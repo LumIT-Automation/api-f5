@@ -1,0 +1,57 @@
+#!/bin/bash
+
+if [ "$1" == "configure" ]; then
+    printf "\n* Post-installing...\n"
+
+    printf "\n* Setting up unattended-upgrades...\n"
+    sed -i -r -e 's#.*Unattended-Upgrade::SyslogEnable .*#Unattended-Upgrade::SyslogEnable "true";#' -e 's#.*Unattended-Upgrade::SyslogFacility .*#Unattended-Upgrade::SyslogFacility "local5";#' /etc/apt/apt.conf.d/50unattended-upgrades
+
+    printf "\n* Setting up Python3 as default Python interpreter...\n"
+    update-alternatives --install /usr/bin/python python /usr/bin/python3.7 1
+    update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1 # best practice for simply creating a symlink.
+
+    printf "\n* Enabling shell capabilities for the Apache user...\n"
+    usermod --shell /bin/bash www-data
+
+    printf "\n* Setting up Apache...\n"
+    a2enmod wsgi
+
+    a2ensite 001-api
+    a2query -s 000-default && a2dissite 000-default # disable default Apache site, only if enabled.
+
+    # Fix the syslog-ng main file. Needed to avoid logging also in /var/log/syslog.
+    cd /etc/syslog-ng/
+    # Move the inclusion of the conf.d files before the log path entries if needed.
+    if grep -Eq '[iI]nclude.*/etc/syslog-ng/conf.d/' syslog-ng.conf; then
+        # Backup the main config file.
+        cp syslog-ng.conf "syslog-ng.conf.`date +%Y%m%d.%H%M`"
+
+        # Cleanup the current include directive.
+        sed -i -r -e '/[iI]nclude.*\/etc\/syslog-ng\/conf.d\//d' syslog-ng.conf
+        sed -i -r '${/^#+/d;}' syslog-ng.conf
+        sed -i -r '${/^#+/d;}' syslog-ng.conf
+
+        # Add the include directive in the right place.
+        sed -i -e '/# Log paths/i # Include all config files in \/etc\/syslog-ng\/conf.d\/\n########################\n@include "\/etc\/syslog-ng\/conf.d\/*.conf"\n\n\n########################' syslog-ng.conf
+    fi
+
+    # Configure mariadb logging if it is installed.
+    if dpkg -l | grep -q mariadb-server; then
+        # By default /etc/systemd/system/mysql.service and mysqld.service are symlink to /lib/systemd/system/mariadb.service.
+        sed -i -r -e '/^\[Service\]$/a StandardOutput=syslog\nStandardError=syslog\nSyslogFacility=daemon\nSyslogLevel=warn\nSyslogIdentifier=mysql' /etc/systemd/system/mysql.service # this one replaces the symlink with a new file.
+        chmod 644 /etc/systemd/system/mysql.service
+        rm -f /etc/systemd/system/mysqld.service
+        ln -s /etc/systemd/system/mysql.service /etc/systemd/system/mysqld.service
+        ln -s /etc/systemd/system/mysql.service /etc/systemd/system/mariadb.service
+    fi
+
+    printf "\n* Enabling local services...\n"
+    systemctl enable syslog-ng
+    systemctl enable consul
+    systemctl enable redis-server
+    systemctl enable unattended-upgrades
+
+    printf "\n* Post-install accomplished.\n"
+fi
+
+exit 0

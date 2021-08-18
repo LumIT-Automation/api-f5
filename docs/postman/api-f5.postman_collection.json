@@ -1,0 +1,2681 @@
+{
+	"info": {
+		"_postman_id": "1b0005f5-79e0-49bd-a2a0-39fc31ec8247",
+		"name": "api-f5",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "F5",
+			"item": [
+				{
+					"name": "Permissions",
+					"item": [
+						{
+							"name": "authorizations",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "c485212f298abe5f8b867ca42617292a",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/authorizations/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"authorizations",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "permissions",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "c485212f298abe5f8b867ca42617292a",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/permissions/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"permissions",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "permissions",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "c485212f298abe5f8b867ca42617292a",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"identity_group_name\": \"groupStaff\",\n        \"identity_group_identifier\": \"cn=groupstaff,cn=users,dc=lab,dc=local\",\n        \"role\": \"staff\",\n        \"partition\": {\n            \"name\": \"any\",\n            \"id_asset\": 1\n        }\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/permissions/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"permissions",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "permission",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "c485212f298abe5f8b867ca42617292a",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"identity_group_name\": \"groupStaff\",\n        \"identity_group_identifier\": \"cn=groupstaff,cn=users,dc=lab,dc=local\",\n        \"role\": \"staff\",\n        \"partition\": {\n            \"name\": \"any\",\n            \"id_asset\": 1\n        }\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/permission/6/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"permission",
+										"6",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "permission",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "c485212f298abe5f8b867ca42617292a",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/permission/3/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"permission",
+										"3",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "identity-groups",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "c485212f298abe5f8b867ca42617292a",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/identity-groups/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"identity-groups",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "identity-groups (privileges)",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/identity-groups/?related=privileges",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"identity-groups",
+										""
+									],
+									"query": [
+										{
+											"key": "related",
+											"value": "privileges"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "identity-groups",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"name\": \"groupLocalNew\",\n        \"identity_group_identifier\": \"cn=groupStaff,cn=users,dc=lab,dc=localNew\",\n        \"roles_partition\": {\n            \"staff\": [\n                {\n                    \"assetId\": 1,\n                    \"partition\": \"Common\"\n                }\n            ],\n            \"nonExistent\": []\n        }\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/identity-groups/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"identity-groups",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "identity-group",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"name\": \"groupStaffModified\",\n        \"identity_group_identifier\": \"cn=groupStaff,cn=users,dc=lab,dc=localNewModified\",\n        \"roles_partition\": {\n            \"staff\": [\n                {\n                    \"assetId\": 1,\n                    \"partition\": \"Beta_Partition\"\n                }\n            ],\n            \"admin\": [\n                {\n                    \"assetId\": 1,\n                    \"partition\": \"any\"\n                }                \n            ],\n            \"nonExistent\": []\n        }\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/identity-group/cn=groupStaff,cn=users,dc=lab,dc=localNew/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"identity-group",
+										"cn=groupStaff,cn=users,dc=lab,dc=localNew",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "identity-group",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"name\": \"groupStaff\",\n        \"ldap_dn\": \"cn=groupStaff,cn=users,dc=lab,dc=localxx\",\n        \"radius_group\": \"\",\n        \"roles\": [\n            \"admin\", \"wwwww\"\n        ]\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/identity-group/cn=groupStaff,cn=users,dc=lab,dc=localNewModified/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"identity-group",
+										"cn=groupStaff,cn=users,dc=lab,dc=localNewModified",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "roles",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "c485212f298abe5f8b867ca42617292a",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/roles/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"roles",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "roles  (privileges)",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "c485212f298abe5f8b867ca42617292a",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/roles/?related=privileges",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"roles",
+										""
+									],
+									"query": [
+										{
+											"key": "related",
+											"value": "privileges"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Assets",
+					"item": [
+						{
+							"name": "assets",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/assets/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"assets",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "assets",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": \n    {\n        \"address\": \"192.168.112.113\",\n        \"fqdn\": \"f5labpri.lumitlab.internal\",\n        \"baseurl\": \"https://192.168.112.113/mgmt/\",\n        \"tlsverify\": 0,\n        \"datacenter\": \"Verona centro\",\n        \"environment\": \"Prod\",\n        \"position\": \"RACK 2\",\n        \"username\": \"ugo\",\n        \"password\": \"1001/bis\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/assets/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"assets",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "asset",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": \n    {\n        \"address\": \"192.168.10.218\",\n        \"fqdn\": \"f5labpri.lumitlab.internal\",\n        \"baseurl\": \"https://192.168.10.218/mgmt/\",\n        \"datacenter\": \"Verona\",\n        \"environment\": \"Produzione\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/asset/4/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"asset",
+										"4",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "asset",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/asset/4/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"asset",
+										"4",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Workflow",
+					"item": [
+						{
+							"name": "virtualservers (L4, NOSNAT)",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "edfb456005712c3e68d97b525e247981",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"virtualServer\": {\n            \"name\": \"SERVICENAME\",\n            \"type\": \"L4\",\n            \"snat\": \"none\",\n            \"destination\": \"11.11.11.61:80\",\n            \"mask\": \"255.255.255.255\",\n            \"source\": \"0.0.0.0/0\"\n        },\n        \"profiles\": [\n            {\n                \"name\": \"PROFILENAME\",\n                \"type\": \"fastl4\",\n                \"idleTimeout\": 300\n            }\n        ],\n        \"pool\": {\n            \"name\": \"POOLNAME\",\n            \"port\": 80,\n            \"loadBalancingMode\": \"round-robin\"\n        },\n        \"monitor\": {\n            \"name\": \"MONITORNAME\",\n            \"type\": \"tcp-half-open\"\n        },\n        \"nodes\": [\n            {\n                \"name\": \"111.111.111.170\",\n                \"address\": \"111.111.111.170\"\n            },\n            {\n                \"name\": \"111.111.111.171\",\n                \"address\": \"111.111.111.171\"\n            },\n            {\n                \"name\": \"111.111.111.178\",\n                \"address\": \"111.111.111.178\"\n            }\n        ]\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/1/Common/workflow/virtualservers/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"1",
+										"Common",
+										"workflow",
+										"virtualservers",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "virtualservers (L7, NOSNAT)",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "edfb456005712c3e68d97b525e247981",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"virtualServer\": {\n            \"name\": \"Germana\",\n            \"type\": \"L7\",\n            \"snat\": \"none\",\n            \"destination\": \"11.11.12.60:443\",\n            \"mask\": \"255.255.255.255\",\n            \"source\": \"0.0.0.0/0\"\n        },\n        \"profiles\": [\n            {\n                \"name\": \"tcp-wan-optimized_SERVICENAMEL7\",\n                \"type\": \"tcp\",\n                \"defaultsFrom\": \"/Common/tcp-wan-optimized\",\n                \"context\": \"clientside\"\n            },\n            {\n                \"name\": \"tcp-lan-optimized_PROFILENAMEL7\",\n                \"type\": \"tcp\",\n                \"defaultsFrom\": \"/Common/tcp-lan-optimized\",\n                \"context\": \"serverside\"\n            },\n            {\n                \"name\": \"http_PROFILENAMEL7\",\n                \"type\": \"http\",\n                \"defaultsFrom\": \"/Common/http\"\n            },\n            {\n                \"name\": \"client-ssl_PROFILENAMEL7\",\n                \"type\": \"client-ssl\",\n                \"cert\": \"/Common/mamma.crt\",\n                \"key\": \"/Common/key.crt\",\n                \"chain\": \"\",\n                \"context\": \"clientside\"\n            }\n        ],\n        \"pool\": {\n            \"name\": \"POOLNAME\",\n            \"port\": 80,\n            \"loadBalancingMode\": \"round-robin\"\n        },\n        \"monitor\": {\n            \"name\": \"MONITORNAME\",\n            \"type\": \"tcp-half-open\"\n        },\n        \"nodes\": [\n            {\n                \"name\": \"111.111.111.170\",\n                \"address\": \"111.111.111.170\"\n            },\n            {\n                \"name\": \"111.111.111.171\",\n                \"address\": \"111.111.111.171\"\n            },\n            {\n                \"name\": \"111.111.111.178\",\n                \"address\": \"111.111.111.178\"\n            }\n        ]\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/1/Common/workflow/virtualservers/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"1",
+										"Common",
+										"workflow",
+										"virtualservers",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "virtualserver",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "edfb456005712c3e68d97b525e247981",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/1/Common/workflow/virtualservers/SERVICENAME/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"1",
+										"Common",
+										"workflow",
+										"virtualservers",
+										"SERVICENAME",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "/",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "partitions",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/partitions/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"partitions",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "nodes",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/nodes/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"nodes",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "nodes",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "62951e7f096cefb6a43b952ddcab869e",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\": \n    {\n        \"name\": \"NODE\",\n        \"address\": \"1.1.1.200\",\n        \"state\": \"Enabled\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/nodes/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"nodes",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "node",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "62951e7f096cefb6a43b952ddcab869e",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/node/NODE/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"node",
+								"NODE",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "node",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "62951e7f096cefb6a43b952ddcab869e",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\": \n    {\n        \"connectionLimit\": 10,\n        \"dynamicRatio\": 1,\n        \"fqdn\": {\n            \"addressFamily\": \"ipv4\",\n            \"interval\": \"1000\",\n            \"downInterval\": 113\n        },\n        \"logging\": \"enabled\",\n        \"monitor\": \"default\",\n        \"rateLimit\": \"0\",\n        \"ratio\": 1\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/node/NODE/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"node",
+								"NODE",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "monitors",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/monitors/tcp-half-open/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"monitors",
+								"tcp-half-open",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "monitors",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "62951e7f096cefb6a43b952ddcab869e",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\": \n    {\n        \"name\": \"MONITOR\",\n        \"loadBalancingMode\": \"round-robin\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/monitors/tcp-half-open/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"monitors",
+								"tcp-half-open",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "monitor",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "62951e7f096cefb6a43b952ddcab869e",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/monitor/tcp-half-open/MONITOR/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"monitor",
+								"tcp-half-open",
+								"MONITOR",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "monitor",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "62951e7f096cefb6a43b952ddcab869e",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\": \n    {\n        \"destination\": \"*:*\",\n        \"interval\": 115,\n        \"manualResume\": \"disabled\",\n        \"timeUntilUp\": 0,\n        \"timeout\": 116,\n        \"transparent\": \"disabled\",\n        \"upInterval\": 0\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/monitor/tcp-half-open/MONITOR/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"monitor",
+								"tcp-half-open",
+								"MONITOR",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pools",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "62951e7f096cefb6a43b952ddcab869e",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/pools/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"pools",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pools",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "62951e7f096cefb6a43b952ddcab869e",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\": \n    {\n        \"name\": \"POOL\",\n        \"monitor\": \"/Common/MONITOR\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/pools/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"pools",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pool",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "62951e7f096cefb6a43b952ddcab869e",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/pool/POOL/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"pool",
+								"POOL",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pool",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "62951e7f096cefb6a43b952ddcab869e",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\": \n    {\n         \"minActiveMembers\": 2,\n          \"reselectTries\": 10\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/pool/POOL/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"pool",
+								"POOL",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "snatpools",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "62951e7f096cefb6a43b952ddcab869e",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/snatpools/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"snatpools",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "snatpools",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "62951e7f096cefb6a43b952ddcab869e",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\": {\n        \"name\": \"SNATPOOL\",\n        \"monitor\": \"/Common/MONITOR\",\n        \"members\": [\n            \"/Common/1.2.3.4\"\n        ]\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/snatpools/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"snatpools",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "snatpool",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "62951e7f096cefb6a43b952ddcab869e",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/snatpool/SNATPOOL/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"snatpool",
+								"SNATPOOL",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "snatpool",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "62951e7f096cefb6a43b952ddcab869e",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\": {\n        \"name\": \"SNATPOOL\",\n        \"monitor\": \"/Common/MONITOR\",\n        \"members\": [\n            \"/Common/1.2.3.5\"\n        ]\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/snatpool/SNATPOOL/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"snatpool",
+								"SNATPOOL",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pool.members",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "edfb456005712c3e68d97b525e247981",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/pool/POOL/members/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"pool",
+								"POOL",
+								"members",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pool.members",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "edfb456005712c3e68d97b525e247981",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\": \n    {\n        \"name\": \"NODE:80\",\n        \"connectionLimit\": 0,\n        \"dynamicRatio\": 1,\n        \"ephemeral\": \"false\",\n        \"inheritProfile\": \"enabled\",\n        \"logging\": \"disabled\",\n        \"monitor\": \"default\",\n        \"priorityGroup\": 0,\n        \"rateLimit\": \"disabled\",\n        \"ratio\": 1,\n        \"state\": \"up\",\n        \"fqdn\": {\n            \"autopopulate\": \"disabled\"\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/pool/POOL/members/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"pool",
+								"POOL",
+								"members",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pool.member",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "edfb456005712c3e68d97b525e247981",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/pool/POOL/member/NODE:80/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"pool",
+								"POOL",
+								"member",
+								"NODE:80",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pool.member stats",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "edfb456005712c3e68d97b525e247981",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/pool/POOL/member/NODE:80/stats/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"pool",
+								"POOL",
+								"member",
+								"NODE:80",
+								"stats",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pool.member",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "edfb456005712c3e68d97b525e247981",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\": {\n        \"state\": \"user-up\",\n        \"session\": \"user-disabled\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/pool/POOL/member/NODE:80/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"pool",
+								"POOL",
+								"member",
+								"NODE:80",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pool.member",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "edfb456005712c3e68d97b525e247981",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/pool/POOL/member/NODE:80/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"pool",
+								"POOL",
+								"member",
+								"NODE:80",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "profiles",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "edfb456005712c3e68d97b525e247981",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/profiles/fastl4/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"profiles",
+								"fastl4",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "profiles",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "edfb456005712c3e68d97b525e247981",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\": {\n        \"name\": \"FASTL4_PROFILE\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/profiles/fastl4/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"profiles",
+								"fastl4",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "profile",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "edfb456005712c3e68d97b525e247981",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/profiles/fastl4/FASTL4_PROFILE/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"profiles",
+								"fastl4",
+								"FASTL4_PROFILE",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "profile",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "edfb456005712c3e68d97b525e247981",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\": {\n        \"name\": \"FASTL4_PROFILE\",\n        \"clientTimeout\": 300\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/profiles/fastl4/FASTL4_PROFILE/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"profiles",
+								"fastl4",
+								"FASTL4_PROFILE",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "virtualservers",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "edfb456005712c3e68d97b525e247981",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/virtualservers/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"virtualservers",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "virtualservers",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "edfb456005712c3e68d97b525e247981",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\": {\n        \"name\": \"VIRTUALSERVER\",\n        \"destination\": \"/Common/11.11.11.11:80\",\n        \"ipProtocol\": \"tcp\",\n        \"profiles\": \"/Common/fastL4\",\n        \"mask\": \"255.255.255.255\",\n        \"pool\": \"/Common/POOL\",\n        \"source\": \"0.0.0.0/0\",\n        \"sourceAddressTranslation\": {\n            \"type\": \"none\"\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/virtualservers/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"virtualservers",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "virtualserver",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "edfb456005712c3e68d97b525e247981",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/virtualserver/VIRTUALSERVER/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"virtualserver",
+								"VIRTUALSERVER",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "virtualserver",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "edfb456005712c3e68d97b525e247981",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\": {\n        \"name\": \"vs\",\n        \"destination\": \"/Common/11.11.11.11:81\",\n        \"ipProtocol\": \"tcp\",\n        \"profiles\": \"/Common/fastL4\",\n        \"mask\": \"255.255.255.255\",\n        \"pool\": \"/Common/POOL\",\n        \"source\": \"0.0.0.0/0\",\n        \"sourceAddressTranslation\": {\n            \"type\": \"none\"\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/virtualserver/VIRTUALSERVER/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"virtualserver",
+								"VIRTUALSERVER",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "virtualserver",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "edfb456005712c3e68d97b525e247981",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/virtualserver/VIRTUALSERVER/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"virtualserver",
+								"VIRTUALSERVER",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "certificates",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/certificates/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"certificates",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "certificate",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Beta_Partition/certificate/mamma.crt/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Beta_Partition",
+								"certificate",
+								"mamma.crt",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "certificates",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"certificate\": {\n        \"name\": \"mamma.crt\",\n        \"content_base64\": \"LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURyakNDQXBhZ0F3SUJBZ0lFRGNCRW16QU5CZ2txaGtpRzl3MEJBUXNGQURDQm1ERUxNQWtHQTFVRUJoTUMKVlZNeEN6QUpCZ05WQkFnVEFsZEJNUkF3RGdZRFZRUUhFd2RUWldGMGRHeGxNUkl3RUFZRFZRUUtFd2xOZVVOdgpiWEJoYm5reEN6QUpCZ05WQkFzVEFrbFVNUjR3SEFZRFZRUURFeFZzYjJOaGJHaHZjM1F1Ykc5allXeGtiMjFoCmFXNHhLVEFuQmdrcWhraUc5dzBCQ1FFV0duSnZiM1JBYkc5allXeG9iM04wTG14dlkyRnNaRzl0WVdsdU1CNFgKRFRFM01EUXlOREV5TXpFeU0xb1hEVEkzTURReU1qRXlNekV5TTFvd2daZ3hDekFKQmdOVkJBWVRBbFZUTVFzdwpDUVlEVlFRSUV3SlhRVEVRTUE0R0ExVUVCeE1IVTJWaGRIUnNaVEVTTUJBR0ExVUVDaE1KVFhsRGIyMXdZVzU1Ck1Rc3dDUVlEVlFRTEV3SkpWREVlTUJ3R0ExVUVBeE1WYkc5allXeG9iM04wTG14dlkyRnNaRzl0WVdsdU1Ta3cKSndZSktvWklodmNOQVFrQkZocHliMjkwUUd4dlkyRnNhRzl6ZEM1c2IyTmhiR1J2YldGcGJqQ0NBU0l3RFFZSgpLb1pJaHZjTkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFMOHNoazJ4eE5vdlFnZmVFdWZNcUpxUG4yVTJaVEVvCnpocElzajlCb1VjNW5MUnBNQWFMK3VHV2U3Z2lYTDF3RTVubThNbTh2YzJXc3hvNkY1cnRBaXlmOVJSaFRLenUKUFVKV0pWclZMVU5SeGg1NTRTQVRUelI2RTZVejBKcWhoT1kzaEViNSs4dGpHdStjOGRzenM5MUVIUTB0K1lrMwp0eG94TnZFdk9haXNiSm9GeEhrVzdGSW1xZVhCdDJZMEZjOGd2NnhKcll6bmxTdnNRZENnQzNrS1lnY1ZhZzVRCm8yYlZwb1RJOVVqajYvc050WTF0TTZJemdmNFRucExjNjZxVFJzbXVmRE1FTWRtRkdzSW5uUmM5OHdWTDFxeHcKRzZCSUZoaGpUdyt5MmszcXhJOFBNNWZxWjBwM1FaV014b2xRZnJCQXd2MjYxYzJYekMwYXFkRUNBd0VBQVRBTgpCZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFuc0ZER3hXVS9jdE5QMktlaUZUNlJzRHJvSmVHQThaMW0rOStKcExoCk1vd3pVTy9oelQ3T0V4K25pRi96U01PYk9idnZTNm1ySFBkV00ybXZUcUVLLzl2Smx4ZjdzbGJtU0JHQTR5Z2MKM2pRV1pUVUpwZWxKeFBqcUEwbTVrTDI4ZldKb0ZxeGVWZXoxNDN1YjFmQTA1VDBudXZzTWVyWjlIcDdVRHArcQpYOWNMbnc3RGxqTWZmMVgvNHd0NFZOdXBVeXhHc3E1cmdLdnU0ci84Sy92WktaTUI5QU5XTEVwUjFockpFT3o1CjIzb2YxZEs3LzVJNTdTMWxNRVJUNE1QZGhJSkFYVi84ZXNYTlk2bDRJU2pyUkh2dUJIUnVRYkV6UDFiTUQ2L00KVXZibktZZm0rOEhFOWluNllvWkhyTWZwS3hLa1hjaUt0R1Y2UjRCeDQ4NTgrdz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0=\",\n        \"partition\": \"Common\"\n    }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/certificates/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"certificates",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "keys",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/keys/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"keys",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "keys",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"key\": {\n        \"name\": \"mamma.key\",\n        \"content_base64\": \"LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV2Z0lCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktnd2dnU2tBZ0VBQW9JQkFRQy9MSVpOc2NUYUwwSUgKM2hMbnpLaWFqNTlsTm1VeEtNNGFTTEkvUWFGSE9aeTBhVEFHaS9yaGxudTRJbHk5Y0JPWjV2REp2TDNObHJNYQpPaGVhN1FJc24vVVVZVXlzN2oxQ1ZpVmExUzFEVWNZZWVlRWdFMDgwZWhPbE05Q2FvWVRtTjRSRytmdkxZeHJ2Cm5QSGJNN1BkUkIwTkxmbUpON2NhTVRieEx6bW9yR3lhQmNSNUZ1eFNKcW5sd2JkbU5CWFBJTCtzU2EyTTU1VXIKN0VIUW9BdDVDbUlIRldvT1VLTm0xYWFFeVBWSTQrdjdEYldOYlRPaU00SCtFNTZTM091cWswYkpybnd6QkRIWgpoUnJDSjUwWFBmTUZTOWFzY0J1Z1NCWVlZMDhQc3RwTjZzU1BEek9YNm1kS2QwR1ZqTWFKVUg2d1FNTDl1dFhOCmw4d3RHcW5SQWdNQkFBRUNnZ0VBVmRVWFRhM1pmTDZJRG9FNkNzSGNGMTBSaXo5RGFyRnY2K1FreDNyZmZ0dVMKakh2SHVNRERlT0o0Rk1HMDBzY052ZVV1eWR6SWVSUkd3S2xCYk9rcHQwQndLR0RSTExsZ1hyYlAyYnJwc2haMgpkYnR5Qk5VMmxCQ1ZYbkJub2UyUC9rOEJ3RjQvbTE4Wk9takVQQTg0RzhtWG81RzNQbEQ2RURQMWY0OGMrNm43Cml1VXRFMnJubDk3bVlsVG0vUThTM2ZrTmQzQ0VMb25nVGt1TVpxdC90aFRnWWlmTmRCSDRtREFGR20wNDhFejAKWWNDOGwrUUtKeGFzR2htTzgxWkVIQUtkSXVJcEZxUEdrNG9mSHdFdWhNUG1PNGVrY0hpTXhRZFJPRU9mN1FhUwpMVHpicUNtMldwc3pJTlZjeWpSVVd1dkttMXZDMDVoMjB2NHBISUk5V3dLQmdRRHRSZ1FUeSs2Wkplc25zQ0M1Ck5QZkFaWWlsSkdqemVhZG1ud3VENHl1NDBnMGllV1VYR003MTZITVRNTFV3c1BQZkZhZ2kydFpCTDZIbHIyeHEKY3RySDVpTEE5OWFmUjVhT1RHcFZteVVKYmVMUVRjc05VcnpjSkNydDVlS1dLRHBCTHViemI3am1pbEZKM1dBOAordC9xTU5BbFF6SFdkVmpPWjFLZ2kyRGZBd0tCZ1FET1F4ZHBHQ3VwVFgwNVAxQm9tZElWSzJmVXQwQXhoa24rCkljdjBrVVdkMzdKVXN2alVzcTlnNit1RTNFTnpZOEpNY2ZQTktwcVZXR0RWM1ppNHZUN3JoYlJleHdXYXpMTkMKdHdEUHcveFk1RlhwUUp4eS9hdFI2bU42bFZzeE1sZEptMmJldFNnQXAxSngvTjJkKy8vVmxubm9FL3lJenIwNgowN0tQMlNiaG13S0JnUUM3T0lQL0d1c3A3TUdnajFsQ3lvaXpSMnFLNUMvcjdoSW81MVl1dXhIRXcvbVpPakNLCkNRbEZBQ1hNL3FINXlhYWtZSEpMRG1JQkRaU3hwN25rUkx4Yy96cHRDU0pRakN4QUhBdkxnSis0MFB3bllUclgKU0hHOVFzeWM2c2Zmczk1RGtMNnJWM3lPYkpXM3N2WTlKN2VIRXYwcWFkcnBYYTYxTHRJRDIvYVVBUUtCZ0ZyUQpjV05GVUJ2MzBUVythYkhVWUFvUUZXUXoxdUMzUnFiTXpKYit5MDhLYWVNZTlhMzRpbjA3QW5SNTRuelFwSUN4Ci8yMEs0QXIzWVpOb1FOQytDaEQ2eW9LY1VCeHJHbFk2YXZJUFVYRDEvOWwyS0N2OUFreEx6Y2J3TWJtRWQ2Z2gKOHZZRmZ2cGlzVXNjMFpxNGxGaS9LeWVDZlVMaSs3QUYrMjJZWjZVWEFvR0JBS29YNkFxTEZSdmJEU0Zob1plcwp6eUZSRWd1b3ZQVDZVNXJTcXJnVXJ5UWJYNUI5K3BJdUd1Nk0rU254Y21sWGd5ZkwzaGo1SU1QNEw5Y2lyeU5ICkM0ZzkrODJpM09pZk50dUxsdGFTQ3ZwNWpPdzdmSTdNaU9pdUY0QWU2YmhvczR3dGkwZHJGQ05ZaVlqWFh0bnoKOVRrV0xEckxZN1NOcTNlUTh5dGpDSzhkCi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0=\"\n    }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/key/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"key",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "key",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/key/mamma.key/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"key",
+								"mamma.key",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "history",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/history/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"history",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+if [ "$1" == "purge" ]; then
+    if podman volume ls | awk '{print $2}' | grep -q ^api-f5$; then
+        printf "\n* Clean up api-f5 volume...\n"
+        podman volume rm -f api-f5
+        podman volume rm -f api-f5-db
+        podman volume rm -f api-f5-cacerts
+    fi
+fi
+
+# Force debconf cleanup.
+echo PURGE | debconf-communicate automation-interface-api-f5-container
+
+exit 0

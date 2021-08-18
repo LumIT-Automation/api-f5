@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -e
+
+printf "\n* Container preinst...\n"
+printf "\n* Cleanup...\n"
+if podman ps | awk '{print $2}' | grep -q ^localhost/api-f5$; then
+    podman stop api-f5
+fi
+
+if podman images | awk '{print $1}' | grep -q ^localhost/api-f5$; then
+    podman rmi -f api-f5
+fi
+
+exit 0

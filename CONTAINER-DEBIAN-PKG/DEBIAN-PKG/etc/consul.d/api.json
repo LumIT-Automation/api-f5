@@ -1,0 +1,20 @@
+{
+  "service": {
+    "id": "api-f5",
+    "name": "api-f5",
+    "tags": [
+      "api-f5"
+    ],
+    "port": 80
+  },
+  "check": {
+    "id": "api-f5",
+    "name": "HTTP API-INFOBLOX",
+    "http": "http://127.0.0.1/api/?consul-check",
+    "method": "GET",
+    "interval": "30s",
+    "timeout": "2s"
+  },
+  "enable_syslog": true,
+  "log_level": "info"
+}
