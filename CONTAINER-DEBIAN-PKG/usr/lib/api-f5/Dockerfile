@@ -1,4 +1,4 @@
-FROM docker.io/amd64/debian
+FROM docker.io/amd64/debian:buster
 EXPOSE 80/tcp
 
 ADD PACKAGE /

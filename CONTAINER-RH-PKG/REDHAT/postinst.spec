@@ -87,7 +87,7 @@ function containerSetup()
 
     diffOutput=$(podman exec api-f5 diff /var/www/api_default_settings.py /var/www/api/api/settings.py | grep '^[<>].*' | grep -v SECRET | grep -v PASSWORD | grep -v VENV || true)
     if [ -n "$diffOutput" ]; then
-        printf "$wallBanner Differences from package's stock config file and the installed one: please import NEW directives in your installed config file, if any.\n* $diffOutput" | wall -n
+        printf "$wallBanner Differences from package's stock config file and the installed one (please import NEW directives in your installed config file, if any):\n* $diffOutput" | wall -n
     fi
 
     # syslog-ng seems going into a catatonic state while updating a package: restarting the whole thing.
