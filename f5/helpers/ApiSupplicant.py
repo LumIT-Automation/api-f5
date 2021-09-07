@@ -64,6 +64,9 @@ class ApiSupplicant:
             if not self.silent:
                 Log.actionLog("Remote response headers: "+str(response.headers))
                 Log.actionLog("Remote response payload: "+str(self.responseObject))
+            else:
+                Log.actionLog("Remote response headers: silenced by caller.")
+                Log.actionLog("Remote response payload: silenced by caller.")
 
             if self.responseStatus == 200: # ok.
                 pass

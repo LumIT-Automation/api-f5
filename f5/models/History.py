@@ -15,7 +15,9 @@ class History:
 
     @staticmethod
     def list(username: str, allUsersHistory: bool) -> dict:
+        j = 0
         c = connection.cursor()
+
         try:
             if allUsersHistory:
                 c.execute("SELECT username, action, asset_id, config_object_type, config_object, status, date FROM log")
@@ -24,9 +26,14 @@ class History:
                     username
                 ])
 
+            items = DBHelper.asDict(c)
+            for el in items:
+                items[j]["date"] = str(el["date"]) # datetime.datetime() to string.
+                j += 1
+
             return dict({
                 "data": {
-                    "items": DBHelper.asDict(c)
+                    "items": items
                 }
             })
 
