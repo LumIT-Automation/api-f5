@@ -15,7 +15,7 @@ class F5NodesSerializer(serializers.Serializer):
             fullPath = serializers.CharField(max_length=255, required=True)
             generation = serializers.IntegerField(required=True)
             selfLink = serializers.CharField(max_length=255, required=True)
-            address = serializers.CharField(max_length=255, required=True)
+            address = serializers.IPAddressField(required=True)
             connectionLimit = serializers.IntegerField(required=True)
             dynamicRatio = serializers.IntegerField(required=True)
             ephemeral = serializers.CharField(max_length=255, required=True)

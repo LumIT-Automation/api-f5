@@ -36,12 +36,14 @@ class F5VirtualServersSerializer(serializers.Serializer):
             cmpEnabled = serializers.CharField(max_length=255, required=True)
             connectionLimit = serializers.IntegerField(required=True)
             creationTime = serializers.CharField(max_length=255, required=True)
-            destination = serializers.CharField(max_length=255, required=True)
+            destination = serializers.RegexField(
+                regex='^/.*/([01]?\d\d?|2[0-4]\d|25[0-5])(?:\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])){3}(:\d*)?$',
+                required=True)
             enabled = serializers.BooleanField(required=False)
             gtmScore = serializers.IntegerField(required=True)
             ipProtocol = serializers.CharField(max_length=255, required=True)
             lastModifiedTime = serializers.CharField(max_length=255, required=True)
-            mask = serializers.CharField(max_length=255, required=True)
+            mask = serializers.IPAddressField(required=True)
             mirror = serializers.CharField(max_length=255, required=True)
             mobileAppTunnel = serializers.CharField(max_length=255, required=True)
             nat64 = serializers.CharField(max_length=255, required=True)
@@ -52,7 +54,9 @@ class F5VirtualServersSerializer(serializers.Serializer):
             rateLimitMode = serializers.CharField(max_length=255, required=False)
             rateLimitSrcMask = serializers.IntegerField(required=True)
             serviceDownImmediateAction = serializers.CharField(max_length=255, required=False)
-            source = serializers.CharField(max_length=255, required=False)
+            source = serializers.RegexField(
+                regex='^([01]?\d\d?|2[0-4]\d|25[0-5])(?:\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])){3}(?:/\d*)?$',
+                required=True)
             sourceAddressTranslation = F5VirtualServersSourceAddressTranslationSerializer(required=True)
             sourcePort = serializers.CharField(max_length=255, required=True)
             synCookieStatus = serializers.CharField(max_length=255, required=True)

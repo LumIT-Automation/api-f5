@@ -13,8 +13,10 @@ class F5SnatPoolsSerializer(serializers.Serializer):
             generation = serializers.IntegerField(required=True)
             selfLink = serializers.CharField(max_length=255, required=True)
             members = serializers.ListField(
-                child=serializers.CharField(max_length=255, required=True),
-                required=False
+                child=serializers.RegexField(
+                    regex='^/.*/([01]?\d\d?|2[0-4]\d|25[0-5])(?:\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])){3}$',
+                    required=False
+                )
             )
             membersReference = F5SnatPoolsItemsMembersReferenceSerializer(required=False, many=True)
 
