@@ -16,13 +16,11 @@ class F5WorkflowVirtualServerSerializer(serializers.Serializer):
                 if plType.lower() == "pl4_snat":
                     self.fields["snatPool"] = F5WorkflowVirtualServerInnerSnatPoolSerializer(required=True)
 
-            class F5WorkflowVirtualServerInnerNodesSerializer(serializers.Serializer):
-                name = serializers.CharField(max_length=255, required=True)
-                address = serializers.IPAddressField(required=True)
-
             class F5WorkflowVirtualServerInnerMonitorSerializer(serializers.Serializer):
                 name = serializers.CharField(max_length=255, required=True)
                 type = serializers.CharField(max_length=255, required=True)
+                send = serializers.CharField(max_length=255, required=False)
+                recv = serializers.CharField(max_length=255, required=False)
 
             class F5WorkflowVirtualServerInnerProfileSerializer(serializers.Serializer):
                 name = serializers.CharField(max_length=255, required=True)
@@ -49,16 +47,20 @@ class F5WorkflowVirtualServerSerializer(serializers.Serializer):
                 )
 
             class F5WorkflowVirtualServerInnerPoolSerializer(serializers.Serializer):
+                class F5WorkflowVirtualServerInnerNodesSerializer(serializers.Serializer):
+                    name = serializers.CharField(max_length=255, required=True)
+                    address = serializers.IPAddressField(required=True)
+                    port = serializers.IntegerField(required=True)
+
                 name = serializers.CharField(max_length=255, required=True)
-                port = serializers.IntegerField(required=True)
                 loadBalancingMode = serializers.CharField(max_length=255, required=False)
+                nodes = F5WorkflowVirtualServerInnerNodesSerializer(required=True, many=True)
 
             virtualServer = F5WorkflowVirtualServerInnerVSSerializer(required=True)
             profiles = F5WorkflowVirtualServerInnerProfileSerializer(required=True, many=True)
             pool = F5WorkflowVirtualServerInnerPoolSerializer(required=True)
             # snatPool dynamically added when needed (-> __init__)
             monitor = F5WorkflowVirtualServerInnerMonitorSerializer(required=True)
-            nodes = F5WorkflowVirtualServerInnerNodesSerializer(required=True, many=True)
 
         # Build son serializer dynamically, passing the plType parameter.
         self.fields["data"] = F5WorkflowVirtualServerInnerSerializer(

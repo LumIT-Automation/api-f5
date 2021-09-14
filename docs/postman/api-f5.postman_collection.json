@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "1b0005f5-79e0-49bd-a2a0-39fc31ec8247",
+		"_postman_id": "8a7af4d7-1c84-47ef-b481-5e86621c3006",
 		"name": "api-f5",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -716,7 +716,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"data\": {\n        \"virtualServer\": {\n            \"name\": \"SERVICENAME\",\n            \"type\": \"L4\",\n            \"snat\": \"none\",\n            \"destination\": \"11.11.11.61:80\",\n            \"mask\": \"255.255.255.255\",\n            \"source\": \"0.0.0.0/0\"\n        },\n        \"profiles\": [\n            {\n                \"name\": \"PROFILENAME\",\n                \"type\": \"fastl4\",\n                \"idleTimeout\": 300\n            }\n        ],\n        \"pool\": {\n            \"name\": \"POOLNAME\",\n            \"port\": 80,\n            \"loadBalancingMode\": \"round-robin\"\n        },\n        \"monitor\": {\n            \"name\": \"MONITORNAME\",\n            \"type\": \"tcp-half-open\"\n        },\n        \"nodes\": [\n            {\n                \"name\": \"111.111.111.170\",\n                \"address\": \"111.111.111.170\"\n            },\n            {\n                \"name\": \"111.111.111.171\",\n                \"address\": \"111.111.111.171\"\n            },\n            {\n                \"name\": \"111.111.111.178\",\n                \"address\": \"111.111.111.178\"\n            }\n        ]\n    }\n}",
+									"raw": "{\n    \"data\": {\n        \"virtualServer\": {\n            \"name\": \"SERVICENAME\",\n            \"type\": \"L4\",\n            \"snat\": \"none\",\n            \"destination\": \"11.11.11.61:80\",\n            \"mask\": \"255.255.255.255\",\n            \"source\": \"0.0.0.0/0\"\n        },\n        \"profiles\": [\n            {\n                \"name\": \"PROFILENAME\",\n                \"type\": \"fastl4\",\n                \"idleTimeout\": 300\n            }\n        ],\n        \"pool\": {\n            \"name\": \"POOLNAME\",\n            \"loadBalancingMode\": \"round-robin\",\n            \"nodes\": [\n                {\n                    \"name\": \"111.111.111.170\",\n                    \"address\": \"111.111.111.170\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"111.111.111.171\",\n                    \"address\": \"111.111.111.171\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"111.111.111.178\",\n                    \"address\": \"111.111.111.178\",\n                    \"port\": 80\n                }\n            ]\n        },\n        \"monitor\": {\n            \"name\": \"MONITORNAME\",\n            \"type\": \"tcp-half-open\",\n            \"send\": \"/\",\n            \"recv\": \"OK\"\n        }\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -768,7 +768,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"data\": {\n        \"virtualServer\": {\n            \"name\": \"Germana\",\n            \"type\": \"L7\",\n            \"snat\": \"none\",\n            \"destination\": \"11.11.12.60:443\",\n            \"mask\": \"255.255.255.255\",\n            \"source\": \"0.0.0.0/0\"\n        },\n        \"profiles\": [\n            {\n                \"name\": \"tcp-wan-optimized_SERVICENAMEL7\",\n                \"type\": \"tcp\",\n                \"defaultsFrom\": \"/Common/tcp-wan-optimized\",\n                \"context\": \"clientside\"\n            },\n            {\n                \"name\": \"tcp-lan-optimized_PROFILENAMEL7\",\n                \"type\": \"tcp\",\n                \"defaultsFrom\": \"/Common/tcp-lan-optimized\",\n                \"context\": \"serverside\"\n            },\n            {\n                \"name\": \"http_PROFILENAMEL7\",\n                \"type\": \"http\",\n                \"defaultsFrom\": \"/Common/http\"\n            },\n            {\n                \"name\": \"client-ssl_PROFILENAMEL7\",\n                \"type\": \"client-ssl\",\n                \"cert\": \"/Common/mamma.crt\",\n                \"key\": \"/Common/key.crt\",\n                \"chain\": \"\",\n                \"context\": \"clientside\"\n            }\n        ],\n        \"pool\": {\n            \"name\": \"POOLNAME\",\n            \"port\": 80,\n            \"loadBalancingMode\": \"round-robin\"\n        },\n        \"monitor\": {\n            \"name\": \"MONITORNAME\",\n            \"type\": \"tcp-half-open\"\n        },\n        \"nodes\": [\n            {\n                \"name\": \"111.111.111.170\",\n                \"address\": \"111.111.111.170\"\n            },\n            {\n                \"name\": \"111.111.111.171\",\n                \"address\": \"111.111.111.171\"\n            },\n            {\n                \"name\": \"111.111.111.178\",\n                \"address\": \"111.111.111.178\"\n            }\n        ]\n    }\n}",
+									"raw": "{\n    \"data\": {\n        \"virtualServer\": {\n            \"name\": \"SERVICENAMEL7\",\n            \"type\": \"L7\",\n            \"snat\": \"none\",\n            \"destination\": \"11.11.12.60:443\",\n            \"mask\": \"255.255.255.255\",\n            \"source\": \"0.0.0.0/0\"\n        },\n        \"profiles\": [\n            {\n                \"name\": \"tcp-wan-optimized_SERVICENAMEL7\",\n                \"type\": \"tcp\",\n                \"defaultsFrom\": \"/Common/tcp-wan-optimized\",\n                \"context\": \"clientside\"\n            },\n            {\n                \"name\": \"tcp-lan-optimized_PROFILENAMEL7\",\n                \"type\": \"tcp\",\n                \"defaultsFrom\": \"/Common/tcp-lan-optimized\",\n                \"context\": \"serverside\"\n            },\n            {\n                \"name\": \"http_PROFILENAMEL7\",\n                \"type\": \"http\",\n                \"defaultsFrom\": \"/Common/http\"\n            },\n            {\n                \"name\": \"client-ssl_PROFILENAMEL7\",\n                \"type\": \"client-ssl\",\n                \"cert\": \"/Common/mamma.crt\",\n                \"key\": \"/Common/key.crt\",\n                \"chain\": \"\",\n                \"context\": \"clientside\"\n            }\n        ],\n        \"pool\": {\n            \"name\": \"POOLNAME\",\n            \"loadBalancingMode\": \"round-robin\",\n            \"nodes\": [\n                {\n                    \"name\": \"111.111.111.170\",\n                    \"address\": \"111.111.111.170\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"111.111.111.171\",\n                    \"address\": \"111.111.111.171\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"111.111.111.178\",\n                    \"address\": \"111.111.111.178\",\n                    \"port\": 80\n                }\n            ]\n        },\n        \"monitor\": {\n            \"name\": \"MONITORNAME\",\n            \"type\": \"tcp-half-open\",\n            \"send\": \"/\",\n            \"recv\": \"OK\"\n        }\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1088,6 +1088,42 @@
 								"Common",
 								"node",
 								"NODE",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "monitors (types)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/monitors/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"monitors",
 								""
 							]
 						}
@@ -1998,6 +2034,48 @@
 								"Common",
 								"profiles",
 								"fastl4",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "profiles (types)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "edfb456005712c3e68d97b525e247981",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/1/Common/profiles/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"1",
+								"Common",
+								"profiles",
 								""
 							]
 						}

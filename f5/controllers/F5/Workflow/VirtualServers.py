@@ -75,7 +75,7 @@ class VirtualServersWorkflow:
     ####################################################################################################################
 
     def __createNodes(self) -> None:
-        for el in self.data["nodes"]:
+        for el in self.data["pool"]["nodes"]:
             nodeName = el["name"]
             nodeAddress = el["address"]
 
@@ -130,10 +130,17 @@ class VirtualServersWorkflow:
         try:
             Log.actionLog("Virtual server workflow: attempting to create monitor: "+str(monitorName))
 
-            Monitor.add(self.assetId, monitorType, {
+            mData = {
                 "name": monitorName,
                 "partition": self.partitionName
-            })
+            }
+
+            if "send" in self.data["monitor"]:
+                mData["send"] = self.data["monitor"]["send"]
+            if "recv" in self.data["monitor"]:
+                mData["recv"] = self.data["monitor"]["recv"]
+
+            Monitor.add(self.assetId, monitorType, mData)
 
             # Keep track of CREATED monitor.
             self.__createdObjects["monitor"] = {
@@ -216,10 +223,10 @@ class VirtualServersWorkflow:
 
     def __createPoolMembers(self) -> None:
         poolName = self.data["pool"]["name"]
-        poolMemberPort = self.data["pool"]["port"]
 
-        for el in self.data["nodes"]:
+        for el in self.data["pool"]["nodes"]:
             nodeName = el["name"]
+            poolMemberPort = el["port"]
             poolMemberName = nodeName+":"+str(poolMemberPort)
 
             try:
