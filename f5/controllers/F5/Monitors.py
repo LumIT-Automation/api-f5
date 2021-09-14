@@ -17,7 +17,7 @@ from f5.helpers.Log import Log
 
 class F5MonitorsController(CustomController):
     @staticmethod
-    def get(request: Request, assetId: int, partitionName: str, monitorType: str) -> Response:
+    def get(request: Request, assetId: int, partitionName: str, monitorType: str = "") -> Response:
         data = dict()
         etagCondition = { "responseEtag": "" }
 
@@ -31,8 +31,16 @@ class F5MonitorsController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    itemData = Monitor.list(assetId, partitionName, monitorType)
-                    data["data"] = MonitorsSerializer(itemData).data["data"]
+                    if monitorType:
+                        # Monitors' list of that type.
+                        # F5 treats monitor type as a sub-object instead of a property. Odd.
+                        itemData = Monitor.list(assetId, partitionName, monitorType)
+                        data["data"] = MonitorsSerializer(itemData).data["data"]
+                    else:
+                        # Monitors' types list.
+                        # No need for a serializer: just a list of strings.
+                        data["data"] = Monitor.types(assetId, partitionName)["data"]
+
                     data["href"] = request.get_full_path()
 
                     # Check the response's ETag validity (against client request).

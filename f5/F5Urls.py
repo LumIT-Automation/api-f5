@@ -33,6 +33,7 @@ urlpatterns = [
     # Monitor.
     path('<int:assetId>/<str:partitionName>/monitor/<str:monitorType>/<str:monitorName>/', Monitor.F5MonitorController.as_view(), name='f5-monitor'),
     path('<int:assetId>/<str:partitionName>/monitors/<str:monitorType>/', Monitors.F5MonitorsController.as_view(), name='f5-monitors'),
+    path('<int:assetId>/<str:partitionName>/monitors/', Monitors.F5MonitorsController.as_view(), name='f5-monitor-types'),
 
     # Pool.
     path('<int:assetId>/<str:partitionName>/pool/<str:poolName>/', Pool.F5PoolController.as_view(), name='f5-pool'),
@@ -50,6 +51,7 @@ urlpatterns = [
     # Profile.
     path('<int:assetId>/<str:partitionName>/profiles/<str:profileType>/<str:profileName>/', Profile.F5ProfileController.as_view(), name='f5-profile'),
     path('<int:assetId>/<str:partitionName>/profiles/<str:profileType>/', Profiles.F5ProfilesController.as_view(), name='f5-profiles'),
+    path('<int:assetId>/<str:partitionName>/profiles/', Profiles.F5ProfilesController.as_view(), name='f5-profile-types'),
 
     # Virtual server.
     path('<int:assetId>/<str:partitionName>/virtualserver/<str:virtualServerName>/', VirtualServer.F5VirtualServerController.as_view(), name='f5-virtualserver'),
@@ -61,7 +63,7 @@ urlpatterns = [
     path('<int:assetId>/<str:partitionName>/key/<str:resourceName>/', Certificate.F5CertificateController.as_view(), name='f5-key'),
     path('<int:assetId>/keys/', Certificates.F5CertificatesController.as_view(), name='f5-keys'),
 
-    # workflows.
+    # Workflows.
     # Virtual server.
     path('<int:assetId>/<str:partitionName>/workflow/virtualservers/<str:virtualServerName>/', WorkflowVirtualServer.F5WorkflowVirtualServerController.as_view(), name='f5-workflow-virtualserver'),
     path('<int:assetId>/<str:partitionName>/workflow/virtualservers/', WorkflowVirtualServers.F5WorkflowVirtualServersController.as_view(), name='f5-workflow-virtualservers'),

@@ -17,7 +17,7 @@ from f5.helpers.Log import Log
 
 class F5ProfilesController(CustomController):
     @staticmethod
-    def get(request: Request, assetId: int, partitionName: str, profileType: str) -> Response:
+    def get(request: Request, assetId: int, partitionName: str, profileType: str = "") -> Response:
         data = dict()
         etagCondition = { "responseEtag": "" }
 
@@ -31,8 +31,16 @@ class F5ProfilesController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    itemData = Profile.list(assetId, partitionName, profileType)
-                    data["data"] = ProfilesSerializer(itemData).data["data"]
+                    if profileType:
+                        # Profiles' list of that type.
+                        # F5 treats profile type as a sub-object instead of a property. Odd.
+                        itemData = Profile.list(assetId, partitionName, profileType)
+                        data["data"] = ProfilesSerializer(itemData).data["data"]
+                    else:
+                        # Profiles' types list.
+                        # No need for a serializer: just a list of strings.
+                        data["data"] = Profile.types(assetId, partitionName)["data"]
+
                     data["href"] = request.get_full_path()
 
                     # Check the response's ETag validity (against client request).

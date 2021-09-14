@@ -25,6 +25,7 @@ class F5MonitorsSerializer(serializers.Serializer):
             ipDscp = serializers.IntegerField(required=False)
             reverse = serializers.CharField(max_length=255, required=False)
             send = serializers.CharField(max_length=255, required=False)
+            recv = serializers.CharField(max_length=255, required=False)
 
         items = F5MonitorsReferencesSerializer(many=True)
 
