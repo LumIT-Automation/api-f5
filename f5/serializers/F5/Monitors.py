@@ -11,7 +11,7 @@ class F5MonitorsSerializer(serializers.Serializer):
             selfLink = serializers.CharField(max_length=255, required=True)
             defaultsFrom = serializers.CharField(max_length=255, required=False)
             destination = serializers.CharField(max_length=255, required=False)
-            interval = serializers.IntegerField(required=False)
+            interval = serializers.CharField(max_length=255, required=False)
             manualResume = serializers.CharField(max_length=255, required=False)
             timeUntilUp = serializers.IntegerField(required=False)
             timeout = serializers.IntegerField(required=False)
