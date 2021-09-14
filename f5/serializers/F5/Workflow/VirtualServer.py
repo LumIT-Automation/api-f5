@@ -38,9 +38,15 @@ class F5WorkflowVirtualServerSerializer(serializers.Serializer):
                 name = serializers.CharField(max_length=255, required=True)
                 type = serializers.ChoiceField(required=True, choices=("L4", "L7"))
                 snat = serializers.ChoiceField(required=True, choices=("none", "automap"))
-                destination = serializers.CharField(max_length=255, required=True) # @todo: 11.11.11.61:80 like field.
+                destination = serializers.RegexField(
+                    regex='^([01]?\d\d?|2[0-4]\d|25[0-5])(?:\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])){3}(:\d*)?$',
+                    required=True
+                )
                 mask = serializers.IPAddressField(required=True)
-                source = serializers.CharField(max_length=255, required=True) # @todo: 0.0.0.0/0 like field.
+                source = serializers.RegexField(
+                    regex='^([01]?\d\d?|2[0-4]\d|25[0-5])(?:\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])){3}(?:/\d*)?$',
+                    required=True
+                )
 
             class F5WorkflowVirtualServerInnerPoolSerializer(serializers.Serializer):
                 name = serializers.CharField(max_length=255, required=True)
