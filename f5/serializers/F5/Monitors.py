@@ -15,7 +15,7 @@ class F5MonitorsSerializer(serializers.Serializer):
             manualResume = serializers.CharField(max_length=255, required=True)
             timeUntilUp = serializers.IntegerField(required=True)
             timeout = serializers.IntegerField(required=True)
-            transparent = serializers.CharField(max_length=255, required=True)
+            transparent = serializers.CharField(max_length=255, required=False)
             upInterval = serializers.IntegerField(required=True)
             adaptive = serializers.CharField(max_length=255, required=False)
             adaptiveDivergenceType = serializers.CharField(max_length=255, required=False)
