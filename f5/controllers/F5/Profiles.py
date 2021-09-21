@@ -1,3 +1,6 @@
+import asyncio
+from asgiref.sync import sync_to_async
+
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
@@ -32,10 +35,30 @@ class F5ProfilesController(CustomController):
                     lock.lock()
 
                     if profileType:
-                        # Profiles' list of that type.
-                        # F5 treats profile type as a sub-object instead of a property. Odd.
-                        itemData = Profile.list(assetId, partitionName, profileType)
-                        data["data"] = ProfilesSerializer(itemData).data["data"]
+                        if profileType != "ANY":
+                            # Profiles' list of that type.
+                            # F5 treats profile type as a sub-object instead of a property. Odd.
+                            itemData = Profile.list(assetId, partitionName, profileType)
+                            data["data"] = ProfilesSerializer(itemData).data["data"]
+                        else:
+                            # All monitors list, of any type.
+                            data["data"] = dict()
+                            profileTypes = Profile.types(assetId, partitionName)["data"]["items"]
+
+                            # Event driven calls (@todo: why is it still serialized?).
+                            @sync_to_async
+                            def profilesListOfType(pType):
+                                p = dict()
+                                p[pType] = ProfilesSerializer(
+                                    Profile.list(assetId, partitionName, pType)
+                                ).data["data"]
+
+                                return p
+
+                            loop = asyncio.get_event_loop()
+                            coroutines = [profilesListOfType(m) for m in profileTypes]
+                            data["data"] = loop.run_until_complete(asyncio.gather(*coroutines))
+                            loop.close()
                     else:
                         # Profiles' types list.
                         # No need for a serializer: just a list of strings.

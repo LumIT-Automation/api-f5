@@ -1,6 +1,4 @@
 import asyncio
-
-import aiohttp
 from asgiref.sync import sync_to_async
 
 from rest_framework.request import Request
@@ -57,7 +55,6 @@ class F5MonitorsController(CustomController):
 
                                 return r
 
-                            asyncResults = list()
                             loop = asyncio.get_event_loop()
                             coroutines = [monitorsListOfType(m) for m in monitorTypes]
                             data["data"] = loop.run_until_complete(asyncio.gather(*coroutines))

@@ -1131,7 +1131,7 @@
 					"response": []
 				},
 				{
-					"name": "monitors (type)",
+					"name": "monitors (of type)",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -2035,7 +2035,7 @@
 					"response": []
 				},
 				{
-					"name": "profiles",
+					"name": "profile types",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -2055,7 +2055,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/profiles/fastl4/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Common/profiles/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -2067,7 +2067,49 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
+								"2",
+								"Common",
+								"profiles",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "profiles (of type)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "edfb456005712c3e68d97b525e247981",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/2/Common/profiles/fastl4/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"2",
 								"Common",
 								"profiles",
 								"fastl4",
@@ -2078,7 +2120,7 @@
 					"response": []
 				},
 				{
-					"name": "profiles (types)",
+					"name": "profiles (all types)",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -2098,7 +2140,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/profiles/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Common/profiles/ANY/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -2110,9 +2152,10 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
+								"2",
 								"Common",
 								"profiles",
+								"ANY",
 								""
 							]
 						}
