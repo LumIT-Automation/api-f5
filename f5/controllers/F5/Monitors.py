@@ -1,3 +1,8 @@
+import asyncio
+
+import aiohttp
+from asgiref.sync import sync_to_async
+
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
@@ -32,10 +37,31 @@ class F5MonitorsController(CustomController):
                     lock.lock()
 
                     if monitorType:
-                        # Monitors' list of that type.
-                        # F5 treats monitor type as a sub-object instead of a property. Odd.
-                        itemData = Monitor.list(assetId, partitionName, monitorType)
-                        data["data"] = MonitorsSerializer(itemData).data["data"]
+                        if monitorType != "ANY":
+                            # Monitors' list of that type.
+                            # F5 treats monitor type as a sub-object instead of a property. Odd.
+                            itemData = Monitor.list(assetId, partitionName, monitorType)
+                            data["data"] = MonitorsSerializer(itemData).data["data"]
+                        else:
+                            # All monitors list, of any type.
+                            data["data"] = dict()
+                            monitorTypes = Monitor.types(assetId, partitionName)["data"]["items"]
+
+                            # Event driven calls (@todo: why is it still serialized?).
+                            @sync_to_async
+                            def monitorsListOfType(mType):
+                                r = dict()
+                                r[mType] = MonitorsSerializer(
+                                    Monitor.list(assetId, partitionName, mType)
+                                ).data["data"]
+
+                                return r
+
+                            asyncResults = list()
+                            loop = asyncio.get_event_loop()
+                            coroutines = [monitorsListOfType(m) for m in monitorTypes]
+                            data["data"] = loop.run_until_complete(asyncio.gather(*coroutines))
+                            loop.close()
                     else:
                         # Monitors' types list.
                         # No need for a serializer: just a list of strings.

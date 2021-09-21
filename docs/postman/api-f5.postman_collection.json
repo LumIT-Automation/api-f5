@@ -1095,7 +1095,7 @@
 					"response": []
 				},
 				{
-					"name": "monitors (types)",
+					"name": "monitor types",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -1109,7 +1109,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/monitors/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Common/monitors/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1121,7 +1121,7 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
+								"2",
 								"Common",
 								"monitors",
 								""
@@ -1131,7 +1131,7 @@
 					"response": []
 				},
 				{
-					"name": "monitors",
+					"name": "monitors (type)",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -1145,7 +1145,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/monitors/tcp-half-open/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Common/monitors/https/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1157,10 +1157,47 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
+								"2",
 								"Common",
 								"monitors",
-								"tcp-half-open",
+								"https",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "monitors (all types)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/2/Common/monitors/ANY/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"2",
+								"Common",
+								"monitors",
+								"ANY",
 								""
 							]
 						}
