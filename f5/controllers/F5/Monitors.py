@@ -1,5 +1,6 @@
-import asyncio
-from asgiref.sync import sync_to_async
+#import asyncio
+#from asgiref.sync import sync_to_async
+import threading
 
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -21,7 +22,7 @@ from f5.helpers.Log import Log
 class F5MonitorsController(CustomController):
     @staticmethod
     def get(request: Request, assetId: int, partitionName: str, monitorType: str = "") -> Response:
-        data = dict()
+        data = {"data": dict()}
         etagCondition = { "responseEtag": "" }
 
         user = CustomController.loggedUser(request)
@@ -42,23 +43,34 @@ class F5MonitorsController(CustomController):
                             data["data"] = MonitorsSerializer(itemData).data["data"]
                         else:
                             # All monitors list, of any type.
-                            data["data"] = dict()
                             monitorTypes = Monitor.types(assetId, partitionName)["data"]["items"]
 
-                            # Event driven calls (@todo: why is it still serialized?).
-                            @sync_to_async
+                            # Event driven calls (no: still serialized).
+                            # @sync_to_async
+                            # def monitorsListOfType(mType):
+                            #     r = dict()
+                            #     r[mType] = MonitorsSerializer(
+                            #         Monitor.list(assetId, partitionName, mType)
+                            #     ).data["data"]
+                            #
+                            #     return r
+                            #
+                            # loop = asyncio.get_event_loop()
+                            # coroutines = [monitorsListOfType(m) for m in monitorTypes]
+                            # data["data"] = loop.run_until_complete(asyncio.gather(*coroutines))
+                            # loop.close()
+
+                            # The threading way.
                             def monitorsListOfType(mType):
-                                r = dict()
-                                r[mType] = MonitorsSerializer(
+                                data["data"][mType] = MonitorsSerializer(
                                     Monitor.list(assetId, partitionName, mType)
                                 ).data["data"]
 
-                                return r
-
-                            loop = asyncio.get_event_loop()
-                            coroutines = [monitorsListOfType(m) for m in monitorTypes]
-                            data["data"] = loop.run_until_complete(asyncio.gather(*coroutines))
-                            loop.close()
+                            workers = [threading.Thread(target=monitorsListOfType, args=(m,)) for m in monitorTypes]
+                            for w in workers:
+                                w.start()
+                            for w in workers:
+                                w.join()
                     else:
                         # Monitors' types list.
                         # No need for a serializer: just a list of strings.
