@@ -1,5 +1,6 @@
-import asyncio
-from asgiref.sync import sync_to_async
+#import asyncio
+#from asgiref.sync import sync_to_async
+import threading
 
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -21,7 +22,7 @@ from f5.helpers.Log import Log
 class F5ProfilesController(CustomController):
     @staticmethod
     def get(request: Request, assetId: int, partitionName: str, profileType: str = "") -> Response:
-        data = dict()
+        data = {"data": dict()}
         etagCondition = { "responseEtag": "" }
 
         user = CustomController.loggedUser(request)
@@ -42,23 +43,34 @@ class F5ProfilesController(CustomController):
                             data["data"] = ProfilesSerializer(itemData).data["data"]
                         else:
                             # All monitors list, of any type.
-                            data["data"] = dict()
                             profileTypes = Profile.types(assetId, partitionName)["data"]["items"]
 
-                            # Event driven calls (@todo: why is it still serialized?).
-                            @sync_to_async
+                            # Event driven calls (no: still serialized).
+                            # @sync_to_async
+                            # def profilesListOfType(pType):
+                            #     p = dict()
+                            #     p[pType] = ProfilesSerializer(
+                            #         Profile.list(assetId, partitionName, pType)
+                            #     ).data["data"]
+                            #
+                            #     return p
+                            #
+                            # loop = asyncio.get_event_loop()
+                            # coroutines = [profilesListOfType(m) for m in profileTypes]
+                            # data["data"] = loop.run_until_complete(asyncio.gather(*coroutines))
+                            # loop.close()
+
+                            # The threading way.
                             def profilesListOfType(pType):
-                                p = dict()
-                                p[pType] = ProfilesSerializer(
+                                data["data"][pType] = ProfilesSerializer(
                                     Profile.list(assetId, partitionName, pType)
                                 ).data["data"]
 
-                                return p
-
-                            loop = asyncio.get_event_loop()
-                            coroutines = [profilesListOfType(m) for m in profileTypes]
-                            data["data"] = loop.run_until_complete(asyncio.gather(*coroutines))
-                            loop.close()
+                            workers = [threading.Thread(target=profilesListOfType, args=(m,)) for m in profileTypes]
+                            for w in workers:
+                                w.start()
+                            for w in workers:
+                                w.join()
                     else:
                         # Profiles' types list.
                         # No need for a serializer: just a list of strings.
