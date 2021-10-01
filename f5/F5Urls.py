@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .controllers import Root
-from .controllers.F5 import Partitions, Node, Nodes, Monitor, Monitors, Certificate, Certificates, Pools, Pool, SnatPool, SnatPools, PoolMembers, PoolMember, PoolMemberStats, Profile, Profiles, VirtualServer, VirtualServers
+from .controllers.F5 import Partitions, Node, Nodes, Monitor, Monitors, Certificate, Certificates, Pools, Pool, SnatPool, SnatPools, PoolMembers, PoolMember, PoolMemberStats, Profile, Profiles, Policy, Policies, VirtualServer, VirtualServers
 from .controllers.F5.Asset import Asset, Assets
 from .controllers.F5.Workflow import VirtualServersController as WorkflowVirtualServers, VirtualServerController as WorkflowVirtualServer
 from .controllers.Permission import Authorizations, IdentityGroups, IdentityGroup, Roles, Permission, Permissions
@@ -52,6 +52,11 @@ urlpatterns = [
     path('<int:assetId>/<str:partitionName>/profiles/<str:profileType>/<str:profileName>/', Profile.F5ProfileController.as_view(), name='f5-profile'),
     path('<int:assetId>/<str:partitionName>/profiles/<str:profileType>/', Profiles.F5ProfilesController.as_view(), name='f5-profiles'),
     path('<int:assetId>/<str:partitionName>/profiles/', Profiles.F5ProfilesController.as_view(), name='f5-profile-types'),
+
+    # Policy.
+    path('<int:assetId>/<str:partitionName>/policies/', Policies.F5PoliciesController.as_view(), name='f5-policies'),
+    path('<int:assetId>/<str:partitionName>/policy/<str:policyName>/', Policy.F5PolicyController.as_view(), name='f5-policy'),
+    path('<int:assetId>/<str:partitionName>/policy/<str:policySubPath>/<str:policyName>/', Policy.F5PolicyController.as_view(), name='f5-policy-with-path'),
 
     # Virtual server.
     path('<int:assetId>/<str:partitionName>/virtualserver/<str:virtualServerName>/', VirtualServer.F5VirtualServerController.as_view(), name='f5-virtualserver'),

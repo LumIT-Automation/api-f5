@@ -72,7 +72,11 @@ INSERT INTO `privilege` (`id`, `privilege`, `propagate_to_all_asset_partitions`,
 (45, 'historyComplete_get', 1, 1, NULL),
 (46, 'workflow_virtualServers_delete', 0, 0, NULL),
 (47, 'certificates_get', 1, 0, NULL),
-(48, 'certificate_delete', 1, 0, NULL);
+(48, 'certificate_delete', 1, 0, NULL),
+(49, 'policies_get', 0, 0, NULL),
+(50, 'policies_post', 0, 0, NULL),
+(51, 'policy_patch', 0, 0, NULL),
+(52, 'policy_delete', 0, 0, NULL);
 
 --
 -- Dump dei dati per la tabella `role`
@@ -135,6 +139,10 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (1, 46),
 (1, 47),
 (1, 48),
+(1, 49),
+(1, 50),
+(1, 51),
+(1, 52),
 (2, 3),
 (2, 5),
 (2, 6),
@@ -173,6 +181,10 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (2, 46),
 (2, 47),
 (2, 48),
+(2, 49),
+(2, 50),
+(2, 51),
+(2, 52),
 (3, 3),
 (3, 6),
 (3, 8),
@@ -185,7 +197,8 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (3, 35),
 (3, 36),
 (3, 41),
-(3, 47);
+(3, 47),
+(3, 49);
 
 
 COMMIT;
