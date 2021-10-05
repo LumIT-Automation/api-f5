@@ -22,6 +22,14 @@ SET time_zone = "+00:00";
 --
 
 --
+-- Dump dei dati per la tabella `configuration`
+--
+
+INSERT INTO `configuration` (`id`, `config_type`, `configuration`) VALUES
+(1, 'global', '{\"config\": {}}');
+
+
+--
 -- Dump dei dati per la tabella `privilege`
 --
 
@@ -81,7 +89,8 @@ INSERT INTO `privilege` (`id`, `privilege`, `propagate_to_all_asset_partitions`,
 (54, 'irules_post', 0, 0, NULL),
 (55, 'irule_patch', 0, 0, NULL),
 (56, 'irule_delete', 0, 0, NULL),
-(57, 'rootdomains_get', 1, 0, NULL);
+(57, 'rootdomains_get', 1, 0, NULL),
+(58, 'configuration_put', 1, 1, NULL);
 
 
 --
@@ -154,6 +163,7 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (1, 55),
 (1, 56),
 (1, 57),
+(1, 58),
 (2, 3),
 (2, 5),
 (2, 6),

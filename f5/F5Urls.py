@@ -5,6 +5,7 @@ from .controllers.F5 import Partitions, RootDomains, Node, Nodes, Monitor, Monit
 from .controllers.F5.Asset import Asset, Assets
 from .controllers.F5.Workflow import VirtualServersController as WorkflowVirtualServers, VirtualServerController as WorkflowVirtualServer
 from .controllers.Permission import Authorizations, IdentityGroups, IdentityGroup, Roles, Permission, Permissions
+from .controllers.Configuration import Configuration
 from .controllers import History
 
 
@@ -18,6 +19,8 @@ urlpatterns = [
     path('permission/<int:permissionId>/', Permission.PermissionController.as_view(), name='permission'),
 
     path('authorizations/', Authorizations.AuthorizationsController.as_view(), name='authorizations'),
+
+    path('configuration/<str:configType>/', Configuration.ConfigurationController.as_view(), name='configuration'),
 
     # Asset.
     path('assets/', Assets.F5AssetsController.as_view(), name='f5-assets'),

@@ -845,6 +845,84 @@
 					]
 				},
 				{
+					"name": "Configuration",
+					"item": [
+						{
+							"name": "configuration",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/configuration/global/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"configuration",
+										"global",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "configuration",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"configuration\": \"{\\\"config\\\": { todo }}\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/configuration/global/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"configuration",
+										"global",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "/",
 					"request": {
 						"auth": {
@@ -878,7 +956,42 @@
 					"response": []
 				},
 				{
-					"name": "partitions",
+					"name": "rootdomains",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/2/rootdomains/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"2",
+								"rootdomains",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "partitions Copy",
 					"request": {
 						"auth": {
 							"type": "noauth"
