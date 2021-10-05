@@ -76,7 +76,12 @@ INSERT INTO `privilege` (`id`, `privilege`, `propagate_to_all_asset_partitions`,
 (49, 'policies_get', 0, 0, NULL),
 (50, 'policies_post', 0, 0, NULL),
 (51, 'policy_patch', 0, 0, NULL),
-(52, 'policy_delete', 0, 0, NULL);
+(52, 'policy_delete', 0, 0, NULL),
+(53, 'irules_get', 0, 0, NULL),
+(54, 'irules_post', 0, 0, NULL),
+(55, 'irule_patch', 0, 0, NULL),
+(56, 'irule_delete', 0, 0, NULL);
+
 
 --
 -- Dump dei dati per la tabella `role`
@@ -143,6 +148,10 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (1, 50),
 (1, 51),
 (1, 52),
+(1, 53),
+(1, 54),
+(1, 55),
+(1, 56),
 (2, 3),
 (2, 5),
 (2, 6),
@@ -185,6 +194,10 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (2, 50),
 (2, 51),
 (2, 52),
+(2, 53),
+(2, 54),
+(2, 55),
+(2, 56),
 (3, 3),
 (3, 6),
 (3, 8),
@@ -198,7 +211,8 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (3, 36),
 (3, 41),
 (3, 47),
-(3, 49);
+(3, 49),
+(3, 53);
 
 
 COMMIT;
