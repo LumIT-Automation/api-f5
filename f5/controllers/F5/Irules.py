@@ -48,8 +48,8 @@ class F5IrulesController(CustomController):
                     else:
                         httpStatus = status.HTTP_500_INTERNAL_SERVER_ERROR
                         data = {
-                            "Infoblox": {
-                                "error": "Infoblox upstream data mismatch."
+                            "F5": {
+                                "error": str(serializer.errors)
                             }
                         }
 

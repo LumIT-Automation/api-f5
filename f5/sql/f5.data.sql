@@ -80,7 +80,8 @@ INSERT INTO `privilege` (`id`, `privilege`, `propagate_to_all_asset_partitions`,
 (53, 'irules_get', 0, 0, NULL),
 (54, 'irules_post', 0, 0, NULL),
 (55, 'irule_patch', 0, 0, NULL),
-(56, 'irule_delete', 0, 0, NULL);
+(56, 'irule_delete', 0, 0, NULL),
+(57, 'rootdomains_get', 1, 0, NULL);
 
 
 --
@@ -152,6 +153,7 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (1, 54),
 (1, 55),
 (1, 56),
+(1, 57),
 (2, 3),
 (2, 5),
 (2, 6),
@@ -198,6 +200,7 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (2, 54),
 (2, 55),
 (2, 56),
+(2, 57),
 (3, 3),
 (3, 6),
 (3, 8),
@@ -212,7 +215,8 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (3, 41),
 (3, 47),
 (3, 49),
-(3, 53);
+(3, 53),
+(3, 57);
 
 
 COMMIT;

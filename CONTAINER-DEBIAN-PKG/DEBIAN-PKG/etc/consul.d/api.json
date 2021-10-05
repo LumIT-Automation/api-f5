@@ -9,7 +9,7 @@
   },
   "check": {
     "id": "api-f5",
-    "name": "HTTP API-INFOBLOX",
+    "name": "HTTP API-F5",
     "http": "http://127.0.0.1/api/?consul-check",
     "method": "GET",
     "interval": "30s",
