@@ -13,6 +13,9 @@ class F5VirtualServersSerializer(serializers.Serializer):
             class F5VirtualServersSecurityLogProfilesReferenceSerializer(serializers.Serializer):
                 link = serializers.CharField(max_length=255, required=True)
 
+            class F5VirtualServersRulesReferenceSerializer(serializers.Serializer):
+                link = serializers.CharField(max_length=255, required=True)
+
             class F5VirtualServersPersistSerializer(serializers.Serializer):
                 class F5VirtualServersPersistNameReferenceSerializer(serializers.Serializer):
                     link = serializers.CharField(max_length=255, required=True)
@@ -40,6 +43,7 @@ class F5VirtualServersSerializer(serializers.Serializer):
                 regex='^/.*/([01]?\d\d?|2[0-4]\d|25[0-5])(?:\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])){3}(:\d*)?$',
                 required=True)
             enabled = serializers.BooleanField(required=False)
+            evictionProtected = serializers.CharField(max_length=255, required=True)
             gtmScore = serializers.IntegerField(required=True)
             ipProtocol = serializers.CharField(max_length=255, required=True)
             lastModifiedTime = serializers.CharField(max_length=255, required=True)
@@ -48,6 +52,7 @@ class F5VirtualServersSerializer(serializers.Serializer):
             mobileAppTunnel = serializers.CharField(max_length=255, required=True)
             nat64 = serializers.CharField(max_length=255, required=True)
             pool = serializers.CharField(max_length=255, required=False)
+            serversslUseSni = serializers.CharField(max_length=255, required=False)
             poolReference = F5VirtualServersPoolReferenceSerializer(required=False)
             rateLimit = serializers.CharField(max_length=255, required=False)
             rateLimitDstMask = serializers.IntegerField(required=True)
@@ -72,6 +77,10 @@ class F5VirtualServersSerializer(serializers.Serializer):
             persist = F5VirtualServersPersistSerializer(many=True, required=False)
             policiesReference = F5VirtualServersReferenceSerializer(required=True)
             profilesReference = F5VirtualServersReferenceSerializer(required=True)
+            rules = serializers.ListField(
+                serializers.CharField(max_length=255, required=False)
+            )
+            rulesReference = F5VirtualServersRulesReferenceSerializer(many=True, required=False)
 
 
         items = F5VirtualServersItemsSerializer(many=True)
