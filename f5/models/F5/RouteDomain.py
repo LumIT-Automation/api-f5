@@ -3,7 +3,7 @@ from f5.models.F5.Asset.Asset import Asset
 from f5.helpers.ApiSupplicant import ApiSupplicant
 
 
-class RootDomain:
+class RouteDomain:
     def __init__(self, assetId: int, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

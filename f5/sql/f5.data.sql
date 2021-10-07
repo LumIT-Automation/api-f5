@@ -89,7 +89,7 @@ INSERT INTO `privilege` (`id`, `privilege`, `propagate_to_all_asset_partitions`,
 (54, 'irules_post', 0, 0, NULL),
 (55, 'irule_patch', 0, 0, NULL),
 (56, 'irule_delete', 0, 0, NULL),
-(57, 'rootdomains_get', 1, 0, NULL),
+(57, 'routedomains_get', 1, 0, NULL),
 (58, 'configuration_put', 1, 1, NULL);
 
 

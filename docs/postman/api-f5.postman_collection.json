@@ -716,7 +716,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"data\": {\n        \"virtualServer\": {\n            \"name\": \"SERVICENAME\",\n            \"type\": \"L4\",\n            \"snat\": \"none\",\n            \"destination\": \"11.11.11.61:80\",\n            \"mask\": \"255.255.255.255\",\n            \"source\": \"0.0.0.0/0\"\n        },\n        \"profiles\": [\n            {\n                \"name\": \"PROFILENAME\",\n                \"type\": \"fastl4\",\n                \"idleTimeout\": 300\n            }\n        ],\n        \"pool\": {\n            \"name\": \"POOLNAME\",\n            \"loadBalancingMode\": \"round-robin\",\n            \"nodes\": [\n                {\n                    \"name\": \"111.111.111.170\",\n                    \"address\": \"111.111.111.170\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"111.111.111.171\",\n                    \"address\": \"111.111.111.171\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"111.111.111.178\",\n                    \"address\": \"111.111.111.178\",\n                    \"port\": 80\n                }\n            ]\n        },\n        \"monitor\": {\n            \"name\": \"MONITORNAME\",\n            \"type\": \"tcp-half-open\",\n            \"send\": \"/\",\n            \"recv\": \"OK\"\n        }\n    }\n}",
+									"raw": "{\n    \"data\": {\n        \"virtualServer\": {\n            \"name\": \"SERVICENAME\",\n            \"type\": \"L4\",\n            \"snat\": \"none\",\n            \"routeDomainId\": 1,\n            \"destination\": \"11.11.11.61:80\",\n            \"mask\": \"255.255.255.255\",\n            \"source\": \"0.0.0.0/0\"\n        },\n        \"profiles\": [\n            {\n                \"name\": \"PROFILENAME\",\n                \"type\": \"fastl4\",\n                \"idleTimeout\": 300\n            }\n        ],\n        \"pool\": {\n            \"name\": \"POOLNAME\",\n            \"loadBalancingMode\": \"round-robin\",\n            \"nodes\": [\n                {\n                    \"name\": \"NODE_1\",\n                    \"address\": \"111.111.111.170\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"NODE_2\",\n                    \"address\": \"111.111.111.171\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"NODE_3\",\n                    \"address\": \"111.111.111.178\",\n                    \"port\": 80\n                }\n            ]\n        },\n        \"monitor\": {\n            \"name\": \"MONITORNAME\",\n            \"type\": \"https\",\n            \"send\": \"/\",\n            \"recv\": \"OK\"\n        }\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -724,7 +724,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/1/Common/workflow/virtualservers/",
+									"raw": "http://10.0.111.22/api/v1/f5/2/Common/workflow/virtualservers/",
 									"protocol": "http",
 									"host": [
 										"10",
@@ -736,7 +736,7 @@
 										"api",
 										"v1",
 										"f5",
-										"1",
+										"2",
 										"Common",
 										"workflow",
 										"virtualservers",
@@ -768,7 +768,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"data\": {\n        \"virtualServer\": {\n            \"name\": \"SERVICENAMEL7\",\n            \"type\": \"L7\",\n            \"snat\": \"none\",\n            \"destination\": \"11.11.12.60:443\",\n            \"mask\": \"255.255.255.255\",\n            \"source\": \"0.0.0.0/0\"\n        },\n        \"profiles\": [\n            {\n                \"name\": \"tcp-wan-optimized_SERVICENAMEL7\",\n                \"type\": \"tcp\",\n                \"defaultsFrom\": \"/Common/tcp-wan-optimized\",\n                \"context\": \"clientside\"\n            },\n            {\n                \"name\": \"tcp-lan-optimized_PROFILENAMEL7\",\n                \"type\": \"tcp\",\n                \"defaultsFrom\": \"/Common/tcp-lan-optimized\",\n                \"context\": \"serverside\"\n            },\n            {\n                \"name\": \"http_PROFILENAMEL7\",\n                \"type\": \"http\",\n                \"defaultsFrom\": \"/Common/http\"\n            },\n            {\n                \"name\": \"client-ssl_PROFILENAMEL7\",\n                \"type\": \"client-ssl\",\n                \"cert\": \"/Common/mamma.crt\",\n                \"key\": \"/Common/key.crt\",\n                \"chain\": \"\",\n                \"context\": \"clientside\"\n            }\n        ],\n        \"pool\": {\n            \"name\": \"POOLNAME\",\n            \"loadBalancingMode\": \"round-robin\",\n            \"nodes\": [\n                {\n                    \"name\": \"111.111.111.170\",\n                    \"address\": \"111.111.111.170\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"111.111.111.171\",\n                    \"address\": \"111.111.111.171\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"111.111.111.178\",\n                    \"address\": \"111.111.111.178\",\n                    \"port\": 80\n                }\n            ]\n        },\n        \"monitor\": {\n            \"name\": \"MONITORNAME\",\n            \"type\": \"tcp-half-open\",\n            \"send\": \"/\",\n            \"recv\": \"OK\"\n        }\n    }\n}",
+									"raw": "{\n    \"data\": {\n        \"virtualServer\": {\n            \"name\": \"SERVICENAMEL7\",\n            \"type\": \"L7\",\n            \"snat\": \"none\",\n            \"routeDomainId\": 1,\n            \"destination\": \"11.11.12.60:443\",\n            \"mask\": \"255.255.255.255\",\n            \"source\": \"0.0.0.0/0\"\n        },\n        \"profiles\": [\n            {\n                \"name\": \"tcp-wan-optimized_SERVICENAMEL7\",\n                \"type\": \"tcp\",\n                \"defaultsFrom\": \"/Common/tcp-wan-optimized\",\n                \"context\": \"clientside\"\n            },\n            {\n                \"name\": \"tcp-lan-optimized_PROFILENAMEL7\",\n                \"type\": \"tcp\",\n                \"defaultsFrom\": \"/Common/tcp-lan-optimized\",\n                \"context\": \"serverside\"\n            },\n            {\n                \"name\": \"http_PROFILENAMEL7\",\n                \"type\": \"http\",\n                \"defaultsFrom\": \"/Common/http\"\n            },\n            {\n                \"name\": \"client-ssl_PROFILENAMEL7\",\n                \"type\": \"client-ssl\",\n                \"cert\": \"/Common/mamma.crt\",\n                \"key\": \"/Common/key.crt\",\n                \"chain\": \"\",\n                \"context\": \"clientside\"\n            }\n        ],\n        \"pool\": {\n            \"name\": \"POOLNAME\",\n            \"loadBalancingMode\": \"round-robin\",\n            \"nodes\": [\n                {\n                    \"name\": \"111.111.111.170\",\n                    \"address\": \"111.111.111.170\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"111.111.111.171\",\n                    \"address\": \"111.111.111.171\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"111.111.111.178\",\n                    \"address\": \"111.111.111.178\",\n                    \"port\": 80\n                }\n            ]\n        },\n        \"monitor\": {\n            \"name\": \"MONITORNAME\",\n            \"type\": \"https\",\n            \"send\": \"/\",\n            \"recv\": \"OK\"\n        }\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -776,7 +776,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/1/Common/workflow/virtualservers/",
+									"raw": "http://10.0.111.22/api/v1/f5/2/Common/workflow/virtualservers/",
 									"protocol": "http",
 									"host": [
 										"10",
@@ -788,7 +788,7 @@
 										"api",
 										"v1",
 										"f5",
-										"1",
+										"2",
 										"Common",
 										"workflow",
 										"virtualservers",
@@ -819,7 +819,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/1/Common/workflow/virtualservers/SERVICENAME/",
+									"raw": "http://10.0.111.22/api/v1/f5/2/Common/workflow/virtualservers/SERVICENAME/",
 									"protocol": "http",
 									"host": [
 										"10",
@@ -831,7 +831,7 @@
 										"api",
 										"v1",
 										"f5",
-										"1",
+										"2",
 										"Common",
 										"workflow",
 										"virtualservers",
@@ -956,7 +956,7 @@
 					"response": []
 				},
 				{
-					"name": "rootdomains",
+					"name": "routedomains",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -970,7 +970,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/2/rootdomains/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/routedomains/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -983,7 +983,7 @@
 								"v1",
 								"f5",
 								"2",
-								"rootdomains",
+								"routedomains",
 								""
 							]
 						}
@@ -991,7 +991,7 @@
 					"response": []
 				},
 				{
-					"name": "partitions Copy",
+					"name": "partitions",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -1487,7 +1487,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/pools/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Common/pools/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1499,7 +1499,7 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
+								"2",
 								"Common",
 								"pools",
 								""
@@ -1589,7 +1589,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/pool/POOL/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Common/pool/POOL/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1601,7 +1601,7 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
+								"2",
 								"Common",
 								"pool",
 								"POOL",

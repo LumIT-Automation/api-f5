@@ -19,7 +19,11 @@ class VirtualServersWorkflow:
         self.partitionName = partitionName
         self.data = data
         self.username = user["username"]
-        
+        self.routeDomain = ""
+
+        if "routeDomainId" in data["virtualServer"]:
+            self.routeDomain = "%" + str(data["virtualServer"]["routeDomainId"])
+
         self.__createdObjects = {
             "node": [],
             "monitor": {},
@@ -84,7 +88,7 @@ class VirtualServersWorkflow:
 
                 Node.add(self.assetId, {
                     "name": nodeName,
-                    "address": nodeAddress,
+                    "address": nodeAddress+self.routeDomain,
                     "partition": self.partitionName,
                     "State": "up"
                 })
@@ -94,7 +98,7 @@ class VirtualServersWorkflow:
                     "asset": self.assetId,
                     "partition": self.partitionName,
                     "name": nodeName,
-                    "address": nodeAddress
+                    "address": nodeAddress+self.routeDomain,
                 })
 
             except Exception as e:
@@ -230,8 +234,7 @@ class VirtualServersWorkflow:
             poolMemberName = nodeName+":"+str(poolMemberPort)
 
             try:
-                Log.actionLog("Virtual server workflow: attempting to create pool members: "
-                              "associate "+str(nodeName)+" to "+str(poolName)+" on port "+str(poolMemberPort))
+                Log.actionLog("Virtual server workflow: attempting to create pool members: associate "+str(nodeName)+" to "+str(poolName)+" on port "+str(poolMemberPort))
 
                 PoolMember.add(self.assetId, self.partitionName, poolName, {
                         "name": poolMemberName,
@@ -347,7 +350,7 @@ class VirtualServersWorkflow:
                 "partition": self.partitionName,
                 "monitor": "/"+self.partitionName+"/"+self.data["monitor"]["name"],
                 "members": [
-                    "/"+self.partitionName+"/"+self.data["snatPool"]["snatIPAddress"]
+                    "/"+self.partitionName+"/"+self.data["snatPool"]["snatIPAddress"]+self.routeDomain
                 ]
             })
 
@@ -390,6 +393,13 @@ class VirtualServersWorkflow:
         virtualServerMask = self.data["virtualServer"]["mask"]
         virtualServerSource = self.data["virtualServer"]["source"]
         virtualServerSnat = self.data["virtualServer"]["snat"]
+
+        if self.routeDomain:
+            i, m = virtualServerSource.split("/")
+            virtualServerSource = i+self.routeDomain+"/"+m
+
+            i, p = virtualServerDestination.split(":")
+            virtualServerDestination = i+self.routeDomain+":"+p
 
         try:
             Log.actionLog("Virtual server workflow: attempting to create virtual server: "+str(virtualServerName))

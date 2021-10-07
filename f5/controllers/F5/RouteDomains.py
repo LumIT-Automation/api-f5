@@ -2,10 +2,10 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
 
-from f5.models.F5.RootDomain import RootDomain
+from f5.models.F5.RouteDomain import RouteDomain
 from f5.models.Permission.Permission import Permission
 
-from f5.serializers.F5.RootDomains import F5RootDomainsSerializer as Serializer
+from f5.serializers.F5.RouteDomains import F5RouteDomainsSerializer as Serializer
 
 from f5.controllers.CustomController import CustomController
 
@@ -14,7 +14,7 @@ from f5.helpers.Conditional import Conditional
 from f5.helpers.Log import Log
 
 
-class F5rootDomainsController(CustomController):
+class F5RouteDomainsController(CustomController):
     @staticmethod
     def get(request: Request, assetId: int) -> Response:
         data = dict()
@@ -23,14 +23,14 @@ class F5rootDomainsController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="rootdomains_get", assetId=assetId) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="routedomains_get", assetId=assetId) or user["authDisabled"]:
                 Log.actionLog("Root domains list", user)
 
-                lock = Lock("rootdomain", locals())
+                lock = Lock("routedomain", locals())
                 if lock.isUnlocked():
                     lock.lock()
 
-                    itemData = RootDomain.list(assetId)
+                    itemData = RouteDomain.list(assetId)
                     serializer = Serializer(data=itemData)
                     if serializer.is_valid():
                         data["data"] = serializer.validated_data["data"]
@@ -60,7 +60,7 @@ class F5rootDomainsController(CustomController):
                 data = None
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("rootdomain", locals()).release()
+            Lock("routedomain", locals()).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

@@ -1,10 +1,10 @@
 from rest_framework import serializers
 
 
-class F5RootDomainsSerializer(serializers.Serializer):
-    class F5RootDomainsInnerSerializer(serializers.Serializer):
-        class F5RootDomainsItemsSerializer(serializers.Serializer):
-            class F5RootDomainsValidatorsSerializer(serializers.Serializer):
+class F5RouteDomainsSerializer(serializers.Serializer):
+    class F5RouteDomainsInnerSerializer(serializers.Serializer):
+        class F5RouteDomainsItemsSerializer(serializers.Serializer):
+            class F5RouteDomainsValidatorsSerializer(serializers.Serializer):
                 link = serializers.CharField(max_length=255, required=True)
 
             name = serializers.CharField(max_length=255, required=True)
@@ -18,10 +18,11 @@ class F5RootDomainsSerializer(serializers.Serializer):
             throughputCapacity = serializers.CharField(max_length=255, required=True)
             defaultRouteDomain = serializers.IntegerField(required=False)
             vlans = serializers.ListField(
-                child=serializers.CharField(max_length=255, required=True)
+                child=serializers.CharField(max_length=255),
+                required=False
             )
-            vlansReference = F5RootDomainsValidatorsSerializer(many=True)
+            vlansReference = F5RouteDomainsValidatorsSerializer(many=True, required=False)
 
-        items = F5RootDomainsItemsSerializer(many=True)
+        items = F5RouteDomainsItemsSerializer(many=True)
 
-    data = F5RootDomainsInnerSerializer(required=True)
+    data = F5RouteDomainsInnerSerializer(required=True)

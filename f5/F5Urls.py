@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .controllers import Root
-from .controllers.F5 import Partitions, RootDomains, Node, Nodes, Monitor, Monitors, Certificate, Certificates, Pools, Pool, SnatPool, SnatPools, PoolMembers, PoolMember, PoolMemberStats, Profile, Profiles, Irule, Irules, Policy, Policies, VirtualServer, VirtualServers
+from .controllers.F5 import Partitions, RouteDomains, Node, Nodes, Monitor, Monitors, Certificate, Certificates, Pools, Pool, SnatPool, SnatPools, PoolMembers, PoolMember, PoolMemberStats, Profile, Profiles, Irule, Irules, Policy, Policies, VirtualServer, VirtualServers
 from .controllers.F5.Asset import Asset, Assets
 from .controllers.F5.Workflow import VirtualServersController as WorkflowVirtualServers, VirtualServerController as WorkflowVirtualServer
 from .controllers.Permission import Authorizations, IdentityGroups, IdentityGroup, Roles, Permission, Permissions
@@ -30,7 +30,7 @@ urlpatterns = [
     path('<int:assetId>/partitions/', Partitions.F5PartitionsController.as_view(), name='f5-partitions'),
 
     # Root domain.
-    path('<int:assetId>/rootdomains/', RootDomains.F5rootDomainsController.as_view(), name='f5-root-domains'),
+    path('<int:assetId>/routedomains/', RouteDomains.F5RouteDomainsController.as_view(), name='f5-route-domains'),
 
     # Node.
     path('<int:assetId>/<str:partitionName>/node/<str:nodeName>/', Node.F5NodeController.as_view(), name='f5-node'),
