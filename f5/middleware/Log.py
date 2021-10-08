@@ -3,14 +3,17 @@ from django.http import request, response
 
 
 class LogMiddleware:
-    def __init__(self, response: response) -> None:
-        self.response = response
-        self.log = logging.getLogger("http") # setup LOGGING in settings.py
+    def __init__(self, resp: response) -> None:
+        self.resp = resp
+        self.log = logging.getLogger("django") # setup LOGGING in settings.py
 
 
 
-    def __call__(self, request: request) -> response:
-        self.log.debug("Request: "+str(request))
+    def __call__(self, req: request) -> response:
+        self.log.debug("--> Request: "+str(req))
 
-        response = self.response(request)
-        return response
+        resp = self.resp(req)
+
+        self.log.debug("--> Response: "+str(resp))
+
+        return resp
