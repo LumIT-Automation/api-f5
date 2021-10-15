@@ -73,7 +73,12 @@ class ApiSupplicant:
             elif self.responseStatus == 401:
                 raise CustomException(status=400, payload={"F5": "Wrong credentials for the asset."})
             else:
-                raise CustomException(status=self.responseStatus, payload={"F5": self.responseObject})
+                if "message" in self.responseObject:
+                    f5Error = self.responseObject["message"]
+                else:
+                    f5Error = self.responseObject
+
+                raise CustomException(status=self.responseStatus, payload={"F5": f5Error})
 
         except Exception as e:
             raise e
@@ -131,7 +136,12 @@ class ApiSupplicant:
             elif self.responseStatus == 401:
                 raise CustomException(status=400, payload={"F5": "Wrong credentials for the asset."})
             else:
-                raise CustomException(status=self.responseStatus, payload={"F5": self.responseObject})
+                if "message" in self.responseObject:
+                    f5Error = self.responseObject["message"]
+                else:
+                    f5Error = self.responseObject
+
+                raise CustomException(status=self.responseStatus, payload={"F5": f5Error})
 
         except Exception as e:
             raise e
@@ -188,7 +198,12 @@ class ApiSupplicant:
             elif self.responseStatus == 401:
                 raise CustomException(status=400, payload={"F5": "Wrong credentials for the asset."})
             else:
-                raise CustomException(status=self.responseStatus, payload={"F5": self.responseObject})
+                if "message" in self.responseObject:
+                    f5Error = self.responseObject["message"]
+                else:
+                    f5Error = self.responseObject
+
+                raise CustomException(status=self.responseStatus, payload={"F5": f5Error})
 
         except Exception as e:
             raise e
@@ -245,7 +260,12 @@ class ApiSupplicant:
             elif self.responseStatus == 401:
                 raise CustomException(status=400, payload={"F5": "Wrong credentials for the asset."})
             else:
-                raise CustomException(status=self.responseStatus, payload={"F5": self.responseObject})
+                if "message" in self.responseObject:
+                    f5Error = self.responseObject["message"]
+                else:
+                    f5Error = self.responseObject
+
+                raise CustomException(status=self.responseStatus, payload={"F5": f5Error})
 
         except Exception as e:
             raise e
@@ -300,7 +320,12 @@ class ApiSupplicant:
             elif self.responseStatus == 401:
                 raise CustomException(status=400, payload={"F5": "Wrong credentials for the asset."})
             else:
-                raise CustomException(status=self.responseStatus, payload={"F5": self.responseObject})
+                if "message" in self.responseObject:
+                    f5Error = self.responseObject["message"]
+                else:
+                    f5Error = self.responseObject
+
+                raise CustomException(status=self.responseStatus, payload={"F5": f5Error})
 
         except Exception as e:
             raise e
