@@ -61,6 +61,7 @@ class F5ProfilesController(CustomController):
                             # loop.close()
 
                             # The threading way.
+                            # This requires a consistent throttle on remote appliance.
                             def profilesListOfType(pType):
                                 data["data"][pType] = ProfilesSerializer(
                                     Profile.list(assetId, partitionName, pType)

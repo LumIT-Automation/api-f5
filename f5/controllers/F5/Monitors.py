@@ -61,6 +61,7 @@ class F5MonitorsController(CustomController):
                             # loop.close()
 
                             # The threading way.
+                            # This requires a consistent throttle on remote appliance.
                             def monitorsListOfType(mType):
                                 data["data"][mType] = MonitorsSerializer(
                                     Monitor.list(assetId, partitionName, mType)
