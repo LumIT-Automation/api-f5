@@ -1,11 +1,11 @@
 from django.utils.html import strip_tags
 from django.db import connection
 from django.db import transaction
+from django.core.cache import cache
 
 from f5.helpers.Log import Log
 from f5.helpers.Exception import CustomException
 from f5.helpers.Database import Database as DBHelper
-
 
 
 class Asset:
@@ -21,31 +21,35 @@ class Asset:
     ####################################################################################################################
 
     def info(self) -> dict:
-        a = dict()
-        c = connection.cursor()
+        if not cache.get("ASSETS"):
+            c = connection.cursor()
 
-        try:
-            c.execute("SELECT * FROM asset WHERE id = %s", [
-                self.assetId
-            ])
+            try:
+                c.execute("SELECT * FROM asset WHERE id = %s", [
+                    self.assetId
+                ])
 
-            a = DBHelper.asDict(c)[0]
-            a["auth"] = {
-                "username": a["username"],
-                "password": a["password"],
-            }
+                a = DBHelper.asDict(c)[0]
+                a["auth"] = {
+                    "username": a["username"],
+                    "password": a["password"],
+                }
 
-            del(
-                a["username"],
-                a["password"]
-            )
+                del(
+                    a["username"],
+                    a["password"]
+                )
 
-            return a
+                cache.set("ASSETS", a, 10)
+                return a
 
-        except Exception as e:
-            raise CustomException(status=400, payload={"database": e.__str__()})
-        finally:
-            c.close()
+            except Exception as e:
+                raise CustomException(status=400, payload={"database": e.__str__()})
+            finally:
+                c.close()
+        else:
+            # Fetching from cache instead of MySQL for when massive threaded calls result in too many sql connections.
+            return cache.get("ASSETS")
 
 
 

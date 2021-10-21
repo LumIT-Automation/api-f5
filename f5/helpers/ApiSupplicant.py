@@ -39,8 +39,6 @@ class ApiSupplicant:
 
         try:
             # Fetch the remote resource from the F5 backend.
-            Log.actionLog("Fetching remote: GET "+str(self.endpoint)+" with params: "+str(self.params))
-
             response = requests.get(self.endpoint,
                 proxies=self.httpProxy,
                 verify=self.tlsVerify,
@@ -59,6 +57,7 @@ class ApiSupplicant:
             except Exception:
                 self.responseObject = {}
 
+            Log.actionLog("Fetching remote: GET "+str(self.endpoint)+" with params: "+str(self.params)) # here for threaded calls.
             Log.actionLog("Remote response HTTP status: "+str(self.responseStatus))
 
             if not self.silent:
