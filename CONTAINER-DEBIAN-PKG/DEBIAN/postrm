@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Use image label to cleanup possible orphaned images.
+oImgs=$(buildah images | grep -F '<none>' | awk '{print $3}')
+for img in $oImgs ; do
+    if buildah inspect $img | grep -q '"AUTOMATION_CONTAINER_IMAGE": "api-f5"'; then
+        buildah rmi --force $img
+    fi
+done
+
 if [ "$1" == "purge" ]; then
     if podman volume ls | awk '{print $2}' | grep -q ^api-f5$; then
         printf "\n* Clean up api-f5 volume...\n"
