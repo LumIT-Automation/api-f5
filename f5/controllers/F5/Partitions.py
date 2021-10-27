@@ -34,10 +34,9 @@ class F5PartitionsController(CustomController):
 
                     itemData = Partition.list(assetId)
 
-                    # Filter partitions' list basing on permissions.
-                    # For any result, check if the user has got at least a pools_get permission on the partition.
+                    # Filter partitions' list basing on actual permissions.
                     for p in itemData["data"]["items"]:
-                        if Permission.hasUserPermission(groups=user["groups"], action="pools_get", assetId=assetId, partitionName=str(p["fullPath"])) or user["authDisabled"]:
+                        if Permission.hasUserPermission(groups=user["groups"], action="partitions_get", assetId=assetId, partitionName=str(p["fullPath"])) or user["authDisabled"]:
                             allowedData["data"]["items"].append(p)
 
                     data["data"] = Serializer(allowedData).data["data"]

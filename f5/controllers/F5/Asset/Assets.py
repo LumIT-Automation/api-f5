@@ -16,6 +16,11 @@ class F5AssetsController(CustomController):
     @staticmethod
     def get(request: Request) -> Response:
         data = dict()
+        allowedData = {
+            "data": {
+                "items": []
+            }
+        }
         user = CustomController.loggedUser(request)
 
         try:
@@ -23,7 +28,13 @@ class F5AssetsController(CustomController):
                 Log.actionLog("Asset list", user)
 
                 itemData = Asset.list()
-                data["data"] = AssetsSerializer(itemData).data["data"]
+
+                # Filter assets' list basing on actual permissions.
+                for p in itemData["data"]["items"]:
+                    if Permission.hasUserPermission(groups=user["groups"], action="assets_get", assetId=p["id"]) or user["authDisabled"]:
+                        allowedData["data"]["items"].append(p)
+
+                data["data"] = AssetsSerializer(allowedData).data["data"]
                 data["href"] = request.get_full_path()
 
                 httpStatus = status.HTTP_200_OK

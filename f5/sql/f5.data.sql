@@ -34,10 +34,10 @@ INSERT INTO `configuration` (`id`, `config_type`, `configuration`) VALUES
 --
 
 INSERT INTO `privilege` (`id`, `privilege`, `propagate_to_all_asset_partitions`, `propagate_to_all_assets`, `description`) VALUES
-(1, 'asset_patch', 1, 1, NULL),
-(2, 'asset_delete', 1, 1, NULL),
-(3, 'assets_get', 1, 1, NULL),
-(4, 'assets_post', 1, 1, NULL),
+(1, 'asset_patch', 1, 0, NULL),
+(2, 'asset_delete', 1, 0, NULL),
+(3, 'assets_get', 1, 0, NULL),
+(4, 'assets_post', 1, 0, NULL),
 (5, 'certificates_post', 1, 0, NULL),
 (6, 'poolMember_get', 0, 0, NULL),
 (7, 'poolMember_patch', 0, 0, NULL),
@@ -49,7 +49,7 @@ INSERT INTO `privilege` (`id`, `privilege`, `propagate_to_all_asset_partitions`,
 (13, 'permission_roles_get', 1, 1, NULL),
 (14, 'permission_identityGroup_patch', 1, 1, NULL),
 (15, 'permission_identityGroup_delete', 1, 1, NULL),
-(16, 'partitions_get', 1, 0, NULL),
+(16, 'partitions_get', 0, 0, NULL),
 (18, 'nodes_get', 0, 0, NULL),
 (19, 'nodes_post', 0, 0, NULL),
 (20, 'node_patch', 0, 0, NULL),
@@ -92,7 +92,6 @@ INSERT INTO `privilege` (`id`, `privilege`, `propagate_to_all_asset_partitions`,
 (57, 'routedomains_get', 1, 0, NULL),
 (58, 'configuration_put', 1, 1, NULL);
 
-
 --
 -- Dump dei dati per la tabella `role`
 --
@@ -107,10 +106,7 @@ INSERT INTO `role` (`id`, `role`, `description`) VALUES
 --
 
 INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
-(1, 1),
-(1, 2),
 (1, 3),
-(1, 4),
 (1, 5),
 (1, 6),
 (1, 7),
