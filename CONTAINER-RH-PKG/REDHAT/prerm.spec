@@ -11,8 +11,9 @@ fi
 if [ "$1" -eq "0" ]; then
     printf "\n* Cleanup...\n"
 
-    if podman ps | awk '{print $2}' | grep -E '\blocalhost/api-f5(:|\b)'; then
-        podman stop api-f5
+    if podman ps | awk '{print $2}' | grep -Eq '\blocalhost/api-f5(:|\b)'; then
+        podman stop -t 5 api-f5 &
+        wait $! # Wait for the shutdown process of the container.
     fi
 
     if podman images | awk '{print $1}' | grep -q ^localhost/api-f5$; then
