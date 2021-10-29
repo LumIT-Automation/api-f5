@@ -10,7 +10,7 @@ printf "\n* Container preinst...\n"
 printf "\n* Cleanup...\n"
 
 # If there is a api-f5 container already, stop it in 5 seconds.
-if podman ps | awk '{print $2}' | grep -Eq '\blocalhost/api-f5(:|\b)'; then
+if podman ps | awk '{print $2}' | grep -Eq '\blocalhost/api-f5(:|$)'; then
     podman stop -t 5 api-f5 &
     wait $! # Wait for the shutdown process of the container.
 fi
@@ -20,8 +20,8 @@ if podman images | awk '{print $1}' | grep -q ^localhost/api-f5$; then
 fi
 
 # Be sure there is not rubbish around.
-if podman ps --all | awk '{print $2}' | grep -E '\blocalhost/api-f5(:|\b)'; then
-    cIds=$( podman ps --all | awk '$2 ~ /^localhost\/api-f5/ { print $1 }' )
+if podman ps --all | awk '{print $2}' | grep -E '\blocalhost/api-f5(:|$)'; then
+    cIds=$( podman ps --all | awk '$2 ~ /^localhost\/api-f5(:|$)/ { print $1 }' )
     for id in $cIds; do
         podman rm -f $id
     done
