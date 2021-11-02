@@ -83,6 +83,9 @@ class VirtualServersWorkflow:
             nodeName = el["name"]
             nodeAddress = el["address"]
 
+            if nodeName == nodeAddress:
+                nodeName += self.routeDomain # this fixes an F5 issue.
+
             try:
                 Log.actionLog("Virtual server workflow: attempting to create node: "+str(nodeAddress))
 
