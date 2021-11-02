@@ -716,7 +716,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"data\": {\n        \"virtualServer\": {\n            \"name\": \"SERVICENAME\",\n            \"type\": \"L4\",\n            \"snat\": \"none\",\n            \"routeDomainId\": 1,\n            \"destination\": \"11.11.11.61:80\",\n            \"mask\": \"255.255.255.255\",\n            \"source\": \"0.0.0.0/0\"\n        },\n        \"profiles\": [\n            {\n                \"name\": \"PROFILENAME\",\n                \"type\": \"fastl4\",\n                \"idleTimeout\": 300\n            }\n        ],\n        \"pool\": {\n            \"name\": \"POOLNAME\",\n            \"loadBalancingMode\": \"round-robin\",\n            \"nodes\": [\n                {\n                    \"name\": \"NODE_1\",\n                    \"address\": \"111.111.111.170\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"NODE_2\",\n                    \"address\": \"111.111.111.171\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"NODE_3\",\n                    \"address\": \"111.111.111.178\",\n                    \"port\": 80\n                }\n            ]\n        },\n        \"monitor\": {\n            \"name\": \"MONITORNAME\",\n            \"type\": \"https\",\n            \"send\": \"/\",\n            \"recv\": \"OK\"\n        }\n    }\n}",
+									"raw": "{\n    \"data\": {\n        \"virtualServer\": {\n            \"name\": \"SERVICENAME\",\n            \"type\": \"L4\",\n            \"snat\": \"none\",\n            \"routeDomainId\": 1,\n            \"destination\": \"11.11.11.61:80\",\n            \"mask\": \"255.255.255.255\",\n            \"source\": \"0.0.0.0/0\"\n        },\n        \"profiles\": [\n            {\n                \"name\": \"PROFILENAME\",\n                \"type\": \"fastl4\",\n                \"idleTimeout\": 300\n            }\n        ],\n        \"pool\": {\n            \"name\": \"POOLNAME\",\n            \"loadBalancingMode\": \"round-robin\",\n            \"nodes\": [\n                {\n                    \"name\": \"NODE_1\",\n                    \"address\": \"111.111.115.100\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"NODE_2\",\n                    \"address\": \"111.111.115.101\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"NODE_3\",\n                    \"address\": \"111.111.115.102\",\n                    \"port\": 80\n                }\n            ]\n        },\n        \"monitor\": {\n            \"name\": \"MONITORNAME\",\n            \"type\": \"https\",\n            \"send\": \"/\",\n            \"recv\": \"OK\"\n        }\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -724,7 +724,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/Common/workflow/virtualservers/",
+									"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/workflow/virtualservers/",
 									"protocol": "http",
 									"host": [
 										"10",
@@ -737,7 +737,7 @@
 										"v1",
 										"f5",
 										"2",
-										"Common",
+										"Partition1",
 										"workflow",
 										"virtualservers",
 										""
@@ -768,7 +768,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"data\": {\n        \"virtualServer\": {\n            \"name\": \"SERVICENAMEL7\",\n            \"type\": \"L7\",\n            \"snat\": \"none\",\n            \"routeDomainId\": 1,\n            \"destination\": \"11.11.12.60:443\",\n            \"mask\": \"255.255.255.255\",\n            \"source\": \"0.0.0.0/0\"\n        },\n        \"profiles\": [\n            {\n                \"name\": \"tcp-wan-optimized_SERVICENAMEL7\",\n                \"type\": \"tcp\",\n                \"defaultsFrom\": \"/Common/tcp-wan-optimized\",\n                \"context\": \"clientside\"\n            },\n            {\n                \"name\": \"tcp-lan-optimized_PROFILENAMEL7\",\n                \"type\": \"tcp\",\n                \"defaultsFrom\": \"/Common/tcp-lan-optimized\",\n                \"context\": \"serverside\"\n            },\n            {\n                \"name\": \"http_PROFILENAMEL7\",\n                \"type\": \"http\",\n                \"defaultsFrom\": \"/Common/http\"\n            },\n            {\n                \"name\": \"client-ssl_PROFILENAMEL7\",\n                \"type\": \"client-ssl\",\n                \"cert\": \"/Common/mamma.crt\",\n                \"key\": \"/Common/key.crt\",\n                \"chain\": \"\",\n                \"context\": \"clientside\"\n            }\n        ],\n        \"pool\": {\n            \"name\": \"POOLNAME\",\n            \"loadBalancingMode\": \"round-robin\",\n            \"nodes\": [\n                {\n                    \"name\": \"111.111.111.170\",\n                    \"address\": \"111.111.111.170\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"111.111.111.171\",\n                    \"address\": \"111.111.111.171\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"111.111.111.178\",\n                    \"address\": \"111.111.111.178\",\n                    \"port\": 80\n                }\n            ]\n        },\n        \"monitor\": {\n            \"name\": \"MONITORNAME\",\n            \"type\": \"https\",\n            \"send\": \"/\",\n            \"recv\": \"OK\"\n        }\n    }\n}",
+									"raw": "{\n    \"data\": {\n        \"virtualServer\": {\n            \"name\": \"SERVICENAMEL7\",\n            \"type\": \"L7\",\n            \"snat\": \"none\",\n            \"routeDomainId\": 1,\n            \"destination\": \"11.11.12.60:443\",\n            \"mask\": \"255.255.255.255\",\n            \"source\": \"0.0.0.0/0\"\n        },\n        \"profiles\": [\n            {\n                \"name\": \"tcp-wan-optimized_SERVICENAMEL7\",\n                \"type\": \"tcp\",\n                \"defaultsFrom\": \"/Common/tcp-wan-optimized\",\n                \"context\": \"clientside\"\n            },\n            {\n                \"name\": \"tcp-lan-optimized_PROFILENAMEL7\",\n                \"type\": \"tcp\",\n                \"defaultsFrom\": \"/Common/tcp-lan-optimized\",\n                \"context\": \"serverside\"\n            },\n            {\n                \"name\": \"http_PROFILENAMEL7\",\n                \"type\": \"http\",\n                \"defaultsFrom\": \"/Common/http\"\n            },\n            {\n                \"name\": \"client-ssl_PROFILENAMEL7\",\n                \"type\": \"client-ssl\",\n                \"cert\": \"/Common/mamma.crt\",\n                \"key\": \"/Common/key.crt\",\n                \"chain\": \"\",\n                \"context\": \"clientside\"\n            }\n        ],\n        \"pool\": {\n            \"name\": \"POOLNAME\",\n            \"loadBalancingMode\": \"round-robin\",\n            \"nodes\": [\n                {\n                    \"name\": \"NODE_1\",\n                    \"address\": \"111.111.115.100\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"NODE_2\",\n                    \"address\": \"111.111.115.101\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"NODE_3\",\n                    \"address\": \"111.111.115.102\",\n                    \"port\": 80\n                }\n            ]\n        },\n        \"monitor\": {\n            \"name\": \"MONITORNAME\",\n            \"type\": \"https\",\n            \"send\": \"/\",\n            \"recv\": \"OK\"\n        }\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -776,7 +776,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/Common/workflow/virtualservers/",
+									"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/workflow/virtualservers/",
 									"protocol": "http",
 									"host": [
 										"10",
@@ -789,7 +789,7 @@
 										"v1",
 										"f5",
 										"2",
-										"Common",
+										"Partition1",
 										"workflow",
 										"virtualservers",
 										""
@@ -819,7 +819,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/Common/workflow/virtualservers/SERVICENAME/",
+									"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/workflow/virtualservers/SERVICENAME/",
 									"protocol": "http",
 									"host": [
 										"10",
@@ -832,7 +832,7 @@
 										"v1",
 										"f5",
 										"2",
-										"Common",
+										"Partition1",
 										"workflow",
 										"virtualservers",
 										"SERVICENAME",
@@ -1005,7 +1005,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/partitions/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/partitions/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1017,7 +1017,7 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
+								"2",
 								"partitions",
 								""
 							]
@@ -1040,7 +1040,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/nodes/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/nodes/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1052,8 +1052,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"nodes",
 								""
 							]
@@ -1083,7 +1083,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"data\": \n    {\n        \"name\": \"NODE\",\n        \"address\": \"1.1.1.200\",\n        \"state\": \"Enabled\"\n    }\n}",
+							"raw": "{\n    \"data\": \n    {\n        \"name\": \"NODE\",\n        \"address\": \"1.1.1.210\",\n        \"state\": \"Enabled\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1091,7 +1091,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/nodes/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/nodes/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1103,8 +1103,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"nodes",
 								""
 							]
@@ -1133,7 +1133,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/node/NODE/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/node/NODE/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1145,8 +1145,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"node",
 								"NODE",
 								""
@@ -1185,7 +1185,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/node/NODE/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/node/NODE/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1197,8 +1197,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"node",
 								"NODE",
 								""
@@ -1222,7 +1222,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/2/Common/monitors/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/monitors/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1235,7 +1235,7 @@
 								"v1",
 								"f5",
 								"2",
-								"Common",
+								"Partition1",
 								"monitors",
 								""
 							]
@@ -1258,7 +1258,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/2/Common/monitors/https/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/monitors/https/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1271,7 +1271,7 @@
 								"v1",
 								"f5",
 								"2",
-								"Common",
+								"Partition1",
 								"monitors",
 								"https",
 								""
@@ -1295,7 +1295,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/2/Common/monitors/ANY/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/monitors/ANY/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1308,7 +1308,7 @@
 								"v1",
 								"f5",
 								"2",
-								"Common",
+								"Partition1",
 								"monitors",
 								"ANY",
 								""
@@ -1347,7 +1347,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/monitors/tcp-half-open/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/monitors/tcp-half-open/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1359,8 +1359,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"monitors",
 								"tcp-half-open",
 								""
@@ -1390,7 +1390,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/monitor/tcp-half-open/MONITOR/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/monitor/tcp-half-open/MONITOR/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1402,8 +1402,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"monitor",
 								"tcp-half-open",
 								"MONITOR",
@@ -1443,7 +1443,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/monitor/tcp-half-open/MONITOR/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/monitor/tcp-half-open/MONITOR/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1455,8 +1455,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"monitor",
 								"tcp-half-open",
 								"MONITOR",
@@ -1487,7 +1487,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/2/Common/pools/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/pools/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1500,7 +1500,7 @@
 								"v1",
 								"f5",
 								"2",
-								"Common",
+								"Partition1",
 								"pools",
 								""
 							]
@@ -1530,7 +1530,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"data\": \n    {\n        \"name\": \"POOL\",\n        \"monitor\": \"/Common/MONITOR\"\n    }\n}",
+							"raw": "{\n    \"data\": \n    {\n        \"name\": \"POOL\",\n        \"monitor\": \"/Partition1/MONITOR\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1538,7 +1538,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/pools/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/pools/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1550,8 +1550,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"pools",
 								""
 							]
@@ -1589,7 +1589,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/2/Common/pool/POOL/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/pool/POOL/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1602,7 +1602,7 @@
 								"v1",
 								"f5",
 								"2",
-								"Common",
+								"Partition1",
 								"pool",
 								"POOL",
 								""
@@ -1641,7 +1641,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/pool/POOL/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/pool/POOL/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1653,8 +1653,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"pool",
 								"POOL",
 								""
@@ -1684,7 +1684,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/snatpools/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/snatpools/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1696,8 +1696,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"snatpools",
 								""
 							]
@@ -1727,7 +1727,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"data\": {\n        \"name\": \"SNATPOOL\",\n        \"monitor\": \"/Common/MONITOR\",\n        \"members\": [\n            \"/Common/1.2.3.4\"\n        ]\n    }\n}",
+							"raw": "{\n    \"data\": {\n        \"name\": \"SNATPOOL\",\n        \"monitor\": \"/Partition1/MONITOR\",\n        \"members\": [\n            \"/Partition1/1.2.3.4\"\n        ]\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1735,7 +1735,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/snatpools/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/snatpools/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1747,8 +1747,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"snatpools",
 								""
 							]
@@ -1786,7 +1786,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/snatpool/SNATPOOL/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/snatpool/SNATPOOL/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1798,8 +1798,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"snatpool",
 								"SNATPOOL",
 								""
@@ -1830,7 +1830,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"data\": {\n        \"name\": \"SNATPOOL\",\n        \"monitor\": \"/Common/MONITOR\",\n        \"members\": [\n            \"/Common/1.2.3.5\"\n        ]\n    }\n}",
+							"raw": "{\n    \"data\": {\n        \"name\": \"SNATPOOL\",\n        \"monitor\": \"/Partition1/MONITOR\",\n        \"members\": [\n            \"/Partition1/1.2.3.5\"\n        ]\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1838,7 +1838,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/snatpool/SNATPOOL/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/snatpool/SNATPOOL/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1850,8 +1850,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"snatpool",
 								"SNATPOOL",
 								""
@@ -1881,7 +1881,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/pool/POOL/members/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/pool/POOL/members/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1893,8 +1893,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"pool",
 								"POOL",
 								"members",
@@ -1926,7 +1926,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"data\": \n    {\n        \"name\": \"NODE:80\",\n        \"connectionLimit\": 0,\n        \"dynamicRatio\": 1,\n        \"ephemeral\": \"false\",\n        \"inheritProfile\": \"enabled\",\n        \"logging\": \"disabled\",\n        \"monitor\": \"default\",\n        \"priorityGroup\": 0,\n        \"rateLimit\": \"disabled\",\n        \"ratio\": 1,\n        \"state\": \"up\",\n        \"fqdn\": {\n            \"autopopulate\": \"disabled\"\n        }\n    }\n}",
+							"raw": "{\n    \"data\": \n    {\n        \"name\": \"/Partition1/NODE:80\",\n        \"connectionLimit\": 0,\n        \"dynamicRatio\": 1,\n        \"ephemeral\": \"false\",\n        \"inheritProfile\": \"enabled\",\n        \"logging\": \"disabled\",\n        \"monitor\": \"default\",\n        \"priorityGroup\": 0,\n        \"rateLimit\": \"disabled\",\n        \"ratio\": 1,\n        \"state\": \"up\",\n        \"fqdn\": {\n            \"autopopulate\": \"disabled\"\n        }\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1934,7 +1934,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/pool/POOL/members/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/pool/POOL/members/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1946,8 +1946,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"pool",
 								"POOL",
 								"members",
@@ -1978,7 +1978,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/pool/POOL/member/NODE:80/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/pool/POOL/member/NODE:80/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1990,8 +1990,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"pool",
 								"POOL",
 								"member",
@@ -2023,7 +2023,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/pool/POOL/member/NODE:80/stats/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/pool/POOL/member/NODE:80/stats/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -2035,8 +2035,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"pool",
 								"POOL",
 								"member",
@@ -2078,7 +2078,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/pool/POOL/member/NODE:80/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/pool/POOL/member/NODE:80/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -2090,8 +2090,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"pool",
 								"POOL",
 								"member",
@@ -2123,7 +2123,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/pool/POOL/member/NODE:80/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/pool/POOL/member/NODE:80/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -2135,8 +2135,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"pool",
 								"POOL",
 								"member",
@@ -2168,7 +2168,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/2/Common/profiles/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/profiles/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -2181,7 +2181,7 @@
 								"v1",
 								"f5",
 								"2",
-								"Common",
+								"Partition1",
 								"profiles",
 								""
 							]
@@ -2210,7 +2210,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/2/Common/profiles/fastl4/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/profiles/fastl4/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -2223,7 +2223,7 @@
 								"v1",
 								"f5",
 								"2",
-								"Common",
+								"Partition1",
 								"profiles",
 								"fastl4",
 								""
@@ -2253,7 +2253,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/2/Common/profiles/ANY/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/profiles/ANY/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -2266,7 +2266,7 @@
 								"v1",
 								"f5",
 								"2",
-								"Common",
+								"Partition1",
 								"profiles",
 								"ANY",
 								""
@@ -2305,7 +2305,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/profiles/fastl4/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/profiles/fastl4/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -2317,8 +2317,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"profiles",
 								"fastl4",
 								""
@@ -2348,7 +2348,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/profiles/fastl4/FASTL4_PROFILE/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/profiles/fastl4/FASTL4_PROFILE/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -2360,8 +2360,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"profiles",
 								"fastl4",
 								"FASTL4_PROFILE",
@@ -2875,7 +2875,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/virtualservers/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/virtualservers/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -2887,8 +2887,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"virtualservers",
 								""
 							]
@@ -2918,7 +2918,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"data\": {\n        \"name\": \"VIRTUALSERVER\",\n        \"destination\": \"/Common/11.11.11.11:80\",\n        \"ipProtocol\": \"tcp\",\n        \"profiles\": \"/Common/fastL4\",\n        \"mask\": \"255.255.255.255\",\n        \"pool\": \"/Common/POOL\",\n        \"source\": \"0.0.0.0/0\",\n        \"sourceAddressTranslation\": {\n            \"type\": \"none\"\n        }\n    }\n}",
+							"raw": "{\n    \"data\": {\n        \"name\": \"VIRTUALSERVER\",\n        \"destination\": \"/Partition1/11.11.11.11:80\",\n        \"ipProtocol\": \"tcp\",\n        \"profiles\": \"/Partition1/FASTL4_PROFILE\",\n        \"mask\": \"255.255.255.255\",\n        \"pool\": \"/Partition1/POOL\",\n        \"source\": \"0.0.0.0/0\",\n        \"sourceAddressTranslation\": {\n            \"type\": \"none\"\n        }\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2926,7 +2926,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/virtualservers/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/virtualservers/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -2938,8 +2938,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"virtualservers",
 								""
 							]
@@ -2968,7 +2968,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/virtualserver/VIRTUALSERVER/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/virtualserver/VIRTUALSERVER/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -2980,8 +2980,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"virtualserver",
 								"VIRTUALSERVER",
 								""
@@ -3012,7 +3012,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"data\": {\n        \"name\": \"vs\",\n        \"destination\": \"/Common/11.11.11.11:81\",\n        \"ipProtocol\": \"tcp\",\n        \"profiles\": \"/Common/fastL4\",\n        \"mask\": \"255.255.255.255\",\n        \"pool\": \"/Common/POOL\",\n        \"source\": \"0.0.0.0/0\",\n        \"sourceAddressTranslation\": {\n            \"type\": \"none\"\n        }\n    }\n}",
+							"raw": "{\n    \"data\": {\n        \"name\": \"vs\",\n        \"destination\": \"/Partition1/11.11.11.11:81\",\n        \"ipProtocol\": \"tcp\",\n        \"profiles\": \"/Partition1/FASTL4_PROFILE\",\n        \"mask\": \"255.255.255.255\",\n        \"pool\": \"/Partition1/POOL\",\n        \"source\": \"0.0.0.0/0\",\n        \"sourceAddressTranslation\": {\n            \"type\": \"none\"\n        }\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -3020,7 +3020,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/virtualserver/VIRTUALSERVER/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/virtualserver/VIRTUALSERVER/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -3032,8 +3032,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"virtualserver",
 								"VIRTUALSERVER",
 								""
@@ -3063,7 +3063,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/virtualserver/VIRTUALSERVER/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/virtualserver/VIRTUALSERVER/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -3075,8 +3075,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Common",
+								"2",
+								"Partition1",
 								"virtualserver",
 								"VIRTUALSERVER",
 								""
@@ -3104,7 +3104,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/certificates/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/certificates/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -3116,7 +3116,7 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
+								"2",
 								"certificates",
 								""
 							]
