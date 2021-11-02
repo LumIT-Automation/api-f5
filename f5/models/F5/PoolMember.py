@@ -94,7 +94,7 @@ class PoolMember:
             asset = f5.info()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/pool/"+self.poolName+"/members/~"+self.partition+"~"+self.name+"/",
+                endpoint=asset["baseurl"]+"tm/ltm/pool/~"+self.partition+"~"+self.poolName+"/members/~"+self.partition+"~"+self.name+"/",
                 auth=asset["auth"],
                 tlsVerify=asset["tlsverify"]
             )
@@ -116,7 +116,7 @@ class PoolMember:
             asset = f5.info()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/pool/"+self.poolName+"/members/~"+self.partition+"~"+self.name+"/",
+                endpoint=asset["baseurl"]+"tm/ltm/pool/~"+self.partition+"~"+self.poolName+"/members/~"+self.partition+"~"+self.name+"/",
                 auth=asset["auth"],
                 tlsVerify=asset["tlsverify"]
             )

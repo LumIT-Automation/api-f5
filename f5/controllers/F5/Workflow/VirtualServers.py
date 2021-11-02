@@ -231,7 +231,7 @@ class VirtualServersWorkflow:
                 Log.actionLog("Virtual server workflow: attempting to create pool members: associate "+str(nodeName)+" to "+str(poolName)+" on port "+str(poolMemberPort))
 
                 PoolMember.add(self.assetId, self.partitionName, poolName, {
-                        "name": poolMemberName,
+                        "name": "/"+self.partitionName+"/"+poolMemberName,
                         "State": "up",
                         "session": "user-enabled"
                     }
@@ -242,7 +242,7 @@ class VirtualServersWorkflow:
                     "asset": self.assetId,
                     "partition": self.partitionName,
                     "pool": poolName,
-                    "name": poolMemberName
+                    "name": "/"+self.partitionName+"/"+poolMemberName
                 })
 
             except Exception as e:
