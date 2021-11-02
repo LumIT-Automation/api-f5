@@ -22,7 +22,7 @@ class VirtualServersWorkflow:
         self.routeDomain = ""
 
         if "routeDomainId" in data["virtualServer"]:
-            self.routeDomain = "%" + str(data["virtualServer"]["routeDomainId"])
+            self.routeDomain = "%"+str(data["virtualServer"]["routeDomainId"]) # %1.
 
         self.__createdObjects = {
             "node": [],
@@ -103,9 +103,7 @@ class VirtualServersWorkflow:
 
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":
-                    if "F5" in e.payload and "code" in e.payload["F5"] \
-                            and e.payload["F5"]["code"] == 409 \
-                            and "already exists" in e.payload["F5"]["message"]:
+                    if "F5" in e.payload and e.status == 409 and "already exists" in e.payload["F5"]:
                         Log.log("Node "+str(nodeName)+"/"+str(nodeAddress)+" already exists with the same/address name; using it. ")
 
                         # Keep track of USED node.
@@ -113,7 +111,7 @@ class VirtualServersWorkflow:
                             "asset": self.assetId,
                             "partition": self.partitionName,
                             "name": nodeName,
-                            "address": nodeAddress
+                            "address": nodeAddress+self.routeDomain,
                         })
                     else:
                         self.__cleanCreatedObjects()
@@ -156,9 +154,7 @@ class VirtualServersWorkflow:
 
         except Exception as e:
             if e.__class__.__name__ == "CustomException":
-                if "F5" in e.payload and "code" in e.payload["F5"] \
-                        and e.payload["F5"]["code"] == 409 \
-                        and "already exists" in e.payload["F5"]["message"]:
+                if "F5" in e.payload and e.status == 409 and "already exists" in e.payload["F5"]:
                     Log.log("Monitor "+str(monitorName)+" already exists with the same name; using it. ")
 
                     # Keep track of USED monitor.
@@ -202,9 +198,7 @@ class VirtualServersWorkflow:
 
         except Exception as e:
             if e.__class__.__name__ == "CustomException":
-                if "F5" in e.payload and "code" in e.payload["F5"] \
-                        and e.payload["F5"]["code"] == 409 \
-                        and "already exists" in e.payload["F5"]["message"]:
+                if "F5" in e.payload and e.status == 409 and "already exists" in e.payload["F5"]:
                     Log.log("Pool "+str(poolName)+" already exists with the same name; using it. ")
 
                     # Keep track of USED pool.
@@ -253,9 +247,7 @@ class VirtualServersWorkflow:
 
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":
-                    if "F5" in e.payload and "code" in e.payload["F5"] \
-                            and e.payload["F5"]["code"] == 409 \
-                            and "already exists" in e.payload["F5"]["message"]:
+                    if "F5" in e.payload and e.status == 409 and "already exists" in e.payload["F5"]:
                         Log.log("Pool member "+str(poolMemberName)+" already exists; using it. ")
 
                         # Keep track of USED node.
@@ -315,9 +307,7 @@ class VirtualServersWorkflow:
 
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":
-                    if "F5" in e.payload and "code" in e.payload["F5"] \
-                            and e.payload["F5"]["code"] == 409 \
-                            and "already exists" in e.payload["F5"]["message"]:
+                    if "F5" in e.payload and e.status == 409 and "already exists" in e.payload["F5"]:
                         Log.log("Profile "+str(profileName)+" already exists with the same name; using it. ")
 
                         # Keep track of USED pool.
@@ -363,9 +353,7 @@ class VirtualServersWorkflow:
 
         except Exception as e:
             if e.__class__.__name__ == "CustomException":
-                if "F5" in e.payload and "code" in e.payload["F5"] \
-                        and e.payload["F5"]["code"] == 409 \
-                        and "already exists" in e.payload["F5"]["message"]:
+                if "F5" in e.payload and e.status == 409 and "already exists" in e.payload["F5"]:
                     Log.log("Snat pool "+str(snatPoolName)+" already exists with the same name; using it. ")
 
                     # Keep track of USED snatPool.
@@ -437,9 +425,7 @@ class VirtualServersWorkflow:
 
         except Exception as e:
             if e.__class__.__name__ == "CustomException":
-                if "F5" in e.payload and "code" in e.payload["F5"] \
-                        and e.payload["F5"]["code"] == 409 \
-                        and "already exists" in e.payload["F5"]["message"]:
+                if "F5" in e.payload and e.status == 409 and "already exists" in e.payload["F5"]:
                     Log.log("virtual server "+str(virtualServerName)+" already exists with the same name; using it. ")
 
                     # Keep track of USED virtual server.
