@@ -138,9 +138,7 @@ class VirtualServerWorkflow:
 
         except Exception as e:
             if e.__class__.__name__ == "CustomException":
-                if "F5" in e.payload and "code" in e.payload["F5"] \
-                        and e.payload["F5"]["code"] == 400 \
-                        and "in use" in e.payload["F5"]["message"]:
+                if "F5" in e.payload and e.status == 400 and "in use" in e.payload["F5"]:
                     Log.log("Virtual server "+str(self.virtualServerName)+" in use; not deleting it. ")
                 else:
                     Log.log("[ERROR] Virtual server deletion workflow: cannot delete virtual server "+self.virtualServerName+": "+str(e.payload))
@@ -171,9 +169,7 @@ class VirtualServerWorkflow:
 
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":
-                    if "F5" in e.payload and "code" in e.payload["F5"] \
-                            and e.payload["F5"]["code"] == 400 \
-                            and "in use" in e.payload["F5"]["message"]:
+                    if "F5" in e.payload and e.status == 400 and "in use" in e.payload["F5"]:
                         Log.log("Profile "+str(profileName)+" in use; not deleting it. ")
                     else:
                         Log.log("[ERROR] Virtual server deletion workflow: cannot delete profile "+profileName+": "+str(e.payload))
@@ -201,9 +197,7 @@ class VirtualServerWorkflow:
 
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":
-                    if "F5" in e.payload and "code" in e.payload["F5"] \
-                            and e.payload["F5"]["code"] == 400 \
-                            and "in use" in e.payload["F5"]["message"]:
+                    if "F5" in e.payload and e.status == 400 and "in use" in e.payload["F5"]:
                         Log.log("Monitor "+str(self.virtualServerName)+" in use; not deleting it. ")
                     else:
                         Log.log("[ERROR] Virtual server deletion workflow: cannot delete monitor "+self.monitor["name"]+": "+str(e.payload))
@@ -230,9 +224,7 @@ class VirtualServerWorkflow:
 
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":
-                    if "F5" in e.payload and "code" in e.payload["F5"] \
-                            and e.payload["F5"]["code"] == 400 \
-                            and "in use" in e.payload["F5"]["message"]:
+                    if "F5" in e.payload and e.status == 400 and "in use" in e.payload["F5"]:
                         Log.log("Pool "+str(self.virtualServerName)+" in use; not deleting it. ")
                     else:
                         Log.log("[ERROR] Virtual server deletion workflow: cannot delete pool "+self.poolName+": "+str(e.payload))
@@ -263,9 +255,7 @@ class VirtualServerWorkflow:
 
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":
-                    if "F5" in e.payload and "code" in e.payload["F5"] \
-                            and e.payload["F5"]["code"] == 400 \
-                            and "is referenced" in e.payload["F5"]["message"]:
+                    if "F5" in e.payload and e.status == 400 and "is referenced" in e.payload["F5"]:
                         Log.log("Node "+str(nodeName)+" in use; not deleting it. ")
                     else:
                         Log.log("[ERROR] Virtual server deletion workflow: cannot delete node "+nodeName+": "+str(e.payload))
