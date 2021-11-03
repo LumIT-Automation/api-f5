@@ -22,7 +22,7 @@ class VirtualServersWorkflow:
         self.routeDomain = ""
 
         if "routeDomainId" in data["virtualServer"]:
-            self.routeDomain = "%"+str(data["virtualServer"]["routeDomainId"]) # %1.
+            self.routeDomain = "%"+str(data["virtualServer"]["routeDomainId"]) # for example: %1.
 
         self.__createdObjects = {
             "node": [],
@@ -79,12 +79,14 @@ class VirtualServersWorkflow:
     ####################################################################################################################
 
     def __createNodes(self) -> None:
+        j = 0
+
         for el in self.data["pool"]["nodes"]:
             nodeName = el["name"]
             nodeAddress = el["address"]
 
             if nodeName == nodeAddress:
-                nodeName += self.routeDomain # this fixes an F5 issue.
+                self.data["pool"]["nodes"][j]["name"] = nodeName = "node_"+nodeName # this fixes an F5 issue.
 
             try:
                 Log.actionLog("Virtual server workflow: attempting to create node: "+str(nodeAddress))
@@ -122,6 +124,8 @@ class VirtualServersWorkflow:
                 else:
                     self.__cleanCreatedObjects()
                     raise e
+
+            j += 1
 
         Log.actionLog("Created objects: "+str(self.__createdObjects))
         Log.actionLog("Reused existent objects: "+str(self.__usedObjects))
