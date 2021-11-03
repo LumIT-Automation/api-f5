@@ -3,7 +3,7 @@ certifi==2021.10.8
 cffi==1.15.0
 chardet==4.0.0
 cryptography==3.4.8
-Django==3.2.8
+Django==3.2.9
 django-redis==5.0.0
 djangorestframework==3.12.4
 djangorestframework-simplejwt==4.6.0
