@@ -78,7 +78,7 @@ class PermissionIdentityGroupController(CustomController):
                     # Also, replace associated roles with roles[]' elements.
                     try:
                         # Cleanup existent roles.
-                        Permission.cleanup(igId)
+                        Permission.cleanup(identityGroupId=igId)
                     except Exception:
                         pass
 

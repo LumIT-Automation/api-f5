@@ -6,18 +6,13 @@ from f5.helpers.Database import Database as DBHelper
 
 
 class Permission:
-    def __init__(self, permissionId: int, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.permissionId = permissionId
-
-
 
     ####################################################################################################################
-    # Public methods
+    # Public static methods
     ####################################################################################################################
 
-    def modify(self, identityGroupId: int, roleId: int, partitionId: int) -> None:
+    @staticmethod
+    def modify(permissionId: int, identityGroupId: int, roleId: int, partitionId: int) -> None:
         c = connection.cursor()
 
         try:
@@ -25,7 +20,7 @@ class Permission:
                 identityGroupId, # AD or RADIUS group.
                 roleId,
                 partitionId,
-                self.permissionId
+                permissionId
             ])
         except Exception as e:
             raise CustomException(status=400, payload={"database": e.__str__()})
@@ -34,12 +29,13 @@ class Permission:
 
 
 
-    def delete(self) -> None:
+    @staticmethod
+    def delete(permissionId: int) -> None:
         c = connection.cursor()
 
         try:
             c.execute("DELETE FROM group_role_partition WHERE id = %s", [
-                self.permissionId
+                permissionId
             ])
         except Exception as e:
             raise CustomException(status=400, payload={"database": e.__str__()})
@@ -47,10 +43,6 @@ class Permission:
             c.close()
 
 
-
-    ####################################################################################################################
-    # Public static methods
-    ####################################################################################################################
 
     @staticmethod
     def countUserPermissions(groups: list, action: str, assetId: int = 0, partitionName: str = "") -> bool:

@@ -6,10 +6,6 @@ from f5.helpers.Database import Database as DBHelper
 
 
 class Privilege:
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-
 
     ####################################################################################################################
     # Public static methods

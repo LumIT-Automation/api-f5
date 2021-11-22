@@ -2,13 +2,13 @@
 # Log paths
 ########################
 # locals
-log { source(s_src); filter(f_match_DJANGO_API); rewrite(r_django_api); destination(d_django_api); };
-log { source(s_src); filter(f_match_HTTP_API); rewrite(r_http_api); destination(d_http_api); };
-log { source(s_src); filter(f_match_APACHE_ACCESS_API); rewrite(r_apache_a_api); destination(d_apache_a_api); };
-log { source(s_src); filter(f_match_APACHE_ERROR_API); rewrite(r_apache_e_api); destination(d_apache_e_api); };
-log { source(s_src); filter(f_match_CONSUL_AG_API); rewrite(r_consul_ag_api); destination(d_consul_ag_api); };
-log { source(s_src); filter(f_match_REDIS_API); rewrite(r_redis_api); destination(d_redis_api); };
-log { source(s_src); filter(f_match_MARIADB_ERR_API); rewrite(r_mariadb_err_api); destination(d_mariadb_err_api); };
-log { source(s_mysql_err); rewrite(r_mariadb_err_api); destination(d_mariadb_err_api); };
-log { source(s_src); filter(f_match_MARIADB_AUDIT_API); rewrite(r_mariadb_audit_api); destination(d_mariadb_audit_api); };
-log { source(s_src); filter(f_local5_UPGRADES_API); rewrite(r_upgrades_api); destination(d_upgrades_api); };
+log { source(s_src); filter(f_match_DJANGO_API); modify(r_django_api); destination(d_django_api); };
+log { source(s_src); filter(f_match_HTTP_API); modify(r_http_api); destination(d_http_api); };
+log { source(s_src); filter(f_match_APACHE_ACCESS_API); modify(r_apache_a_api); destination(d_apache_a_api); };
+log { source(s_src); filter(f_match_APACHE_ERROR_API); modify(r_apache_e_api); destination(d_apache_e_api); };
+log { source(s_src); filter(f_match_CONSUL_AG_API); modify(r_consul_ag_api); destination(d_consul_ag_api); };
+log { source(s_src); filter(f_match_REDIS_API); modify(r_redis_api); destination(d_redis_api); };
+log { source(s_src); filter(f_match_MARIADB_ERR_API); modify(r_mariadb_err_api); destination(d_mariadb_err_api); };
+log { source(s_mysql_err); modify(r_mariadb_err_api); destination(d_mariadb_err_api); };
+log { source(s_src); filter(f_match_MARIADB_AUDIT_API); modify(r_mariadb_audit_api); destination(d_mariadb_audit_api); };
+log { source(s_src); filter(f_local5_UPGRADES_API); modify(r_upgrades_api); destination(d_upgrades_api); };

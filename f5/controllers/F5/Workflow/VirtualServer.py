@@ -78,7 +78,7 @@ class VirtualServerWorkflow:
         try:
             vs = VirtualServer(self.assetId, self.partitionName, self.virtualServerName)
 
-            # General info.
+            # General get.
             info = vs.info()["data"]
             try:
                 self.poolName = info["pool"].split("/")[2]
@@ -100,7 +100,7 @@ class VirtualServerWorkflow:
             #    self.policies.append(policy["name"])
 
             if self.poolName:
-                # Pool info -> monitor.
+                # Pool get -> monitor.
                 pool = Pool(self.assetId, self.partitionName, self.poolName)
                 poolInfo = pool.info()["data"]
                 if "monitor" in poolInfo:

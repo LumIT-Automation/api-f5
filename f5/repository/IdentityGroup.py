@@ -8,23 +8,18 @@ from f5.helpers.Database import Database as DBHelper
 
 
 class IdentityGroup:
-    def __init__(self, identityGroupIdentifier: str,  *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.identityGroupIdentifier = identityGroupIdentifier
-
-
 
     ####################################################################################################################
-    # Public methods
+    # Public static methods
     ####################################################################################################################
 
-    def info(self) -> dict:
+    @staticmethod
+    def get(identityGroupIdentifier: str) -> dict:
         c = connection.cursor()
 
         try:
             c.execute("SELECT * FROM identity_group WHERE identity_group_identifier = %s", [
-                self.identityGroupIdentifier
+                identityGroupIdentifier
             ])
 
             return DBHelper.asDict(c)[0]
@@ -35,17 +30,18 @@ class IdentityGroup:
 
 
 
-    def modify(self, data: dict) -> None:
+    @staticmethod
+    def modify(identityGroupIdentifier: str, data: dict) -> None:
         sql = ""
         values = []
         c = connection.cursor()
 
-        if self.__exists():
+        if IdentityGroup.__exists(identityGroupIdentifier):
             for k, v in data.items():
                 sql += k + "=%s,"
                 values.append(strip_tags(v)) # no HTML allowed.
 
-            values.append(self.identityGroupIdentifier)
+            values.append(identityGroupIdentifier)
 
             try:
                 # Patch identity group.
@@ -62,13 +58,14 @@ class IdentityGroup:
 
 
 
-    def delete(self) -> None:
+    @staticmethod
+    def delete(identityGroupIdentifier: str) -> None:
         c = connection.cursor()
 
-        if self.__exists():
+        if IdentityGroup.__exists(identityGroupIdentifier):
             try:
                 c.execute("DELETE FROM identity_group WHERE identity_group_identifier = %s", [
-                    self.identityGroupIdentifier
+                    identityGroupIdentifier
                 ])
 
                 # Foreign keys' on cascade rules will clean the linked items on db.
@@ -81,10 +78,6 @@ class IdentityGroup:
             raise CustomException(status=404, payload={"database": {"message": "Non existent identity group"}})
 
 
-
-    ####################################################################################################################
-    # Public static methods
-    ####################################################################################################################
 
     @staticmethod
     def list() -> list:
@@ -166,14 +159,15 @@ class IdentityGroup:
 
 
     ####################################################################################################################
-    # Private methods
+    # Private static methods
     ####################################################################################################################
 
-    def __exists(self) -> int:
+    @staticmethod
+    def __exists(identityGroupIdentifier: str) -> int:
         c = connection.cursor()
         try:
             c.execute("SELECT COUNT(*) AS c FROM identity_group WHERE identity_group_identifier = %s", [
-                self.identityGroupIdentifier
+                identityGroupIdentifier
             ])
             o = DBHelper.asDict(c)
 

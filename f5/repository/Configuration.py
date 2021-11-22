@@ -7,23 +7,18 @@ from f5.helpers.Database import Database as DBHelper
 
 
 class Configuration:
-    def __init__(self, configType: str, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.configType = configType
-
-
 
     ####################################################################################################################
-    # Public methods
+    # Public static methods
     ####################################################################################################################
 
-    def info(self) -> dict:
+    @staticmethod
+    def get(configType: str) -> dict:
         c = connection.cursor()
 
         try:
             c.execute("SELECT * FROM configuration WHERE config_type = %s", [
-                self.configType
+                configType
             ])
 
             return DBHelper.asDict(c)[0]
@@ -34,14 +29,15 @@ class Configuration:
 
 
 
-    def rewrite(self, data: dict) -> None:
+    @staticmethod
+    def modify(configType: str, data: dict) -> None:
         c = connection.cursor()
 
-        if self.__exists():
+        if Configuration.__exists(configType):
             try:
                 c.execute("UPDATE configuration SET configuration=%s WHERE config_type=%s", [
                     strip_tags(data["configuration"]),
-                    self.configType
+                    configType
                 ])
             except Exception as e:
                 raise CustomException(status=400, payload={"database": e.__str__()})
@@ -54,14 +50,15 @@ class Configuration:
 
 
     ####################################################################################################################
-    # Private methods
+    # Private static methods
     ####################################################################################################################
 
-    def __exists(self) -> int:
+    @staticmethod
+    def __exists(configType: str) -> int:
         c = connection.cursor()
         try:
             c.execute("SELECT COUNT(*) AS c FROM configuration WHERE config_type = %s", [
-                self.configType
+                configType
             ])
             o = DBHelper.asDict(c)
 

@@ -6,24 +6,18 @@ from f5.helpers.Database import Database as DBHelper
 
 
 class Role:
-    def __init__(self, roleId: int = 0, roleName: str = "", *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.roleId = roleId
-        self.roleName = roleName
-
-
 
     ####################################################################################################################
-    # Public methods
+    # Public static methods
     ####################################################################################################################
 
-    def info(self) -> dict:
+    @staticmethod
+    def get(roleName: str) -> dict:
         c = connection.cursor()
 
         try:
             c.execute("SELECT * FROM role WHERE role = %s", [
-                self.roleName
+                roleName
             ])
 
             return DBHelper.asDict(c)[0]
@@ -33,10 +27,6 @@ class Role:
             c.close()
 
 
-
-    ####################################################################################################################
-    # Public static methods
-    ####################################################################################################################
 
     @staticmethod
     def list(showPrivileges: bool = False) -> list:

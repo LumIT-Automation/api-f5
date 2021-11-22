@@ -15,7 +15,7 @@ class IdentityGroup:
 
     def info(self) -> dict:
         try:
-            return Repository(self.identityGroupIdentifier).info()
+            return Repository.get(self.identityGroupIdentifier)
         except Exception as e:
             raise e
 
@@ -23,7 +23,7 @@ class IdentityGroup:
 
     def modify(self, data: dict) -> int:
         try:
-            Repository(self.identityGroupIdentifier).modify(data)
+            Repository.modify(self.identityGroupIdentifier, data)
 
             identityGroupId = self.info()["id"]
             return identityGroupId # return id of the modified group.
@@ -34,7 +34,7 @@ class IdentityGroup:
 
     def delete(self) -> None:
         try:
-            Repository(self.identityGroupIdentifier).delete()
+            Repository.delete(self.identityGroupIdentifier)
         except Exception as e:
             raise e
 

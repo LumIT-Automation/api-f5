@@ -16,7 +16,7 @@ class Role:
 
     def info(self) -> dict:
         try:
-            return Repository(roleName=self.roleName).info()
+            return Repository.get(roleName=self.roleName)
         except Exception as e:
             raise e
 
@@ -31,7 +31,7 @@ class Role:
         j = 0
 
         try:
-            items = Repository().list(showPrivileges)
+            items = Repository.list(showPrivileges)
 
             for ln in items:
                 if "privileges" in items[j]:

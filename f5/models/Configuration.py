@@ -16,7 +16,7 @@ class Configuration:
     def info(self) -> dict:
         try:
             return dict({
-                "data": Repository(self.configType).info()
+                "data": Repository.get(self.configType)
             })
         except Exception as e:
             raise e
@@ -25,6 +25,6 @@ class Configuration:
 
     def rewrite(self, data: dict) -> None:
         try:
-            Repository(self.configType).rewrite(data)
+            Repository.modify(self.configType, data)
         except Exception as e:
             raise e

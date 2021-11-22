@@ -15,7 +15,7 @@ class Asset:
 
     def info(self) -> dict:
         try:
-            info = Repository(self.assetId).info()
+            info = Repository.get(self.assetId)
             return info
         except Exception as e:
             raise e
@@ -24,7 +24,7 @@ class Asset:
 
     def modify(self, data: dict) -> None:
         try:
-            Repository(self.assetId).modify(data)
+            Repository.modify(self.assetId, data)
         except Exception as e:
             raise e
 
@@ -32,7 +32,7 @@ class Asset:
 
     def delete(self) -> None:
         try:
-            Repository(self.assetId).delete()
+            Repository.delete(self.assetId)
         except Exception as e:
             raise e
 

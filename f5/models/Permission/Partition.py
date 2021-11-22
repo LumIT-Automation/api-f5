@@ -3,7 +3,6 @@ from f5.models.F5.Partition import Partition as F5Partition
 from f5.repository.Partition import Partition as Repository
 
 
-
 class Partition:
     def __init__(self, assetId: int, partitionId: int = 0, partitionName: str = "", *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -20,7 +19,7 @@ class Partition:
 
     def exists(self) -> bool:
         try:
-            pid = self.info()["id"]
+            pid = self.info()["id"] # just a probe.
             return True
         except Exception:
             return False
@@ -29,7 +28,7 @@ class Partition:
 
     def info(self) -> dict:
         try:
-            return Repository(self.assetId, partitionName=self.partitionName).info()
+            return Repository.get(self.assetId, self.partitionName)
         except Exception as e:
             raise e
 
@@ -37,7 +36,7 @@ class Partition:
 
     def delete(self) -> None:
         try:
-            Repository(self.assetId, partitionName=self.partitionName).delete()
+            Repository.delete(self.assetId, self.partitionName)
         except Exception as e:
             raise e
 

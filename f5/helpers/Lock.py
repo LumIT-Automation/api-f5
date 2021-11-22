@@ -53,7 +53,7 @@ class Lock:
         # D   *    x    *    *
 
         # *: yes, on different objects.
-        # R: read for both singular (info) and plural (list); @todo: improve.
+        # R: read for both singular (get) and plural (list); @todo: improve.
         # Workflows: "*" becomes "x": so always a big lock.
 
         table = {

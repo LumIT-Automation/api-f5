@@ -34,7 +34,7 @@ class Permission:
             else:
                 partitionId = p.add(assetId, partitionName)
 
-            Repository(self.permissionId).modify(identityGroupId, roleId, partitionId)
+            Repository.modify(self.permissionId, identityGroupId, roleId, partitionId)
         except Exception as e:
             raise e
 
@@ -42,7 +42,7 @@ class Permission:
 
     def delete(self) -> None:
         try:
-            Repository(self.permissionId).delete()
+            Repository.delete(self.permissionId)
         except Exception as e:
             raise e
 
@@ -107,6 +107,6 @@ class Permission:
     @staticmethod
     def cleanup(identityGroupId: int) -> None:
         try:
-            Repository.cleanup(identityGroupId)
+            Repository.cleanup(identityGroupId=identityGroupId)
         except Exception as e:
             raise e
