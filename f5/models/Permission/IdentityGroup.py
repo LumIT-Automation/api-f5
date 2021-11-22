@@ -1,5 +1,3 @@
-from f5.models.Permission.Permission import Permission
-
 from f5.repository.IdentityGroup import IdentityGroup as Repository
 
 
@@ -23,46 +21,12 @@ class IdentityGroup:
 
 
 
-    def modify(self, data: dict) -> None:
-        roles = dict()
-
+    def modify(self, data: dict) -> int:
         try:
-            # roles is a dictionary of related roles/partitions, which is POSTed together with the main identity group item.
-            if "roles_partition" in data:
-                # "roles_partition": {
-                #     "staff": [
-                #         {
-                #             "assetId": 1,
-                #             "partition": "any"
-                #         },
-                #         ...
-                #     ],
-                #     ...
-                # }
-
-                for k, v in data["roles_partition"].items():
-                    roles[k] = v
-
-                del (data["roles_partition"])
-
-            # Modify identity group data.
             Repository(self.identityGroupIdentifier).modify(data)
 
-            # Replace associated roles with roles[]' elements.
             identityGroupId = self.info()["id"]
-
-            try:
-                # Cleanup existent roles.
-                Permission.cleanup(identityGroupId)
-            except Exception:
-                pass
-
-            for roleName, partitionsAssetsList in roles.items():
-                for partitionsAssetDict in partitionsAssetsList:
-                    try:
-                        Permission.add(identityGroupId, roleName, partitionsAssetDict["assetId"], partitionsAssetDict["partition"])
-                    except Exception:
-                        pass
+            return identityGroupId # return id of the modified group.
         except Exception as e:
             raise e
 
@@ -197,36 +161,9 @@ class IdentityGroup:
 
 
     @staticmethod
-    def add(data: dict) -> None:
-        roles = dict()
-
+    def add(data: dict) -> int:
         try:
-            # roles is a dictionary of related roles/partitions, which is POSTed together with the main identity group item.
-            if "roles_partition" in data:
-                # "roles_partition": {
-                #     "staff": [
-                #         {
-                #             "assetId": 1,
-                #             "partition": "any"
-                #         },
-                #         ...
-                #     ],
-                #     ...
-                # }
-
-                for k, v in data["roles_partition"].items():
-                    roles[k] = v
-
-                del(data["roles_partition"])
-
             igId = Repository.add(data)
-
-            # Add associated roles (no error on non-existent role).
-            for roleName, partitionsAssetsList in roles.items():
-                for partitionsAssetDict in partitionsAssetsList:
-                    try:
-                        Permission.add(igId, roleName, partitionsAssetDict["assetId"], partitionsAssetDict["partition"])
-                    except Exception:
-                        pass
+            return igId
         except Exception as e:
             raise e
