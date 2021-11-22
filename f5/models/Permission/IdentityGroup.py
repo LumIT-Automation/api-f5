@@ -1,13 +1,6 @@
-from django.utils.html import strip_tags
-from django.db import transaction
-
 from f5.models.Permission.Permission import Permission
 
-from f5.helpers.Log import Log
-from f5.helpers.Exception import CustomException
-from f5.helpers.Database import Database as DBHelper
-from django.db import connection
-
+from f5.repository.IdentityGroup import IdentityGroup as Repository
 
 
 class IdentityGroup:
@@ -23,101 +16,63 @@ class IdentityGroup:
     ####################################################################################################################
 
     def info(self) -> dict:
-        c = connection.cursor()
-
         try:
-            c.execute("SELECT * FROM identity_group WHERE identity_group_identifier = %s", [
-                self.identityGroupIdentifier
-            ])
-
-            return DBHelper.asDict(c)[0]
-
+            return Repository(self.identityGroupIdentifier).info()
         except Exception as e:
-            raise CustomException(status=400, payload={"database": e.__str__()})
-        finally:
-            c.close()
+            raise e
 
 
 
     def modify(self, data: dict) -> None:
-        sql = ""
-        values = []
         roles = dict()
 
-        c = connection.cursor()
-        if self.__exists():
-            for k, v in data.items():
-                if any(exc in k for exc in (
-                        "roles_partition",
-                )):
-                    # "roles_partition": {
-                    #     "staff": [
-                    #         {
-                    #             "assetId": 1,
-                    #             "partition": "any"
-                    #         }
-                    #     ],
-                    #  "nonExistent": []
-                    # }
+        try:
+            # roles is a dictionary of related roles/partitions, which is POSTed together with the main identity group item.
+            if "roles_partition" in data:
+                # "roles_partition": {
+                #     "staff": [
+                #         {
+                #             "assetId": 1,
+                #             "partition": "any"
+                #         },
+                #         ...
+                #     ],
+                #     ...
+                # }
 
-                    if isinstance(v, dict):
-                        for rk, rv in v.items():
-                            roles[rk] = rv
-                else:
-                    sql += k + "=%s,"
-                    values.append(strip_tags(v))  # no HTML allowed.
+                for k, v in data["roles_partition"].items():
+                    roles[k] = v
+
+                del (data["roles_partition"])
+
+            # Modify identity group data.
+            Repository(self.identityGroupIdentifier).modify(data)
+
+            # Replace associated roles with roles[]' elements.
+            identityGroupId = self.info()["id"]
 
             try:
-                with transaction.atomic():
-                    identityGroupId = self.info()["id"]
+                # Cleanup existent roles.
+                Permission.cleanup(identityGroupId)
+            except Exception:
+                pass
 
-                    # Patch identity group.
-                    c.execute("UPDATE identity_group SET "+sql[:-1]+" WHERE id = "+str(identityGroupId),
-                        values
-                    )
-
-                    # Replace associated roles with roles[]' elements.
+            for roleName, partitionsAssetsList in roles.items():
+                for partitionsAssetDict in partitionsAssetsList:
                     try:
-                        # Empty existent roles.
-                        Permission.cleanup(identityGroupId)
+                        Permission.add(identityGroupId, roleName, partitionsAssetDict["assetId"], partitionsAssetDict["partition"])
                     except Exception:
                         pass
-
-                    for roleName, partitionsAssetsList in roles.items():
-                        for partitionsAssetDict in partitionsAssetsList:
-                            try:
-                                Permission.add(identityGroupId, roleName, partitionsAssetDict["assetId"], partitionsAssetDict["partition"])
-                            except Exception:
-                                pass
-
-            except Exception as e:
-                raise CustomException(status=400, payload={"database": e.__str__()})
-            finally:
-                c.close()
-
-        else:
-            raise CustomException(status=404, payload={"database": {"message": "Non existent identity group"}})
+        except Exception as e:
+            raise e
 
 
 
     def delete(self) -> None:
-        c = connection.cursor()
-
-        if self.__exists():
-            try:
-                c.execute("DELETE FROM identity_group WHERE identity_group_identifier = %s", [
-                    self.identityGroupIdentifier
-                ])
-
-                # Foreign keys' on cascade rules will clean the linked items on db.
-
-            except Exception as e:
-                raise CustomException(status=400, payload={"database": e.__str__()})
-            finally:
-                c.close()
-
-        else:
-            raise CustomException(status=404, payload={"database": {"message": "Non existent identity group"}})
+        try:
+            Repository(self.identityGroupIdentifier).delete()
+        except Exception as e:
+            raise e
 
 
 
@@ -129,46 +84,10 @@ class IdentityGroup:
     def list(showPrivileges: bool = False) -> dict:
         # List identity groups with related information regarding the associated roles on partitions
         # and optionally detailed privileges' descriptions.
-
         j = 0
-        c = connection.cursor()
 
         try:
-            c.execute("SELECT "
-                "identity_group.*, " 
-
-                "IFNULL(GROUP_CONCAT( "
-                    "DISTINCT CONCAT(role.role,'::',CONCAT(partition.id_asset,'::',partition.partition)) " 
-                    "ORDER BY role.id "
-                    "SEPARATOR ',' "
-                "), '') AS roles_partition, "
-
-                "IFNULL(GROUP_CONCAT( "
-                    "DISTINCT CONCAT(privilege.privilege,'::',partition.id_asset,'::',partition.partition,'::',privilege.propagate_to_all_asset_partitions,'::',privilege.propagate_to_all_assets) " 
-                    "ORDER BY privilege.id "
-                    "SEPARATOR ',' "
-                "), '') AS privileges_partition "
-
-                "FROM identity_group "
-                "LEFT JOIN group_role_partition ON group_role_partition.id_group = identity_group.id "
-                "LEFT JOIN role ON role.id = group_role_partition.id_role "
-                "LEFT JOIN `partition` ON `partition`.id = group_role_partition.id_partition "
-                "LEFT JOIN role_privilege ON role_privilege.id_role = role.id "
-                "LEFT JOIN privilege ON privilege.id = role_privilege.id_privilege "
-                "GROUP BY identity_group.id"
-            )
-
-            # Simple start query:
-            # SELECT identity_group.*, role.role, privilege.privilege, `partition`.partition
-            # FROM identity_group
-            # LEFT JOIN group_role_partition ON group_role_partition.id_group = identity_group.id
-            # LEFT JOIN role ON role.id = group_role_partition.id_role
-            # LEFT JOIN `partition` ON `partition`.id = group_role_partition.id_partition
-            # LEFT JOIN role_privilege ON role_privilege.id_role = role.id
-            # LEFT JOIN privilege ON privilege.id = role_privilege.id_privilege
-            # GROUP BY identity_group.id
-
-            items = DBHelper.asDict(c)
+            items = Repository.list()
 
             # "items": [
             # ...,
@@ -272,87 +191,42 @@ class IdentityGroup:
             return dict({
                 "items": items
             })
-
         except Exception as e:
-            raise CustomException(status=400, payload={"database": e.__str__()})
-        finally:
-            c.close()
+            raise e
 
 
 
     @staticmethod
     def add(data: dict) -> None:
-        s = ""
-        keys = "("
-        values = []
         roles = dict()
 
-        c = connection.cursor()
-
-        # Build SQL query according to dict fields (only whitelisted fields pass).
-        for k, v in data.items():
+        try:
             # roles is a dictionary of related roles/partitions, which is POSTed together with the main identity group item.
-            if any(exc in k for exc in (
-                    "roles_partition",
-            )):
+            if "roles_partition" in data:
                 # "roles_partition": {
                 #     "staff": [
                 #         {
                 #             "assetId": 1,
                 #             "partition": "any"
-                #         }
+                #         },
+                #         ...
                 #     ],
-                #  "nonExistent": []
+                #     ...
                 # }
 
-                if isinstance(v, dict):
-                    for rk, rv in v.items():
-                        roles[rk] = rv
-            else:
-                s += "%s,"
-                keys += k + ","
-                values.append(strip_tags(v))  # no HTML allowed.
+                for k, v in data["roles_partition"].items():
+                    roles[k] = v
 
-        keys = keys[:-1]+")"
+                del(data["roles_partition"])
 
-        try:
-            with transaction.atomic():
-                # Insert identity group.
-                c.execute("INSERT INTO identity_group "+keys+" VALUES ("+s[:-1]+")",
-                    values
-                )
-                igId = c.lastrowid
+            igId = Repository.add(data)
 
-                # Add associated roles (no error on non-existent role).
-                for roleName, partitionsAssetsList in roles.items():
-                    for partitionsAssetDict in partitionsAssetsList:
-                        try:
-                            Permission.add(igId, roleName, partitionsAssetDict["assetId"], partitionsAssetDict["partition"])
-                        except Exception:
-                            pass
-
+            # Add associated roles (no error on non-existent role).
+            for roleName, partitionsAssetsList in roles.items():
+                for partitionsAssetDict in partitionsAssetsList:
+                    try:
+                        Permission.add(igId, roleName, partitionsAssetDict["assetId"], partitionsAssetDict["partition"])
+                    except Exception:
+                        pass
         except Exception as e:
-            raise CustomException(status=400, payload={"database": e.__str__()})
-        finally:
-            c.close()
-
-
-
-    ####################################################################################################################
-    # Private methods
-    ####################################################################################################################
-
-    def __exists(self) -> int:
-        c = connection.cursor()
-        try:
-            c.execute("SELECT COUNT(*) AS c FROM identity_group WHERE identity_group_identifier = %s", [
-                self.identityGroupIdentifier
-            ])
-            o = DBHelper.asDict(c)
-
-            return int(o[0]['c'])
-
-        except Exception:
-            return 0
-        finally:
-            c.close()
+            raise e
