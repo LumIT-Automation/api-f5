@@ -85,6 +85,7 @@ class Permission:
                     "AND privilege.privilege = %s ",
                         args
                 )
+
                 return DBHelper.asDict(c)[0]["count"]
             except Exception as e:
                 raise CustomException(status=400, payload={"database": e.__str__()})

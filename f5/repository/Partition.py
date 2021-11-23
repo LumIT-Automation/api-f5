@@ -1,4 +1,5 @@
 from django.db import connection
+from django.db import transaction
 
 from f5.models.F5.Partition import Partition as F5Partition
 
@@ -51,12 +52,13 @@ class Partition:
         c = connection.cursor()
 
         try:
-            c.execute("INSERT INTO `partition` (id_asset, `partition`) VALUES (%s, %s)", [
-                assetId,
-                partitionName
-            ])
+            with transaction.atomic():
+                c.execute("INSERT INTO `partition` (id_asset, `partition`) VALUES (%s, %s)", [
+                    assetId,
+                    partitionName
+                ])
 
-            return c.lastrowid
+                return c.lastrowid
         except Exception as e:
             raise CustomException(status=400, payload={"database": e.__str__()})
         finally:
