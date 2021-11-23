@@ -1,7 +1,6 @@
 from f5.models.Permission.IdentityGroup import IdentityGroup
 
 
-
 class Authorization:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

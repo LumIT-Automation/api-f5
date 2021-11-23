@@ -1,8 +1,4 @@
-from f5.helpers.Log import Log
-from f5.helpers.Exception import CustomException
-from f5.helpers.Database import Database as DBHelper
-from django.db import connection
-
+from f5.repository.Privilege import Privilege as Repository
 
 
 class Privilege:
@@ -17,15 +13,9 @@ class Privilege:
 
     @staticmethod
     def list() -> dict:
-        c = connection.cursor()
         try:
-            c.execute("SELECT * FROM privilege")
-
             return dict({
-                "items": DBHelper.asDict(c)
+                "items": Repository.list()
             })
-
         except Exception as e:
-            raise CustomException(status=400, payload={"database": e.__str__()})
-        finally:
-            c.close()
+            raise e

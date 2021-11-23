@@ -126,8 +126,7 @@ CREATE TABLE `partition` (
 CREATE TABLE `privilege` (
   `id` int(11) NOT NULL,
   `privilege` varchar(64) NOT NULL,
-  `propagate_to_all_asset_partitions` tinyint(1) NOT NULL DEFAULT 0,
-  `propagate_to_all_assets` tinyint(1) NOT NULL DEFAULT 0,
+  `privilege_type` enum('object','asset','global') NOT NULL DEFAULT 'object',
   `description` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
