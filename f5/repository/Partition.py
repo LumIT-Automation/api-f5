@@ -50,33 +50,14 @@ class Partition:
     def add(assetId, partitionName) -> int:
         c = connection.cursor()
 
-        if partitionName == "any":
-            try:
-                c.execute("INSERT INTO `partition` (id_asset, `partition`) VALUES (%s, %s)", [
-                    assetId,
-                    partitionName
-                ])
+        try:
+            c.execute("INSERT INTO `partition` (id_asset, `partition`) VALUES (%s, %s)", [
+                assetId,
+                partitionName
+            ])
 
-                return c.lastrowid
-            except Exception as e:
-                raise CustomException(status=400, payload={"database": e.__str__()})
-            finally:
-                c.close()
-
-        else:
-            # Check if assetId/partitionName is a valid F5 partition (at the time of the insert).
-            f5Partitions = F5Partition.list(assetId)["data"]["items"]
-
-            for v in f5Partitions:
-                if v["name"] == partitionName:
-                    try:
-                        c.execute("INSERT INTO `partition` (id_asset, `partition`) VALUES (%s, %s)", [
-                            assetId,
-                            partitionName
-                        ])
-
-                        return c.lastrowid
-                    except Exception as e:
-                        raise CustomException(status=400, payload={"database": e.__str__()})
-                    finally:
-                        c.close()
+            return c.lastrowid
+        except Exception as e:
+            raise CustomException(status=400, payload={"database": e.__str__()})
+        finally:
+            c.close()

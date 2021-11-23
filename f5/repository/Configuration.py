@@ -56,6 +56,7 @@ class Configuration:
     @staticmethod
     def __exists(configType: str) -> int:
         c = connection.cursor()
+
         try:
             c.execute("SELECT COUNT(*) AS c FROM configuration WHERE config_type = %s", [
                 configType

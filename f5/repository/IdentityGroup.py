@@ -37,14 +37,15 @@ class IdentityGroup:
         c = connection.cursor()
 
         if IdentityGroup.__exists(identityGroupIdentifier):
+            # %s placeholders and values for SET.
             for k, v in data.items():
                 sql += k + "=%s,"
                 values.append(strip_tags(v)) # no HTML allowed.
 
+            # Condition for WHERE.
             values.append(identityGroupIdentifier)
 
             try:
-                # Patch identity group.
                 c.execute("UPDATE identity_group SET "+sql[:-1]+" WHERE identity_group_identifier = %s",
                     values
                 )
@@ -146,7 +147,6 @@ class IdentityGroup:
 
         try:
             with transaction.atomic():
-                # Insert identity group.
                 c.execute("INSERT INTO identity_group "+keys+" VALUES ("+s[:-1]+")",
                     values
                 )
