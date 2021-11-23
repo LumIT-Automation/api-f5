@@ -11,11 +11,11 @@ func-timeout==4.3.5
 idna==2.10
 mysqlclient==2.0.3
 pkg_resources==0.0.0
-pycparser==2.20
+pycparser==2.21
 PyJWT==2.0.1
 pytz==2021.3
 redis==3.5.3
 requests==2.25.1
 sqlparse==0.4.2
-typing-extensions==3.10.0.2
+typing_extensions==4.0.0
 urllib3==1.26.7
