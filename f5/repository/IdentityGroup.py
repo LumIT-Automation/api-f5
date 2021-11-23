@@ -97,7 +97,7 @@ class IdentityGroup:
                 "), '') AS roles_partition, "
 
                 "IFNULL(GROUP_CONCAT( "
-                    "DISTINCT CONCAT(privilege.privilege,'::',partition.id_asset,'::',partition.partition,'::',privilege.propagate_to_all_asset_partitions,'::',privilege.propagate_to_all_assets) " 
+                    "DISTINCT CONCAT(privilege.privilege,'::',partition.id_asset,'::',partition.partition,'::',privilege.privilege_type) " 
                     "ORDER BY privilege.id "
                     "SEPARATOR ',' "
                 "), '') AS privileges_partition "
