@@ -137,6 +137,11 @@ function System_systemFilesSetup()
 
     cp -R ../CONTAINER-DEBIAN-PKG/usr $workingFolderPath
     cp -R ../CONTAINER-DEBIAN-PKG/etc $workingFolderPath
+    cp -R ../CONTAINER-DEBIAN-PKG/var $workingFolderPath
+
+    # Cleanup.
+    rm -f $workingFolderPath/var/log/automation/api-f5/placeholder
+
     mv $serviceProjectPackage $workingFolderPath/usr/lib/${shortName}
     sed -i "s/PACKAGE/${serviceProjectName}.deb/g" $workingFolderPath/usr/lib/${shortName}/Dockerfile
 
