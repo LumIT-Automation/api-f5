@@ -186,6 +186,9 @@ function System_redhatFilesSetup()
     # Build the file specs section. List files only, not directories.
     echo "%files" > ${workingFolder}/rpmbuild/SPECS/files.spec
     tar tf ${workingFolder}/rpmbuild/SOURCES/${containerName}.tar | grep -Ev '/$' | sed "s#${containerName}-${rpmPackageVer}##g" >> ${workingFolder}/rpmbuild/SPECS/files.spec
+
+    # Empty folders need to be in the files.spec list.
+    tar tf ${workingFolder}/rpmbuild/SOURCES/${containerName}.tar | grep -E 'var/log/automation/.+' | sed -e "s#${containerName}-${rpmPackageVer}##g" -e 's@/$@@g' >> ${workingFolder}/rpmbuild/SPECS/files.spec
 }
 
 
