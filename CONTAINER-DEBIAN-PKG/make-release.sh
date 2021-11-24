@@ -128,7 +128,7 @@ function System_systemFilesSetup()
     cp -R var $workingFolderPath
 
     # Cleanup.
-    rm -f $workingFolderPath/var/log/automation/api-f5/placeholder
+    rm -f $workingFolderPath/var/log/automation/${shortName}/placeholder
 
     mv $serviceProjectPackage $workingFolderPath/usr/lib/${shortName}
     sed -i "s/PACKAGE/${serviceProjectName}.deb/g" $workingFolderPath/usr/lib/${shortName}/Dockerfile
