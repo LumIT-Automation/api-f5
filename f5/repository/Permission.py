@@ -147,18 +147,3 @@ class Permission:
             raise CustomException(status=400, payload={"database": e.__str__()})
         finally:
             c.close()
-
-
-
-    @staticmethod
-    def cleanup(identityGroupId: int) -> None:
-        c = connection.cursor()
-
-        try:
-            c.execute("DELETE FROM group_role_partition WHERE id_group = %s", [
-                identityGroupId,
-            ])
-        except Exception as e:
-            raise CustomException(status=400, payload={"database": e.__str__()})
-        finally:
-            c.close()

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "8a7af4d7-1c84-47ef-b481-5e86621c3006",
+		"_postman_id": "3c2e9841-eb99-4155-a016-2ad5f3055ccf",
 		"name": "api-f5",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -327,7 +327,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"data\": {\n        \"name\": \"groupLocalNew\",\n        \"identity_group_identifier\": \"cn=groupStaff,cn=users,dc=lab,dc=localNew\",\n        \"roles_partition\": {\n            \"staff\": [\n                {\n                    \"assetId\": 1,\n                    \"partition\": \"Common\"\n                }\n            ],\n            \"nonExistent\": []\n        }\n    }\n}",
+									"raw": "{\n    \"data\": {\n        \"name\": \"groupLocalNew\",\n        \"identity_group_identifier\": \"cn=groupStaff,cn=users,dc=lab,dc=localNew\"\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -370,7 +370,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"data\": {\n        \"name\": \"groupStaffModified\",\n        \"identity_group_identifier\": \"cn=groupStaff,cn=users,dc=lab,dc=localNewModified\",\n        \"roles_partition\": {\n            \"staff\": [\n                {\n                    \"assetId\": 1,\n                    \"partition\": \"Beta_Partition\"\n                }\n            ],\n            \"admin\": [\n                {\n                    \"assetId\": 1,\n                    \"partition\": \"any\"\n                }                \n            ],\n            \"nonExistent\": []\n        }\n    }\n}",
+									"raw": "{\n    \"data\": {\n        \"name\": \"groupStaffModified\",\n        \"identity_group_identifier\": \"cn=groupStaff,cn=users,dc=lab,dc=localNewModified\"\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"

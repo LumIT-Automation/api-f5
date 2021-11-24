@@ -150,6 +150,7 @@ class IdentityGroup:
                 c.execute("INSERT INTO identity_group "+keys+" VALUES ("+s[:-1]+")",
                     values
                 )
+
                 return c.lastrowid
         except Exception as e:
             raise CustomException(status=400, payload={"database": e.__str__()})

@@ -21,12 +21,9 @@ class IdentityGroup:
 
 
 
-    def modify(self, data: dict) -> int:
+    def modify(self, data: dict) -> None:
         try:
             Repository.modify(self.identityGroupIdentifier, data)
-
-            identityGroupId = self.info()["id"]
-            return identityGroupId # return id of the modified group.
         except Exception as e:
             raise e
 
@@ -167,9 +164,8 @@ class IdentityGroup:
 
 
     @staticmethod
-    def add(data: dict) -> int:
+    def add(data: dict) -> None:
         try:
-            igId = Repository.add(data)
-            return igId
+            Repository.add(data)
         except Exception as e:
             raise e
