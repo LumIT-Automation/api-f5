@@ -8,10 +8,14 @@ class Permission:
 
     # IdentityGroupRolePartition
 
-    def __init__(self, permissionId: int, *args, **kwargs):
+    def __init__(self, id: int, id_group: int = 0, id_role: int = 0, id_partition: int = 0, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.permissionId = permissionId
+        self.id = id
+        
+        self.id_group = id_group
+        self.id_role = id_role
+        self.id_partition = id_partition
 
 
 
@@ -30,14 +34,9 @@ class Permission:
             roleId = r.info()["id"]
 
             # Partition id.
-            # If partition does not exist, create it (on Permissions database, not F5 endpoint).
-            p = Partition(assetId=assetId, partitionName=partitionName)
-            if p.exists():
-                partitionId = p.info()["id"]
-            else:
-                partitionId = p.add(assetId, partitionName)
+            partitionId = Permission.__getPartition(assetId, partitionName)
 
-            Repository.modify(self.permissionId, identityGroupId, roleId, partitionId)
+            Repository.modify(self.id, identityGroupId, roleId, partitionId)
         except Exception as e:
             raise e
 
@@ -45,7 +44,7 @@ class Permission:
 
     def delete(self) -> None:
         try:
-            Repository.delete(self.permissionId)
+            Repository.delete(self.id)
         except Exception as e:
             raise e
 
@@ -94,13 +93,25 @@ class Permission:
             roleId = r.info()["id"]
 
             # Partition id.
-            # If partition does not exist, create it (on Permissions database, not F5 endpoint).
-            p = Partition(assetId=assetId, partitionName=partitionName)
-            if p.exists():
-                partitionId = p.info()["id"]
-            else:
-                partitionId = p.add(assetId, partitionName)
+            partitionId = Permission.__getPartition(assetId, partitionName)
 
             Repository.add(identityGroupId, roleId, partitionId)
         except Exception as e:
             raise e
+
+
+
+    ####################################################################################################################
+    # Private methods
+    ####################################################################################################################
+
+    @staticmethod
+    def __getPartition(assetId: int, partitionName: str):
+        p = Partition(assetId, partitionName)
+        if p.exists():
+            partitionId = p.info()["id"]
+        else:
+            # If partition does not exist, create it (on Permissions database, not F5 endpoint).
+            partitionId = p.add(assetId, partitionName)
+
+        return partitionId

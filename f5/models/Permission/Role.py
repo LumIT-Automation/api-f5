@@ -2,11 +2,12 @@ from f5.repository.Role import Role as Repository
 
 
 class Role:
-    def __init__(self, roleId: int = 0, roleName: str = "", *args, **kwargs):
+    def __init__(self, id: int = 0, role: str = "", *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.roleId = roleId
-        self.roleName = roleName
+        self.id = id
+        self.role = role
+        self.description = ""
 
 
 
@@ -16,7 +17,7 @@ class Role:
 
     def info(self) -> dict:
         try:
-            return Repository.get(roleName=self.roleName)
+            return Repository.get(self.role)
         except Exception as e:
             raise e
 

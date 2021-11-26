@@ -4,11 +4,12 @@ from f5.repository.Partition import Partition as Repository
 
 
 class Partition:
-    def __init__(self, assetId: int, partitionName: str, *args, **kwargs):
+    def __init__(self, id: int, partitionName: str, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.assetId = assetId
-        self.partitionName = partitionName
+        self.id = id
+        self.partition = partitionName
+        self.description = ""
 
 
 
@@ -27,7 +28,7 @@ class Partition:
 
     def info(self) -> dict:
         try:
-            return Repository.get(self.assetId, self.partitionName)
+            return Repository.get(self.id, self.partition)
         except Exception as e:
             raise e
 
@@ -35,7 +36,7 @@ class Partition:
 
     def delete(self) -> None:
         try:
-            Repository.delete(self.assetId, self.partitionName)
+            Repository.delete(self.id, self.partition)
         except Exception as e:
             raise e
 
@@ -46,22 +47,22 @@ class Partition:
     ####################################################################################################################
 
     @staticmethod
-    def add(assetId, partitionName) -> int:
-        if partitionName == "any":
+    def add(id, partition) -> int:
+        if partition == "any":
             try:
-                pid = Repository.add(assetId, partitionName)
+                pid = Repository.add(id, partition)
                 return pid
             except Exception as e:
                 raise e
 
         else:
-            # Check if assetId/partitionName is a valid F5 partition (at the time of the insert).
-            partitions = F5Partition.list(assetId)["data"]["items"]
+            # Check if assetId/partition is a valid F5 partition (at the time of the insert).
+            partitions = F5Partition.list(id)["data"]["items"]
 
             for v in partitions:
-                if v["name"] == partitionName:
+                if v["partition"] == partition:
                     try:
-                        pid = Repository.add(assetId, partitionName)
+                        pid = Repository.add(id, partition)
                         return pid
                     except Exception as e:
                         raise e
