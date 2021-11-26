@@ -17,10 +17,8 @@ class Privilege:
     ####################################################################################################################
 
     @staticmethod
-    def list() -> dict:
+    def list() -> list:
         try:
-            return dict({
-                "items": Repository.list()
-            })
+            return Repository.list()
         except Exception as e:
             raise e
