@@ -71,7 +71,7 @@ class Permission:
 
 
     @staticmethod
-    def list() -> list:
+    def listIdentityGroupsRolesPartitions() -> list:
         try:
             return Repository.list()
         except Exception as e:

@@ -33,7 +33,7 @@ class PermissionIdentityGroupsController(CustomController):
                     if "privileges" in rList:
                         showPrivileges = True
 
-                itemData["data"]["items"] = IdentityGroup.list(showPrivileges)
+                itemData["data"]["items"] = IdentityGroup.listWithRelated(showPrivileges)
                 data["data"] = GroupsSerializer(itemData).data["data"]
                 data["href"] = request.get_full_path()
 

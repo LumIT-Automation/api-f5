@@ -27,7 +27,7 @@ class PermissionsController(CustomController):
             if Permission.hasUserPermission(groups=user["groups"], action="permission_identityGroups_get") or user["authDisabled"]:
                 Log.actionLog("Permissions list", user)
 
-                itemData["data"]["items"] = Permission.list()
+                itemData["data"]["items"] = Permission.listIdentityGroupsRolesPartitions()
                 data["data"] = PermissionsSerializer(itemData).data["data"]
                 data["href"] = request.get_full_path()
 

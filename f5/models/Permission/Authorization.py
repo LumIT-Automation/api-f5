@@ -29,7 +29,7 @@ class Authorization:
                 }
 
         if not combinedPermissions:
-            o = IdentityGroup.list(True)
+            o = IdentityGroup.listWithRelated(True)
 
             # Collect every permission related to the group in groups.
             for identityGroup in groups:
