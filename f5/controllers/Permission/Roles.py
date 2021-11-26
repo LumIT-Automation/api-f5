@@ -32,7 +32,10 @@ class PermissionRolesController(CustomController):
                     if "privileges" in rList:
                         showPrivileges = True
 
-                itemData["data"]["items"] = Role.list(showPrivileges)
+                if showPrivileges:
+                    itemData["data"]["items"] = Role.listWithPrivileges()
+                else:
+                    itemData["data"]["items"] = Role.list()
                 data["data"] = Serializer(itemData).data["data"]
                 data["href"] = request.get_full_path()
 

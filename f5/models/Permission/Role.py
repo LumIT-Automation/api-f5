@@ -28,11 +28,20 @@ class Role:
     ####################################################################################################################
 
     @staticmethod
-    def list(showPrivileges: bool = False) -> list:
+    def list() -> list:
+        try:
+            return Repository.list()
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
+    def listWithPrivileges() -> list:
         j = 0
 
         try:
-            items = Repository.list(showPrivileges)
+            items = Repository.list(True)
 
             for ln in items:
                 if "privileges" in items[j]:
