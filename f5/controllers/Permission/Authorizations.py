@@ -14,7 +14,7 @@ class AuthorizationsController(CustomController):
     @staticmethod
     # Enlist caller's permissions (depending on groups user belongs to).
     def get(request: Request) -> Response:
-        data = dict()
+        data = {"data": dict()}
         etagCondition = {"responseEtag": ""}
 
         user = CustomController.loggedUser(request)
@@ -23,22 +23,8 @@ class AuthorizationsController(CustomController):
             if not user["authDisabled"]:
                 Log.actionLog("Permissions' list", user)
 
-                data["data"] = Authorization.list(user["groups"])
+                data["data"]["items"] = Authorization.list(user["groups"])
                 data["href"] = request.get_full_path()
-
-                # Superadmin's permissions override.
-                for gr in user["groups"]:
-                    if gr.lower() == "automation.local":
-                        data["data"] = {
-                            "items": {
-                                "any": [
-                                    {
-                                        "assetId": 0,
-                                        "partition": "any"
-                                    }
-                                ]
-                            }
-                        }
 
                 # Check the response's ETag validity (against client request).
                 conditional = Conditional(request)

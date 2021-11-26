@@ -71,11 +71,9 @@ class Permission:
 
 
     @staticmethod
-    def list() -> dict:
+    def list() -> list:
         try:
-            return {
-                "items": Repository.list()
-            }
+            return Repository.list()
         except Exception as e:
             raise e
 

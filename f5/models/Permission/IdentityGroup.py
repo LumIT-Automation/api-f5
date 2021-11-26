@@ -43,7 +43,7 @@ class IdentityGroup:
     ####################################################################################################################
 
     @staticmethod
-    def list(showPrivileges: bool = False) -> dict:
+    def list(showPrivileges: bool = False) -> list:
         # List identity groups with related information regarding the associated roles on partitions
         # and optionally detailed privileges' descriptions.
         j = 0
@@ -156,9 +156,7 @@ class IdentityGroup:
 
                 j = j+1
 
-            return dict({
-                "items": items
-            })
+            return items
         except Exception as e:
             raise e
 

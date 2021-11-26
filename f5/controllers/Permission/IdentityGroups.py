@@ -17,7 +17,7 @@ class PermissionIdentityGroupsController(CustomController):
     @staticmethod
     def get(request: Request) -> Response:
         data = dict()
-        itemData = dict()
+        itemData = {"data": dict()}
         showPrivileges = False
         etagCondition = {"responseEtag": ""}
 
@@ -33,7 +33,7 @@ class PermissionIdentityGroupsController(CustomController):
                     if "privileges" in rList:
                         showPrivileges = True
 
-                itemData["data"] = IdentityGroup.list(showPrivileges)
+                itemData["data"]["items"] = IdentityGroup.list(showPrivileges)
                 data["data"] = GroupsSerializer(itemData).data["data"]
                 data["href"] = request.get_full_path()
 

@@ -16,7 +16,7 @@ class PermissionRolesController(CustomController):
     @staticmethod
     def get(request: Request) -> Response:
         data = dict()
-        itemData = dict()
+        itemData = {"data": dict()}
         showPrivileges = False
         etagCondition = {"responseEtag": ""}
 
@@ -32,7 +32,7 @@ class PermissionRolesController(CustomController):
                     if "privileges" in rList:
                         showPrivileges = True
 
-                itemData["data"] = Role.list(showPrivileges)
+                itemData["data"]["items"] = Role.list(showPrivileges)
                 data["data"] = Serializer(itemData).data["data"]
                 data["href"] = request.get_full_path()
 

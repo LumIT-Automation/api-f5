@@ -28,7 +28,7 @@ class Role:
     ####################################################################################################################
 
     @staticmethod
-    def list(showPrivileges: bool = False) -> dict:
+    def list(showPrivileges: bool = False) -> list:
         j = 0
 
         try:
@@ -43,8 +43,6 @@ class Role:
                             items[j]["privileges"] = [ ln["privileges"] ]
                 j = j+1
 
-            return dict({
-                "items": items
-            })
+            return items
         except Exception as e:
             raise e

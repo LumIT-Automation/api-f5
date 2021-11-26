@@ -12,7 +12,7 @@ class IdentityGroupsAssestRolesItems(serializers.Serializer):
 
         # Adding dynamic fields as taken from the Roles model.
         additionalFields = []
-        r = Role.list()["items"]
+        r = Role.list()
         for additionalField in r:
             if "role" in additionalField:
                 additionalFields.append(additionalField["role"])
