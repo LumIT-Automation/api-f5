@@ -5,6 +5,9 @@ from f5.repository.Permission import Permission as Repository
 
 
 class Permission:
+
+    # IdentityGroupRolePartition
+
     def __init__(self, permissionId: int, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
