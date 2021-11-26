@@ -9,6 +9,14 @@ from f5.helpers.Database import Database as DBHelper
 
 class IdentityGroup:
 
+    # Table: identity_group
+
+    #   `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    #   `name` varchar(64) NOT NULL KEY,
+    #   `identity_group_identifier` varchar(255) DEFAULT NULL UNIQUE KEY
+
+
+
     ####################################################################################################################
     # Public static methods
     ####################################################################################################################
@@ -150,6 +158,7 @@ class IdentityGroup:
                 c.execute("INSERT INTO identity_group "+keys+" VALUES ("+s[:-1]+")",
                     values
                 )
+
                 return c.lastrowid
         except Exception as e:
             raise CustomException(status=400, payload={"database": e.__str__()})

@@ -24,6 +24,5 @@ class IdentityGroupSerializer(serializers.Serializer):
     class IdentityGroupAssestItems(serializers.Serializer):
         name = serializers.CharField(max_length=64, required=True)
         identity_group_identifier = serializers.CharField(max_length=255, required=True)
-        roles_partition = IdentityGroupsAssestRolesItems(required=False)
 
     data = IdentityGroupAssestItems(required=True)

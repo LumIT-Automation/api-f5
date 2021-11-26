@@ -1,4 +1,5 @@
 from django.db import connection
+from django.db import transaction
 
 from f5.models.F5.Partition import Partition as F5Partition
 
@@ -7,6 +8,17 @@ from f5.helpers.Database import Database as DBHelper
 
 
 class Partition:
+
+    # Table: partition
+
+    #   `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    #   `id_asset` int(11) NOT NULL KEY,
+    #   `partition` varchar(64) NOT NULL,
+    #   `description` varchar(255) DEFAULT NULL
+    #
+    #   UNIQUE KEY `id_asset` (`id_asset`,`partition`)
+
+
 
     ####################################################################################################################
     # Public static methods
@@ -51,12 +63,13 @@ class Partition:
         c = connection.cursor()
 
         try:
-            c.execute("INSERT INTO `partition` (id_asset, `partition`) VALUES (%s, %s)", [
-                assetId,
-                partitionName
-            ])
+            with transaction.atomic():
+                c.execute("INSERT INTO `partition` (id_asset, `partition`) VALUES (%s, %s)", [
+                    assetId,
+                    partitionName
+                ])
 
-            return c.lastrowid
+                return c.lastrowid
         except Exception as e:
             raise CustomException(status=400, payload={"database": e.__str__()})
         finally:

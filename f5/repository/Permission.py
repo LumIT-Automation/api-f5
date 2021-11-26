@@ -7,6 +7,23 @@ from f5.helpers.Database import Database as DBHelper
 
 class Permission:
 
+    # IdentityGroupRolePartition
+
+    # Table: group_role_partition
+
+    #   `id` int(255) NOT NULL AUTO_INCREMENT,
+    #   `id_group` int(11) NOT NULL KEY,
+    #   `id_role` int(11) NOT NULL KEY,
+    #   `id_partition` int(11) NOT NULL KEY
+    #
+    #   PRIMARY KEY (`id_group`,`id_role`,`id_partition`)
+    #
+    #   CONSTRAINT `grp_group` FOREIGN KEY (`id_group`) REFERENCES `identity_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    #   CONSTRAINT `grp_partition` FOREIGN KEY (`id_partition`) REFERENCES `partition` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    #   CONSTRAINT `grp_role` FOREIGN KEY (`id_role`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+
     ####################################################################################################################
     # Public static methods
     ####################################################################################################################
@@ -85,6 +102,7 @@ class Permission:
                     "AND privilege.privilege = %s ",
                         args
                 )
+
                 return DBHelper.asDict(c)[0]["count"]
             except Exception as e:
                 raise CustomException(status=400, payload={"database": e.__str__()})
@@ -141,21 +159,6 @@ class Permission:
                 identityGroupId, # AD or RADIUS group.
                 roleId,
                 partitionId
-            ])
-        except Exception as e:
-            raise CustomException(status=400, payload={"database": e.__str__()})
-        finally:
-            c.close()
-
-
-
-    @staticmethod
-    def cleanup(identityGroupId: int) -> None:
-        c = connection.cursor()
-
-        try:
-            c.execute("DELETE FROM group_role_partition WHERE id_group = %s", [
-                identityGroupId,
             ])
         except Exception as e:
             raise CustomException(status=400, payload={"database": e.__str__()})

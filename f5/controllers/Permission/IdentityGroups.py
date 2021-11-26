@@ -73,36 +73,7 @@ class PermissionIdentityGroupsController(CustomController):
                 serializer = GroupSerializer(data=request.data)
                 if serializer.is_valid():
                     validatedData = serializer.validated_data["data"]
-
-                    # roles is a dictionary of related roles/partitions,
-                    # which is POSTed together with the main identity group item.
-                    if "roles_partition" in validatedData:
-                        # "roles_partition": {
-                        #     "staff": [
-                        #         {
-                        #             "assetId": 1,
-                        #             "partition": "any"
-                        #         },
-                        #         ...
-                        #     ],
-                        #     ...
-                        # }
-
-                        for k, v in validatedData["roles_partition"].items():
-                            roles[k] = v
-
-                        del (validatedData["roles_partition"])
-
-                    # Add identity group.
-                    igId = IdentityGroup.add(validatedData)
-
-                    # Also, add associated roles (no error on non-existent role).
-                    for roleName, partitionsAssetsList in roles.items():
-                        for partitionsAssetDict in partitionsAssetsList:
-                            try:
-                                Permission.add(igId, roleName, partitionsAssetDict["assetId"], partitionsAssetDict["partition"])
-                            except Exception:
-                                pass
+                    IdentityGroup.add(validatedData)
 
                     httpStatus = status.HTTP_201_CREATED
                 else:

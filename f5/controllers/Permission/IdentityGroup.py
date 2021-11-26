@@ -40,7 +40,6 @@ class PermissionIdentityGroupController(CustomController):
     @staticmethod
     def patch(request: Request, identityGroupIdentifier: str) -> Response:
         response = None
-        roles = dict()
         user = CustomController.loggedUser(request)
 
         try:
@@ -52,42 +51,8 @@ class PermissionIdentityGroupController(CustomController):
                 if serializer.is_valid():
                     data = serializer.validated_data["data"]
 
-                    # roles is a dictionary of related roles/partitions,
-                    # which is POSTed together with the main identity group item:
-                    if "roles_partition" in data:
-                        # "roles_partition": {
-                        #     "staff": [
-                        #         {
-                        #             "assetId": 1,
-                        #             "partition": "any"
-                        #         },
-                        #         ...
-                        #     ],
-                        #     ...
-                        # }
-
-                        for k, v in data["roles_partition"].items():
-                            roles[k] = v
-
-                        del (data["roles_partition"])
-
-                    # Modify identity group data.
                     ig = IdentityGroup(identityGroupIdentifier)
-                    igId = ig.modify(data)
-
-                    # Also, replace associated roles with roles[]' elements.
-                    try:
-                        # Cleanup existent roles.
-                        Permission.cleanup(identityGroupId=igId)
-                    except Exception:
-                        pass
-
-                    for roleName, partitionsAssetsList in roles.items():
-                        for partitionsAssetDict in partitionsAssetsList:
-                            try:
-                                Permission.add(igId, roleName, partitionsAssetDict["assetId"], partitionsAssetDict["partition"])
-                            except Exception:
-                                pass
+                    ig.modify(data)
 
                     httpStatus = status.HTTP_200_OK
                 else:
