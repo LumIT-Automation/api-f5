@@ -137,6 +137,11 @@ function System_systemFilesSetup()
 
     cp -R ../CONTAINER-DEBIAN-PKG/usr $workingFolderPath
     cp -R ../CONTAINER-DEBIAN-PKG/etc $workingFolderPath
+    cp -R ../CONTAINER-DEBIAN-PKG/var $workingFolderPath
+
+    # Cleanup.
+    rm -f $workingFolderPath/var/log/automation/${shortName}/placeholder
+
     mv $serviceProjectPackage $workingFolderPath/usr/lib/${shortName}
     sed -i "s/PACKAGE/${serviceProjectName}.deb/g" $workingFolderPath/usr/lib/${shortName}/Dockerfile
 
@@ -181,6 +186,9 @@ function System_redhatFilesSetup()
     # Build the file specs section. List files only, not directories.
     echo "%files" > ${workingFolder}/rpmbuild/SPECS/files.spec
     tar tf ${workingFolder}/rpmbuild/SOURCES/${containerName}.tar | grep -Ev '/$' | sed "s#${containerName}-${rpmPackageVer}##g" >> ${workingFolder}/rpmbuild/SPECS/files.spec
+
+    # Empty folders need to be in the files.spec list.
+    tar tf ${workingFolder}/rpmbuild/SOURCES/${containerName}.tar | grep -E 'var/log/automation/.+' | sed -e "s#${containerName}-${rpmPackageVer}##g" -e 's@/$@@g' >> ${workingFolder}/rpmbuild/SPECS/files.spec
 }
 
 
