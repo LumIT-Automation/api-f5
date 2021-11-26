@@ -4,11 +4,10 @@ from f5.repository.Partition import Partition as Repository
 
 
 class Partition:
-    def __init__(self, assetId: int, partitionId: int = 0, partitionName: str = "", *args, **kwargs):
+    def __init__(self, assetId: int, partitionName: str, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.assetId = assetId
-        self.partitionId = id
         self.partitionName = partitionName
 
 
