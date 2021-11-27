@@ -8,14 +8,14 @@ from f5.helpers.Exception import CustomException
 
 
 class ApiSupplicant:
-    def __init__(self, endpoint: str, auth: dict, tlsVerify: bool = True, params: dict = None, silent: bool = False, *args, **kwargs):
+    def __init__(self, endpoint: str, auth: tuple, tlsVerify: bool = True, params: dict = None, silent: bool = False, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.endpoint = endpoint
         self.params = params
         self.tlsVerify = tlsVerify
         self.httpProxy = settings.API_SUPPLICANT_HTTP_PROXY
-        self.authorization = "Basic "+b64encode((auth["username"]+":"+auth["password"]).encode()).decode("ascii")
+        self.authorization = "Basic "+b64encode((auth[0]+":"+auth[1]).encode()).decode("ascii")
         self.silent = silent
 
         self.responseStatus = 500

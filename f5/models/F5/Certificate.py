@@ -30,7 +30,7 @@ class Certificate:
 
                 api = ApiSupplicant(
                     endpoint=asset["baseurl"]+"tm/sys/crypto/"+what+"/~"+self.partitionName+"~"+self.resourceName+"/",
-                    auth=asset["auth"],
+                    auth=(asset["username"], asset["password"]),
                     tlsVerify=asset["tlsverify"]
                 )
 
@@ -59,7 +59,7 @@ class Certificate:
 
                 api = ApiSupplicant(
                     endpoint=asset["baseurl"]+"tm/sys/crypto/"+what+"/",
-                    auth=asset["auth"],
+                    auth=(asset["username"], asset["password"]),
                     tlsVerify=asset["tlsverify"]
                 )
 
@@ -90,7 +90,7 @@ class Certificate:
 
                 api = ApiSupplicant(
                     endpoint=asset["baseurl"]+"shared/file-transfer/uploads/"+str(data["name"]),
-                    auth=asset["auth"],
+                    auth=(asset["username"], asset["password"]),
                     tlsVerify=asset["tlsverify"]
                 )
                 r = api.post(
@@ -113,7 +113,7 @@ class Certificate:
 
                     api = ApiSupplicant(
                         endpoint=asset["baseurl"]+"tm/sys/crypto/"+what+"/",
-                        auth=asset["auth"],
+                        auth=(asset["username"], asset["password"]),
                         tlsVerify=asset["tlsverify"]
                     )
                     r = api.post(

@@ -26,7 +26,7 @@ class SnatPool:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/snatpool/~"+self.partitionName+"~"+self.snatPoolName+"/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 
@@ -48,7 +48,7 @@ class SnatPool:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/snatpool/~"+self.partitionName+"~"+self.snatPoolName+"/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 
@@ -76,7 +76,7 @@ class SnatPool:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/snatpool/?$filter=partition+eq+"+partitionName,
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 
@@ -96,7 +96,7 @@ class SnatPool:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/snatpool/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 

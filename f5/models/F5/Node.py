@@ -26,7 +26,7 @@ class Node:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/node/~"+self.partitionName+"~"+self.nodeName+"/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 
@@ -48,7 +48,7 @@ class Node:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/node/~"+self.partitionName+"~"+self.nodeName+"/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 
@@ -76,7 +76,7 @@ class Node:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/node/?$filter=partition+eq+"+partitionName,
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"],
                 silent=silent
             )
@@ -97,7 +97,7 @@ class Node:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/node/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 

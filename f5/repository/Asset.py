@@ -40,16 +40,6 @@ class Asset:
                 ])
 
                 info = DBHelper.asDict(c)[0]
-                info["auth"] = {
-                    "username": info["username"],
-                    "password": info["password"],
-                }
-
-                del (
-                    info["username"],
-                    info["password"]
-                )
-
                 cache.set("ASSET"+str(assetId), info, 10)
                 return info
             except Exception as e:

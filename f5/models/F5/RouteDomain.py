@@ -25,7 +25,7 @@ class RouteDomain:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/net/route-domain",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 

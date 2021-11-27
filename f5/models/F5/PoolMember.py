@@ -29,7 +29,7 @@ class PoolMember:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/pool/~"+self.partition+"~"+self.poolName+"/members/~"+self.partition+"~"+self.name+"/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
             o["data"] = api.get()
@@ -50,7 +50,7 @@ class PoolMember:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/pool/~"+self.partition+"~"+self.poolName+"/members/~"+self.partition+"~"+self.name+"/stats/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
             r = api.get()
@@ -95,7 +95,7 @@ class PoolMember:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/pool/~"+self.partition+"~"+self.poolName+"/members/~"+self.partition+"~"+self.name+"/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
             api.put(
@@ -117,7 +117,7 @@ class PoolMember:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/pool/~"+self.partition+"~"+self.poolName+"/members/~"+self.partition+"~"+self.name+"/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
             api.delete(
@@ -145,7 +145,7 @@ class PoolMember:
 
                 api = ApiSupplicant(
                     endpoint=asset["baseurl"]+"tm/ltm/pool/~"+partitionName+"~"+poolName+"/members/",
-                    auth=asset["auth"],
+                    auth=(asset["username"], asset["password"]),
                     tlsVerify=asset["tlsverify"]
                 )
                 o["data"] = api.get()
@@ -164,7 +164,7 @@ class PoolMember:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/pool/~"+partitionName+"~"+poolName+"/members/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 

@@ -15,12 +15,13 @@ class ConfigurationController(CustomController):
     @staticmethod
     def get(request: Request, configType: str) -> Response:
         data = dict()
+        itemData = dict()
         user = CustomController.loggedUser(request)
 
         try:
             Log.actionLog("Configuration read", user)
 
-            itemData = Configuration(configType).info()
+            itemData["data"] = Configuration.getByType(configType)
             data["data"] = Serializer(itemData).data["data"]
             data["href"] = request.get_full_path()
 
@@ -48,7 +49,8 @@ class ConfigurationController(CustomController):
 
                 serializer = Serializer(data=request.data)
                 if serializer.is_valid():
-                    Configuration(configType).rewrite(
+                    Configuration.rewriteByType(
+                        configType,
                         serializer.validated_data["data"]
                     )
 

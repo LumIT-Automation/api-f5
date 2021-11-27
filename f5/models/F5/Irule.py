@@ -26,7 +26,7 @@ class Irule:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/rule/~"+self.partitionName+"~"+self.iruleName+"/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 
@@ -48,7 +48,7 @@ class Irule:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/rule/~"+self.partitionName+"~"+self.iruleName+"/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 
@@ -76,7 +76,7 @@ class Irule:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/rule/?$filter=partition+eq+"+partitionName,
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 
@@ -96,7 +96,7 @@ class Irule:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/rule/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 

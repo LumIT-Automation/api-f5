@@ -17,6 +17,7 @@ class HistoryLogsController(CustomController):
     def get(request: Request) -> Response:
         allUsersHistory = False
         data = dict()
+        itemData = {"data": dict()}
 
         user = CustomController.loggedUser(request)
 
@@ -26,7 +27,7 @@ class HistoryLogsController(CustomController):
 
             Log.actionLog("History log", user)
 
-            itemData = History.list(user["username"], allUsersHistory)
+            itemData["data"]["items"] = History.list(user["username"], allUsersHistory)
             data["data"] = Serializer(itemData).data["data"]
             data["href"] = request.get_full_path()
 

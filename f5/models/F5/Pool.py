@@ -28,7 +28,7 @@ class Pool:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/pool/~"+self.partitionName+"~"+self.poolName+"/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 
@@ -47,7 +47,7 @@ class Pool:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/pool/~"+self.partitionName+"~"+self.poolName+"/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 
@@ -69,7 +69,7 @@ class Pool:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/pool/~"+self.partitionName+"~"+self.poolName+"/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 
@@ -97,7 +97,7 @@ class Pool:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/pool/?$filter=partition+eq+"+partitionName,
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 
@@ -117,7 +117,7 @@ class Pool:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/pool/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 

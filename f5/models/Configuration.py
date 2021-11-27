@@ -2,29 +2,31 @@ from f5.repository.Configuration import Configuration as Repository
 
 
 class Configuration:
-    def __init__(self, configType: str, *args, **kwargs):
+    def __init__(self, id: int, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.configType = configType
+        self.id = id
+        self.config_type = ""
+        self.configuration = ""
 
 
 
     ####################################################################################################################
-    # Public methods
+    # Public static methods
     ####################################################################################################################
 
-    def info(self) -> dict:
+    @staticmethod
+    def getByType(configType: str) -> dict:
         try:
-            return dict({
-                "data": Repository.get(self.configType)
-            })
+            return Repository.get(configType)
         except Exception as e:
             raise e
 
 
 
-    def rewrite(self, data: dict) -> None:
+    @staticmethod
+    def rewriteByType(configType: str, data: dict) -> None:
         try:
-            Repository.modify(self.configType, data)
+            Repository.modify(configType, data)
         except Exception as e:
             raise e

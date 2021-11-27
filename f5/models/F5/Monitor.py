@@ -30,7 +30,7 @@ class Monitor:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/monitor/"+self.monitorType+"/~"+self.partitionName+"~"+self.monitorName+"/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"],
                 silent=silent
             )
@@ -50,7 +50,7 @@ class Monitor:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/monitor/"+self.monitorType+"/~"+self.partitionName+"~"+self.monitorName+"/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 
@@ -72,7 +72,7 @@ class Monitor:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/monitor/"+self.monitorType+"/~"+self.partitionName+"~"+self.monitorName+"/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 
@@ -101,7 +101,7 @@ class Monitor:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/monitor/?$filter=partition+eq+"+partitionName,
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 
@@ -132,7 +132,7 @@ class Monitor:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/monitor/"+monitorType+"?$filter=partition+eq+"+partitionName,
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 
@@ -152,7 +152,7 @@ class Monitor:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/monitor/"+monitorType+"/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 

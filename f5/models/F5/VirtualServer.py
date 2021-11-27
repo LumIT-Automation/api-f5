@@ -28,7 +28,7 @@ class VirtualServer:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/virtual/~"+self.partitionName+"~"+self.virtualServerName+"/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 
@@ -49,7 +49,7 @@ class VirtualServer:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/virtual/~"+self.partitionName+"~"+self.virtualServerName+"/policies/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 
@@ -70,7 +70,7 @@ class VirtualServer:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/virtual/~"+self.partitionName+"~"+self.virtualServerName+"/profiles/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 
@@ -89,7 +89,7 @@ class VirtualServer:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/virtual/~"+self.partitionName+"~"+self.virtualServerName+"/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 
@@ -111,7 +111,7 @@ class VirtualServer:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/virtual/~"+self.partitionName+"~"+self.virtualServerName+"/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 
@@ -139,7 +139,7 @@ class VirtualServer:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/virtual/?$filter=partition+eq+"+partitionName,
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 
@@ -159,7 +159,7 @@ class VirtualServer:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/virtual/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 

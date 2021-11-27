@@ -5,7 +5,17 @@ class Asset:
     def __init__(self, assetId: int, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.assetId = int(assetId)
+        self.id = int(assetId)
+        self.address = ""
+        self.fqdn = ""
+        self.baseurl = ""
+        self.tlsverify = ""
+        self.datacenter = ""
+        self.environment = ""
+        self.position = ""
+
+        self.username = ""
+        self.password = ""
 
 
 
@@ -15,7 +25,7 @@ class Asset:
 
     def info(self) -> dict:
         try:
-            info = Repository.get(self.assetId)
+            info = Repository.get(self.id)
             return info
         except Exception as e:
             raise e
@@ -24,7 +34,7 @@ class Asset:
 
     def modify(self, data: dict) -> None:
         try:
-            Repository.modify(self.assetId, data)
+            Repository.modify(self.id, data)
         except Exception as e:
             raise e
 
@@ -32,7 +42,7 @@ class Asset:
 
     def delete(self) -> None:
         try:
-            Repository.delete(self.assetId)
+            Repository.delete(self.id)
         except Exception as e:
             raise e
 

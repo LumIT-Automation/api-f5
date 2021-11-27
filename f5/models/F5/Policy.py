@@ -32,7 +32,7 @@ class Policy:
 
             api = ApiSupplicant(
                 endpoint=endpoint,
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 
@@ -59,7 +59,7 @@ class Policy:
 
             api = ApiSupplicant(
                 endpoint=endpoint,
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 
@@ -87,7 +87,7 @@ class Policy:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/policy/?$filter=partition+eq+"+partitionName,
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 
@@ -107,7 +107,7 @@ class Policy:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/ltm/policy/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 

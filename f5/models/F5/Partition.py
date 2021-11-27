@@ -25,7 +25,7 @@ class Partition:
 
             api = ApiSupplicant(
                 endpoint=asset["baseurl"]+"tm/auth/partition/",
-                auth=asset["auth"],
+                auth=(asset["username"], asset["password"]),
                 tlsVerify=asset["tlsverify"]
             )
 

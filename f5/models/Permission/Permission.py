@@ -8,14 +8,14 @@ class Permission:
 
     # IdentityGroupRolePartition
 
-    def __init__(self, id: int, id_group: int = 0, id_role: int = 0, id_partition: int = 0, *args, **kwargs):
+    def __init__(self, id: int, groupId: int = 0, roleId: int = 0, partitionId: int = 0, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.id = id
         
-        self.id_group = id_group
-        self.id_role = id_role
-        self.id_partition = id_partition
+        self.id_group = groupId
+        self.id_role = roleId
+        self.id_partition = partitionId
 
 
 
