@@ -24,12 +24,12 @@ class VirtualServer:
 
         try:
             f5 = Asset(self.assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/virtual/~"+self.partitionName+"~"+self.virtualServerName+"/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/virtual/~"+self.partitionName+"~"+self.virtualServerName+"/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             o["data"] = api.get()
@@ -45,12 +45,12 @@ class VirtualServer:
 
         try:
             f5 = Asset(self.assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/virtual/~"+self.partitionName+"~"+self.virtualServerName+"/policies/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/virtual/~"+self.partitionName+"~"+self.virtualServerName+"/policies/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             o["data"] = api.get()
@@ -66,12 +66,12 @@ class VirtualServer:
 
         try:
             f5 = Asset(self.assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/virtual/~"+self.partitionName+"~"+self.virtualServerName+"/profiles/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/virtual/~"+self.partitionName+"~"+self.virtualServerName+"/profiles/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             o["data"] = api.get()
@@ -85,12 +85,12 @@ class VirtualServer:
     def modify(self, data):
         try:
             f5 = Asset(self.assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/virtual/~"+self.partitionName+"~"+self.virtualServerName+"/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/virtual/~"+self.partitionName+"~"+self.virtualServerName+"/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             api.patch(
@@ -107,12 +107,12 @@ class VirtualServer:
     def delete(self):
         try:
             f5 = Asset(self.assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/virtual/~"+self.partitionName+"~"+self.virtualServerName+"/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/virtual/~"+self.partitionName+"~"+self.virtualServerName+"/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             api.delete(
@@ -135,12 +135,12 @@ class VirtualServer:
 
         try:
             f5 = Asset(assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/virtual/?$filter=partition+eq+"+partitionName,
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/virtual/?$filter=partition+eq+"+partitionName,
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             o["data"] = api.get()
@@ -155,12 +155,12 @@ class VirtualServer:
     def add(assetId: int, data: dict) -> None:
         try:
             f5 = Asset(assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/virtual/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/virtual/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             api.post(

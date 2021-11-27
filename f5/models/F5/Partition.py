@@ -21,12 +21,12 @@ class Partition:
 
         try:
             f5 = Asset(assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/auth/partition/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/auth/partition/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             o["data"] = api.get()

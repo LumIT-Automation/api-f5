@@ -26,12 +26,12 @@ class Certificate:
         if any(w in what for w in ("cert", "key")):
             try:
                 f5 = Asset(self.assetId)
-                asset = f5.info()
+                f5.load()
 
                 api = ApiSupplicant(
-                    endpoint=asset["baseurl"]+"tm/sys/crypto/"+what+"/~"+self.partitionName+"~"+self.resourceName+"/",
-                    auth=(asset["username"], asset["password"]),
-                    tlsVerify=asset["tlsverify"]
+                    endpoint=f5.baseurl+"tm/sys/crypto/"+what+"/~"+self.partitionName+"~"+self.resourceName+"/",
+                    auth=(f5.username, f5.password),
+                    tlsVerify=f5.tlsverify
                 )
 
                 api.delete(
@@ -55,12 +55,12 @@ class Certificate:
         if any(w in what for w in ("cert", "key")):
             try:
                 f5 = Asset(assetId)
-                asset = f5.info()
+                f5.load()
 
                 api = ApiSupplicant(
-                    endpoint=asset["baseurl"]+"tm/sys/crypto/"+what+"/",
-                    auth=(asset["username"], asset["password"]),
-                    tlsVerify=asset["tlsverify"]
+                    endpoint=f5.baseurl+"tm/sys/crypto/"+what+"/",
+                    auth=(f5.username, f5.password),
+                    tlsVerify=f5.tlsverify
                 )
 
                 o["data"] = api.get()
@@ -76,7 +76,7 @@ class Certificate:
         if any(w in what for w in ("cert", "key")):
             try:
                 f5 = Asset(assetId)
-                asset = f5.info()
+                f5.load()
 
                 # Decode base 64 data.
                 contentBase64 = data["content_base64"] # base 64 UTF-8.
@@ -89,9 +89,9 @@ class Certificate:
                 Log.log("Uploading "+what+".")
 
                 api = ApiSupplicant(
-                    endpoint=asset["baseurl"]+"shared/file-transfer/uploads/"+str(data["name"]),
-                    auth=(asset["username"], asset["password"]),
-                    tlsVerify=asset["tlsverify"]
+                    endpoint=f5.baseurl+"shared/file-transfer/uploads/"+str(data["name"]),
+                    auth=(f5.username, f5.password),
+                    tlsVerify=f5.tlsverify
                 )
                 r = api.post(
                     additionalHeaders={
@@ -112,9 +112,9 @@ class Certificate:
                         partition = data["partition"]
 
                     api = ApiSupplicant(
-                        endpoint=asset["baseurl"]+"tm/sys/crypto/"+what+"/",
-                        auth=(asset["username"], asset["password"]),
-                        tlsVerify=asset["tlsverify"]
+                        endpoint=f5.baseurl+"tm/sys/crypto/"+what+"/",
+                        auth=(f5.username, f5.password),
+                        tlsVerify=f5.tlsverify
                     )
                     r = api.post(
                         additionalHeaders={

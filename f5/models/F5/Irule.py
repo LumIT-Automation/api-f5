@@ -22,12 +22,12 @@ class Irule:
     def modify(self, data):
         try:
             f5 = Asset(self.assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/rule/~"+self.partitionName+"~"+self.iruleName+"/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/rule/~"+self.partitionName+"~"+self.iruleName+"/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             api.patch(
@@ -44,12 +44,12 @@ class Irule:
     def delete(self):
         try:
             f5 = Asset(self.assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/rule/~"+self.partitionName+"~"+self.iruleName+"/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/rule/~"+self.partitionName+"~"+self.iruleName+"/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             api.delete(
@@ -72,12 +72,12 @@ class Irule:
 
         try:
             f5 = Asset(assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/rule/?$filter=partition+eq+"+partitionName,
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/rule/?$filter=partition+eq+"+partitionName,
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             o["data"] = api.get()
@@ -92,12 +92,12 @@ class Irule:
     def add(assetId: int, data: dict) -> None:
         try:
             f5 = Asset(assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/rule/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/rule/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             api.post(

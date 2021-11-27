@@ -22,12 +22,12 @@ class Node:
     def modify(self, data):
         try:
             f5 = Asset(self.assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/node/~"+self.partitionName+"~"+self.nodeName+"/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/node/~"+self.partitionName+"~"+self.nodeName+"/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             api.patch(
@@ -44,12 +44,12 @@ class Node:
     def delete(self):
         try:
             f5 = Asset(self.assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/node/~"+self.partitionName+"~"+self.nodeName+"/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/node/~"+self.partitionName+"~"+self.nodeName+"/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             api.delete(
@@ -72,12 +72,12 @@ class Node:
 
         try:
             f5 = Asset(assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/node/?$filter=partition+eq+"+partitionName,
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"],
+                endpoint=f5.baseurl+"tm/ltm/node/?$filter=partition+eq+"+partitionName,
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify,
                 silent=silent
             )
 
@@ -93,12 +93,12 @@ class Node:
     def add(assetId: int, data: dict) -> None:
         try:
             f5 = Asset(assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/node/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/node/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             api.post(

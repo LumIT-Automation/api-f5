@@ -23,6 +23,17 @@ class Asset:
     # Public methods
     ####################################################################################################################
 
+    def load(self) -> None:
+        try:
+            data = Repository.get(self.id)
+            for k, v in data.items():
+                setattr(self, k, v)
+
+        except Exception as e:
+            raise e
+
+
+
     def info(self) -> dict:
         try:
             info = Repository.get(self.id)

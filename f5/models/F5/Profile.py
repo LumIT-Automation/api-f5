@@ -28,12 +28,12 @@ class Profile:
 
         try:
             f5 = Asset(assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/profile/?$filter=partition+eq+"+partitionName,
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/profile/?$filter=partition+eq+"+partitionName,
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             for m in api.get()["items"]:
@@ -58,12 +58,12 @@ class Profile:
 
         try:
             f5 = Asset(self.assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/profile/"+self.profileType+"/~"+self.partitionName+"~"+self.profileName+"/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"],
+                endpoint=f5.baseurl+"tm/ltm/profile/"+self.profileType+"/~"+self.partitionName+"~"+self.profileName+"/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify,
                 silent=silent
             )
 
@@ -78,12 +78,12 @@ class Profile:
     def modify(self, data):
         try:
             f5 = Asset(self.assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/profile/"+self.profileType+"/~"+self.partitionName+"~"+self.profileName+"/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/profile/"+self.profileType+"/~"+self.partitionName+"~"+self.profileName+"/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             api.patch(
@@ -100,12 +100,12 @@ class Profile:
     def delete(self):
         try:
             f5 = Asset(self.assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/profile/"+self.profileType+"/~"+self.partitionName+"~"+self.profileName+"/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/profile/"+self.profileType+"/~"+self.partitionName+"~"+self.profileName+"/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             api.delete(
@@ -128,12 +128,12 @@ class Profile:
 
         try:
             f5 = Asset(assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/profile/"+profileType+"/?$filter=partition+eq+"+partitionName,
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/profile/"+profileType+"/?$filter=partition+eq+"+partitionName,
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             o["data"] = api.get()
@@ -148,12 +148,12 @@ class Profile:
     def add(assetId: int, profileType: str, data: dict) -> None:
         try:
             f5 = Asset(assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/profile/"+profileType+"/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/profile/"+profileType+"/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             api.post(

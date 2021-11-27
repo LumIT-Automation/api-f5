@@ -26,12 +26,12 @@ class Monitor:
 
         try:
             f5 = Asset(self.assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/monitor/"+self.monitorType+"/~"+self.partitionName+"~"+self.monitorName+"/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"],
+                endpoint=f5.baseurl+"tm/ltm/monitor/"+self.monitorType+"/~"+self.partitionName+"~"+self.monitorName+"/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify,
                 silent=silent
             )
 
@@ -46,12 +46,12 @@ class Monitor:
     def modify(self, data):
         try:
             f5 = Asset(self.assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/monitor/"+self.monitorType+"/~"+self.partitionName+"~"+self.monitorName+"/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/monitor/"+self.monitorType+"/~"+self.partitionName+"~"+self.monitorName+"/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             api.patch(
@@ -68,12 +68,12 @@ class Monitor:
     def delete(self):
         try:
             f5 = Asset(self.assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/monitor/"+self.monitorType+"/~"+self.partitionName+"~"+self.monitorName+"/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/monitor/"+self.monitorType+"/~"+self.partitionName+"~"+self.monitorName+"/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             api.delete(
@@ -97,12 +97,12 @@ class Monitor:
 
         try:
             f5 = Asset(assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/monitor/?$filter=partition+eq+"+partitionName,
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/monitor/?$filter=partition+eq+"+partitionName,
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             for m in api.get()["items"]:
@@ -128,12 +128,12 @@ class Monitor:
 
         try:
             f5 = Asset(assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/monitor/"+monitorType+"?$filter=partition+eq+"+partitionName,
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/monitor/"+monitorType+"?$filter=partition+eq+"+partitionName,
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             o["data"] = api.get()
@@ -148,12 +148,12 @@ class Monitor:
     def add(assetId: int, monitorType: str, data: dict) -> None:
         try:
             f5 = Asset(assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/monitor/"+monitorType+"/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/monitor/"+monitorType+"/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             api.post(

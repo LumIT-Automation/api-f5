@@ -23,7 +23,7 @@ class Policy:
     def modify(self, data):
         try:
             f5 = Asset(self.assetId)
-            asset = f5.info()
+            f5.load()
 
             if self.policySubPath:
                 endpoint = asset["baseurl"]+"tm/ltm/policy/~"+self.partitionName+"~"+self.policySubPath+"~"+self.policyName+"/"
@@ -32,8 +32,8 @@ class Policy:
 
             api = ApiSupplicant(
                 endpoint=endpoint,
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             api.patch(
@@ -50,7 +50,7 @@ class Policy:
     def delete(self):
         try:
             f5 = Asset(self.assetId)
-            asset = f5.info()
+            f5.load()
 
             if self.policySubPath:
                 endpoint = asset["baseurl"]+"tm/ltm/policy/~"+self.partitionName+"~"+self.policySubPath+"~"+self.policyName+"/"
@@ -59,8 +59,8 @@ class Policy:
 
             api = ApiSupplicant(
                 endpoint=endpoint,
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             api.delete(
@@ -83,12 +83,12 @@ class Policy:
 
         try:
             f5 = Asset(assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/policy/?$filter=partition+eq+"+partitionName,
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/policy/?$filter=partition+eq+"+partitionName,
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             o["data"] = api.get()
@@ -103,12 +103,12 @@ class Policy:
     def add(assetId: int, data: dict) -> None:
         try:
             f5 = Asset(assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/policy/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/policy/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             api.post(

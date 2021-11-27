@@ -25,12 +25,12 @@ class PoolMember:
 
         try:
             f5 = Asset(self.assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/pool/~"+self.partition+"~"+self.poolName+"/members/~"+self.partition+"~"+self.name+"/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/pool/~"+self.partition+"~"+self.poolName+"/members/~"+self.partition+"~"+self.name+"/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
             o["data"] = api.get()
 
@@ -46,12 +46,12 @@ class PoolMember:
 
         try:
             f5 = Asset(self.assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/pool/~"+self.partition+"~"+self.poolName+"/members/~"+self.partition+"~"+self.name+"/stats/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/pool/~"+self.partition+"~"+self.poolName+"/members/~"+self.partition+"~"+self.name+"/stats/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
             r = api.get()
 
@@ -91,12 +91,12 @@ class PoolMember:
     def modify(self, data: dict) -> None:
         try:
             f5 = Asset(self.assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/pool/~"+self.partition+"~"+self.poolName+"/members/~"+self.partition+"~"+self.name+"/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/pool/~"+self.partition+"~"+self.poolName+"/members/~"+self.partition+"~"+self.name+"/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
             api.put(
                 additionalHeaders={
@@ -113,12 +113,12 @@ class PoolMember:
     def delete(self) -> None:
         try:
             f5 = Asset(self.assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/pool/~"+self.partition+"~"+self.poolName+"/members/~"+self.partition+"~"+self.name+"/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/pool/~"+self.partition+"~"+self.poolName+"/members/~"+self.partition+"~"+self.name+"/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
             api.delete(
                 additionalHeaders={
@@ -141,12 +141,12 @@ class PoolMember:
         if assetId and partitionName and poolName:
             try:
                 f5 = Asset(assetId)
-                asset = f5.info()
+                f5.load()
 
                 api = ApiSupplicant(
-                    endpoint=asset["baseurl"]+"tm/ltm/pool/~"+partitionName+"~"+poolName+"/members/",
-                    auth=(asset["username"], asset["password"]),
-                    tlsVerify=asset["tlsverify"]
+                    endpoint=f5.baseurl+"tm/ltm/pool/~"+partitionName+"~"+poolName+"/members/",
+                    auth=(f5.username, f5.password),
+                    tlsVerify=f5.tlsverify
                 )
                 o["data"] = api.get()
             except Exception as e:
@@ -160,12 +160,12 @@ class PoolMember:
     def add(assetId: int, partitionName: str, poolName: str, data: dict) -> None:
         try:
             f5 = Asset(assetId)
-            asset = f5.info()
+            f5.load()
 
             api = ApiSupplicant(
-                endpoint=asset["baseurl"]+"tm/ltm/pool/~"+partitionName+"~"+poolName+"/members/",
-                auth=(asset["username"], asset["password"]),
-                tlsVerify=asset["tlsverify"]
+                endpoint=f5.baseurl+"tm/ltm/pool/~"+partitionName+"~"+poolName+"/members/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
             )
 
             api.post(
