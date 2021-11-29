@@ -1,6 +1,7 @@
 import json
 
 from f5.models.F5.Asset.Asset import Asset
+from f5.models.F5.PoolMember import PoolMember
 
 from f5.helpers.ApiSupplicant import ApiSupplicant
 
@@ -40,6 +41,22 @@ class Pool:
 
 
 
+    def member(self, poolMemberName: str) -> PoolMember:
+        try:
+            return PoolMember(self.assetId, self.partitionName, self.poolName, poolMemberName)
+        except Exception as e:
+            raise e
+
+
+
+    def members(self) -> dict:
+        try:
+            return PoolMember.list(self.assetId, self.partitionName, self.poolName)
+        except Exception as e:
+            raise e
+
+
+
     def modify(self, data):
         try:
             f5 = Asset(self.assetId)
@@ -57,6 +74,14 @@ class Pool:
                 },
                 data=json.dumps(data)
             )
+        except Exception as e:
+            raise e
+
+
+
+    def addMember(self, data: dict) -> None:
+        try:
+            PoolMember.add(self.assetId, self.partitionName, self.poolName, data)
         except Exception as e:
             raise e
 

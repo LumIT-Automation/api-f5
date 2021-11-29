@@ -2,7 +2,6 @@ from f5.models.F5.Node import Node
 from f5.models.F5.Monitor import Monitor
 from f5.models.F5.Pool import Pool
 from f5.models.F5.SnatPool import SnatPool
-from f5.models.F5.PoolMember import PoolMember
 from f5.models.F5.Profile import Profile
 from f5.models.F5.VirtualServer import VirtualServer
 from f5.models.History import History
@@ -108,7 +107,7 @@ class VirtualServerWorkflow:
                     self.monitor["type"] = VirtualServerWorkflow.__getMonitorType(self.assetId, self.partitionName, self.monitor["name"])
 
                 # Pool members of self.poolName -> nodes.
-                poolMembers = PoolMember.list(self.assetId, self.partitionName, self.poolName)["data"]["items"]
+                poolMembers = Pool(self.assetId, self.partitionName, self.poolName).members()["data"]["items"]
                 for pm in poolMembers:
                     self.nodes.append({
                         "name": Node.getNameFromAddress(

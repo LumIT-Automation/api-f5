@@ -2,7 +2,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
 
-from f5.models.F5.PoolMember import PoolMember
+from f5.models.F5.Pool import Pool
 from f5.models.Permission.Permission import Permission
 
 from f5.serializers.F5.PoolMembers import F5PoolMembersSerializer as PoolMembersSerializer
@@ -31,7 +31,7 @@ class F5PoolMembersController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    itemData = PoolMember.list(assetId, partitionName, poolName)
+                    itemData = Pool(assetId, partitionName, poolName).members()
                     data["data"] = PoolMembersSerializer(itemData).data["data"]
                     data["href"] = request.get_full_path()
 
@@ -85,7 +85,7 @@ class F5PoolMembersController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        PoolMember.add(assetId, partitionName, poolName, data)
+                        Pool(assetId, partitionName, poolName).addMember(data)
 
                         httpStatus = status.HTTP_201_CREATED
                         lock.release()

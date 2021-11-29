@@ -4,7 +4,6 @@ from f5.models.F5.Node import Node
 from f5.models.F5.Monitor import Monitor
 from f5.models.F5.Pool import Pool
 from f5.models.F5.SnatPool import SnatPool
-from f5.models.F5.PoolMember import PoolMember
 from f5.models.F5.Profile import Profile
 from f5.models.F5.VirtualServer import VirtualServer
 from f5.models.History import History
@@ -237,7 +236,7 @@ class VirtualServersWorkflow:
             try:
                 Log.actionLog("Virtual server workflow: attempting to create pool members: associate "+str(nodeName)+" to "+str(poolName)+" on port "+str(poolMemberPort))
 
-                PoolMember.add(self.assetId, self.partitionName, poolName, {
+                Pool(self.assetId, self.partitionName, poolName).addMember({
                         "name": "/"+self.partitionName+"/"+poolMemberName,
                         "State": "up",
                         "session": "user-enabled"
@@ -492,7 +491,7 @@ class VirtualServersWorkflow:
                     try:
                         Log.log("Virtual server workflow: cleanup pool member "+poolMemberName)
 
-                        poolMember = PoolMember(self.assetId, poolName, self.partitionName, poolMemberName)
+                        poolMember = Pool(self.assetId, poolName, self.partitionName).member(poolMemberName)
                         poolMember.delete()
                     except Exception:
                         Log.actionLog("[ERROR] Virtual server workflow: failed to clean "+poolMemberName)
