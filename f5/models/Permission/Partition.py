@@ -60,7 +60,7 @@ class Partition:
             partitions = F5Partition.list(id)["data"]["items"]
 
             for v in partitions:
-                if v["partition"] == partition:
+                if v["name"] == partition:
                     try:
                         pid = Repository.add(id, partition)
                         return pid
