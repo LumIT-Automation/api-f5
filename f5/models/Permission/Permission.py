@@ -30,7 +30,7 @@ class Permission:
                 partitionName = "any"
 
             # RoleId.
-            r = Role(roleName=role)
+            r = Role(role=role)
             roleId = r.info()["id"]
 
             # Partition id.
@@ -87,7 +87,7 @@ class Permission:
                 partitionName = "any"
 
             # RoleId.
-            r = Role(roleName=role)
+            r = Role(role=role)
             roleId = r.info()["id"]
 
             # Partition id.
