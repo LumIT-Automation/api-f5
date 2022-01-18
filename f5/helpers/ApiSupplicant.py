@@ -86,7 +86,7 @@ class ApiSupplicant:
 
 
 
-    def post(self, data: object, additionalHeaders: dict = {}) -> dict:
+    def post(self, data: object, additionalHeaders: dict = None) -> dict:
         # In the event of a network problem (e.g. DNS failure, refused connection, etc), Requests will raise a ConnectionError exception.
         # If a request times out, a Timeout exception is raised.
         # If a request exceeds the configured number of maximum redirections, a TooManyRedirects exception is raised.
@@ -94,6 +94,7 @@ class ApiSupplicant:
 
         # On KO status codes, a CustomException is raised, with response status and body.
 
+        additionalHeaders = {} if additionalHeaders is None else additionalHeaders
         standardHeaders = {
             "Authorization": self.authorization
         }
@@ -149,7 +150,7 @@ class ApiSupplicant:
 
 
 
-    def put(self, data: object, additionalHeaders: dict = {}) -> dict:
+    def put(self, data: object, additionalHeaders: dict = None) -> dict:
         # In the event of a network problem (e.g. DNS failure, refused connection, etc), Requests will raise a ConnectionError exception.
         # If a request times out, a Timeout exception is raised.
         # If a request exceeds the configured number of maximum redirections, a TooManyRedirects exception is raised.
@@ -157,6 +158,7 @@ class ApiSupplicant:
 
         # On KO status codes, a CustomException is raised, with response status and body.
 
+        additionalHeaders = {} if additionalHeaders is None else additionalHeaders
         standardHeaders = {
             "Authorization": self.authorization
         }
@@ -211,7 +213,7 @@ class ApiSupplicant:
 
 
 
-    def patch(self, data: object, additionalHeaders: dict = {}) -> dict:
+    def patch(self, data: object, additionalHeaders: dict = None) -> dict:
         # In the event of a network problem (e.g. DNS failure, refused connection, etc), Requests will raise a ConnectionError exception.
         # If a request times out, a Timeout exception is raised.
         # If a request exceeds the configured number of maximum redirections, a TooManyRedirects exception is raised.
@@ -219,6 +221,7 @@ class ApiSupplicant:
 
         # On KO status codes, a CustomException is raised, with response status and body.
 
+        additionalHeaders = {} if additionalHeaders is None else additionalHeaders
         standardHeaders = {
             "Authorization": self.authorization
         }
@@ -273,7 +276,7 @@ class ApiSupplicant:
 
 
 
-    def delete(self, additionalHeaders: dict = {}) -> dict:
+    def delete(self, additionalHeaders: dict = None) -> dict:
         # In the event of a network problem (e.g. DNS failure, refused connection, etc), Requests will raise a ConnectionError exception.
         # If a request times out, a Timeout exception is raised.
         # If a request exceeds the configured number of maximum redirections, a TooManyRedirects exception is raised.
@@ -281,6 +284,7 @@ class ApiSupplicant:
 
         # On KO status codes, a CustomException is raised, with response status and body.
 
+        additionalHeaders = {} if additionalHeaders is None else additionalHeaders
         standardHeaders = {
             "Authorization": self.authorization
         }
