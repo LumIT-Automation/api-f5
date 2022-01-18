@@ -28,7 +28,6 @@ class Asset:
             data = Repository.get(self.id)
             for k, v in data.items():
                 setattr(self, k, v)
-
         except Exception as e:
             raise e
 

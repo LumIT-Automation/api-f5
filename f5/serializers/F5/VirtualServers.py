@@ -43,7 +43,7 @@ class F5VirtualServersSerializer(serializers.Serializer):
                 regex='^/.*/([01]?\d\d?|2[0-4]\d|25[0-5])(?:\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])){3}(:\d*)?$',
                 required=True)
             enabled = serializers.BooleanField(required=False)
-            evictionProtected = serializers.CharField(max_length=255, required=True)
+            evictionProtected = serializers.CharField(max_length=255, required=False)
             gtmScore = serializers.IntegerField(required=True)
             ipProtocol = serializers.CharField(max_length=255, required=True)
             lastModifiedTime = serializers.CharField(max_length=255, required=True)

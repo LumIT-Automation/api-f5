@@ -11,7 +11,6 @@ from f5.models.History import History
 from f5.helpers.Log import Log
 
 
-
 class VirtualServersWorkflow:
     def __init__(self, assetId: int, partitionName: str, data: dict, user: dict):
         self.assetId = assetId

@@ -9,7 +9,6 @@ from f5.models.History import History
 from f5.helpers.Log import Log
 
 
-
 class VirtualServerWorkflow:
     def __init__(self, assetId: int, partitionName: str, virtualServerName: str, user: dict):
         try:
