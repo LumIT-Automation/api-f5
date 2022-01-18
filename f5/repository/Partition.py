@@ -1,8 +1,6 @@
 from django.db import connection
 from django.db import transaction
 
-from f5.models.F5.Partition import Partition as F5Partition
-
 from f5.helpers.Exception import CustomException
 from f5.helpers.Database import Database as DBHelper
 
