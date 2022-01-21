@@ -71,7 +71,7 @@ class PermissionsController(CustomController):
                     try:
                         identityGroupId = ig.info()["id"]
                     except Exception:
-                        raise CustomException(status=status.HTTP_422_UNPROCESSABLE_ENTITY, payload={"database": {"message": "Group identifier doesn't exist."}})
+                        raise CustomException(status=status.HTTP_422_UNPROCESSABLE_ENTITY, payload={"database": "Group identifier doesn't exist."})
 
                     Permission.add(
                         identityGroupId,

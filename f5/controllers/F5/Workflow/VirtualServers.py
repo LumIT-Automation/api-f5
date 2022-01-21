@@ -84,7 +84,7 @@ class VirtualServersWorkflow:
             nodeAddress = el["address"]
 
             if nodeName == nodeAddress:
-                self.data["pool"]["nodes"][j]["name"] = nodeName = "node_"+nodeName # this fixes an F5 issue.
+                self.data["pool"]["nodes"][j]["name"] = nodeName = "node_"+nodeName # this fixes an F5 issue (name = address when using a root domain different than the default).
 
             try:
                 Log.actionLog("Virtual server workflow: attempting to create node: "+str(nodeAddress))

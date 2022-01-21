@@ -5,6 +5,7 @@ class IdentityGroup:
     def __init__(self, identityGroupIdentifier: str,  *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self.id = 0
         self.identity_group_identifier = identityGroupIdentifier
         self.name = ""
 

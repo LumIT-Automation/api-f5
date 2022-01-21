@@ -53,7 +53,7 @@ class Configuration:
                 c.close()
 
         else:
-            raise CustomException(status=404, payload={"database": {"message": "Non existent configuration"}})
+            raise CustomException(status=404, payload={"database": "Non existent configuration"})
 
 
 

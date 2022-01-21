@@ -62,7 +62,7 @@ class Permission:
 
 
     @staticmethod
-    def countUserPermissions(groups: list, action: str, assetId: int = 0, partitionName: str = "") -> bool:
+    def countUserPermissions(groups: list, action: str, assetId: int = 0, partitionName: str = "") -> int:
         if action and groups:
             args = groups.copy()
             assetWhere = ""
