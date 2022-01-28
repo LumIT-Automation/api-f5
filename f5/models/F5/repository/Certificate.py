@@ -9,14 +9,6 @@ from f5.helpers.Exception import CustomException
 
 
 class Certificate:
-    def __init__(self, assetId: int, partitionName: str, resourceName: str, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.assetId = int(assetId)
-        self.partitionName = partitionName
-        self.resourceName = resourceName
-
-
 
     ####################################################################################################################
     # Public static methods
