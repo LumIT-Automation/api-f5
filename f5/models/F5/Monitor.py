@@ -1,9 +1,4 @@
-import json
-import re
-
-from f5.models.F5.Asset.Asset import Asset
-
-from f5.helpers.ApiSupplicant import ApiSupplicant
+from f5.models.F5.repository.Monitor import Monitor as Repository
 
 
 class Monitor:
@@ -22,44 +17,16 @@ class Monitor:
     ####################################################################################################################
 
     def info(self, silent: bool = False):
-        o = dict()
-
         try:
-            f5 = Asset(self.assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/monitor/"+self.monitorType+"/~"+self.partitionName+"~"+self.monitorName+"/",
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify,
-                silent=silent
-            )
-
-            o["data"] = api.get()
+            return Repository.info(self.assetId, self.partitionName, self.monitorType, self.monitorName, silent)
         except Exception as e:
             raise e
-
-        return o
 
 
 
     def modify(self, data):
         try:
-            f5 = Asset(self.assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/monitor/"+self.monitorType+"/~"+self.partitionName+"~"+self.monitorName+"/",
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            api.patch(
-                additionalHeaders={
-                    "Content-Type": "application/json",
-                },
-                data=json.dumps(data)
-            )
+            Repository.modify(self.assetId, self.partitionName, self.monitorType, self.monitorName, data)
         except Exception as e:
             raise e
 
@@ -67,20 +34,7 @@ class Monitor:
 
     def delete(self):
         try:
-            f5 = Asset(self.assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/monitor/"+self.monitorType+"/~"+self.partitionName+"~"+self.monitorName+"/",
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            api.delete(
-                additionalHeaders={
-                    "Content-Type": "application/json",
-                }
-            )
+            Repository.delete(self.assetId, self.partitionName, self.monitorType, self.monitorName)
         except Exception as e:
             raise e
 
@@ -92,29 +46,10 @@ class Monitor:
 
     @staticmethod
     def types(assetId: int, partitionName: str) -> dict:
-        items = list()
         o = dict()
 
         try:
-            f5 = Asset(assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/monitor/?$filter=partition+eq+"+partitionName,
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            for m in api.get()["items"]:
-                matches = re.search(r"monitor\/(.*)\?", m["reference"]["link"])
-                if matches:
-                    monitorType = str(matches.group(1)).strip()
-                    items.append(monitorType)
-
-            o["data"] = {
-                "items": items
-            }
-
+            o["items"] = Repository.types(assetId, partitionName)
         except Exception as e:
             raise e
 
@@ -124,43 +59,16 @@ class Monitor:
 
     @staticmethod
     def list(assetId: int, partitionName: str, monitorType: str) -> dict:
-        o = dict()
-
         try:
-            f5 = Asset(assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/monitor/"+monitorType+"?$filter=partition+eq+"+partitionName,
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            o["data"] = api.get()
+            return Repository.list(assetId, partitionName, monitorType)
         except Exception as e:
             raise e
-
-        return o
 
 
 
     @staticmethod
     def add(assetId: int, monitorType: str, data: dict) -> None:
         try:
-            f5 = Asset(assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/monitor/"+monitorType+"/",
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            api.post(
-                additionalHeaders={
-                    "Content-Type": "application/json",
-                },
-                data=json.dumps(data)
-            )
+            Repository.add(assetId, monitorType, data)
         except Exception as e:
             raise e

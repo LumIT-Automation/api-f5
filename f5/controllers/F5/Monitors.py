@@ -40,10 +40,10 @@ class F5MonitorsController(CustomController):
                             # Monitors' list of that type.
                             # F5 treats monitor type as a sub-object instead of a property. Odd.
                             itemData = Monitor.list(assetId, partitionName, monitorType)
-                            data["data"] = MonitorsSerializer(itemData).data["data"]
+                            data["data"] = MonitorsSerializer(itemData).data
                         else:
                             # All monitors list, of any type.
-                            monitorTypes = Monitor.types(assetId, partitionName)["data"]["items"]
+                            monitorTypes = Monitor.types(assetId, partitionName)["items"]
 
                             # Event driven calls (no: still serialized).
                             # @sync_to_async
@@ -65,7 +65,7 @@ class F5MonitorsController(CustomController):
                             def monitorsListOfType(mType):
                                 data["data"][mType] = MonitorsSerializer(
                                     Monitor.list(assetId, partitionName, mType)
-                                ).data["data"]
+                                ).data
 
                             workers = [threading.Thread(target=monitorsListOfType, args=(m,)) for m in monitorTypes]
                             for w in workers:
@@ -75,7 +75,7 @@ class F5MonitorsController(CustomController):
                     else:
                         # Monitors' types list.
                         # No need for a serializer: just a list of strings.
-                        data["data"] = Monitor.types(assetId, partitionName)["data"]
+                        data["data"] = Monitor.types(assetId, partitionName)
 
                     data["href"] = request.get_full_path()
 
