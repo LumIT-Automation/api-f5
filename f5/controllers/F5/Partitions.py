@@ -17,11 +17,7 @@ class F5PartitionsController(CustomController):
     @staticmethod
     def get(request: Request, assetId: int) -> Response:
         data = dict()
-        allowedData = {
-            "data": {
-                "items": []
-            }
-        }
+        allowedData = {"items": list()}
         user = CustomController.loggedUser(request)
 
         try:
@@ -35,11 +31,11 @@ class F5PartitionsController(CustomController):
                     itemData = Partition.list(assetId)
 
                     # Filter partitions' list basing on actual permissions.
-                    for p in itemData["data"]["items"]:
+                    for p in itemData["items"]:
                         if Permission.hasUserPermission(groups=user["groups"], action="partitions_get", assetId=assetId, partitionName=str(p["fullPath"])) or user["authDisabled"]:
-                            allowedData["data"]["items"].append(p)
+                            allowedData["items"].append(p)
 
-                    data["data"] = Serializer(allowedData).data["data"]
+                    data["data"] = Serializer(allowedData).data
                     data["href"] = request.get_full_path()
 
                     httpStatus = status.HTTP_200_OK

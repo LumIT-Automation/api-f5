@@ -1,6 +1,4 @@
-from f5.models.F5.Asset.Asset import Asset
-
-from f5.helpers.ApiSupplicant import ApiSupplicant
+from f5.models.F5.repository.Partition import Partition as Repository
 
 
 class Partition:
@@ -17,20 +15,7 @@ class Partition:
 
     @staticmethod
     def list(assetId: int) -> dict:
-        o = dict()
-
         try:
-            f5 = Asset(assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/auth/partition/",
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            o["data"] = api.get()
+            return Repository.list(assetId)
         except Exception as e:
             raise e
-
-        return o
