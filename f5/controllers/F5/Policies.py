@@ -34,7 +34,7 @@ class F5PoliciesController(CustomController):
                     itemData = Policy.list(assetId, partitionName)
                     serializer = PoliciesSerializer(data=itemData)
                     if serializer.is_valid():
-                        data["data"] = serializer.validated_data["data"]
+                        data["data"] = serializer.validated_data
                         data["href"] = request.get_full_path()
 
                         # Check the response's ETag validity (against client request).

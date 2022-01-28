@@ -1,8 +1,4 @@
-import json
-
-from f5.models.F5.Asset.Asset import Asset
-
-from f5.helpers.ApiSupplicant import ApiSupplicant
+from f5.models.F5.repository.Policy import Policy as Repository
 
 
 class Policy:
@@ -22,26 +18,7 @@ class Policy:
 
     def modify(self, data):
         try:
-            f5 = Asset(self.assetId)
-            f5.load()
-
-            if self.policySubPath:
-                endpoint = asset["baseurl"]+"tm/ltm/policy/~"+self.partitionName+"~"+self.policySubPath+"~"+self.policyName+"/"
-            else:
-                endpoint = asset["baseurl"]+"tm/ltm/policy/~"+self.partitionName+"~"+self.policyName+"/"
-
-            api = ApiSupplicant(
-                endpoint=endpoint,
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            api.patch(
-                additionalHeaders={
-                    "Content-Type": "application/json",
-                },
-                data=json.dumps(data)
-            )
+            Repository.modify(self.assetId, self.partitionName, self.policySubPath, self.policyName, data)
         except Exception as e:
             raise e
 
@@ -49,25 +26,7 @@ class Policy:
 
     def delete(self):
         try:
-            f5 = Asset(self.assetId)
-            f5.load()
-
-            if self.policySubPath:
-                endpoint = asset["baseurl"]+"tm/ltm/policy/~"+self.partitionName+"~"+self.policySubPath+"~"+self.policyName+"/"
-            else:
-                endpoint = asset["baseurl"]+"tm/ltm/policy/~"+self.partitionName+"~"+self.policyName+"/"
-
-            api = ApiSupplicant(
-                endpoint=endpoint,
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            api.delete(
-                additionalHeaders={
-                    "Content-Type": "application/json",
-                }
-            )
+            Repository.delete(self.assetId, self.partitionName, self.policySubPath, self.policyName)
         except Exception as e:
             raise e
 
@@ -79,43 +38,16 @@ class Policy:
 
     @staticmethod
     def list(assetId: int, partitionName: str) -> dict:
-        o = dict()
-
         try:
-            f5 = Asset(assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/policy/?$filter=partition+eq+"+partitionName,
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            o["data"] = api.get()
+            return Repository.list(assetId, partitionName)
         except Exception as e:
             raise e
-
-        return o
 
 
 
     @staticmethod
     def add(assetId: int, data: dict) -> None:
         try:
-            f5 = Asset(assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/policy/",
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            api.post(
-                additionalHeaders={
-                    "Content-Type": "application/json",
-                },
-                data=json.dumps(data)
-            )
+            Repository.add(assetId, data)
         except Exception as e:
             raise e
