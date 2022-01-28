@@ -1,4 +1,4 @@
-from f5.models.F5.repository.Policy import Policy as Repository
+from f5.models.F5.backend.Policy import Policy as Backend
 
 
 class Policy:
@@ -18,7 +18,7 @@ class Policy:
 
     def modify(self, data):
         try:
-            Repository.modify(self.assetId, self.partitionName, self.policySubPath, self.policyName, data)
+            Backend.modify(self.assetId, self.partitionName, self.policySubPath, self.policyName, data)
         except Exception as e:
             raise e
 
@@ -26,7 +26,7 @@ class Policy:
 
     def delete(self):
         try:
-            Repository.delete(self.assetId, self.partitionName, self.policySubPath, self.policyName)
+            Backend.delete(self.assetId, self.partitionName, self.policySubPath, self.policyName)
         except Exception as e:
             raise e
 
@@ -39,7 +39,7 @@ class Policy:
     @staticmethod
     def list(assetId: int, partitionName: str) -> dict:
         try:
-            return Repository.list(assetId, partitionName)
+            return Backend.list(assetId, partitionName)
         except Exception as e:
             raise e
 
@@ -48,6 +48,6 @@ class Policy:
     @staticmethod
     def add(assetId: int, data: dict) -> None:
         try:
-            Repository.add(assetId, data)
+            Backend.add(assetId, data)
         except Exception as e:
             raise e

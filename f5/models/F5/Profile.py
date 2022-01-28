@@ -1,4 +1,4 @@
-from f5.models.F5.repository.Profile import Profile as Repository
+from f5.models.F5.backend.Profile import Profile as Backend
 
 
 class Profile:
@@ -21,7 +21,7 @@ class Profile:
         o = dict()
 
         try:
-            items = Repository.types(assetId, partitionName)
+            items = Backend.types(assetId, partitionName)
             o["items"] = items
         except Exception as e:
             raise e
@@ -32,7 +32,7 @@ class Profile:
 
     def info(self, silent: bool = False):
         try:
-            return Repository.info(self.assetId, self.profileType, self.partitionName, self.profileName, silent)
+            return Backend.info(self.assetId, self.profileType, self.partitionName, self.profileName, silent)
         except Exception as e:
             raise e
 
@@ -40,7 +40,7 @@ class Profile:
 
     def modify(self, data):
         try:
-            Repository.modify(self.assetId, self.profileType, self.partitionName, self.profileName, data)
+            Backend.modify(self.assetId, self.profileType, self.partitionName, self.profileName, data)
         except Exception as e:
             raise e
 
@@ -48,7 +48,7 @@ class Profile:
 
     def delete(self):
         try:
-            Repository.delete(self.assetId, self.profileType, self.partitionName, self.profileName)
+            Backend.delete(self.assetId, self.profileType, self.partitionName, self.profileName)
         except Exception as e:
             raise e
 
@@ -61,7 +61,7 @@ class Profile:
     @staticmethod
     def list(assetId: int, partitionName: str, profileType: str) -> dict:
         try:
-            return Repository.list(assetId, partitionName, profileType)
+            return Backend.list(assetId, partitionName, profileType)
         except Exception as e:
             raise e
 
@@ -70,6 +70,6 @@ class Profile:
     @staticmethod
     def add(assetId: int, profileType: str, data: dict) -> None:
         try:
-            Repository.add(assetId, profileType, data)
+            Backend.add(assetId, profileType, data)
         except Exception as e:
             raise e

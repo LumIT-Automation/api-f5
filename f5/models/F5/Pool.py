@@ -1,6 +1,6 @@
 from f5.models.F5.PoolMember import PoolMember
 
-from f5.models.F5.repository.Pool import Pool as Repository
+from f5.models.F5.backend.Pool import Pool as Backend
 
 
 class Pool:
@@ -19,7 +19,7 @@ class Pool:
 
     def info(self):
         try:
-            return Repository.info(self.assetId, self.partitionName, self.poolName)
+            return Backend.info(self.assetId, self.partitionName, self.poolName)
         except Exception as e:
             raise e
 
@@ -27,7 +27,7 @@ class Pool:
 
     def modify(self, data):
         try:
-            Repository.modify(self.assetId, self.partitionName, self.poolName, data)
+            Backend.modify(self.assetId, self.partitionName, self.poolName, data)
         except Exception as e:
             raise e
 
@@ -35,7 +35,7 @@ class Pool:
 
     def delete(self):
         try:
-            Repository.delete(self.assetId, self.partitionName, self.poolName)
+            Backend.delete(self.assetId, self.partitionName, self.poolName)
         except Exception as e:
             raise e
 
@@ -72,7 +72,7 @@ class Pool:
     @staticmethod
     def list(assetId: int, partitionName: str) -> dict:
         try:
-            return Repository.list(assetId, partitionName)
+            return Backend.list(assetId, partitionName)
         except Exception as e:
             raise e
 
@@ -81,6 +81,6 @@ class Pool:
     @staticmethod
     def add(assetId: int, data: dict) -> None:
         try:
-            Repository.add(assetId, data)
+            Backend.add(assetId, data)
         except Exception as e:
             raise e

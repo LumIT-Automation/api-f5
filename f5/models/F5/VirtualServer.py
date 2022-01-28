@@ -1,4 +1,4 @@
-from f5.models.F5.repository.VirtualServer import VirtualServer as Repository
+from f5.models.F5.backend.VirtualServer import VirtualServer as Backend
 
 
 class VirtualServer:
@@ -17,7 +17,7 @@ class VirtualServer:
 
     def info(self):
         try:
-            return Repository.info(self.assetId, self.partitionName, self.virtualServerName)
+            return Backend.info(self.assetId, self.partitionName, self.virtualServerName)
         except Exception as e:
             raise e
 
@@ -25,7 +25,7 @@ class VirtualServer:
 
     def policies(self):
         try:
-            return Repository.policies(self.assetId, self.partitionName, self.virtualServerName)
+            return Backend.policies(self.assetId, self.partitionName, self.virtualServerName)
         except Exception as e:
             raise e
 
@@ -33,7 +33,7 @@ class VirtualServer:
 
     def profiles(self):
         try:
-            return Repository.profiles(self.assetId, self.partitionName, self.virtualServerName)
+            return Backend.profiles(self.assetId, self.partitionName, self.virtualServerName)
         except Exception as e:
             raise e
 
@@ -41,7 +41,7 @@ class VirtualServer:
 
     def modify(self, data):
         try:
-            Repository.modify(self.assetId, self.partitionName, self.virtualServerName, data)
+            Backend.modify(self.assetId, self.partitionName, self.virtualServerName, data)
         except Exception as e:
             raise e
 
@@ -49,7 +49,7 @@ class VirtualServer:
 
     def delete(self):
         try:
-            Repository.delete(self.assetId, self.partitionName, self.virtualServerName)
+            Backend.delete(self.assetId, self.partitionName, self.virtualServerName)
         except Exception as e:
             raise e
 
@@ -62,7 +62,7 @@ class VirtualServer:
     @staticmethod
     def list(assetId: int, partitionName: str) -> dict:
         try:
-            return Repository.list(assetId, partitionName)
+            return Backend.list(assetId, partitionName)
         except Exception as e:
             raise e
 
@@ -71,6 +71,6 @@ class VirtualServer:
     @staticmethod
     def add(assetId: int, data: dict) -> None:
         try:
-            Repository.add(assetId, data)
+            Backend.add(assetId, data)
         except Exception as e:
             raise e

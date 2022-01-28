@@ -1,4 +1,4 @@
-from f5.models.F5.repository.Irule import Irule as Repository
+from f5.models.F5.backend.Irule import Irule as Backend
 
 
 class Irule:
@@ -17,7 +17,7 @@ class Irule:
 
     def modify(self, data):
         try:
-            Repository.modify(self.assetId, self.partitionName, self.iruleName, data)
+            Backend.modify(self.assetId, self.partitionName, self.iruleName, data)
         except Exception as e:
             raise e
 
@@ -25,7 +25,7 @@ class Irule:
 
     def delete(self):
         try:
-            Repository.delete(self.assetId, self.partitionName, self.iruleName)
+            Backend.delete(self.assetId, self.partitionName, self.iruleName)
         except Exception as e:
             raise e
 
@@ -38,7 +38,7 @@ class Irule:
     @staticmethod
     def list(assetId: int, partitionName: str) -> dict:
         try:
-            return Repository.list(assetId, partitionName)
+            return Backend.list(assetId, partitionName)
         except Exception as e:
             raise e
 
@@ -47,6 +47,6 @@ class Irule:
     @staticmethod
     def add(assetId: int, data: dict) -> None:
         try:
-            Repository.add(assetId, data)
+            Backend.add(assetId, data)
         except Exception as e:
             raise e

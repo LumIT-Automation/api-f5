@@ -1,4 +1,4 @@
-from f5.models.F5.repository.Partition import Partition as Repository
+from f5.models.F5.backend.Partition import Partition as Backend
 
 
 class Partition:
@@ -16,6 +16,6 @@ class Partition:
     @staticmethod
     def list(assetId: int) -> dict:
         try:
-            return Repository.list(assetId)
+            return Backend.list(assetId)
         except Exception as e:
             raise e

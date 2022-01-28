@@ -1,4 +1,4 @@
-from f5.models.F5.repository.PoolMember import PoolMember as Repository
+from f5.models.F5.backend.PoolMember import PoolMember as Backend
 
 
 class PoolMember:
@@ -18,7 +18,7 @@ class PoolMember:
 
     def info(self) -> dict:
         try:
-            return Repository.info(self.assetId, self.partition, self.poolName, self.name)
+            return Backend.info(self.assetId, self.partition, self.poolName, self.name)
         except Exception as e:
             raise e
 
@@ -26,7 +26,7 @@ class PoolMember:
 
     def stats(self) -> dict:
         try:
-            return Repository.stats(self.assetId, self.partition, self.poolName, self.name)
+            return Backend.stats(self.assetId, self.partition, self.poolName, self.name)
         except Exception as e:
             raise e
 
@@ -34,7 +34,7 @@ class PoolMember:
 
     def modify(self, data: dict) -> None:
         try:
-            Repository.modify(self.assetId, self.partition, self.poolName, self.name, data)
+            Backend.modify(self.assetId, self.partition, self.poolName, self.name, data)
         except Exception as e:
             raise e
 
@@ -42,7 +42,7 @@ class PoolMember:
 
     def delete(self) -> None:
         try:
-            Repository.delete(self.assetId, self.partition, self.poolName, self.name)
+            Backend.delete(self.assetId, self.partition, self.poolName, self.name)
         except Exception as e:
             raise e
 
@@ -54,7 +54,7 @@ class PoolMember:
     @staticmethod
     def list(assetId: int, partitionName: str, poolName: str) -> dict:
         try:
-            return Repository.list(assetId, partitionName, poolName)
+            return Backend.list(assetId, partitionName, poolName)
         except Exception as e:
             raise e
 
@@ -63,6 +63,6 @@ class PoolMember:
     @staticmethod
     def add(assetId: int, partitionName: str, poolName: str, data: dict) -> None:
         try:
-            Repository.add(assetId, partitionName, poolName, data)
+            Backend.add(assetId, partitionName, poolName, data)
         except Exception as e:
             raise e

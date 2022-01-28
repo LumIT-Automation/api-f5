@@ -1,4 +1,4 @@
-from f5.models.F5.repository.Node import Node as Repository
+from f5.models.F5.backend.Node import Node as Backend
 
 
 class Node:
@@ -17,7 +17,7 @@ class Node:
 
     def modify(self, data):
         try:
-            Repository.modify(self.assetId, self.partitionName, self.nodeName, data)
+            Backend.modify(self.assetId, self.partitionName, self.nodeName, data)
         except Exception as e:
             raise e
 
@@ -25,7 +25,7 @@ class Node:
 
     def delete(self):
         try:
-            Repository.delete(self.assetId, self.partitionName, self.nodeName)
+            Backend.delete(self.assetId, self.partitionName, self.nodeName)
         except Exception as e:
             raise e
 
@@ -38,7 +38,7 @@ class Node:
     @staticmethod
     def list(assetId: int, partitionName: str, silent: bool = False) -> dict:
         try:
-            return Repository.list(assetId, partitionName, silent)
+            return Backend.list(assetId, partitionName, silent)
         except Exception as e:
             raise e
 
@@ -47,7 +47,7 @@ class Node:
     @staticmethod
     def add(assetId: int, data: dict) -> None:
         try:
-            Repository.add(assetId, data)
+            Backend.add(assetId, data)
         except Exception as e:
             raise e
 

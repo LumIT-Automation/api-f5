@@ -1,4 +1,4 @@
-from f5.models.F5.repository.Certificate import Certificate as Repository
+from f5.models.F5.backend.Certificate import Certificate as Backend
 
 
 class Certificate:
@@ -18,7 +18,7 @@ class Certificate:
     def delete(self, what):
         if any(w in what for w in ("cert", "key")):
             try:
-                Repository.delete(self.assetId, self.partitionName, self.resourceName, what)
+                Backend.delete(self.assetId, self.partitionName, self.resourceName, what)
             except Exception as e:
                 raise e
 
@@ -34,7 +34,7 @@ class Certificate:
 
         if any(w in what for w in ("cert", "key")):
             try:
-                return Repository.list(assetId, what)
+                return Backend.list(assetId, what)
             except Exception as e:
                 raise e
 
@@ -46,6 +46,6 @@ class Certificate:
     def install(assetId: int, what: str, data: dict) -> None:
         if any(w in what for w in ("cert", "key")):
             try:
-                Repository.install(assetId, what, data)
+                Backend.install(assetId, what, data)
             except Exception as e:
                 raise e

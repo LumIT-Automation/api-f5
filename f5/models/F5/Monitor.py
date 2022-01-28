@@ -1,4 +1,4 @@
-from f5.models.F5.repository.Monitor import Monitor as Repository
+from f5.models.F5.backend.Monitor import Monitor as Backend
 
 
 class Monitor:
@@ -18,7 +18,7 @@ class Monitor:
 
     def info(self, silent: bool = False):
         try:
-            return Repository.info(self.assetId, self.partitionName, self.monitorType, self.monitorName, silent)
+            return Backend.info(self.assetId, self.partitionName, self.monitorType, self.monitorName, silent)
         except Exception as e:
             raise e
 
@@ -26,7 +26,7 @@ class Monitor:
 
     def modify(self, data):
         try:
-            Repository.modify(self.assetId, self.partitionName, self.monitorType, self.monitorName, data)
+            Backend.modify(self.assetId, self.partitionName, self.monitorType, self.monitorName, data)
         except Exception as e:
             raise e
 
@@ -34,7 +34,7 @@ class Monitor:
 
     def delete(self):
         try:
-            Repository.delete(self.assetId, self.partitionName, self.monitorType, self.monitorName)
+            Backend.delete(self.assetId, self.partitionName, self.monitorType, self.monitorName)
         except Exception as e:
             raise e
 
@@ -49,7 +49,7 @@ class Monitor:
         o = dict()
 
         try:
-            o["items"] = Repository.types(assetId, partitionName)
+            o["items"] = Backend.types(assetId, partitionName)
         except Exception as e:
             raise e
 
@@ -60,7 +60,7 @@ class Monitor:
     @staticmethod
     def list(assetId: int, partitionName: str, monitorType: str) -> dict:
         try:
-            return Repository.list(assetId, partitionName, monitorType)
+            return Backend.list(assetId, partitionName, monitorType)
         except Exception as e:
             raise e
 
@@ -69,6 +69,6 @@ class Monitor:
     @staticmethod
     def add(assetId: int, monitorType: str, data: dict) -> None:
         try:
-            Repository.add(assetId, monitorType, data)
+            Backend.add(assetId, monitorType, data)
         except Exception as e:
             raise e

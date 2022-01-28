@@ -1,4 +1,4 @@
-from f5.models.F5.repository.RouteDomain import RouteDomain as Repository
+from f5.models.F5.backend.RouteDomain import RouteDomain as Backend
 
 
 class RouteDomain:
@@ -16,6 +16,6 @@ class RouteDomain:
     @staticmethod
     def list(assetId: int) -> dict:
         try:
-            return Repository.list(assetId)
+            return Backend.list(assetId)
         except Exception as e:
             raise e
