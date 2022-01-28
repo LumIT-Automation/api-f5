@@ -32,7 +32,7 @@ class F5NodesController(CustomController):
                     lock.lock()
 
                     itemData = Node.list(assetId, partitionName)
-                    data["data"] = NodesSerializer(itemData).data["data"]
+                    data["data"] = NodesSerializer(itemData).data
                     data["href"] = request.get_full_path()
 
                     # Check the response's ETag validity (against client request).

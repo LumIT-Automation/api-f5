@@ -1,8 +1,4 @@
-import json
-
-from f5.models.F5.Asset.Asset import Asset
-
-from f5.helpers.ApiSupplicant import ApiSupplicant
+from f5.models.F5.repository.Node import Node as Repository
 
 
 class Node:
@@ -21,21 +17,7 @@ class Node:
 
     def modify(self, data):
         try:
-            f5 = Asset(self.assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/node/~"+self.partitionName+"~"+self.nodeName+"/",
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            api.patch(
-                additionalHeaders={
-                    "Content-Type": "application/json",
-                },
-                data=json.dumps(data)
-            )
+            Repository.modify(self.assetId, self.partitionName, self.nodeName, data)
         except Exception as e:
             raise e
 
@@ -43,20 +25,7 @@ class Node:
 
     def delete(self):
         try:
-            f5 = Asset(self.assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/node/~"+self.partitionName+"~"+self.nodeName+"/",
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            api.delete(
-                additionalHeaders={
-                    "Content-Type": "application/json",
-                }
-            )
+            Repository.delete(self.assetId, self.partitionName, self.nodeName)
         except Exception as e:
             raise e
 
@@ -68,45 +37,17 @@ class Node:
 
     @staticmethod
     def list(assetId: int, partitionName: str, silent: bool = False) -> dict:
-        o = dict()
-
         try:
-            f5 = Asset(assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/node/?$filter=partition+eq+"+partitionName,
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify,
-                silent=silent
-            )
-
-            o["data"] = api.get()
+            return Repository.list(assetId, partitionName, silent)
         except Exception as e:
             raise e
-
-        return o
 
 
 
     @staticmethod
     def add(assetId: int, data: dict) -> None:
         try:
-            f5 = Asset(assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/node/",
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            api.post(
-                additionalHeaders={
-                    "Content-Type": "application/json",
-                },
-                data=json.dumps(data)
-            )
+            Repository.add(assetId, data)
         except Exception as e:
             raise e
 
@@ -117,7 +58,7 @@ class Node:
         name = ""
         try:
             data = Node.list(assetId, partitionName, silent=silent)
-            for nel in data["data"]["items"]:
+            for nel in data["items"]:
                 if nel["address"] == address:
                     name = nel["name"]
 
