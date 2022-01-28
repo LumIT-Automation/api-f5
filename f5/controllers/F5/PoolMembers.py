@@ -32,7 +32,7 @@ class F5PoolMembersController(CustomController):
                     lock.lock()
 
                     itemData = Pool(assetId, partitionName, poolName).members()
-                    data["data"] = PoolMembersSerializer(itemData).data["data"]
+                    data["data"] = PoolMembersSerializer(itemData).data
                     data["href"] = request.get_full_path()
 
                     # Check the response's ETag validity (against client request).
@@ -74,9 +74,9 @@ class F5PoolMembersController(CustomController):
                 Log.actionLog("Add node/port to pool (create pool member)", user)
                 Log.actionLog("User data: "+str(request.data), user)
 
-                serializer = PoolMemberSerializer(data=request.data)
+                serializer = PoolMemberSerializer(data=request.data["data"])
                 if serializer.is_valid():
-                    data = serializer.validated_data["data"]
+                    data = serializer.validated_data
                     if "state" in data:
                         data["State"] = data["state"] # curious F5 field's name.
                         del(data["state"])
@@ -103,7 +103,7 @@ class F5PoolMembersController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("poolMember", locals(), locals()["serializer"].data["data"]["name"]).release()
+            Lock("poolMember", locals(), locals()["serializer"].data["name"]).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

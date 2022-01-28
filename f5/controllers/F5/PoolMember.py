@@ -33,7 +33,7 @@ class F5PoolMemberController(CustomController):
                     pm = Pool(assetId, poolName, partitionName).member(poolMemberName)
                     itemData = pm.info()
 
-                    data["data"] = Serializer(itemData).data["data"]
+                    data["data"] = Serializer(itemData).data
                     data["href"] = request.get_full_path()
 
                     # Check the response's ETag validity (against client request).
@@ -110,7 +110,7 @@ class F5PoolMemberController(CustomController):
 
                 serializer = Serializer(data=request.data, partial=True)
                 if serializer.is_valid():
-                    data = serializer.validated_data["data"]
+                    data = serializer.validated_data
 
                     lock = Lock("poolMember", locals(), poolMemberName)
                     if lock.isUnlocked():

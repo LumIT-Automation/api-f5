@@ -32,7 +32,7 @@ class F5PoolsController(CustomController):
                     lock.lock()
 
                     itemData = Pool.list(assetId, partitionName)
-                    data["data"] = PoolsSerializer(itemData).data["data"]
+                    data["data"] = PoolsSerializer(itemData).data
                     data["href"] = request.get_full_path()
 
                     # Check the response's ETag validity (against client request).

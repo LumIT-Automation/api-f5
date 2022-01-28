@@ -1,9 +1,6 @@
-import json
-
-from f5.models.F5.Asset.Asset import Asset
 from f5.models.F5.PoolMember import PoolMember
 
-from f5.helpers.ApiSupplicant import ApiSupplicant
+from f5.models.F5.repository.Pool import Pool as Repository
 
 
 class Pool:
@@ -21,23 +18,26 @@ class Pool:
     ####################################################################################################################
 
     def info(self):
-        o = dict()
-
         try:
-            f5 = Asset(self.assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/pool/~"+self.partitionName+"~"+self.poolName+"/",
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            o["data"] = api.get()
+            return Repository.info(self.assetId, self.partitionName, self.poolName)
         except Exception as e:
             raise e
 
-        return o
+
+
+    def modify(self, data):
+        try:
+            Repository.modify(self.assetId, self.partitionName, self.poolName, data)
+        except Exception as e:
+            raise e
+
+
+
+    def delete(self):
+        try:
+            Repository.delete(self.assetId, self.partitionName, self.poolName)
+        except Exception as e:
+            raise e
 
 
 
@@ -57,52 +57,9 @@ class Pool:
 
 
 
-    def modify(self, data):
-        try:
-            f5 = Asset(self.assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/pool/~"+self.partitionName+"~"+self.poolName+"/",
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            api.patch(
-                additionalHeaders={
-                    "Content-Type": "application/json",
-                },
-                data=json.dumps(data)
-            )
-        except Exception as e:
-            raise e
-
-
-
     def addMember(self, data: dict) -> None:
         try:
             PoolMember.add(self.assetId, self.partitionName, self.poolName, data)
-        except Exception as e:
-            raise e
-
-
-
-    def delete(self):
-        try:
-            f5 = Asset(self.assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/pool/~"+self.partitionName+"~"+self.poolName+"/",
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            api.delete(
-                additionalHeaders={
-                    "Content-Type": "application/json",
-                }
-            )
         except Exception as e:
             raise e
 
@@ -114,43 +71,16 @@ class Pool:
 
     @staticmethod
     def list(assetId: int, partitionName: str) -> dict:
-        o = dict()
-
         try:
-            f5 = Asset(assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/pool/?$filter=partition+eq+"+partitionName,
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            o["data"] = api.get()
+            return Repository.list(assetId, partitionName)
         except Exception as e:
             raise e
-
-        return o
 
 
 
     @staticmethod
     def add(assetId: int, data: dict) -> None:
         try:
-            f5 = Asset(assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/pool/",
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            api.post(
-                additionalHeaders={
-                    "Content-Type": "application/json",
-                },
-                data=json.dumps(data)
-            )
+            Repository.add(assetId, data)
         except Exception as e:
             raise e
