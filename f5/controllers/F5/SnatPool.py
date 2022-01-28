@@ -57,9 +57,9 @@ class F5SnatPoolController(CustomController):
                 Log.actionLog("Snat pool modification", user)
                 Log.actionLog("User data: "+str(request.data), user)
 
-                serializer = Serializer(data=request.data, partial=True)
+                serializer = Serializer(data=request.data["data"], partial=True)
                 if serializer.is_valid():
-                    data = serializer.validated_data["data"]
+                    data = serializer.validated_data
 
                     lock = Lock("snatPool", locals(), snatPoolName)
                     if lock.isUnlocked():

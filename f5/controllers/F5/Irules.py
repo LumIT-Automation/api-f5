@@ -83,9 +83,9 @@ class F5IrulesController(CustomController):
                 Log.actionLog("iRule addition", user)
                 Log.actionLog("User data: "+str(request.data), user)
 
-                serializer = IruleSerializer(data=request.data)
+                serializer = IruleSerializer(data=request.data["data"])
                 if serializer.is_valid():
-                    data = serializer.validated_data["data"]
+                    data = serializer.validated_data
                     data["partition"] = partitionName
 
                     lock = Lock("irule", locals(), data["name"])
@@ -110,7 +110,7 @@ class F5IrulesController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("irule", locals(), locals()["serializer"].data["data"]["name"]).release()
+            Lock("irule", locals(), locals()["serializer"].data["name"]).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

@@ -75,9 +75,9 @@ class F5VirtualServersController(CustomController):
                 Log.actionLog("Virtual server addition", user)
                 Log.actionLog("User data: "+str(request.data), user)
 
-                serializer = VirtualServerSerializer(data=request.data)
+                serializer = VirtualServerSerializer(data=request.data["data"])
                 if serializer.is_valid():
-                    data = serializer.validated_data["data"]
+                    data = serializer.validated_data
                     data["partition"] = partitionName
 
                     lock = Lock("virtualServer", locals(), data["name"])
@@ -102,7 +102,7 @@ class F5VirtualServersController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("virtualServer", locals(), locals()["serializer"].data["data"]["name"]).release()
+            Lock("virtualServer", locals(), locals()["serializer"].data["name"]).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

@@ -40,10 +40,10 @@ class F5ProfilesController(CustomController):
                             # Profiles' list of that type.
                             # F5 treats profile type as a sub-object instead of a property. Odd.
                             itemData = Profile.list(assetId, partitionName, profileType)
-                            data["data"] = ProfilesSerializer(itemData).data["data"]
+                            data["data"] = ProfilesSerializer(itemData).data
                         else:
                             # All monitors list, of any type.
-                            profileTypes = Profile.types(assetId, partitionName)["data"]["items"]
+                            profileTypes = Profile.types(assetId, partitionName)["items"]
 
                             # Event driven calls (no: still serialized).
                             # @sync_to_async
@@ -65,7 +65,7 @@ class F5ProfilesController(CustomController):
                             def profilesListOfType(pType):
                                 data["data"][pType] = ProfilesSerializer(
                                     Profile.list(assetId, partitionName, pType)
-                                ).data["data"]
+                                ).data
 
                             workers = [threading.Thread(target=profilesListOfType, args=(m,)) for m in profileTypes]
                             for w in workers:
@@ -75,7 +75,7 @@ class F5ProfilesController(CustomController):
                     else:
                         # Profiles' types list.
                         # No need for a serializer: just a list of strings.
-                        data["data"] = Profile.types(assetId, partitionName)["data"]
+                        data["data"] = Profile.types(assetId, partitionName)
 
                     data["href"] = request.get_full_path()
 
@@ -118,9 +118,9 @@ class F5ProfilesController(CustomController):
                 Log.actionLog("Profile addition", user)
                 Log.actionLog("User data: "+str(request.data), user)
 
-                serializer = ProfileSerializer(data=request.data)
+                serializer = ProfileSerializer(data=request.data["data"])
                 if serializer.is_valid():
-                    data = serializer.validated_data["data"]
+                    data = serializer.validated_data
                     data["partition"] = partitionName
 
                     lock = Lock("profile", locals(), profileType+data["name"])
@@ -145,7 +145,7 @@ class F5ProfilesController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("profile", locals(), locals()["profileType"]+locals()["serializer"].data["data"]["name"]).release()
+            Lock("profile", locals(), locals()["profileType"]+locals()["serializer"].data["name"]).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

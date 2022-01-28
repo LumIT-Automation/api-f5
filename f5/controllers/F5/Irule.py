@@ -57,9 +57,9 @@ class F5IruleController(CustomController):
                 Log.actionLog("iRule modification", user)
                 Log.actionLog("User data: "+str(request.data), user)
 
-                serializer = Serializer(data=request.data, partial=True)
+                serializer = Serializer(data=request.data["data"], partial=True)
                 if serializer.is_valid():
-                    data = serializer.validated_data["data"]
+                    data = serializer.validated_data
 
                     lock = Lock("irule", locals(), iruleName)
                     if lock.isUnlocked():

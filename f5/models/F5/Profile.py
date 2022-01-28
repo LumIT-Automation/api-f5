@@ -1,9 +1,4 @@
-import json
-import re
-
-from f5.models.F5.Asset.Asset import Asset
-
-from f5.helpers.ApiSupplicant import ApiSupplicant
+from f5.models.F5.repository.Profile import Profile as Repository
 
 
 class Profile:
@@ -23,29 +18,11 @@ class Profile:
 
     @staticmethod
     def types(assetId: int, partitionName: str) -> dict:
-        items = list()
         o = dict()
 
         try:
-            f5 = Asset(assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/profile/?$filter=partition+eq+"+partitionName,
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            for m in api.get()["items"]:
-                matches = re.search(r"profile\/(.*)\?", m["reference"]["link"])
-                if matches:
-                    profileType = str(matches.group(1)).strip()
-                    items.append(profileType)
-
-            o["data"] = {
-                "items": items
-            }
-
+            items = Repository.types(assetId, partitionName)
+            o["items"] = items
         except Exception as e:
             raise e
 
@@ -54,44 +31,16 @@ class Profile:
 
 
     def info(self, silent: bool = False):
-        o = dict()
-
         try:
-            f5 = Asset(self.assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/profile/"+self.profileType+"/~"+self.partitionName+"~"+self.profileName+"/",
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify,
-                silent=silent
-            )
-
-            o["data"] = api.get()
+            return Repository.info(self.assetId, self.profileType, self.partitionName, self.profileName, silent)
         except Exception as e:
             raise e
-
-        return o
 
 
 
     def modify(self, data):
         try:
-            f5 = Asset(self.assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/profile/"+self.profileType+"/~"+self.partitionName+"~"+self.profileName+"/",
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            api.patch(
-                additionalHeaders={
-                    "Content-Type": "application/json",
-                },
-                data=json.dumps(data)
-            )
+            Repository.modify(self.assetId, self.profileType, self.partitionName, self.profileName, data)
         except Exception as e:
             raise e
 
@@ -99,20 +48,7 @@ class Profile:
 
     def delete(self):
         try:
-            f5 = Asset(self.assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/profile/"+self.profileType+"/~"+self.partitionName+"~"+self.profileName+"/",
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            api.delete(
-                additionalHeaders={
-                    "Content-Type": "application/json",
-                }
-            )
+            Repository.delete(self.assetId, self.profileType, self.partitionName, self.profileName)
         except Exception as e:
             raise e
 
@@ -124,43 +60,16 @@ class Profile:
 
     @staticmethod
     def list(assetId: int, partitionName: str, profileType: str) -> dict:
-        o = dict()
-
         try:
-            f5 = Asset(assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/profile/"+profileType+"/?$filter=partition+eq+"+partitionName,
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            o["data"] = api.get()
+            return Repository.list(assetId, partitionName, profileType)
         except Exception as e:
             raise e
-
-        return o
 
 
 
     @staticmethod
     def add(assetId: int, profileType: str, data: dict) -> None:
         try:
-            f5 = Asset(assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/profile/"+profileType+"/",
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            api.post(
-                additionalHeaders={
-                    "Content-Type": "application/json",
-                },
-                data=json.dumps(data)
-            )
+            Repository.add(assetId, profileType, data)
         except Exception as e:
             raise e

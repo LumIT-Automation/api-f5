@@ -74,9 +74,9 @@ class F5SnatPoolsController(CustomController):
                 Log.actionLog("Snat pool addition", user)
                 Log.actionLog("User data: "+str(request.data), user)
 
-                serializer = SnatPoolSerializer(data=request.data)
+                serializer = SnatPoolSerializer(data=request.data["data"])
                 if serializer.is_valid():
-                    data = serializer.validated_data["data"]
+                    data = serializer.validated_data
                     data["partition"] = partitionName
 
                     lock = Lock("snatPool", locals(), data["name"])
@@ -101,7 +101,7 @@ class F5SnatPoolsController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("snatPool", locals(), locals()["serializer"].data["data"]["name"]).release()
+            Lock("snatPool", locals(), locals()["serializer"].data["name"]).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

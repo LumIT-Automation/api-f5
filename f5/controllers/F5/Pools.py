@@ -74,9 +74,9 @@ class F5PoolsController(CustomController):
                 Log.actionLog("Pool addition", user)
                 Log.actionLog("User data: "+str(request.data), user)
 
-                serializer = PoolSerializer(data=request.data)
+                serializer = PoolSerializer(data=request.data["data"])
                 if serializer.is_valid():
-                    data = serializer.validated_data["data"]
+                    data = serializer.validated_data
                     data["partition"] = partitionName
 
                     lock = Lock("pool", locals(), data["name"])
@@ -101,7 +101,7 @@ class F5PoolsController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("pool", locals(), locals()["serializer"].data["data"]["name"]).release()
+            Lock("pool", locals(), locals()["serializer"].data["name"]).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

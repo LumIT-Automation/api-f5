@@ -74,9 +74,9 @@ class F5NodesController(CustomController):
                 Log.actionLog("Node addition", user)
                 Log.actionLog("User data: "+str(request.data), user)
 
-                serializer = NodeSerializer(data=request.data)
+                serializer = NodeSerializer(data=request.data["data"])
                 if serializer.is_valid():
-                    data = serializer.validated_data["data"]
+                    data = serializer.validated_data
                     data["partition"] = partitionName
                     if "state" in data:
                         data["State"] = data["state"] # curious F5 field's name.
@@ -104,7 +104,7 @@ class F5NodesController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("node", locals(), locals()["serializer"].data["data"]["name"]).release()
+            Lock("node", locals(), locals()["serializer"].data["name"]).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

@@ -85,9 +85,9 @@ class F5PoliciesController(CustomController):
                 Log.actionLog("Policy addition", user)
                 Log.actionLog("User data: "+str(request.data), user)
 
-                serializer = PolicySerializer(data=request.data)
+                serializer = PolicySerializer(data=request.data["data"])
                 if serializer.is_valid():
-                    data = serializer.validated_data["data"]
+                    data = serializer.validated_data
                     data["partition"] = partitionName
 
                     lock = Lock("policy", locals(), data["name"])
@@ -112,7 +112,7 @@ class F5PoliciesController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("policy", locals(), locals()["serializer"].data["data"]["name"]).release()
+            Lock("policy", locals(), locals()["serializer"].data["name"]).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
