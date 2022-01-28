@@ -33,7 +33,7 @@ class F5VirtualServersController(CustomController):
 
                     itemData = VirtualServer.list(assetId, partitionName)
 
-                    data["data"] = VirtualServersSerializer(itemData).data["data"]
+                    data["data"] = VirtualServersSerializer(itemData).data
                     data["href"] = request.get_full_path()
 
                     # Check the response's ETag validity (against client request).

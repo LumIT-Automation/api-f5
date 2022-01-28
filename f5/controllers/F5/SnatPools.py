@@ -32,7 +32,7 @@ class F5SnatPoolsController(CustomController):
                     lock.lock()
 
                     itemData = SnatPool.list(assetId, partitionName)
-                    data["data"] = SnatPoolsSerializer(itemData).data["data"]
+                    data["data"] = SnatPoolsSerializer(itemData).data
                     data["href"] = request.get_full_path()
 
                     # Check the response's ETag validity (against client request).

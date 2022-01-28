@@ -1,8 +1,4 @@
-import json
-
-from f5.models.F5.Asset.Asset import Asset
-
-from f5.helpers.ApiSupplicant import ApiSupplicant
+from f5.models.F5.repository.VirtualServer import VirtualServer as Repository
 
 
 class VirtualServer:
@@ -20,85 +16,32 @@ class VirtualServer:
     ####################################################################################################################
 
     def info(self):
-        o = dict()
-
         try:
-            f5 = Asset(self.assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/virtual/~"+self.partitionName+"~"+self.virtualServerName+"/",
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            o["data"] = api.get()
+            return Repository.info(self.assetId, self.partitionName, self.virtualServerName)
         except Exception as e:
             raise e
-
-        return o
 
 
 
     def policies(self):
-        o = dict()
-
         try:
-            f5 = Asset(self.assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/virtual/~"+self.partitionName+"~"+self.virtualServerName+"/policies/",
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            o["data"] = api.get()
+            return Repository.policies(self.assetId, self.partitionName, self.virtualServerName)
         except Exception as e:
             raise e
-
-        return o
 
 
 
     def profiles(self):
-        o = dict()
-
         try:
-            f5 = Asset(self.assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/virtual/~"+self.partitionName+"~"+self.virtualServerName+"/profiles/",
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            o["data"] = api.get()
+            return Repository.profiles(self.assetId, self.partitionName, self.virtualServerName)
         except Exception as e:
             raise e
-
-        return o
 
 
 
     def modify(self, data):
         try:
-            f5 = Asset(self.assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/virtual/~"+self.partitionName+"~"+self.virtualServerName+"/",
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            api.patch(
-                additionalHeaders={
-                    "Content-Type": "application/json",
-                },
-                data=json.dumps(data)
-            )
+            Repository.modify(self.assetId, self.partitionName, self.virtualServerName, data)
         except Exception as e:
             raise e
 
@@ -106,20 +49,7 @@ class VirtualServer:
 
     def delete(self):
         try:
-            f5 = Asset(self.assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/virtual/~"+self.partitionName+"~"+self.virtualServerName+"/",
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            api.delete(
-                additionalHeaders={
-                    "Content-Type": "application/json",
-                }
-            )
+            Repository.delete(self.assetId, self.partitionName, self.virtualServerName)
         except Exception as e:
             raise e
 
@@ -131,43 +61,16 @@ class VirtualServer:
 
     @staticmethod
     def list(assetId: int, partitionName: str) -> dict:
-        o = dict()
-
         try:
-            f5 = Asset(assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/virtual/?$filter=partition+eq+"+partitionName,
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            o["data"] = api.get()
+            return Repository.list(assetId, partitionName)
         except Exception as e:
             raise e
-
-        return o
 
 
 
     @staticmethod
     def add(assetId: int, data: dict) -> None:
         try:
-            f5 = Asset(assetId)
-            f5.load()
-
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/virtual/",
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-
-            api.post(
-                additionalHeaders={
-                    "Content-Type": "application/json",
-                },
-                data=json.dumps(data)
-            )
+            Repository.add(assetId, data)
         except Exception as e:
             raise e

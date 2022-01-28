@@ -77,7 +77,7 @@ class VirtualServerWorkflow:
             vs = VirtualServer(self.assetId, self.partitionName, self.virtualServerName)
 
             # General info.
-            info = vs.info()["data"]
+            info = vs.info()
             try:
                 self.poolName = info["pool"].split("/")[2]
                 self.snat = info["sourceAddressTranslation"]["type"]
@@ -85,7 +85,7 @@ class VirtualServerWorkflow:
                 pass
 
             # Related profiles.
-            profiles = vs.profiles()["data"]["items"]
+            profiles = vs.profiles()["items"]
             for profile in profiles:
                 self.profiles.append({
                     "name": profile["name"],
