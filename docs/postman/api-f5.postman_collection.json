@@ -2968,7 +2968,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/virtualserver/VIRTUALSERVER/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/virtualserver/SERVICENAME/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -2983,7 +2983,7 @@
 								"2",
 								"Partition1",
 								"virtualserver",
-								"VIRTUALSERVER",
+								"SERVICENAME",
 								""
 							]
 						}
@@ -3143,7 +3143,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Beta_Partition/certificate/mamma.crt/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Common/certificate/mamma.crt/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -3155,8 +3155,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"Beta_Partition",
+								"2",
+								"Common",
 								"certificate",
 								"mamma.crt",
 								""
@@ -3193,7 +3193,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/certificates/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/certificates/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -3205,7 +3205,7 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
+								"2",
 								"certificates",
 								""
 							]
@@ -3232,7 +3232,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/keys/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/keys/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -3244,7 +3244,7 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
+								"2",
 								"keys",
 								""
 							]
@@ -3281,7 +3281,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/key/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/keys/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -3293,8 +3293,8 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
-								"key",
+								"2",
+								"keys",
 								""
 							]
 						}
@@ -3320,7 +3320,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/1/Common/key/mamma.key/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Common/key/mamma.key/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -3332,7 +3332,7 @@
 								"api",
 								"v1",
 								"f5",
-								"1",
+								"2",
 								"Common",
 								"key",
 								"mamma.key",

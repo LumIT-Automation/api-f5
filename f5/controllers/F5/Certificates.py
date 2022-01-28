@@ -35,7 +35,7 @@ class F5CertificatesController(CustomController):
                         lock.lock()
 
                         itemData = Certificate.list(assetId, "cert")
-                        data["data"] = CertificatesSerializer(itemData).data["data"]
+                        data["data"] = CertificatesSerializer(itemData).data
                         data["href"] = request.get_full_path()
 
                         # Check the response's ETag validity (against client request).
@@ -58,7 +58,7 @@ class F5CertificatesController(CustomController):
                         lock.lock()
 
                         itemData = Certificate.list(assetId, "key")
-                        data["data"] = KeysSerializer(itemData).data["data"]
+                        data["data"] = KeysSerializer(itemData).data
 
                         # Check the response's ETag validity (against client request).
                         conditional = Conditional(request)
