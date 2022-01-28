@@ -1,7 +1,7 @@
 from f5.models.Permission.Role import Role
 from f5.models.Permission.Partition import Partition
 
-from f5.repository.Permission import Permission as Repository
+from f5.models.Permission.repository.Permission import Permission as Repository
 
 
 class Permission:

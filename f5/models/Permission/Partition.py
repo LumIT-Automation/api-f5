@@ -1,6 +1,6 @@
 from f5.models.F5.Partition import Partition as F5Partition
 
-from f5.repository.Partition import Partition as Repository
+from f5.models.Permission.repository.Partition import Partition as Repository
 
 
 class Partition:

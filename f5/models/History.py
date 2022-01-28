@@ -1,4 +1,4 @@
-from f5.repository.History import History as Repository
+from f5.models.repository.History import History as Repository
 
 
 class History:

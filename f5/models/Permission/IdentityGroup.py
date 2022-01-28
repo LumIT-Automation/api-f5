@@ -1,4 +1,4 @@
-from f5.repository.IdentityGroup import IdentityGroup as Repository
+from f5.models.Permission.repository.IdentityGroup import IdentityGroup as Repository
 
 
 class IdentityGroup:

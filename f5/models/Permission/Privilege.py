@@ -1,4 +1,4 @@
-from f5.repository.Privilege import Privilege as Repository
+from f5.models.Permission.repository.Privilege import Privilege as Repository
 
 
 class Privilege:

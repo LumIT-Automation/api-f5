@@ -1,4 +1,4 @@
-from f5.repository.Asset import Asset as Repository
+from f5.models.F5.Asset.repository.Asset import Asset as Repository
 
 
 class Asset:

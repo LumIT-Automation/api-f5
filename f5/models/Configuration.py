@@ -1,4 +1,4 @@
-from f5.repository.Configuration import Configuration as Repository
+from f5.models.repository.Configuration import Configuration as Repository
 
 
 class Configuration:

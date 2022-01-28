@@ -1,4 +1,4 @@
-from f5.repository.Role import Role as Repository
+from f5.models.Permission.repository.Role import Role as Repository
 
 
 class Role:
