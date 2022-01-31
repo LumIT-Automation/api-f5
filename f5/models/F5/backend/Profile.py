@@ -18,8 +18,6 @@ class Profile:
 
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/profile/?$filter=partition+eq+"+partitionName,
                 auth=(f5.username, f5.password),
@@ -42,8 +40,6 @@ class Profile:
     def info(assetId: int, profileType: str, partitionName: str, profileName: str, silent: bool = False):
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/profile/"+profileType+"/~"+partitionName+"~"+profileName+"/",
                 auth=(f5.username, f5.password),
@@ -61,8 +57,6 @@ class Profile:
     def modify(assetId: int, profileType: str, partitionName: str, profileName: str, data):
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/profile/"+profileType+"/~"+partitionName+"~"+profileName+"/",
                 auth=(f5.username, f5.password),
@@ -84,8 +78,6 @@ class Profile:
     def delete(assetId: int, profileType: str, partitionName: str, profileName: str):
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/profile/"+profileType+"/~"+partitionName+"~"+profileName+"/",
                 auth=(f5.username, f5.password),
@@ -106,8 +98,6 @@ class Profile:
     def list(assetId: int, partitionName: str, profileType: str) -> dict:
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/profile/"+profileType+"/?$filter=partition+eq+"+partitionName,
                 auth=(f5.username, f5.password),
@@ -124,8 +114,6 @@ class Profile:
     def add(assetId: int, profileType: str, data: dict) -> None:
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/profile/"+profileType+"/",
                 auth=(f5.username, f5.password),

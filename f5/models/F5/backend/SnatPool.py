@@ -15,8 +15,6 @@ class SnatPool:
     def modify(assetId: int, partitionName: str, snatPoolName: str, data):
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/snatpool/~"+partitionName+"~"+snatPoolName+"/",
                 auth=(f5.username, f5.password),
@@ -38,8 +36,6 @@ class SnatPool:
     def delete(assetId: int, partitionName: str, snatPoolName: str):
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/snatpool/~"+partitionName+"~"+snatPoolName+"/",
                 auth=(f5.username, f5.password),
@@ -60,8 +56,6 @@ class SnatPool:
     def list(assetId: int, partitionName: str) -> dict:
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/snatpool/?$filter=partition+eq+"+partitionName,
                 auth=(f5.username, f5.password),
@@ -78,8 +72,6 @@ class SnatPool:
     def add(assetId: int, data: dict) -> None:
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/snatpool/",
                 auth=(f5.username, f5.password),

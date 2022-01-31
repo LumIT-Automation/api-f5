@@ -15,8 +15,6 @@ class Node:
     def modify(assetId: int, partitionName: str, nodeName: str, data: dict):
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/node/~"+partitionName+"~"+nodeName+"/",
                 auth=(f5.username, f5.password),
@@ -38,8 +36,6 @@ class Node:
     def delete(assetId: int, partitionName: str, nodeName: str):
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/node/~"+partitionName+"~"+nodeName+"/",
                 auth=(f5.username, f5.password),
@@ -60,8 +56,6 @@ class Node:
     def list(assetId: int, partitionName: str, silent: bool = False) -> dict:
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/node/?$filter=partition+eq+"+partitionName,
                 auth=(f5.username, f5.password),
@@ -79,8 +73,6 @@ class Node:
     def add(assetId: int, data: dict) -> None:
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/node/",
                 auth=(f5.username, f5.password),

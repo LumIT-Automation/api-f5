@@ -15,8 +15,6 @@ class Policy:
     def modify(assetId: int, partitionName: str, policySubPath: str, policyName: str, data):
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             if policySubPath:
                 endpoint = f5.baseurl+"tm/ltm/policy/~"+partitionName+"~"+policySubPath+"~"+policyName+"/"
             else:
@@ -43,8 +41,6 @@ class Policy:
     def delete(assetId: int, partitionName: str, policySubPath: str, policyName: str):
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             if policySubPath:
                 endpoint = f5.baseurl+"tm/ltm/policy/~"+partitionName+"~"+policySubPath+"~"+policyName+"/"
             else:
@@ -70,8 +66,6 @@ class Policy:
     def list(assetId: int, partitionName: str) -> dict:
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/policy/?$filter=partition+eq+"+partitionName,
                 auth=(f5.username, f5.password),
@@ -88,8 +82,6 @@ class Policy:
     def add(assetId: int, data: dict) -> None:
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/policy/",
                 auth=(f5.username, f5.password),

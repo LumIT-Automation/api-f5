@@ -19,8 +19,6 @@ class Certificate:
         if any(w in what for w in ("cert", "key")):
             try:
                 f5 = Asset(assetId)
-                f5.load()
-
                 api = ApiSupplicant(
                     endpoint=f5.baseurl+"tm/sys/crypto/"+what+"/~"+partitionName+"~"+resourceName+"/",
                     auth=(f5.username, f5.password),
@@ -44,8 +42,6 @@ class Certificate:
         if any(w in what for w in ("cert", "key")):
             try:
                 f5 = Asset(assetId)
-                f5.load()
-
                 api = ApiSupplicant(
                     endpoint=f5.baseurl+"tm/sys/crypto/"+what+"/",
                     auth=(f5.username, f5.password),
@@ -65,8 +61,6 @@ class Certificate:
         if any(w in what for w in ("cert", "key")):
             try:
                 f5 = Asset(assetId)
-                f5.load()
-
                 # Decode base 64 data.
                 contentBase64 = data["content_base64"] # base 64 UTF-8.
 

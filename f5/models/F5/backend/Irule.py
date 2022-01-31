@@ -16,8 +16,6 @@ class Irule:
     def modify(assetId: int, partitionName: str, iruleName: str, data):
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/rule/~"+partitionName+"~"+iruleName+"/",
                 auth=(f5.username, f5.password),
@@ -39,8 +37,6 @@ class Irule:
     def delete(assetId: int, partitionName: str, iruleName: str):
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/rule/~"+partitionName+"~"+iruleName+"/",
                 auth=(f5.username, f5.password),
@@ -61,8 +57,6 @@ class Irule:
     def list(assetId: int, partitionName: str) -> dict:
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/rule/?$filter=partition+eq+"+partitionName,
                 auth=(f5.username, f5.password),
@@ -79,8 +73,6 @@ class Irule:
     def add(assetId: int, data: dict) -> None:
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/rule/",
                 auth=(f5.username, f5.password),

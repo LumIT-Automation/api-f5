@@ -1,7 +1,6 @@
 from django.utils.html import strip_tags
 from django.db import connection
 from django.db import transaction
-from django.core.cache import cache
 
 from f5.helpers.Log import Log
 from f5.helpers.Exception import CustomException
@@ -31,24 +30,19 @@ class Asset:
 
     @staticmethod
     def get(assetId: int) -> dict:
-        if not cache.get("ASSET"+str(assetId)):
-            c = connection.cursor()
+        c = connection.cursor()
 
-            try:
-                c.execute("SELECT * FROM asset WHERE id = %s", [
-                    assetId
-                ])
+        try:
+            c.execute("SELECT * FROM asset WHERE id = %s", [
+                assetId
+            ])
 
-                info = DBHelper.asDict(c)[0]
-                cache.set("ASSET"+str(assetId), info, 10)
-                return info
-            except Exception as e:
-                raise CustomException(status=400, payload={"database": e.__str__()})
-            finally:
-                c.close()
-        else:
-            # Fetching from cache instead of MySQL for when massive threaded calls result in too many sql connections.
-            return cache.get("ASSET"+str(assetId))
+            info = DBHelper.asDict(c)[0]
+            return info
+        except Exception as e:
+            raise CustomException(status=400, payload={"database": e.__str__()})
+        finally:
+            c.close()
 
 
 

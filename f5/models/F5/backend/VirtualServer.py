@@ -15,8 +15,6 @@ class VirtualServer:
     def info(assetId: int, partitionName: str, virtualServerName: str):
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/virtual/~"+partitionName+"~"+virtualServerName+"/",
                 auth=(f5.username, f5.password),
@@ -33,8 +31,6 @@ class VirtualServer:
     def policies(assetId: int, partitionName: str, virtualServerName: str):
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/virtual/~"+partitionName+"~"+virtualServerName+"/policies/",
                 auth=(f5.username, f5.password),
@@ -51,8 +47,6 @@ class VirtualServer:
     def profiles(assetId: int, partitionName: str, virtualServerName: str):
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/virtual/~"+partitionName+"~"+virtualServerName+"/profiles/",
                 auth=(f5.username, f5.password),
@@ -69,8 +63,6 @@ class VirtualServer:
     def modify(assetId: int, partitionName: str, virtualServerName: str, data: dict):
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/virtual/~"+partitionName+"~"+virtualServerName+"/",
                 auth=(f5.username, f5.password),
@@ -92,8 +84,6 @@ class VirtualServer:
     def delete(assetId: int, partitionName: str, virtualServerName: str):
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/virtual/~"+partitionName+"~"+virtualServerName+"/",
                 auth=(f5.username, f5.password),
@@ -114,8 +104,6 @@ class VirtualServer:
     def list(assetId: int, partitionName: str) -> dict:
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/virtual/?$filter=partition+eq+"+partitionName,
                 auth=(f5.username, f5.password),
@@ -132,8 +120,6 @@ class VirtualServer:
     def add(assetId: int, data: dict) -> None:
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/virtual/",
                 auth=(f5.username, f5.password),

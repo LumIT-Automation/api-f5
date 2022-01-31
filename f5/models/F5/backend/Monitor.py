@@ -16,8 +16,6 @@ class Monitor:
     def info(assetId, partitionName: str, monitorType: str, monitorName: str, silent: bool = False):
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/monitor/"+monitorType+"/~"+partitionName+"~"+monitorName+"/",
                 auth=(f5.username, f5.password),
@@ -35,8 +33,6 @@ class Monitor:
     def modify(assetId, partitionName: str, monitorType: str, monitorName: str, data: dict):
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/monitor/"+monitorType+"/~"+partitionName+"~"+monitorName+"/",
                 auth=(f5.username, f5.password),
@@ -58,8 +54,6 @@ class Monitor:
     def delete(assetId, partitionName: str, monitorType: str, monitorName: str):
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/monitor/"+monitorType+"/~"+partitionName+"~"+monitorName+"/",
                 auth=(f5.username, f5.password),
@@ -82,8 +76,6 @@ class Monitor:
 
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/monitor/?$filter=partition+eq+"+partitionName,
                 auth=(f5.username, f5.password),
@@ -106,8 +98,6 @@ class Monitor:
     def list(assetId: int, partitionName: str, monitorType: str) -> dict:
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/monitor/"+monitorType+"?$filter=partition+eq+"+partitionName,
                 auth=(f5.username, f5.password),
@@ -124,8 +114,6 @@ class Monitor:
     def add(assetId: int, monitorType: str, data: dict) -> None:
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/monitor/"+monitorType+"/",
                 auth=(f5.username, f5.password),

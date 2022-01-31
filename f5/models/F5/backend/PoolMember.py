@@ -15,8 +15,6 @@ class PoolMember:
     def info(assetId: int, partition: str, poolName: str, name: str) -> dict:
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/pool/~"+partition+"~"+poolName+"/members/~"+partition+"~"+name+"/",
                 auth=(f5.username, f5.password),
@@ -34,8 +32,6 @@ class PoolMember:
 
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/pool/~"+partition+"~"+poolName+"/members/~"+partition+"~"+name+"/stats/",
                 auth=(f5.username, f5.password),
@@ -80,8 +76,6 @@ class PoolMember:
     def modify(assetId: int, partition: str, poolName: str, name: str, data: dict) -> None:
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/pool/~"+partition+"~"+poolName+"/members/~"+partition+"~"+name+"/",
                 auth=(f5.username, f5.password),
@@ -102,8 +96,6 @@ class PoolMember:
     def delete(assetId: int, partition: str, poolName: str, name: str) -> None:
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/pool/~"+partition+"~"+poolName+"/members/~"+partition+"~"+name+"/",
                 auth=(f5.username, f5.password),
@@ -123,8 +115,6 @@ class PoolMember:
     def list(assetId: int, partitionName: str, poolName: str) -> dict:
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/pool/~"+partitionName+"~"+poolName+"/members/",
                 auth=(f5.username, f5.password),
@@ -140,8 +130,6 @@ class PoolMember:
     def add(assetId: int, partitionName: str, poolName: str, data: dict) -> None:
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/pool/~"+partitionName+"~"+poolName+"/members/",
                 auth=(f5.username, f5.password),

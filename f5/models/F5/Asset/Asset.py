@@ -1,7 +1,17 @@
 from f5.models.F5.Asset.repository.Asset import Asset as Repository
 
 
-class Asset:
+class Singleton(type):
+    _instances = {}
+
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
+
+
+
+class Asset(metaclass=Singleton):
     def __init__(self, assetId: int, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -17,30 +27,13 @@ class Asset:
         self.username = ""
         self.password = ""
 
+        self.__load()
+
 
 
     ####################################################################################################################
     # Public methods
     ####################################################################################################################
-
-    def load(self) -> None:
-        try:
-            data = Repository.get(self.id)
-            for k, v in data.items():
-                setattr(self, k, v)
-        except Exception as e:
-            raise e
-
-
-
-    def info(self) -> dict:
-        try:
-            info = Repository.get(self.id)
-            return info
-        except Exception as e:
-            raise e
-
-
 
     def modify(self, data: dict) -> None:
         try:
@@ -79,5 +72,19 @@ class Asset:
             # When inserting an asset, add the "any" partition (Permission).
             from f5.models.Permission.Partition import Partition as PermissionPartition
             PermissionPartition.add(aid, "any")
+        except Exception as e:
+            raise e
+
+
+
+    ####################################################################################################################
+    # Private methods
+    ####################################################################################################################
+
+    def __load(self) -> None:
+        try:
+            data = Repository.get(self.id)
+            for k, v in data.items():
+                setattr(self, k, v)
         except Exception as e:
             raise e

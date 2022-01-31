@@ -15,8 +15,6 @@ class Pool:
     def info(assetId, partitionName, poolName):
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/pool/~"+partitionName+"~"+poolName+"/",
                 auth=(f5.username, f5.password),
@@ -33,8 +31,6 @@ class Pool:
     def modify(assetId, partitionName, poolName, data):
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/pool/~"+partitionName+"~"+poolName+"/",
                 auth=(f5.username, f5.password),
@@ -56,8 +52,6 @@ class Pool:
     def delete(assetId, partitionName, poolName):
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/pool/~"+partitionName+"~"+poolName+"/",
                 auth=(f5.username, f5.password),
@@ -78,8 +72,6 @@ class Pool:
     def list(assetId: int, partitionName: str) -> dict:
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/pool/?$filter=partition+eq+"+partitionName,
                 auth=(f5.username, f5.password),
@@ -96,8 +88,6 @@ class Pool:
     def add(assetId: int, data: dict) -> None:
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/pool/",
                 auth=(f5.username, f5.password),

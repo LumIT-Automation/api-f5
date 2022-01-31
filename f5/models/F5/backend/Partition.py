@@ -13,8 +13,6 @@ class Partition:
     def list(assetId: int) -> dict:
         try:
             f5 = Asset(assetId)
-            f5.load()
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/auth/partition/",
                 auth=(f5.username, f5.password),
