@@ -2,12 +2,13 @@ from f5.models.F5.backend.Certificate import Certificate as Backend
 
 
 class Certificate:
-    def __init__(self, assetId: int, partitionName: str, resourceName: str, *args, **kwargs):
+    def __init__(self, assetId: int, partitionName: str, resource: str, name: str, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.assetId = int(assetId)
         self.partitionName = partitionName
-        self.resourceName = resourceName
+        self.resource = resource
+        self.name = name
 
 
 
@@ -15,10 +16,10 @@ class Certificate:
     # Public methods
     ####################################################################################################################
 
-    def delete(self, what):
-        if any(w in what for w in ("cert", "key")):
+    def delete(self):
+        if self.resource in ["cert", "key"]:
             try:
-                Backend.delete(self.assetId, self.partitionName, self.resourceName, what)
+                Backend.delete(self.assetId, self.partitionName, self.name, self.resource)
             except Exception as e:
                 raise e
 
@@ -32,7 +33,7 @@ class Certificate:
     def list(assetId: int, what: str) -> dict:
         o = dict()
 
-        if any(w in what for w in ("cert", "key")):
+        if what in ["cert", "key"]:
             try:
                 return Backend.list(assetId, what)
             except Exception as e:
@@ -44,7 +45,7 @@ class Certificate:
 
     @staticmethod
     def install(assetId: int, what: str, data: dict) -> None:
-        if any(w in what for w in ("cert", "key")):
+        if what in ["cert", "key"]:
             try:
                 Backend.install(assetId, what, data)
             except Exception as e:

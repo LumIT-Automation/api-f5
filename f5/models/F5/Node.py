@@ -1,5 +1,3 @@
-from dataclasses import dataclass
-
 from f5.models.F5.backend.Node import Node as Backend
 
 
@@ -7,31 +5,9 @@ class Node:
     def __init__(self, assetId: int, partitionName: str, nodeName: str, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        @dataclass
-        class Fqdn:
-            addressFamily: str
-            autopopulate: str
-            interval: str
-            downInterval: int
-
         self.assetId = int(assetId)
         self.partition = partitionName
         self.name = nodeName
-
-        self.fullPath: str
-        self.generation: int
-        self.selfLink: str
-        self.address: str
-        self.connectionLimit: int
-        self.dynamicRatio: int
-        self.ephemeral: str
-        self.fqdn: Fqdn
-        self.logging: str
-        self.monitor: str
-        self.rateLimit: str
-        self.ratio: int
-        self.session: str
-        self.state: str
 
 
 
