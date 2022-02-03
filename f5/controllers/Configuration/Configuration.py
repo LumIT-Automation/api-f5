@@ -15,7 +15,6 @@ class ConfigurationController(CustomController):
     @staticmethod
     def get(request: Request, configType: str) -> Response:
         data = dict()
-        itemData = dict()
         user = CustomController.loggedUser(request)
 
         try:
