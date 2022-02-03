@@ -63,9 +63,9 @@ class PermissionsController(CustomController):
                 Log.actionLog("Permission addition", user)
                 Log.actionLog("User data: "+str(request.data), user)
 
-                serializer = PermissionSerializer(data=request.data)
+                serializer = PermissionSerializer(data=request.data["data"])
                 if serializer.is_valid():
-                    data = serializer.validated_data["data"]
+                    data = serializer.validated_data
 
                     ig = IdentityGroup(data["identity_group_identifier"])
                     try:

@@ -70,9 +70,9 @@ class PermissionIdentityGroupsController(CustomController):
                 Log.actionLog("Identity group addition", user)
                 Log.actionLog("User data: "+str(request.data), user)
 
-                serializer = GroupSerializer(data=request.data)
+                serializer = GroupSerializer(data=request.data["data"])
                 if serializer.is_valid():
-                    validatedData = serializer.validated_data["data"]
+                    validatedData = serializer.validated_data
                     IdentityGroup.add(validatedData)
 
                     httpStatus = status.HTTP_201_CREATED

@@ -61,9 +61,9 @@ class F5AssetsController(CustomController):
                 Log.actionLog("Asset addition", user)
                 Log.actionLog("User data: "+str(request.data), user)
 
-                serializer = AssetSerializer(data=request.data)
+                serializer = AssetSerializer(data=request.data["data"])
                 if serializer.is_valid():
-                    Asset.add(serializer.validated_data["data"])
+                    Asset.add(serializer.validated_data)
 
                     httpStatus = status.HTTP_201_CREATED
                 else:

@@ -21,8 +21,5 @@ class IdentityGroupsAssestRolesItems(serializers.Serializer):
             self.fields[af] = IdentityGroupsAssestRolesSubItems(many=True, required=False)
 
 class IdentityGroupSerializer(serializers.Serializer):
-    class IdentityGroupAssestItems(serializers.Serializer):
-        name = serializers.CharField(max_length=64, required=True)
-        identity_group_identifier = serializers.CharField(max_length=255, required=True)
-
-    data = IdentityGroupAssestItems(required=True)
+    name = serializers.CharField(max_length=64, required=True)
+    identity_group_identifier = serializers.CharField(max_length=255, required=True)

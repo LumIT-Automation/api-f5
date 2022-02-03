@@ -47,9 +47,9 @@ class PermissionIdentityGroupController(CustomController):
                 Log.actionLog("Identity group modification", user)
                 Log.actionLog("User data: "+str(request.data), user)
 
-                serializer = GroupSerializer(data=request.data, partial=True)
+                serializer = GroupSerializer(data=request.data["data"], partial=True)
                 if serializer.is_valid():
-                    data = serializer.validated_data["data"]
+                    data = serializer.validated_data
 
                     ig = IdentityGroup(identityGroupIdentifier)
                     ig.modify(data)
