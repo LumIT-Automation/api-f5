@@ -51,7 +51,7 @@ class F5ProfilesController(CustomController):
                             #     p = dict()
                             #     p[pType] = ProfilesSerializer(
                             #         Profile.list(assetId, partitionName, pType)
-                            #     ).data["data"]
+                            #     ).data
                             #
                             #     return p
                             #

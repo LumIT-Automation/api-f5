@@ -16,7 +16,7 @@ class PermissionRolesController(CustomController):
     @staticmethod
     def get(request: Request) -> Response:
         data = dict()
-        itemData = {"data": dict()}
+        itemData = dict()
         showPrivileges = False
         etagCondition = {"responseEtag": ""}
 
@@ -33,10 +33,10 @@ class PermissionRolesController(CustomController):
                         showPrivileges = True
 
                 if showPrivileges:
-                    itemData["data"]["items"] = Role.listWithPrivileges()
+                    itemData["items"] = Role.listWithPrivileges()
                 else:
-                    itemData["data"]["items"] = Role.list()
-                data["data"] = Serializer(itemData).data["data"]
+                    itemData["items"] = Role.list()
+                data["data"] = Serializer(itemData).data
                 data["href"] = request.get_full_path()
 
                 # Check the response's ETag validity (against client request).

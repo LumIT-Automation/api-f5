@@ -17,9 +17,7 @@ class F5AssetsController(CustomController):
     def get(request: Request) -> Response:
         data = dict()
         allowedData = {
-            "data": {
-                "items": []
-            }
+            "items": []
         }
         user = CustomController.loggedUser(request)
 
@@ -32,9 +30,9 @@ class F5AssetsController(CustomController):
                 # Filter assets' list basing on actual permissions.
                 for p in itemData:
                     if Permission.hasUserPermission(groups=user["groups"], action="assets_get", assetId=p["id"]) or user["authDisabled"]:
-                        allowedData["data"]["items"].append(p)
+                        allowedData["items"].append(p)
 
-                data["data"] = AssetsSerializer(allowedData).data["data"]
+                data["data"] = AssetsSerializer(allowedData).data
                 data["href"] = request.get_full_path()
 
                 httpStatus = status.HTTP_200_OK
@@ -61,9 +59,9 @@ class F5AssetsController(CustomController):
                 Log.actionLog("Asset addition", user)
                 Log.actionLog("User data: "+str(request.data), user)
 
-                serializer = AssetSerializer(data=request.data)
+                serializer = AssetSerializer(data=request.data["data"])
                 if serializer.is_valid():
-                    Asset.add(serializer.validated_data["data"])
+                    Asset.add(serializer.validated_data)
 
                     httpStatus = status.HTTP_201_CREATED
                 else:

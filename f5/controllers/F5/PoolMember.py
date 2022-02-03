@@ -108,7 +108,7 @@ class F5PoolMemberController(CustomController):
                 Log.actionLog("Pool members modify", user)
                 Log.actionLog("User data: "+str(request.data), user)
 
-                serializer = Serializer(data=request.data, partial=True)
+                serializer = Serializer(data=request.data["data"], partial=True)
                 if serializer.is_valid():
                     data = serializer.validated_data
 

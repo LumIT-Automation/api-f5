@@ -17,7 +17,7 @@ class HistoryLogsController(CustomController):
     def get(request: Request) -> Response:
         allUsersHistory = False
         data = dict()
-        itemData = {"data": dict()}
+        itemData = dict()
 
         user = CustomController.loggedUser(request)
 
@@ -27,8 +27,8 @@ class HistoryLogsController(CustomController):
 
             Log.actionLog("History log", user)
 
-            itemData["data"]["items"] = History.list(user["username"], allUsersHistory)
-            data["data"] = Serializer(itemData).data["data"]
+            itemData["items"] = History.list(user["username"], allUsersHistory)
+            data["data"] = Serializer(itemData).data
             data["href"] = request.get_full_path()
 
             # Check the response's ETag validity (against client request).

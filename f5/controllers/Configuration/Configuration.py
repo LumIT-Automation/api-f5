@@ -21,8 +21,8 @@ class ConfigurationController(CustomController):
         try:
             Log.actionLog("Configuration read", user)
 
-            itemData["data"] = Configuration.getByType(configType)
-            data["data"] = Serializer(itemData).data["data"]
+            itemData = Configuration.getByType(configType)
+            data["data"] = Serializer(itemData).data
             data["href"] = request.get_full_path()
 
             httpStatus = status.HTTP_200_OK
@@ -47,11 +47,11 @@ class ConfigurationController(CustomController):
                 Log.actionLog("Configuration modification", user)
                 Log.actionLog("User data: "+str(request.data), user)
 
-                serializer = Serializer(data=request.data)
+                serializer = Serializer(data=request.data["data"])
                 if serializer.is_valid():
                     Configuration.rewriteByType(
                         configType,
-                        serializer.validated_data["data"]
+                        serializer.validated_data
                     )
 
                     httpStatus = status.HTTP_200_OK

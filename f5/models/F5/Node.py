@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 from f5.models.F5.backend.Node import Node as Backend
 
 
@@ -5,9 +7,31 @@ class Node:
     def __init__(self, assetId: int, partitionName: str, nodeName: str, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        @dataclass
+        class Fqdn:
+            addressFamily: str
+            autopopulate: str
+            interval: str
+            downInterval: int
+
         self.assetId = int(assetId)
-        self.partitionName = partitionName
-        self.nodeName = nodeName
+        self.partition = partitionName
+        self.name = nodeName
+
+        self.fullPath: str
+        self.generation: int
+        self.selfLink: str
+        self.address: str
+        self.connectionLimit: int
+        self.dynamicRatio: int
+        self.ephemeral: str
+        self.fqdn: Fqdn
+        self.logging: str
+        self.monitor: str
+        self.rateLimit: str
+        self.ratio: int
+        self.session: str
+        self.state: str
 
 
 
@@ -17,7 +41,7 @@ class Node:
 
     def modify(self, data):
         try:
-            Backend.modify(self.assetId, self.partitionName, self.nodeName, data)
+            Backend.modify(self.assetId, self.partition, self.name, data)
         except Exception as e:
             raise e
 
@@ -25,7 +49,7 @@ class Node:
 
     def delete(self):
         try:
-            Backend.delete(self.assetId, self.partitionName, self.nodeName)
+            Backend.delete(self.assetId, self.partition, self.name)
         except Exception as e:
             raise e
 
