@@ -63,7 +63,7 @@ class PoolMember:
                 if "entries" in r:
                     for k, v in r["entries"].items():
                         if "entries" in v["nestedStats"]:
-                            o["data"] = v["nestedStats"]["entries"]
+                            o = v["nestedStats"]["entries"]
 
         except Exception as e:
             raise e

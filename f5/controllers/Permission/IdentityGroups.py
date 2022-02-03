@@ -17,7 +17,7 @@ class PermissionIdentityGroupsController(CustomController):
     @staticmethod
     def get(request: Request) -> Response:
         data = dict()
-        itemData = {"data": dict()}
+        itemData = dict()
         showPrivileges = False
         etagCondition = {"responseEtag": ""}
 
@@ -33,8 +33,8 @@ class PermissionIdentityGroupsController(CustomController):
                     if "privileges" in rList:
                         showPrivileges = True
 
-                itemData["data"]["items"] = IdentityGroup.listWithRelated(showPrivileges)
-                data["data"] = GroupsSerializer(itemData).data["data"]
+                itemData["items"] = IdentityGroup.listWithRelated(showPrivileges)
+                data["data"] = GroupsSerializer(itemData).data
                 data["href"] = request.get_full_path()
 
                 # Check the response's ETag validity (against client request).

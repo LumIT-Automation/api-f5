@@ -18,7 +18,7 @@ class PermissionsController(CustomController):
     @staticmethod
     def get(request: Request) -> Response:
         data = dict()
-        itemData = {"data": dict()}
+        itemData = dict()
         etagCondition = {"responseEtag": ""}
 
         user = CustomController.loggedUser(request)
@@ -27,8 +27,8 @@ class PermissionsController(CustomController):
             if Permission.hasUserPermission(groups=user["groups"], action="permission_identityGroups_get") or user["authDisabled"]:
                 Log.actionLog("Permissions list", user)
 
-                itemData["data"]["items"] = Permission.listIdentityGroupsRolesPartitions()
-                data["data"] = PermissionsSerializer(itemData).data["data"]
+                itemData["items"] = Permission.listIdentityGroupsRolesPartitions()
+                data["data"] = PermissionsSerializer(itemData).data
                 data["href"] = request.get_full_path()
 
                 # Check the response's ETag validity (against client request).

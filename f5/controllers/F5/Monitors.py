@@ -51,7 +51,7 @@ class F5MonitorsController(CustomController):
                             #     r = dict()
                             #     r[mType] = MonitorsSerializer(
                             #         Monitor.list(assetId, partitionName, mType)
-                            #     ).data["data"]
+                            #     ).data
                             #
                             #     return r
                             #
