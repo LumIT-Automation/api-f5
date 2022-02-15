@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from f5.models.F5.Certificate import Certificate
+from f5.models.F5.Key import Key
 from f5.models.Permission.Permission import Permission
 
 from f5.controllers.CustomController import CustomController
@@ -25,7 +26,7 @@ class F5CertificateController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        c = Certificate(assetId, partitionName, "cert", resourceName)
+                        c = Certificate(assetId, partitionName, resourceName)
                         c.delete()
 
                         httpStatus = status.HTTP_200_OK
@@ -38,7 +39,7 @@ class F5CertificateController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        k = Certificate(assetId, partitionName, "key", resourceName)
+                        k = Key(assetId, partitionName, resourceName)
                         k.delete()
 
                         httpStatus = status.HTTP_200_OK

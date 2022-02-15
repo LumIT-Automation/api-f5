@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from f5.models.F5.Certificate import Certificate
+from f5.models.F5.Key import Key
 from f5.models.Permission.Permission import Permission
 
 from f5.serializers.F5.Certificate import F5CertificateSerializer as CertificateSerializer
@@ -34,7 +35,7 @@ class F5CertificatesController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        itemData = Certificate.list(assetId, "cert")
+                        itemData = Certificate.list(assetId)
                         data["data"] = CertificatesSerializer(itemData).data
                         data["href"] = request.get_full_path()
 
@@ -57,7 +58,7 @@ class F5CertificatesController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        itemData = Certificate.list(assetId, "key")
+                        itemData = Key.list(assetId)
                         data["data"] = KeysSerializer(itemData).data
 
                         # Check the response's ETag validity (against client request).
@@ -109,7 +110,7 @@ class F5CertificatesController(CustomController):
                         if lock.isUnlocked():
                             lock.lock()
 
-                            Certificate.install(assetId, "cert", data)
+                            Certificate.install(assetId, data)
 
                             lock.release()
                             httpStatus = status.HTTP_201_CREATED
@@ -134,7 +135,7 @@ class F5CertificatesController(CustomController):
                         if lock.isUnlocked():
                             lock.lock()
 
-                            Certificate.install(assetId, "key", data)
+                            Key.install(assetId, data)
 
                             lock.release()
                             httpStatus = status.HTTP_201_CREATED
