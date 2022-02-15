@@ -1,25 +1,11 @@
-from f5.models.F5.backend.Certificate import Certificate as Backend
+from f5.models.F5.CertificateBase import CertificateBase
 
 
-class Key:
+class Key(CertificateBase):
     def __init__(self, assetId: int, partitionName: str, name: str, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(assetId, partitionName, "key", name, *args, **kwargs)
 
-        self.assetId = int(assetId)
-        self.partitionName = partitionName
-        self.name = name
-
-
-
-    ####################################################################################################################
-    # Public methods
-    ####################################################################################################################
-
-    def delete(self):
-        try:
-            Backend.delete(self.assetId, self.partitionName, self.name, "key")
-        except Exception as e:
-            raise e
+        self.o = "key"
 
 
 
@@ -28,9 +14,9 @@ class Key:
     ####################################################################################################################
 
     @staticmethod
-    def list(assetId) -> dict:
+    def list(assetId: int) -> dict:
         try:
-            return Backend.list(assetId, "key")
+            return CertificateBase.list(assetId, "key")
         except Exception as e:
             raise e
 
@@ -39,6 +25,6 @@ class Key:
     @staticmethod
     def install(assetId: int, data: dict) -> None:
         try:
-            Backend.install(assetId, "key", data)
+            CertificateBase.install(assetId, "key", data)
         except Exception as e:
             raise e
