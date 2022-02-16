@@ -313,7 +313,7 @@ class VirtualServerWorkflow:
             except Exception:
                 pass
 
-        profileTypes = Profile.types(assetId, partitionName)["items"]
+        profileTypes = Profile.types(assetId, partitionName)
         for pt in profileTypes:
             try:
                 p = Profile(assetId, partitionName, pt, profileName)

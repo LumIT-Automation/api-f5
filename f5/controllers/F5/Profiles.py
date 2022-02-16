@@ -23,6 +23,7 @@ class F5ProfilesController(CustomController):
     @staticmethod
     def get(request: Request, assetId: int, partitionName: str, profileType: str = "") -> Response:
         data = {"data": dict()}
+        itemData = dict()
         etagCondition = { "responseEtag": "" }
 
         user = CustomController.loggedUser(request)
@@ -39,11 +40,11 @@ class F5ProfilesController(CustomController):
                         if profileType != "ANY":
                             # Profiles' list of that type.
                             # F5 treats profile type as a sub-object instead of a property. Odd.
-                            itemData = Profile.list(assetId, partitionName, profileType)
+                            itemData["items"] = Profile.list(assetId, partitionName, profileType)
                             data["data"] = ProfilesSerializer(itemData).data
                         else:
                             # All monitors list, of any type.
-                            profileTypes = Profile.types(assetId, partitionName)["items"]
+                            profileTypes = Profile.types(assetId, partitionName)
 
                             # Event driven calls (no: still serialized).
                             # @sync_to_async
@@ -63,9 +64,8 @@ class F5ProfilesController(CustomController):
                             # The threading way.
                             # This requires a consistent throttle on remote appliance.
                             def profilesListOfType(pType):
-                                data["data"][pType] = ProfilesSerializer(
-                                    Profile.list(assetId, partitionName, pType)
-                                ).data
+                                itemData["items"] = Profile.list(assetId, partitionName, pType)
+                                data["data"][pType] = ProfilesSerializer(itemData).data
 
                             workers = [threading.Thread(target=profilesListOfType, args=(m,)) for m in profileTypes]
                             for w in workers:
@@ -75,7 +75,7 @@ class F5ProfilesController(CustomController):
                     else:
                         # Profiles' types list.
                         # No need for a serializer: just a list of strings.
-                        data["data"] = Profile.types(assetId, partitionName)
+                        data["data"]["items"] = Profile.types(assetId, partitionName)
 
                     data["href"] = request.get_full_path()
 
