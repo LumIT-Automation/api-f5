@@ -19,6 +19,7 @@ class F5PoliciesController(CustomController):
     @staticmethod
     def get(request: Request, assetId: int, partitionName: str) -> Response:
         data = dict()
+        itemData = dict()
         etagCondition = { "responseEtag": "" }
 
         user = CustomController.loggedUser(request)
@@ -31,7 +32,7 @@ class F5PoliciesController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    itemData = Policy.list(assetId, partitionName)
+                    itemData["items"] = Policy.list(assetId, partitionName)
                     serializer = PoliciesSerializer(data=itemData)
                     if serializer.is_valid():
                         data["data"] = serializer.validated_data

@@ -1,14 +1,33 @@
+from typing import Dict, Union
+
 from f5.models.F5.backend.Policy import Policy as Backend
 
+
+Link: Dict[str, str] = {
+    "link": ""
+}
+
+RulesReference: Dict[str, str] = {
+    "link": "",
+    "isSubcollection": False
+}
 
 class Policy:
     def __init__(self, assetId: int, partitionName: str, policySubPath: str, policyName: str, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.assetId = int(assetId)
-        self.partitionName = partitionName
-        self.policySubPath = policySubPath
-        self.policyName = policyName
+        self.assetId: int = int(assetId)
+        self.partition: str = partitionName
+        self.subPath: str = policySubPath
+        self.name: str = policyName
+        self.fullPath: str = ""
+        self.generation: int = 0
+        self.selfLink: str = ""
+        self.lastModified: str = ""
+        self.status: str = ""
+        self.strategy: str = ""
+        self.strategyReference: Link
+        self.rulesReference: RulesReference
 
 
 
@@ -18,7 +37,7 @@ class Policy:
 
     def modify(self, data):
         try:
-            Backend.modify(self.assetId, self.partitionName, self.policySubPath, self.policyName, data)
+            Backend.modify(self.assetId, self.partition, self.subPath, self.name, data)
         except Exception as e:
             raise e
 
@@ -26,7 +45,7 @@ class Policy:
 
     def delete(self):
         try:
-            Backend.delete(self.assetId, self.partitionName, self.policySubPath, self.policyName)
+            Backend.delete(self.assetId, self.partition, self.subPath, self.name)
         except Exception as e:
             raise e
 
@@ -39,7 +58,11 @@ class Policy:
     @staticmethod
     def list(assetId: int, partitionName: str) -> dict:
         try:
-            return Backend.list(assetId, partitionName)
+            l = Backend.list(assetId, partitionName)
+            for el in l:
+                el["assetId"] = assetId
+
+            return l
         except Exception as e:
             raise e
 
