@@ -24,6 +24,7 @@ class Partition:
             l = Backend.list(assetId)
             for el in l:
                 el["assetId"] = assetId
+
             return l
         except Exception as e:
             raise e

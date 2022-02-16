@@ -106,7 +106,7 @@ class VirtualServerWorkflow:
                     self.monitor["type"] = VirtualServerWorkflow.__getMonitorType(self.assetId, self.partitionName, self.monitor["name"])
 
                 # Pool members of self.poolName -> nodes.
-                poolMembers = Pool(self.assetId, self.partitionName, self.poolName).members()["items"]
+                poolMembers = Pool(self.assetId, self.partitionName, self.poolName).members()
                 for pm in poolMembers:
                     self.nodes.append({
                         "name": Node.getNameFromAddress(

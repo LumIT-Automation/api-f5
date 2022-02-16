@@ -120,7 +120,7 @@ class PoolMember:
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
-            return api.get()
+            return api.get()["items"]
         except Exception as e:
             raise e
 

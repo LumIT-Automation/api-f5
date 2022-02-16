@@ -19,6 +19,7 @@ class F5PoolMembersController(CustomController):
     @staticmethod
     def get(request: Request, assetId: int, partitionName: str, poolName: str) -> Response:
         data = dict()
+        itemData = dict()
         etagCondition = { "responseEtag": "" }
 
         user = CustomController.loggedUser(request)
@@ -31,7 +32,7 @@ class F5PoolMembersController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    itemData = Pool(assetId, partitionName, poolName).members()
+                    itemData["items"] = Pool(assetId, partitionName, poolName).members()
                     data["data"] = PoolMembersSerializer(itemData).data
                     data["href"] = request.get_full_path()
 

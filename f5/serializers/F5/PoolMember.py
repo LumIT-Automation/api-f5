@@ -5,6 +5,7 @@ class F5PoolMemberSerializer(serializers.Serializer):
     class F5PoolMemberInnerFQDNSerializer(serializers.Serializer):
         autopopulate = serializers.CharField(max_length=255, required=True)
 
+    assetId = serializers.IntegerField(required=True)
     name = serializers.CharField(max_length=255, required=True)
     connectionLimit =serializers.IntegerField(required=False)
     dynamicRatio =serializers.IntegerField(required=False)

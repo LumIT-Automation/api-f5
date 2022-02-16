@@ -1,14 +1,36 @@
+from typing import Dict
+
 from f5.models.F5.backend.PoolMember import PoolMember as Backend
 
+
+Fqdn: Dict[str, str] = {
+    "autopopulate": ""
+}
 
 class PoolMember:
     def __init__(self, assetId: int, poolName: str, partition: str, name: str, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.assetId = int(assetId)
-        self.partition = str(partition)
-        self.poolName = str(poolName)
-        self.name = str(name)
+        self.assetId: int = int(assetId)
+        self.partition: str = partition
+        self.poolName: str = poolName
+        self.name: str = name
+        self.fullPath: str = ""
+        self.generation: int = 0
+        self.selfLink: str = ""
+        self.address: str = ""
+        self.connectionLimit: int = 0
+        self.dynamicRatio: int = 0
+        self.ephemeral: bool
+        self.inheritProfile: str = ""
+        self.logging: str = ""
+        self.monitor: str = ""
+        self.priorityGroup: int = 0
+        self.rateLimit: str = ""
+        self.ratio: int = 0
+        self.session: str = ""
+        self.state: str = ""
+        self.fqdn: Fqdn
 
 
 
@@ -18,7 +40,10 @@ class PoolMember:
 
     def info(self) -> dict:
         try:
-            return Backend.info(self.assetId, self.partition, self.poolName, self.name)
+            i = Backend.info(self.assetId, self.partition, self.poolName, self.name)
+            i["assetId"] = self.assetId
+
+            return i
         except Exception as e:
             raise e
 
@@ -54,7 +79,11 @@ class PoolMember:
     @staticmethod
     def list(assetId: int, partitionName: str, poolName: str) -> dict:
         try:
-            return Backend.list(assetId, partitionName, poolName)
+            l = Backend.list(assetId, partitionName, poolName)
+            for el in l:
+                el["assetId"] = assetId
+
+            return l
         except Exception as e:
             raise e
 

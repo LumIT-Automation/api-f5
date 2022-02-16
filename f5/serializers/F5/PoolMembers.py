@@ -6,6 +6,7 @@ class F5PoolMembersSerializer(serializers.Serializer):
         class F5PoolMembersInnerSerializer(serializers.Serializer):
             autopopulate = serializers.CharField(max_length=255, required=True)
 
+        assetId = serializers.IntegerField(required=True)
         name = serializers.CharField(max_length=255, required=True)
         fullPath = serializers.CharField(max_length=255, required=True)
         generation = serializers.IntegerField(required=True)

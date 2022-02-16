@@ -64,6 +64,7 @@ class Node:
             l = Backend.list(assetId, partitionName, silent)
             for el in l:
                 el["assetId"] = assetId
+
             return l
         except Exception as e:
             raise e

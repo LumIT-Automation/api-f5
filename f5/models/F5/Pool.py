@@ -107,6 +107,7 @@ class Pool:
             l = Backend.list(assetId, partitionName)
             for el in l:
                 el["assetId"] = assetId
+
             return l
         except Exception as e:
             raise e

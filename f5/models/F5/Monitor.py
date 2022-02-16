@@ -73,6 +73,7 @@ class Monitor:
             l = Backend.list(assetId, partitionName, monitorType)
             for el in l:
                 el["assetId"] = assetId
+
             return l
         except Exception as e:
             raise e
