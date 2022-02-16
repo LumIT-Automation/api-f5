@@ -336,7 +336,7 @@ class VirtualServerWorkflow:
             except Exception:
                 pass
 
-        monitorTypes = Monitor.types(assetId, partitionName)["items"]
+        monitorTypes = Monitor.types(assetId, partitionName)
         for mtype in monitorTypes:
             try:
                 monitor = Monitor(assetId, partitionName, mtype, monitorName)

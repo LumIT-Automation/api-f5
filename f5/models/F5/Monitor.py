@@ -5,10 +5,21 @@ class Monitor:
     def __init__(self, assetId: int, partitionName: str, monitorType: str, monitorName: str, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.assetId = int(assetId)
-        self.partitionName = partitionName
-        self.monitorType = monitorType
-        self.monitorName = monitorName
+        self.assetId: int = int(assetId)
+        self.partition: str = partitionName
+        self.type: str = monitorType
+        self.name: str = monitorName
+        self.fullPath: str = ""
+        self.generation: int = 0
+        self.selfLink: str = ""
+        self.defaultsFrom: str = ""
+        self.destination: str = ""
+        self.interval: str = ""
+        self.manualResume: str = ""
+        self.timeUntilUp: int = 0
+        self.timeout: int = 0
+        self.transparent: str = ""
+        self.upInterval: int = 0
 
 
 
@@ -18,7 +29,10 @@ class Monitor:
 
     def info(self, silent: bool = False):
         try:
-            return Backend.info(self.assetId, self.partitionName, self.monitorType, self.monitorName, silent)
+            i = Backend.info(self.assetId, self.partition, self.type, self.name, silent)
+            i["assetId"] = self.assetId
+
+            return i
         except Exception as e:
             raise e
 
@@ -26,7 +40,7 @@ class Monitor:
 
     def modify(self, data):
         try:
-            Backend.modify(self.assetId, self.partitionName, self.monitorType, self.monitorName, data)
+            Backend.modify(self.assetId, self.partition, self.type, self.name, data)
         except Exception as e:
             raise e
 
@@ -34,7 +48,7 @@ class Monitor:
 
     def delete(self):
         try:
-            Backend.delete(self.assetId, self.partitionName, self.monitorType, self.monitorName)
+            Backend.delete(self.assetId, self.partition, self.type, self.name)
         except Exception as e:
             raise e
 
@@ -45,22 +59,21 @@ class Monitor:
     ####################################################################################################################
 
     @staticmethod
-    def types(assetId: int, partitionName: str) -> dict:
-        o = dict()
-
+    def types(assetId: int, partitionName: str) -> list:
         try:
-            o["items"] = Backend.types(assetId, partitionName)
+            return Backend.types(assetId, partitionName)
         except Exception as e:
             raise e
-
-        return o
 
 
 
     @staticmethod
     def list(assetId: int, partitionName: str, monitorType: str) -> dict:
         try:
-            return Backend.list(assetId, partitionName, monitorType)
+            l = Backend.list(assetId, partitionName, monitorType)
+            for el in l:
+                el["assetId"] = assetId
+            return l
         except Exception as e:
             raise e
 

@@ -23,6 +23,7 @@ class F5MonitorsController(CustomController):
     @staticmethod
     def get(request: Request, assetId: int, partitionName: str, monitorType: str = "") -> Response:
         data = {"data": dict()}
+        itemData = dict()
         etagCondition = { "responseEtag": "" }
 
         user = CustomController.loggedUser(request)
@@ -39,11 +40,11 @@ class F5MonitorsController(CustomController):
                         if monitorType != "ANY":
                             # Monitors' list of that type.
                             # F5 treats monitor type as a sub-object instead of a property. Odd.
-                            itemData = Monitor.list(assetId, partitionName, monitorType)
+                            itemData["items"] = Monitor.list(assetId, partitionName, monitorType)
                             data["data"] = MonitorsSerializer(itemData).data
                         else:
                             # All monitors list, of any type.
-                            monitorTypes = Monitor.types(assetId, partitionName)["items"]
+                            monitorTypes = Monitor.types(assetId, partitionName)
 
                             # Event driven calls (no: still serialized).
                             # @sync_to_async
@@ -63,9 +64,8 @@ class F5MonitorsController(CustomController):
                             # The threading way.
                             # This requires a consistent throttle on remote appliance.
                             def monitorsListOfType(mType):
-                                data["data"][mType] = MonitorsSerializer(
-                                    Monitor.list(assetId, partitionName, mType)
-                                ).data
+                                itemData["items"] = Monitor.list(assetId, partitionName, mType)
+                                data["data"][mType] = MonitorsSerializer(itemData).data
 
                             workers = [threading.Thread(target=monitorsListOfType, args=(m,)) for m in monitorTypes]
                             for w in workers:
@@ -75,7 +75,7 @@ class F5MonitorsController(CustomController):
                     else:
                         # Monitors' types list.
                         # No need for a serializer: just a list of strings.
-                        data["data"] = Monitor.types(assetId, partitionName)
+                        data["data"]["items"] = Monitor.types(assetId, partitionName)
 
                     data["href"] = request.get_full_path()
 
