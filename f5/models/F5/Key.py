@@ -5,7 +5,9 @@ class Key(CertificateBase):
     def __init__(self, assetId: int, partitionName: str, name: str, *args, **kwargs):
         super().__init__(assetId, partitionName, "key", name, *args, **kwargs)
 
-        self.o = "key"
+        self.assetId = int(assetId)
+        self.partitionName = partitionName
+        self.name = name
 
 
 

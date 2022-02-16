@@ -1,5 +1,14 @@
+from typing import Dict
+
 from f5.models.F5.backend.Node import Node as Backend
 
+
+Fqdn: Dict[str, str] = {
+    "addressFamily": "",
+    "autopopulate": "",
+    "interval": "",
+    "downInterval": 0
+}
 
 class Node:
     def __init__(self, assetId: int, partitionName: str, nodeName: str, *args, **kwargs):
@@ -7,7 +16,21 @@ class Node:
 
         self.assetId = int(assetId)
         self.partition = partitionName
-        self.name = nodeName
+        self.name: str = nodeName
+        self.fullPath: str = ""
+        self.generation: int = 0
+        self.selfLink: str = ""
+        self.address: str = ""
+        self.connectionLimit: int = 0
+        self.dynamicRatio: int = 0
+        self.ephemeral: bool
+        self.fqdn = Fqdn
+        self.logging: str = ""
+        self.monitor: str = ""
+        self.rateLimit: str = ""
+        self.ratio: int = 0
+        self.session: str = ""
+        self.state: str = ""
 
 
 
@@ -38,7 +61,10 @@ class Node:
     @staticmethod
     def list(assetId: int, partitionName: str, silent: bool = False) -> dict:
         try:
-            return Backend.list(assetId, partitionName, silent)
+            l = Backend.list(assetId, partitionName, silent)
+            for el in l:
+                el["assetId"] = assetId
+            return l
         except Exception as e:
             raise e
 
@@ -56,9 +82,10 @@ class Node:
     @staticmethod
     def getNameFromAddress(assetId: int, partitionName: str, address: str, silent: bool = False) -> str:
         name = ""
+
         try:
             data = Node.list(assetId, partitionName, silent=silent)
-            for nel in data["items"]:
+            for nel in data:
                 if nel["address"] == address:
                     name = nel["name"]
 

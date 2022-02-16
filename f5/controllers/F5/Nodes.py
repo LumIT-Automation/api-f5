@@ -19,6 +19,7 @@ class F5NodesController(CustomController):
     @staticmethod
     def get(request: Request, assetId: int, partitionName: str) -> Response:
         data = dict()
+        itemData = dict()
         etagCondition = { "responseEtag": "" }
 
         user = CustomController.loggedUser(request)
@@ -31,7 +32,7 @@ class F5NodesController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    itemData = Node.list(assetId, partitionName)
+                    itemData["items"] = Node.list(assetId, partitionName)
                     data["data"] = NodesSerializer(itemData).data
                     data["href"] = request.get_full_path()
 

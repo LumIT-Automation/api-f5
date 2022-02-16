@@ -18,6 +18,7 @@ class F5RouteDomainsController(CustomController):
     @staticmethod
     def get(request: Request, assetId: int) -> Response:
         data = dict()
+        itemData = dict()
         etagCondition = { "responseEtag": "" }
 
         user = CustomController.loggedUser(request)
@@ -30,7 +31,7 @@ class F5RouteDomainsController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    itemData = RouteDomain.list(assetId)
+                    itemData["items"] = RouteDomain.list(assetId)
                     serializer = Serializer(data=itemData)
                     if serializer.is_valid():
                         data["data"] = serializer.validated_data

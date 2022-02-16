@@ -63,7 +63,7 @@ class Node:
                 silent=silent
             )
 
-            return api.get()
+            return api.get()["items"]
         except Exception as e:
             raise e
 
