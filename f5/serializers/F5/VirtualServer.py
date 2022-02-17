@@ -3,31 +3,31 @@ from rest_framework import serializers
 
 class F5VirtualServerSerializer(serializers.Serializer):
     class F5VirtualServerPoolReferenceSerializer(serializers.Serializer):
-        link = serializers.CharField(max_length=255, required=True)
+        link = serializers.CharField(max_length=255, required=False)
 
     class F5VirtualServerSourceAddressTranslationSerializer(serializers.Serializer):
-        type = serializers.CharField(max_length=255, required=True)
+        type = serializers.CharField(max_length=255, required=False)
 
     class F5VirtualServerSecurityLogProfilesReferenceSerializer(serializers.Serializer):
-        link = serializers.CharField(max_length=255, required=True)
+        link = serializers.CharField(max_length=255, required=False)
 
     class F5VirtualServersRulesReferenceSerializer(serializers.Serializer):
-        link = serializers.CharField(max_length=255, required=True)
+        link = serializers.CharField(max_length=255, required=False)
 
     class F5VirtualServerPersistSerializer(serializers.Serializer):
         class F5VirtualServerPersistNameReferenceSerializer(serializers.Serializer):
-            link = serializers.CharField(max_length=255, required=True)
+            link = serializers.CharField(max_length=255, required=False)
 
-        name = serializers.CharField(max_length=255, required=True)
-        partition = serializers.CharField(max_length=255, required=True)
-        tmDefault = serializers.CharField(max_length=255, required=True)
-        nameReference = F5VirtualServerPersistNameReferenceSerializer(required=True)
+        name = serializers.CharField(max_length=255, required=False)
+        partition = serializers.CharField(max_length=255, required=False)
+        tmDefault = serializers.CharField(max_length=255, required=False)
+        nameReference = F5VirtualServerPersistNameReferenceSerializer(required=False)
 
     class F5VirtualServerReferenceSerializer(serializers.Serializer):
-        link = serializers.CharField(max_length=255, required=True)
-        isSubcollection = serializers.BooleanField(required=True)
+        link = serializers.CharField(max_length=255, required=False)
+        isSubcollection = serializers.BooleanField(required=False)
 
-    assetId = serializers.IntegerField(required=True)
+    assetId = serializers.IntegerField(required=False)
     name = serializers.CharField(max_length=255, required=True)
     partition = serializers.CharField(max_length=255, required=False)
     fullPath = serializers.CharField(max_length=255, required=False)
