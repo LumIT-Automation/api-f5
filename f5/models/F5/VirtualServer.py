@@ -1,13 +1,64 @@
+from typing import Dict, Any
+
 from f5.models.F5.backend.VirtualServer import VirtualServer as Backend
 
+
+SourceAddressTranslation: Dict[str, str] = {
+    "type": ""
+}
+
+PoolReference: Dict[str, str] = {
+    "link": ""
+}
+
+Reference: Dict[str, Any] = {
+    "link": "",
+    "isSubcollection": False
+}
 
 class VirtualServer:
     def __init__(self, assetId: int, partitionName: str, virtualServerName: str, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.assetId = int(assetId)
-        self.partitionName = partitionName
-        self.virtualServerName = virtualServerName
+        self.partition = partitionName
+        self.name = virtualServerName
+        self.fullPath: str = ""
+        self.generation: int = 0
+        self.selfLink: str = ""
+        self.addressStatus: str = ""
+        self.autoLasthop: str = ""
+        self.cmpEnabled: str = ""
+        self.connectionLimit: int = 0
+        self.creationTime: str = ""
+        self.destination: str = ""
+        self.enabled: bool = False
+        self.evictionProtected: str = ""
+        self.gtmScore: int = 0
+        self.ipProtocol: str = ""
+        self.lastModifiedTime: str = ""
+        self.mask: str = ""
+        self.mirror: str = ""
+        self.mobileAppTunnel: str = ""
+        self.nat64: str = ""
+        self.pool: str = ""
+        self.serversslUseSni: str = ""
+        self.poolReference: PoolReference = None
+        self.rateLimit: str = ""
+        self.rateLimitDstMask: int = 0
+        self.rateLimitMode: str = ""
+        self.rateLimitSrcMask: int = 0
+        self.serviceDownImmediateAction: str = ""
+        self.source: str = ""
+        self.sourceAddressTranslation: SourceAddressTranslation = None
+        self.sourcePort: str = ""
+        self.synCookieStatus: str = ""
+        self.translateAddress: str = ""
+        self.translatePort: str = ""
+        self.vlansDisabled: bool = False
+        self.vsIndex: int = 0
+        self.policiesReference: Reference = None
+        self.profilesReference: Reference = None
 
 
 
@@ -17,7 +68,10 @@ class VirtualServer:
 
     def info(self):
         try:
-            return Backend.info(self.assetId, self.partitionName, self.virtualServerName)
+            i = Backend.info(self.assetId, self.partition, self.name)
+            i["assetId"] = self.assetId
+
+            return i
         except Exception as e:
             raise e
 
@@ -25,7 +79,7 @@ class VirtualServer:
 
     def policies(self):
         try:
-            return Backend.policies(self.assetId, self.partitionName, self.virtualServerName)
+            return Backend.policies(self.assetId, self.partition, self.name)
         except Exception as e:
             raise e
 
@@ -33,7 +87,7 @@ class VirtualServer:
 
     def profiles(self):
         try:
-            return Backend.profiles(self.assetId, self.partitionName, self.virtualServerName)
+            return Backend.profiles(self.assetId, self.partition, self.name)
         except Exception as e:
             raise e
 
@@ -41,7 +95,7 @@ class VirtualServer:
 
     def modify(self, data):
         try:
-            Backend.modify(self.assetId, self.partitionName, self.virtualServerName, data)
+            Backend.modify(self.assetId, self.partition, self.name, data)
         except Exception as e:
             raise e
 
@@ -49,7 +103,7 @@ class VirtualServer:
 
     def delete(self):
         try:
-            Backend.delete(self.assetId, self.partitionName, self.virtualServerName)
+            Backend.delete(self.assetId, self.partition, self.name)
         except Exception as e:
             raise e
 
@@ -62,7 +116,11 @@ class VirtualServer:
     @staticmethod
     def list(assetId: int, partitionName: str) -> dict:
         try:
-            return Backend.list(assetId, partitionName)
+            l = Backend.list(assetId, partitionName)
+            for el in l:
+                el["assetId"] = assetId
+
+            return l
         except Exception as e:
             raise e
 

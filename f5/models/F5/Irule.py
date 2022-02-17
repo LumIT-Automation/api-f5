@@ -6,8 +6,12 @@ class Irule:
         super().__init__(*args, **kwargs)
 
         self.assetId = int(assetId)
-        self.partitionName = partitionName
-        self.iruleName = iruleName
+        self.partition = partitionName
+        self.name = iruleName
+        self.fullPath: str = ""
+        self.generation: int = 0
+        self.selfLink: str = ""
+        self.apiAnonymous: str = ""
 
 
 
@@ -17,7 +21,7 @@ class Irule:
 
     def modify(self, data):
         try:
-            Backend.modify(self.assetId, self.partitionName, self.iruleName, data)
+            Backend.modify(self.assetId, self.partition, self.name, data)
         except Exception as e:
             raise e
 
@@ -25,7 +29,7 @@ class Irule:
 
     def delete(self):
         try:
-            Backend.delete(self.assetId, self.partitionName, self.iruleName)
+            Backend.delete(self.assetId, self.partition, self.name)
         except Exception as e:
             raise e
 
@@ -38,7 +42,11 @@ class Irule:
     @staticmethod
     def list(assetId: int, partitionName: str) -> dict:
         try:
-            return Backend.list(assetId, partitionName)
+            l = Backend.list(assetId, partitionName)
+            for el in l:
+                el["assetId"] = assetId
+
+            return l
         except Exception as e:
             raise e
 

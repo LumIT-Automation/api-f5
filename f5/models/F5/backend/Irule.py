@@ -7,7 +7,6 @@ from f5.helpers.ApiSupplicant import ApiSupplicant
 
 class Irule:
 
-
     ####################################################################################################################
     # Public static methods
     ####################################################################################################################
@@ -63,7 +62,7 @@ class Irule:
                 tlsVerify=f5.tlsverify
             )
 
-            return api.get()
+            return api.get()["items"]
         except Exception as e:
             raise e
 

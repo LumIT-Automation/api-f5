@@ -28,6 +28,7 @@ class F5VirtualServersSerializer(serializers.Serializer):
             link = serializers.CharField(max_length=255, required=True)
             isSubcollection = serializers.BooleanField(required=True)
 
+        assetId = serializers.IntegerField(required=True)
         name = serializers.CharField(max_length=255, required=True)
         partition = serializers.CharField(max_length=255, required=True)
         fullPath = serializers.CharField(max_length=255, required=True)

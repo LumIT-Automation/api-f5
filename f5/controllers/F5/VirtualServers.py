@@ -19,6 +19,7 @@ class F5VirtualServersController(CustomController):
     @staticmethod
     def get(request: Request, assetId: int, partitionName) -> Response:
         data = dict()
+        itemData = dict()
         etagCondition = { "responseEtag": "" }
 
         user = CustomController.loggedUser(request)
@@ -31,7 +32,7 @@ class F5VirtualServersController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    itemData = VirtualServer.list(assetId, partitionName)
+                    itemData["items"] = VirtualServer.list(assetId, partitionName)
 
                     data["data"] = VirtualServersSerializer(itemData).data
                     data["href"] = request.get_full_path()

@@ -110,7 +110,7 @@ class VirtualServer:
                 tlsVerify=f5.tlsverify
             )
 
-            return api.get()
+            return api.get()["items"]
         except Exception as e:
             raise e
 

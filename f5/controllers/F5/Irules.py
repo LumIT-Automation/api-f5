@@ -19,6 +19,7 @@ class F5IrulesController(CustomController):
     @staticmethod
     def get(request: Request, assetId: int, partitionName: str) -> Response:
         data = dict()
+        itemData = dict()
         etagCondition = { "responseEtag": "" }
 
         user = CustomController.loggedUser(request)
@@ -31,7 +32,7 @@ class F5IrulesController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    itemData = Irule.list(assetId, partitionName)
+                    itemData["items"] = Irule.list(assetId, partitionName)
                     serializer = IrulesSerializer(data=itemData)
                     if serializer.is_valid():
                         data["data"] = serializer.validated_data
