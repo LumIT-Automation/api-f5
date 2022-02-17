@@ -8,6 +8,7 @@ class F5NodeSerializer(serializers.Serializer):
         interval = serializers.CharField(max_length=255, required=False)
         downInterval = serializers.IntegerField(required=False)
 
+    assetId = serializers.IntegerField(required=False)
     name = serializers.CharField(max_length=255, required=True)
     partition = serializers.CharField(max_length=255, required=False)
     fullPath = serializers.CharField(max_length=255, required=False)
@@ -23,4 +24,4 @@ class F5NodeSerializer(serializers.Serializer):
     rateLimit = serializers.CharField(max_length=255, required=False)
     ratio = serializers.IntegerField(required=False)
     session = serializers.CharField(max_length=255, required=False)
-    state = serializers.CharField(max_length=255, required=False) # do not modify.
+    state = serializers.CharField(max_length=255, required=False)

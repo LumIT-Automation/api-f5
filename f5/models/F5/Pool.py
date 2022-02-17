@@ -83,7 +83,7 @@ class Pool:
 
     def members(self) -> dict:
         try:
-            return PoolMember.list(self.assetId, self.partition, self.name)
+            return PoolMember.list(self.assetId, self.partition, self.name) # return raw list.
         except Exception as e:
             raise e
 

@@ -6,7 +6,7 @@ from f5.models.F5.Irule import Irule
 from f5.models.Permission.Permission import Permission
 
 from f5.serializers.F5.Irules import F5IrulesSerializer as IrulesSerializer
-from f5.serializers.F5.Irule import F5IrulesSerializer as IruleSerializer
+from f5.serializers.F5.Irule import F5IruleSerializer as IruleSerializer
 
 from f5.controllers.CustomController import CustomController
 

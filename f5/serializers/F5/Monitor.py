@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 
 class F5MonitorSerializer(serializers.Serializer):
+    assetId = serializers.IntegerField(required=False)
     name = serializers.CharField(max_length=255, required=True)
     partition = serializers.CharField(max_length=255, required=False)
     fullPath = serializers.CharField(max_length=255, required=False)

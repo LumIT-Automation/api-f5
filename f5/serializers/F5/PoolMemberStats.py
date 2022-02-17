@@ -2,12 +2,12 @@ from rest_framework import serializers
 
 
 class F5PoolMemberStatsSerializer(serializers.Serializer):
-    monitorRule = serializers.CharField(max_length=255, required=True)
-    monitorStatus = serializers.CharField(max_length=255, required=True)
-    serverside_curConns = serializers.CharField(max_length=255, required=True)
-    status_availabilityState =serializers.CharField(max_length=255, required=True)
-    status_enabledState = serializers.CharField(max_length=255, required=True)
-    status_statusReason = serializers.CharField(max_length=255, required=True)
+    monitorRule = serializers.CharField(max_length=255, required=False)
+    monitorStatus = serializers.CharField(max_length=255, required=False)
+    serverside_curConns = serializers.CharField(max_length=255, required=False)
+    status_availabilityState =serializers.CharField(max_length=255, required=False)
+    status_enabledState = serializers.CharField(max_length=255, required=False)
+    status_statusReason = serializers.CharField(max_length=255, required=False)
 
 
 

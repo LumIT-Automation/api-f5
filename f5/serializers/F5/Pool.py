@@ -3,9 +3,10 @@ from rest_framework import serializers
 
 class F5PoolSerializer(serializers.Serializer):
     class F5PoolItemsMembersReferenceSerializer(serializers.Serializer):
-        link = serializers.CharField(max_length=255, required=True)
-        isSubcollection = serializers.BooleanField(required=True)
+        link = serializers.CharField(max_length=255, required=False)
+        isSubcollection = serializers.BooleanField(required=False)
 
+    assetId = serializers.IntegerField(required=False)
     name = serializers.CharField(max_length=255, required=True)
     partition = serializers.CharField(max_length=255, required=False)
     fullPath = serializers.CharField(max_length=255, required=False)
@@ -31,3 +32,6 @@ class F5PoolSerializer(serializers.Serializer):
     serviceDownAction = serializers.CharField(max_length=255, required=False)
     slowRampTime = serializers.IntegerField(required=False)
     membersReference = F5PoolItemsMembersReferenceSerializer(required=False)
+
+    link = serializers.CharField(max_length=255, required=False)
+    isSubcollection = serializers.BooleanField(required=False)
