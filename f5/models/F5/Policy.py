@@ -7,7 +7,7 @@ Link: Dict[str, str] = {
     "link": ""
 }
 
-RulesReference: Dict[str, str] = {
+RulesReference: Dict[str, Union[str, bool]] = {
     "link": "",
     "isSubcollection": False
 }

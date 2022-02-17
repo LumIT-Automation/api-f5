@@ -22,6 +22,7 @@ class F5CertificatesController(CustomController):
     @staticmethod
     def get(request: Request, assetId: int) -> Response:
         data = dict()
+        itemData = dict()
         etagCondition = { "responseEtag": "" }
 
         user = CustomController.loggedUser(request)
@@ -35,7 +36,7 @@ class F5CertificatesController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        itemData = Certificate.list(assetId)
+                        itemData["items"] = Certificate.list(assetId)
                         data["data"] = CertificatesSerializer(itemData).data
                         data["href"] = request.get_full_path()
 
@@ -58,7 +59,7 @@ class F5CertificatesController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        itemData = Key.list(assetId)
+                        itemData["items"] = Key.list(assetId)
                         data["data"] = KeysSerializer(itemData).data
 
                         # Check the response's ETag validity (against client request).

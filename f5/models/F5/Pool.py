@@ -1,10 +1,10 @@
-from typing import Dict, Any
+from typing import Dict, Union
 
 from f5.models.F5.PoolMember import PoolMember
 from f5.models.F5.backend.Pool import Pool as Backend
 
 
-MembersReference: Dict[str, Any] = {
+MembersReference: Dict[str, Union[str, bool]] = {
     "link": "",
     "isSubcollection": False
 }

@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing import Dict, Union
 
 from f5.models.F5.backend.VirtualServer import VirtualServer as Backend
 
@@ -11,7 +11,7 @@ PoolReference: Dict[str, str] = {
     "link": ""
 }
 
-Reference: Dict[str, Any] = {
+Reference: Dict[str, Union[str, bool]] = {
     "link": "",
     "isSubcollection": False
 }

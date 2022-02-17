@@ -6,7 +6,7 @@ class CertificateBase:
         super().__init__(*args, **kwargs)
 
         self.assetId = int(assetId)
-        self.partitionName = partitionName
+        self.partition = partitionName
         self.name = name
 
         self.o = o
@@ -19,7 +19,7 @@ class CertificateBase:
 
     def delete(self):
         try:
-            Backend.delete(self.assetId, self.partitionName, self.name, self.o)
+            Backend.delete(self.assetId, self.partition, self.name, self.o)
         except Exception as e:
             raise e
 

@@ -48,7 +48,7 @@ class Certificate:
                     tlsVerify=f5.tlsverify
                 )
 
-                o = api.get()
+                o = api.get()["items"]
             except Exception as e:
                 raise e
 

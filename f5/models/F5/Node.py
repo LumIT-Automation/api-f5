@@ -1,9 +1,9 @@
-from typing import Dict
+from typing import Dict, Union
 
 from f5.models.F5.backend.Node import Node as Backend
 
 
-Fqdn: Dict[str, str] = {
+Fqdn: Dict[str, Union[str, int]] = {
     "addressFamily": "",
     "autopopulate": "",
     "interval": "",
