@@ -14,7 +14,7 @@ class F5NodeSerializer(serializers.Serializer):
     fullPath = serializers.CharField(max_length=255, required=False)
     generation = serializers.IntegerField(required=False)
     selfLink = serializers.CharField(max_length=255, required=False)
-    address = serializers.IPAddressField(required=True)
+    address = serializers.RegexField(regex='^([01]?\d\d?|2[0-4]\d|25[0-5])(?:\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])){3}(%\d)?$', required=True)
     connectionLimit = serializers.IntegerField(required=False)
     dynamicRatio = serializers.IntegerField(required=False)
     ephemeral = serializers.CharField(max_length=255, required=False)
