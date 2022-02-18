@@ -39,7 +39,7 @@ class F5VirtualServerSerializer(serializers.Serializer):
     connectionLimit = serializers.IntegerField(required=False)
     creationTime = serializers.CharField(max_length=255, required=False)
     destination = serializers.RegexField(
-        regex='^/.*/([01]?\d\d?|2[0-4]\d|25[0-5])(?:\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])){3}(:\d*)?$',
+        regex='^/.*/([01]?\d\d?|2[0-4]\d|25[0-5])(?:\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])){3}(%\d)?(:\d*)?$',
         required=True)
     enabled = serializers.BooleanField(required=False)
     evictionProtected = serializers.CharField(max_length=255, required=False)
@@ -59,7 +59,7 @@ class F5VirtualServerSerializer(serializers.Serializer):
     rateLimitSrcMask = serializers.IntegerField(required=False)
     serviceDownImmediateAction = serializers.CharField(max_length=255, required=False)
     source = serializers.RegexField(
-        regex='^([01]?\d\d?|2[0-4]\d|25[0-5])(?:\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])){3}(?:/\d*)?$', required=True)
+        regex='^([01]?\d\d?|2[0-4]\d|25[0-5])(?:\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])){3}(%\d)?(?:/\d*)?$', required=True)
     sourceAddressTranslation = F5VirtualServerSourceAddressTranslationSerializer(required=True)
     sourcePort = serializers.CharField(max_length=255, required=False)
     synCookieStatus = serializers.CharField(max_length=255, required=False)
