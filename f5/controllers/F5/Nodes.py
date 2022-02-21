@@ -105,7 +105,8 @@ class F5NodesController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("node", locals(), locals()["serializer"].data["name"]).release()
+            if "serializer" in locals():
+                Lock("node", locals(), locals()["serializer"].data["name"]).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

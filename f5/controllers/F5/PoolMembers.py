@@ -104,7 +104,8 @@ class F5PoolMembersController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("poolMember", locals(), locals()["serializer"].data["name"]).release()
+            if "serializer" in locals():
+                Lock("poolMember", locals(), locals()["serializer"].data["name"]).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

@@ -111,7 +111,8 @@ class F5IrulesController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("irule", locals(), locals()["serializer"].data["name"]).release()
+            if "serializer" in locals():
+                Lock("irule", locals(), locals()["serializer"].data["name"]).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

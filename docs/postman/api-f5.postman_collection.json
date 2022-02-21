@@ -716,7 +716,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"data\": {\n        \"virtualServer\": {\n            \"name\": \"SERVICENAME\",\n            \"type\": \"L4\",\n            \"snat\": \"none\",\n            \"routeDomainId\": 1,\n            \"destination\": \"11.11.11.61:80\",\n            \"mask\": \"255.255.255.255\",\n            \"source\": \"0.0.0.0/0\"\n        },\n        \"profiles\": [\n            {\n                \"name\": \"PROFILENAME\",\n                \"type\": \"fastl4\",\n                \"idleTimeout\": 300\n            }\n        ],\n        \"pool\": {\n            \"name\": \"POOLNAME\",\n            \"loadBalancingMode\": \"round-robin\",\n            \"nodes\": [\n                {\n                    \"name\": \"NODE_1\",\n                    \"address\": \"111.111.115.100\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"NODE_2\",\n                    \"address\": \"111.111.115.101\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"NODE_3\",\n                    \"address\": \"111.111.115.102\",\n                    \"port\": 80\n                }\n            ]\n        },\n        \"monitor\": {\n            \"name\": \"MONITORNAME\",\n            \"type\": \"https\",\n            \"send\": \"/\",\n            \"recv\": \"OK\"\n        }\n    }\n}",
+									"raw": "{\n    \"data\": {\n        \"virtualServer\": {\n            \"name\": \"vs_SERVICENAME\",\n            \"type\": \"L4\",\n            \"snat\": \"none\",\n            \"routeDomainId\": 0,\n            \"destination\": \"11.11.11.61:80\",\n            \"mask\": \"255.255.255.255\",\n            \"source\": \"0.0.0.0/0\"\n        },\n        \"profiles\": [\n            {\n                \"name\": \"PROFILENAME\",\n                \"type\": \"fastl4\",\n                \"idleTimeout\": 300\n            }\n        ],\n        \"pool\": {\n            \"name\": \"POOLNAME\",\n            \"loadBalancingMode\": \"round-robin\",\n            \"nodes\": [\n                {\n                    \"name\": \"NODE_1\",\n                    \"address\": \"111.111.115.100\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"NODE_2\",\n                    \"address\": \"111.111.115.101\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"NODE_3\",\n                    \"address\": \"111.111.115.102\",\n                    \"port\": 80\n                }\n            ]\n        },\n        \"monitor\": {\n            \"name\": \"MONITORNAME\",\n            \"type\": \"https\",\n            \"send\": \"/\",\n            \"recv\": \"OK\"\n        }\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1258,7 +1258,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/monitors/https/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/monitors/tcp-half-open/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1273,7 +1273,7 @@
 								"2",
 								"Partition1",
 								"monitors",
-								"https",
+								"tcp-half-open",
 								""
 							]
 						}
@@ -1339,7 +1339,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"data\": \n    {\n        \"name\": \"MONITOR\",\n        \"loadBalancingMode\": \"round-robin\"\n    }\n}",
+							"raw": "{\n    \"data\": \n    {\n        \"name\": \"MONITOR\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -2968,7 +2968,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/virtualserver/SERVICENAME/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/virtualserver/VIRTUALSERVER/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -2983,7 +2983,7 @@
 								"2",
 								"Partition1",
 								"virtualserver",
-								"SERVICENAME",
+								"VIRTUALSERVER",
 								""
 							]
 						}

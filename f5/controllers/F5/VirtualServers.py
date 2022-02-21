@@ -103,7 +103,8 @@ class F5VirtualServersController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("virtualServer", locals(), locals()["serializer"].data["name"]).release()
+            if "serializer" in locals():
+                Lock("virtualServer", locals(), locals()["serializer"].data["name"]).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

@@ -145,7 +145,8 @@ class F5MonitorsController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("monitor", locals(), locals()["monitorType"]+locals()["serializer"].data["name"]).release()
+            if "serializer" in locals():
+                Lock("monitor", locals(), locals()["monitorType"]+locals()["serializer"].data["name"]).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
