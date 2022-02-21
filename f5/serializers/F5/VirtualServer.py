@@ -50,7 +50,7 @@ class F5VirtualServerSerializer(serializers.Serializer):
     mirror = serializers.CharField(max_length=255, required=False)
     mobileAppTunnel = serializers.CharField(max_length=255, required=False)
     nat64 = serializers.CharField(max_length=255, required=False)
-    pool = serializers.CharField(max_length=255, required=True)
+    pool = serializers.CharField(max_length=255, required=False)
     serversslUseSni = serializers.CharField(max_length=255, required=False)
     poolReference = F5VirtualServerPoolReferenceSerializer(required=False)
     rateLimit = serializers.CharField(max_length=255, required=False)
