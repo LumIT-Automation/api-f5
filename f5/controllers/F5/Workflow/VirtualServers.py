@@ -19,7 +19,7 @@ class VirtualServersWorkflow:
         self.username = user["username"]
         self.routeDomain = ""
 
-        if "routeDomainId" in data["virtualServer"]:
+        if "routeDomainId" in data["virtualServer"] and data["virtualServer"]["routeDomainId"]:
             self.routeDomain = "%"+str(data["virtualServer"]["routeDomainId"]) # for example: %1.
 
         self.__createdObjects = {
