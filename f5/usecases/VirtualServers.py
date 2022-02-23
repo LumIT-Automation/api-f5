@@ -107,7 +107,7 @@ class VirtualServersWorkflow:
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":
                     if "F5" in e.payload and e.status == 409 and "already exists" in e.payload["F5"]:
-                        Log.log("Node "+str(nodeName)+"/"+str(nodeAddress)+" already exists with the same/address name; using it. ")
+                        Log.log("Node "+str(nodeName)+"/"+str(nodeAddress)+" already exists with the same address/name; using it. ")
 
                         # Keep track of USED node.
                         self.__usedObjects["node"].append({
@@ -159,20 +159,6 @@ class VirtualServersWorkflow:
 
         except Exception as e:
             if e.__class__.__name__ == "CustomException":
-                if "F5" in e.payload and e.status == 409 and "already exists" in e.payload["F5"]:
-                    Log.log("Monitor "+str(monitorName)+" already exists with the same name; using it. ")
-
-                    # Keep track of USED monitor.
-                    self.__usedObjects["monitor"] = {
-                        "asset": self.assetId,
-                        "partition": self.partitionName,
-                        "name": monitorName,
-                        "type": monitorType
-                    }
-                else:
-                    self.__cleanCreatedObjects()
-                    raise e
-            else:
                 self.__cleanCreatedObjects()
                 raise e
 
@@ -203,19 +189,6 @@ class VirtualServersWorkflow:
 
         except Exception as e:
             if e.__class__.__name__ == "CustomException":
-                if "F5" in e.payload and e.status == 409 and "already exists" in e.payload["F5"]:
-                    Log.log("Pool "+str(poolName)+" already exists with the same name; using it. ")
-
-                    # Keep track of USED pool.
-                    self.__usedObjects["pool"] = {
-                        "asset": self.assetId,
-                        "partition": self.partitionName,
-                        "name": poolName
-                    }
-                else:
-                    self.__cleanCreatedObjects()
-                    raise e
-            else:
                 self.__cleanCreatedObjects()
                 raise e
 
@@ -252,20 +225,6 @@ class VirtualServersWorkflow:
 
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":
-                    if "F5" in e.payload and e.status == 409 and "already exists" in e.payload["F5"]:
-                        Log.log("Pool member "+str(poolMemberName)+" already exists; using it. ")
-
-                        # Keep track of USED node.
-                        self.__usedObjects["poolMember"].append({
-                            "asset": self.assetId,
-                            "partition": self.partitionName,
-                            "pool": poolName,
-                            "name": poolMemberName
-                        })
-                    else:
-                        self.__cleanCreatedObjects()
-                        raise e
-                else:
                     self.__cleanCreatedObjects()
                     raise e
 
@@ -312,20 +271,6 @@ class VirtualServersWorkflow:
 
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":
-                    if "F5" in e.payload and e.status == 409 and "already exists" in e.payload["F5"]:
-                        Log.log("Profile "+str(profileName)+" already exists with the same name; using it. ")
-
-                        # Keep track of USED pool.
-                        self.__usedObjects["profiles"].append({
-                            "asset": self.assetId,
-                            "partition": self.partitionName,
-                            "name": profileName,
-                            "type": profileType
-                        })
-                    else:
-                        self.__cleanCreatedObjects()
-                        raise e
-                else:
                     self.__cleanCreatedObjects()
                     raise e
 
@@ -338,7 +283,7 @@ class VirtualServersWorkflow:
         snatPoolName = self.data["snatPool"]["name"]
 
         try:
-            Log.actionLog("Virtual server workflow: attempting to create SNAT pool: snatPool_"+str(snatPoolName))
+            Log.actionLog("Virtual server workflow: attempting to create SNAT pool: "+str(snatPoolName))
 
             SnatPool.add(self.assetId, {
                 "name": snatPoolName,
@@ -358,19 +303,6 @@ class VirtualServersWorkflow:
 
         except Exception as e:
             if e.__class__.__name__ == "CustomException":
-                if "F5" in e.payload and e.status == 409 and "already exists" in e.payload["F5"]:
-                    Log.log("Snat pool "+str(snatPoolName)+" already exists with the same name; using it. ")
-
-                    # Keep track of USED snatPool.
-                    self.__usedObjects["snatPool"] = {
-                        "asset": self.assetId,
-                        "partition": self.partitionName,
-                        "name": snatPoolName
-                    }
-                else:
-                    self.__cleanCreatedObjects()
-                    raise e
-            else:
                 self.__cleanCreatedObjects()
                 raise e
 
@@ -430,19 +362,6 @@ class VirtualServersWorkflow:
 
         except Exception as e:
             if e.__class__.__name__ == "CustomException":
-                if "F5" in e.payload and e.status == 409 and "already exists" in e.payload["F5"]:
-                    Log.log("virtual server "+str(virtualServerName)+" already exists with the same name; using it. ")
-
-                    # Keep track of USED virtual server.
-                    self.__usedObjects["virtualServer"] = {
-                        "asset": self.assetId,
-                        "partition": self.partitionName,
-                        "name": virtualServerName
-                    }
-                else:
-                    self.__cleanCreatedObjects()
-                    raise e
-            else:
                 self.__cleanCreatedObjects()
                 raise e
 
