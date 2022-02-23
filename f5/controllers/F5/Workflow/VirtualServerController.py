@@ -3,13 +3,12 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from f5.models.Permission.Permission import Permission
+from f5.usecases.VirtualServer import VirtualServerWorkflow
 
 from f5.controllers.CustomController import CustomController
-from f5.controllers.F5.Workflow.VirtualServer import VirtualServerWorkflow
 
 from f5.helpers.Lock import Lock
 from f5.helpers.Log import Log
-
 
 
 class F5WorkflowVirtualServerController(CustomController):
