@@ -1,5 +1,6 @@
 from f5.models.F5.Node import Node
 from f5.models.F5.Monitor import Monitor
+from f5.models.F5.Irule import Irule
 from f5.models.F5.Pool import Pool
 from f5.models.F5.SnatPool import SnatPool
 from f5.models.F5.Profile import Profile
@@ -13,6 +14,7 @@ class VirtualServerWorkflow:
     def __init__(self, assetId: int, partitionName: str, virtualServerName: str, user: dict):
         try:
             self.profiles = list()
+            self.irules = list()
             self.policies = list()
             self.monitor = {
                 "name": "",
@@ -28,6 +30,7 @@ class VirtualServerWorkflow:
                 "pool": {},
                 "poolMember": [],
                 "profile": [],
+                "irule": [],
                 "snatPool": {},
                 "virtualServer": {}
             }
@@ -49,6 +52,7 @@ class VirtualServerWorkflow:
 
     def delete(self) -> None:
         self.__deleteVirtualServer()
+        self.__deleteIrules()
         self.__deleteProfiles()
         self.__deletePool()
         self.__deleteMonitor()
@@ -64,7 +68,7 @@ class VirtualServerWorkflow:
 
     @staticmethod
     def relatedF5Objects() -> list:
-        return ["node", "monitor", "pool", "poolMember", "profile", "virtualServer"]
+        return ["node", "monitor", "pool", "poolMember", "irule", "profile", "virtualServer"]
 
 
 
@@ -81,6 +85,9 @@ class VirtualServerWorkflow:
             try:
                 self.poolName = info["pool"].split("/")[2]
                 self.snat = info["sourceAddressTranslation"]["type"]
+
+                for ir in info["rules"]:
+                    self.irules.append({"name": ir})
             except Exception:
                 pass
 
@@ -93,7 +100,7 @@ class VirtualServerWorkflow:
                 })
 
             # Related policies.
-            #policies = vs.policies()["data"]["items"]
+            #policies = vs.policies()["items"]
             #for policy in policies:
             #    self.policies.append(policy["name"])
 
@@ -142,6 +149,34 @@ class VirtualServerWorkflow:
                     Log.log("[ERROR] Virtual server deletion workflow: cannot delete virtual server "+self.virtualServerName+": "+str(e.payload))
             else:
                 Log.log("[ERROR] Virtual server deletion workflow: cannot delete virtual server "+self.virtualServerName+": "+e.__str__())
+
+        Log.actionLog("Deleted objects: "+str(self.__deletedObjects))
+
+
+
+    def __deleteIrules(self) -> None:
+        Log.actionLog("Virtual server deletion workflow: attempting to delete irules: "+str(self.irules))
+
+        for el in self.irules:
+            iruleName = el["name"].split("/")[2]
+            try:
+                irule = Irule(self.assetId, self.partitionName, iruleName)
+                irule.delete()
+
+                self.__deletedObjects["irule"].append({
+                    "asset": self.assetId,
+                    "partition": self.partitionName,
+                    "name": iruleName
+                })
+
+            except Exception as e:
+                if e.__class__.__name__ == "CustomException":
+                    if "F5" in e.payload and e.status == 400 and "in use" in e.payload["F5"]:
+                        Log.log("Irule "+str(iruleName)+" in use; not deleting it. ")
+                    else:
+                        Log.log("[ERROR] Virtual server deletion workflow: cannot delete irule "+iruleName+": "+str(e.payload))
+                else:
+                    Log.log("[ERROR] Virtual server deletion workflow: cannot delete irule "+iruleName+": "+e.__str__())
 
         Log.actionLog("Deleted objects: "+str(self.__deletedObjects))
 
@@ -267,7 +302,7 @@ class VirtualServerWorkflow:
     def __logDeletedObjects(self) -> None:
         for k, v in self.__deletedObjects.items():
             try:
-                if any(key in k for key in ("virtualServer", "pool", "monitor")):
+                if k in ("virtualServer", "pool", "monitor"):
                     if "name" in v:
                         History.add({
                             "username": self.username,
@@ -278,7 +313,7 @@ class VirtualServerWorkflow:
                             "status": "deleted"
                             })
 
-                if any(key in k for key in ("node", "profile")):
+                if k in ("node", "profile", "irule"):
                     for n in v:
                         History.add({
                             "username": self.username,

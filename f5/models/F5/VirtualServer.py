@@ -59,6 +59,8 @@ class VirtualServer:
         self.vsIndex: int = 0
         self.policiesReference: Reference = None
         self.profilesReference: Reference = None
+        self.rules: list = []
+        self.rulesReference: Reference = None
 
 
 

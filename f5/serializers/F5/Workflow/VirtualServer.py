@@ -22,6 +22,10 @@ class F5WorkflowVirtualServerSerializer(serializers.Serializer):
                 send = serializers.CharField(max_length=255, required=False)
                 recv = serializers.CharField(max_length=255, required=False)
 
+            class F5WorkflowVirtualServerInnerIruleSerializer(serializers.Serializer):
+                name = serializers.CharField(max_length=255, required=True)
+                code = serializers.CharField(max_length=255, required=False, allow_null=True)
+
             class F5WorkflowVirtualServerInnerProfileSerializer(serializers.Serializer):
                 name = serializers.CharField(max_length=255, required=True)
                 type = serializers.CharField(max_length=255, required=True)
@@ -62,6 +66,7 @@ class F5WorkflowVirtualServerSerializer(serializers.Serializer):
             pool = F5WorkflowVirtualServerInnerPoolSerializer(required=True)
             # snatPool dynamically added when needed (-> __init__)
             monitor = F5WorkflowVirtualServerInnerMonitorSerializer(required=True)
+            irules = F5WorkflowVirtualServerInnerIruleSerializer(required=False, many=True)
 
         # Build son serializer dynamically, passing the plType parameter.
         self.fields["data"] = F5WorkflowVirtualServerInnerSerializer(

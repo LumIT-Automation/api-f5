@@ -5,6 +5,7 @@ from f5.models.F5.Monitor import Monitor
 from f5.models.F5.Pool import Pool
 from f5.models.F5.SnatPool import SnatPool
 from f5.models.F5.Profile import Profile
+from f5.models.F5.Irule import Irule
 from f5.models.F5.VirtualServer import VirtualServer
 from f5.models.History import History
 
@@ -27,19 +28,14 @@ class VirtualServersWorkflow:
             "monitor": {},
             "pool": {},
             "poolMember": [],
+            "irules": [],
             "profiles": [],
             "snatPool": {},
             "virtualServer": {}
         }
 
         self.__usedObjects = {
-            "node": [],
-            "monitor": {},
-            "pool": {},
-            "poolMember": [],
-            "profiles": [],
-            "snatPool": {},
-            "virtualServer": {}
+            "node": []
         }
 
 
@@ -55,6 +51,8 @@ class VirtualServersWorkflow:
         self.__createMonitor()
         self.__createPool()
         self.__createPoolMembers()
+        # snatpool
+        self.__createIrules()
         self.__createProfiles()
         self.__createVirtualServer()
 
@@ -68,7 +66,7 @@ class VirtualServersWorkflow:
 
     @staticmethod
     def relatedF5Objects() -> list:
-        return ["node", "monitor", "pool", "poolMember", "profile", "virtualServer"]
+        return ["node", "monitor", "pool", "poolMember", "irule", "profile", "virtualServer"]
 
 
 
@@ -163,7 +161,6 @@ class VirtualServersWorkflow:
                 raise e
 
         Log.actionLog("Created objects: "+str(self.__createdObjects))
-        Log.actionLog("Reused existent objects: "+str(self.__usedObjects))
 
 
 
@@ -193,7 +190,6 @@ class VirtualServersWorkflow:
                 raise e
 
         Log.actionLog("Created objects: "+str(self.__createdObjects))
-        Log.actionLog("Reused existent objects: "+str(self.__usedObjects))
 
 
 
@@ -229,7 +225,38 @@ class VirtualServersWorkflow:
                     raise e
 
         Log.actionLog("Created objects: "+str(self.__createdObjects))
-        Log.actionLog("Reused existent objects: "+str(self.__usedObjects))
+
+
+
+    def __createIrules(self) -> None:
+        for el in self.data["irules"]:
+            iruleName = el["name"]
+            iruleCode = ""
+            if "code" in el:
+                iruleCode = el["code"]
+
+            try:
+                Log.actionLog("Virtual server workflow: attempting to create irule: "+str(iruleName))
+
+                Irule.add(self.assetId, {
+                    "name": iruleName,
+                    "partition": self.partitionName,
+                    "apiAnonymous": iruleCode
+                })
+
+                # Keep track of CREATED irule.
+                self.__createdObjects["irules"].append({
+                    "asset": self.assetId,
+                    "partition": self.partitionName,
+                    "name": iruleName
+                })
+
+            except Exception as e:
+                if e.__class__.__name__ == "CustomException":
+                    self.__cleanCreatedObjects()
+                    raise e
+
+        Log.actionLog("Created objects: "+str(self.__createdObjects))
 
 
 
@@ -275,7 +302,6 @@ class VirtualServersWorkflow:
                     raise e
 
         Log.actionLog("Created objects: "+str(self.__createdObjects))
-        Log.actionLog("Reused existent objects: "+str(self.__usedObjects))
 
 
 
@@ -307,12 +333,13 @@ class VirtualServersWorkflow:
                 raise e
 
         Log.actionLog("Created objects: "+str(self.__createdObjects))
-        Log.actionLog("Reused existent objects: "+str(self.__usedObjects))
 
 
 
     def __createVirtualServer(self) -> None:
         profiles = list()
+        irules = list()
+
         virtualServerName = self.data["virtualServer"]["name"]
         virtualServerDestination = self.data["virtualServer"]["destination"]
         virtualServerMask = self.data["virtualServer"]["mask"]
@@ -339,11 +366,15 @@ class VirtualServersWorkflow:
                     "context": context
                 })
 
+            for el in self.data["irules"]:
+                irules.append("/"+self.partitionName+"/"+el["name"])
+
             VirtualServer.add(self.assetId, {
                 "name": virtualServerName,
                 "partition": self.partitionName,
                 "destination": "/"+self.partitionName+"/"+virtualServerDestination,
                 "ipProtocol": "tcp",
+                "rules": irules,
                 "profiles": profiles,
                 "mask": virtualServerMask,
                 "pool":  "/"+self.partitionName+"/"+self.data["pool"]["name"],
@@ -366,7 +397,6 @@ class VirtualServersWorkflow:
                 raise e
 
         Log.actionLog("Created objects: "+str(self.__createdObjects))
-        Log.actionLog("Reused existent objects: "+str(self.__usedObjects))
 
 
     
@@ -388,6 +418,18 @@ class VirtualServersWorkflow:
                     except Exception:
                         # If deletion failed, log.
                         Log.actionLog("[ERROR] Virtual server workflow: failed to clean "+virtualServerName)
+
+            if k == "irules":
+                for n in v:
+                    iruleName = n["name"]
+                    try:
+                        Log.log("Virtual server workflow: cleanup irule "+iruleName)
+
+                        irule = Irule(self.assetId, self.partitionName, iruleName)
+                        irule.delete()
+                    except Exception:
+                        # If deletion failed, log.
+                        Log.actionLog("[ERROR] Virtual server workflow: failed to clean "+iruleName)
 
             if k == "profiles":
                 for n in v:
@@ -454,7 +496,7 @@ class VirtualServersWorkflow:
     def __logCreatedObjects(self) -> None:
         for k, v in self.__createdObjects.items():
             try:
-                if any(key in k for key in ("virtualServer", "pool", "monitor")):
+                if k in ("virtualServer", "pool", "monitor"):
                     if "name" in v:
                         History.add({
                             "username": self.username,
@@ -465,7 +507,7 @@ class VirtualServersWorkflow:
                             "status": "created"
                             })
 
-                if any(key in k for key in ("node", "poolMember", "profiles")):
+                if k in ("node", "poolMember", "irules", "profiles"):
                     for n in v:
                         History.add({
                             "username": self.username,
