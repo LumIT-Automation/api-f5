@@ -43,7 +43,7 @@ class F5WorkflowVirtualServerSerializer(serializers.Serializer):
             class F5WorkflowVirtualServerInnerVSSerializer(serializers.Serializer):
                 name = serializers.CharField(max_length=255, required=True)
                 type = serializers.ChoiceField(required=True, choices=("L4", "L7"))
-                snat = serializers.CharField(max_length=255, required=True, allow_blank=True)
+                snat = serializers.ChoiceField(required=True, choices=("none", "automap", "snat"))
                 routeDomainId = serializers.CharField(max_length=255, required=False, allow_blank=True)
                 destination = serializers.RegexField(
                     regex='^([01]?\d\d?|2[0-4]\d|25[0-5])(?:\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])){3}(:\d*)?$',

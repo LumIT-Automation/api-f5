@@ -230,34 +230,35 @@ class VirtualServersWorkflow:
 
 
     def __createIrules(self) -> None:
-        for el in self.data["irules"]:
-            iruleName = el["name"]
-            iruleCode = ""
-            if "code" in el:
-                iruleCode = el["code"]
+        if "irules" in self.data:
+            for el in self.data["irules"]:
+                iruleName = el["name"]
+                iruleCode = ""
+                if "code" in el:
+                    iruleCode = el["code"]
 
-            try:
-                Log.actionLog("Virtual server workflow: attempting to create irule: "+str(iruleName))
+                try:
+                    Log.actionLog("Virtual server workflow: attempting to create irule: "+str(iruleName))
 
-                Irule.add(self.assetId, {
-                    "name": iruleName,
-                    "partition": self.partitionName,
-                    "apiAnonymous": iruleCode
-                })
+                    Irule.add(self.assetId, {
+                        "name": iruleName,
+                        "partition": self.partitionName,
+                        "apiAnonymous": iruleCode
+                    })
 
-                # Keep track of CREATED irule.
-                self.__createdObjects["irules"].append({
-                    "asset": self.assetId,
-                    "partition": self.partitionName,
-                    "name": iruleName
-                })
+                    # Keep track of CREATED irule.
+                    self.__createdObjects["irules"].append({
+                        "asset": self.assetId,
+                        "partition": self.partitionName,
+                        "name": iruleName
+                    })
 
-            except Exception as e:
-                if e.__class__.__name__ == "CustomException":
-                    self.__cleanCreatedObjects()
-                    raise e
+                except Exception as e:
+                    if e.__class__.__name__ == "CustomException":
+                        self.__cleanCreatedObjects()
+                        raise e
 
-        Log.actionLog("Created objects: "+str(self.__createdObjects))
+            Log.actionLog("Created objects: "+str(self.__createdObjects))
 
 
 
