@@ -47,16 +47,19 @@ class VirtualServersWorkflow:
     def add(self) -> None:
         vsType = self.data["virtualServer"]["type"]
 
-        self.__createNodes()
-        self.__createMonitor()
-        self.__createPool()
-        self.__createPoolMembers()
-        self.__createSnatPool()
-        self.__createIrules()
-        self.__createProfiles()
-        self.__createVirtualServer()
+        try:
+            self.__createNodes()
+            self.__createMonitor()
+            self.__createPool()
+            self.__createPoolMembers()
+            self.__createSnatPool()
+            self.__createIrules()
+            self.__createProfiles()
+            self.__createVirtualServer()
 
-        self.__logCreatedObjects()
+            self.__logCreatedObjects()
+        except Exception as e:
+            raise e
 
 
 
@@ -157,11 +160,10 @@ class VirtualServersWorkflow:
                 }
 
             except Exception as e:
-                if e.__class__.__name__ == "CustomException":
-                    self.__cleanCreatedObjects()
-                    raise e
+                self.__cleanCreatedObjects()
+                raise e
 
-        Log.actionLog("Created objects: "+str(self.__createdObjects))
+            Log.actionLog("Created objects: "+str(self.__createdObjects))
 
 
 
@@ -186,9 +188,8 @@ class VirtualServersWorkflow:
             }
 
         except Exception as e:
-            if e.__class__.__name__ == "CustomException":
-                self.__cleanCreatedObjects()
-                raise e
+            self.__cleanCreatedObjects()
+            raise e
 
         Log.actionLog("Created objects: "+str(self.__createdObjects))
 
@@ -197,35 +198,35 @@ class VirtualServersWorkflow:
     def __createPoolMembers(self) -> None:
         poolName = self.data["pool"]["name"]
 
-        for el in self.data["pool"]["nodes"]:
-            nodeName = el["name"]
-            poolMemberPort = el["port"]
-            poolMemberName = nodeName+":"+str(poolMemberPort)
+        if "nodes" in self.data["pool"]:
+            for el in self.data["pool"]["nodes"]:
+                nodeName = el["name"]
+                poolMemberPort = el["port"]
+                poolMemberName = nodeName+":"+str(poolMemberPort)
 
-            try:
-                Log.actionLog("Virtual server workflow: attempting to create pool members: associate "+str(nodeName)+" to "+str(poolName)+" on port "+str(poolMemberPort))
+                try:
+                    Log.actionLog("Virtual server workflow: attempting to create pool members: associate "+str(nodeName)+" to "+str(poolName)+" on port "+str(poolMemberPort))
 
-                Pool(self.assetId, self.partitionName, poolName).addMember({
-                        "name": "/"+self.partitionName+"/"+poolMemberName,
-                        "State": "up",
-                        "session": "user-enabled"
-                    }
-                )
+                    Pool(self.assetId, self.partitionName, poolName).addMember({
+                            "name": "/"+self.partitionName+"/"+poolMemberName,
+                            "State": "up",
+                            "session": "user-enabled"
+                        }
+                    )
 
-                # Keep track of CREATED pool members.
-                self.__createdObjects["poolMember"].append({
-                    "asset": self.assetId,
-                    "partition": self.partitionName,
-                    "pool": poolName,
-                    "name": poolMemberName
-                })
+                    # Keep track of CREATED pool members.
+                    self.__createdObjects["poolMember"].append({
+                        "asset": self.assetId,
+                        "partition": self.partitionName,
+                        "pool": poolName,
+                        "name": poolMemberName
+                    })
 
-            except Exception as e:
-                if e.__class__.__name__ == "CustomException":
+                except Exception as e:
                     self.__cleanCreatedObjects()
                     raise e
 
-        Log.actionLog("Created objects: "+str(self.__createdObjects))
+            Log.actionLog("Created objects: "+str(self.__createdObjects))
 
 
 
@@ -254,9 +255,8 @@ class VirtualServersWorkflow:
                     })
 
                 except Exception as e:
-                    if e.__class__.__name__ == "CustomException":
-                        self.__cleanCreatedObjects()
-                        raise e
+                    self.__cleanCreatedObjects()
+                    raise e
 
             Log.actionLog("Created objects: "+str(self.__createdObjects))
 
@@ -299,9 +299,8 @@ class VirtualServersWorkflow:
                 })
 
             except Exception as e:
-                if e.__class__.__name__ == "CustomException":
-                    self.__cleanCreatedObjects()
-                    raise e
+                self.__cleanCreatedObjects()
+                raise e
 
         Log.actionLog("Created objects: "+str(self.__createdObjects))
 
@@ -333,9 +332,8 @@ class VirtualServersWorkflow:
                 }
 
             except Exception as e:
-                if e.__class__.__name__ == "CustomException":
-                    self.__cleanCreatedObjects()
-                    raise e
+                self.__cleanCreatedObjects()
+                raise e
 
         Log.actionLog("Created objects: "+str(self.__createdObjects))
 
@@ -351,36 +349,39 @@ class VirtualServersWorkflow:
         virtualServerMask = self.data["virtualServer"]["mask"]
         virtualServerSource = self.data["virtualServer"]["source"]
 
-        if "snatPool" in self.data:
-            snatpoolName = self.data["snatPool"]["name"]
-
-        virtualServerSnat = {
-            "type": self.data["virtualServer"]["snat"],
-            "pool": snatpoolName
-        }
-
-        if self.routeDomain:
-            i, m = virtualServerSource.split("/")
-            virtualServerSource = i+self.routeDomain+"/"+m
-
-            i, p = virtualServerDestination.split(":")
-            virtualServerDestination = i+self.routeDomain+":"+p
-
         try:
             Log.actionLog("Virtual server workflow: attempting to create virtual server: "+str(virtualServerName))
 
-            for el in self.data["profiles"]:
-                context = "all"
-                if "context" in el:
-                    context = el["context"]
+            if "snatPool" in self.data \
+                    and "name" in self.data["snatPool"]:
+                snatpoolName = self.data["snatPool"]["name"]
 
-                profiles.append({
-                    "name": "/"+self.partitionName+"/"+el["name"],
-                    "context": context
-                })
+            virtualServerSnat = {
+                "type": self.data["virtualServer"]["snat"],
+                "pool": snatpoolName
+            }
 
-            for el in self.data["irules"]:
-                irules.append("/"+self.partitionName+"/"+el["name"])
+            if self.routeDomain:
+                i, m = virtualServerSource.split("/")
+                virtualServerSource = i + self.routeDomain + "/" + m
+
+                i, p = virtualServerDestination.split(":")
+                virtualServerDestination = i + self.routeDomain + ":" + p
+
+            if "profiles" in self.data:
+                for el in self.data["profiles"]:
+                    context = "all"
+                    if "context" in el:
+                        context = el["context"]
+
+                    profiles.append({
+                        "name": "/"+self.partitionName+"/"+el["name"],
+                        "context": context
+                    })
+
+            if "irules" in self.data:
+                for el in self.data["irules"]:
+                    irules.append("/"+self.partitionName+"/"+el["name"])
 
             VirtualServer.add(self.assetId, {
                 "name": virtualServerName,
@@ -403,9 +404,8 @@ class VirtualServersWorkflow:
             }
 
         except Exception as e:
-            if e.__class__.__name__ == "CustomException":
-                self.__cleanCreatedObjects()
-                raise e
+            self.__cleanCreatedObjects()
+            raise e
 
         Log.actionLog("Created objects: "+str(self.__createdObjects))
 
