@@ -9,12 +9,9 @@ class F5WorkflowVirtualServerSerializer(serializers.Serializer):
             def __init__(self, plType, *args_, **kwargs_):
                 super().__init__(*args_, **kwargs_)
 
-                class F5WorkflowVirtualServerInnerSnatPoolSerializer(serializers.Serializer):
-                    snatIPAddress = serializers.CharField(max_length=255, required=True)
-
                 # Build different serializer basing on plType value.
                 if plType.lower() == "pl4_snat":
-                    self.fields["snatPool"] = F5WorkflowVirtualServerInnerSnatPoolSerializer(required=True)
+                    pass # currently unused.
 
             class F5WorkflowVirtualServerInnerMonitorSerializer(serializers.Serializer):
                 name = serializers.CharField(max_length=255, required=True)
@@ -36,10 +33,17 @@ class F5WorkflowVirtualServerSerializer(serializers.Serializer):
                 chain = serializers.CharField(max_length=255, required=False, allow_blank=True)
                 idleTimeout = serializers.IntegerField(required=False)
 
+            class F5WorkflowVirtualServerInnerSnatPoolSerializer(serializers.Serializer):
+                name = serializers.CharField(max_length=255, required=True)
+                members = serializers.ListField(
+                    child=serializers.IPAddressField(required=False),
+                    required=False
+                )
+
             class F5WorkflowVirtualServerInnerVSSerializer(serializers.Serializer):
                 name = serializers.CharField(max_length=255, required=True)
                 type = serializers.ChoiceField(required=True, choices=("L4", "L7"))
-                snat = serializers.ChoiceField(required=True, choices=("none", "automap"))
+                snat = serializers.CharField(max_length=255, required=True, allow_blank=True)
                 routeDomainId = serializers.CharField(max_length=255, required=False, allow_blank=True)
                 destination = serializers.RegexField(
                     regex='^([01]?\d\d?|2[0-4]\d|25[0-5])(?:\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])){3}(:\d*)?$',
@@ -64,7 +68,7 @@ class F5WorkflowVirtualServerSerializer(serializers.Serializer):
             virtualServer = F5WorkflowVirtualServerInnerVSSerializer(required=True)
             profiles = F5WorkflowVirtualServerInnerProfileSerializer(required=True, many=True)
             pool = F5WorkflowVirtualServerInnerPoolSerializer(required=True)
-            # snatPool dynamically added when needed (-> __init__)
+            snatPool = F5WorkflowVirtualServerInnerSnatPoolSerializer(required=False)
             monitor = F5WorkflowVirtualServerInnerMonitorSerializer(required=True)
             irules = F5WorkflowVirtualServerInnerIruleSerializer(required=False, many=True)
 

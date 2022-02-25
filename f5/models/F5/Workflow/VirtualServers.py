@@ -51,7 +51,7 @@ class VirtualServersWorkflow:
         self.__createMonitor()
         self.__createPool()
         self.__createPoolMembers()
-        # snatpool
+        self.__createSnatPool()
         self.__createIrules()
         self.__createProfiles()
         self.__createVirtualServer()
@@ -66,7 +66,7 @@ class VirtualServersWorkflow:
 
     @staticmethod
     def relatedF5Objects() -> list:
-        return ["node", "monitor", "pool", "poolMember", "irule", "profile", "virtualServer"]
+        return ["node", "monitor", "pool", "poolMember", "snatPool", "irule", "profile", "virtualServer"]
 
 
 
@@ -129,36 +129,37 @@ class VirtualServersWorkflow:
 
 
     def __createMonitor(self) -> None:
-        monitorName = self.data["monitor"]["name"]
-        monitorType = self.data["monitor"]["type"]
+        if "monitor" in self.data:
+            monitorName = self.data["monitor"]["name"]
+            monitorType = self.data["monitor"]["type"]
 
-        try:
-            Log.actionLog("Virtual server workflow: attempting to create monitor: "+str(monitorName))
+            try:
+                Log.actionLog("Virtual server workflow: attempting to create monitor: "+str(monitorName))
 
-            mData = {
-                "name": monitorName,
-                "partition": self.partitionName
-            }
+                mData = {
+                    "name": monitorName,
+                    "partition": self.partitionName
+                }
 
-            if "send" in self.data["monitor"]:
-                mData["send"] = self.data["monitor"]["send"]
-            if "recv" in self.data["monitor"]:
-                mData["recv"] = self.data["monitor"]["recv"]
+                if "send" in self.data["monitor"]:
+                    mData["send"] = self.data["monitor"]["send"]
+                if "recv" in self.data["monitor"]:
+                    mData["recv"] = self.data["monitor"]["recv"]
 
-            Monitor.add(self.assetId, monitorType, mData)
+                Monitor.add(self.assetId, monitorType, mData)
 
-            # Keep track of CREATED monitor.
-            self.__createdObjects["monitor"] = {
-                "asset": self.assetId,
-                "partition": self.partitionName,
-                "name": monitorName,
-                "type": monitorType
-            }
+                # Keep track of CREATED monitor.
+                self.__createdObjects["monitor"] = {
+                    "asset": self.assetId,
+                    "partition": self.partitionName,
+                    "name": monitorName,
+                    "type": monitorType
+                }
 
-        except Exception as e:
-            if e.__class__.__name__ == "CustomException":
-                self.__cleanCreatedObjects()
-                raise e
+            except Exception as e:
+                if e.__class__.__name__ == "CustomException":
+                    self.__cleanCreatedObjects()
+                    raise e
 
         Log.actionLog("Created objects: "+str(self.__createdObjects))
 
@@ -216,7 +217,7 @@ class VirtualServersWorkflow:
                     "asset": self.assetId,
                     "partition": self.partitionName,
                     "pool": poolName,
-                    "name": "/"+self.partitionName+"/"+poolMemberName
+                    "name": poolMemberName
                 })
 
             except Exception as e:
@@ -306,31 +307,34 @@ class VirtualServersWorkflow:
 
 
     def __createSnatPool(self) -> None:
-        snatPoolName = self.data["snatPool"]["name"]
+        if "snatPool" in self.data:
+            snatPoolName = self.data["snatPool"]["name"]
+            snatPoolMembers = list()
 
-        try:
-            Log.actionLog("Virtual server workflow: attempting to create SNAT pool: "+str(snatPoolName))
+            try:
+                Log.actionLog("Virtual server workflow: attempting to create SNAT pool: "+str(snatPoolName))
 
-            SnatPool.add(self.assetId, {
-                "name": snatPoolName,
-                "partition": self.partitionName,
-                "monitor": "/"+self.partitionName+"/"+self.data["monitor"]["name"],
-                "members": [
-                    "/"+self.partitionName+"/"+self.data["snatPool"]["snatIPAddress"]+self.routeDomain
-                ]
-            })
+                if "members" in self.data["snatPool"]:
+                    for m in self.data["snatPool"]["members"]:
+                        snatPoolMembers.append("/"+self.partitionName+"/"+m+self.routeDomain)
 
-            # Keep track of CREATED snatPool.
-            self.__createdObjects["snatPool"] = {
-                "asset": self.assetId,
-                "partition": self.partitionName,
-                "name": snatPoolName
-            }
+                SnatPool.add(self.assetId, {
+                    "name": snatPoolName,
+                    "partition": self.partitionName,
+                    "members": snatPoolMembers
+                })
 
-        except Exception as e:
-            if e.__class__.__name__ == "CustomException":
-                self.__cleanCreatedObjects()
-                raise e
+                # Keep track of CREATED snatPool.
+                self.__createdObjects["snatPool"] = {
+                    "asset": self.assetId,
+                    "partition": self.partitionName,
+                    "name": snatPoolName
+                }
+
+            except Exception as e:
+                if e.__class__.__name__ == "CustomException":
+                    self.__cleanCreatedObjects()
+                    raise e
 
         Log.actionLog("Created objects: "+str(self.__createdObjects))
 
@@ -468,6 +472,18 @@ class VirtualServersWorkflow:
                         # If deletion failed, log.
                         Log.actionLog("[ERROR] Virtual server workflow: failed to clean "+poolName)
 
+            if k == "snatPool":
+                if "name" in v:
+                    snatPoolName = v["name"]
+                    try:
+                        Log.log("Virtual server workflow: cleanup snatpool "+snatPoolName)
+
+                        snatpool = SnatPool(self.assetId, self.partitionName, snatPoolName)
+                        snatpool.delete()
+                    except Exception:
+                        # If deletion failed, log.
+                        Log.actionLog("[ERROR] Virtual server workflow: failed to clean "+snatPoolName)
+
             if k == "monitor":
                 if "name" in v:
                     monitorName = v["name"]
@@ -496,7 +512,7 @@ class VirtualServersWorkflow:
     def __logCreatedObjects(self) -> None:
         for k, v in self.__createdObjects.items():
             try:
-                if k in ("virtualServer", "pool", "monitor"):
+                if k in ("virtualServer", "pool", "monitor", "snatPool"):
                     if "name" in v:
                         History.add({
                             "username": self.username,
