@@ -21,7 +21,7 @@ class VirtualServerWorkflow:
                 "type": ""
             }
             self.poolName = ""
-            self.snat = ""
+            self.snatPool = ""
             self.nodes = list()
 
             self.__deletedObjects = {
@@ -53,6 +53,7 @@ class VirtualServerWorkflow:
     def delete(self) -> None:
         self.__deleteVirtualServer()
         self.__deleteIrules()
+        self.__deleteSnatPool()
         self.__deleteProfiles()
         self.__deletePool()
         self.__deleteMonitor()
@@ -84,7 +85,10 @@ class VirtualServerWorkflow:
             info = vs.info()
             try:
                 self.poolName = info["pool"].split("/")[2]
-                self.snat = info["sourceAddressTranslation"]["type"]
+
+                if "sourceAddressTranslation" in info \
+                        and "pool" in info["sourceAddressTranslation"]:
+                    self.snatPool = info["sourceAddressTranslation"]["pool"]
 
                 for ir in info["rules"]:
                     self.irules.append({"name": ir})
@@ -231,7 +235,7 @@ class VirtualServerWorkflow:
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":
                     if "F5" in e.payload and e.status == 400 and "in use" in e.payload["F5"]:
-                        Log.log("Monitor "+str(self.virtualServerName)+" in use; not deleting it. ")
+                        Log.log("Monitor "+str(self.monitor["name"])+" in use; not deleting it. ")
                     else:
                         Log.log("[ERROR] Virtual server deletion workflow: cannot delete monitor "+self.monitor["name"]+": "+str(e.payload))
                 else:
@@ -258,7 +262,7 @@ class VirtualServerWorkflow:
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":
                     if "F5" in e.payload and e.status == 400 and "in use" in e.payload["F5"]:
-                        Log.log("Pool "+str(self.virtualServerName)+" in use; not deleting it. ")
+                        Log.log("Pool "+str(self.poolName)+" in use; not deleting it. ")
                     else:
                         Log.log("[ERROR] Virtual server deletion workflow: cannot delete pool "+self.poolName+": "+str(e.payload))
                 else:
@@ -266,7 +270,34 @@ class VirtualServerWorkflow:
 
         Log.actionLog("Deleted objects: "+str(self.__deletedObjects))
 
-        
+
+
+    def __deleteSnatPool(self) -> None:
+        if self.snatPool:
+            try:
+                Log.actionLog("Virtual server deletion workflow: attempting to delete snat pool: "+str(self.snatPool))
+
+                snatpool = SnatPool(self.assetId, self.partitionName, self.snatPool.split("/")[2])
+                snatpool.delete()
+
+                self.__deletedObjects["snatPool"] = {
+                    "asset": self.assetId,
+                    "partition": self.partitionName,
+                    "name": self.poolName
+                }
+
+            except Exception as e:
+                if e.__class__.__name__ == "CustomException":
+                    if "F5" in e.payload and e.status == 400 and "in use" in e.payload["F5"]:
+                        Log.log("Snat pool "+str(self.snatPool)+" in use; not deleting it. ")
+                    else:
+                        Log.log("[ERROR] Virtual server deletion workflow: cannot delete snat pool "+self.snatPool+": "+str(e.payload))
+                else:
+                    Log.log("[ERROR] Virtual server deletion workflow: cannot delete snat pool "+self.snatPool+": "+e.__str__())
+
+        Log.actionLog("Deleted objects: "+str(self.__deletedObjects))
+
+
 
     def __deleteNodes(self) -> None:
         Log.actionLog("Virtual server deletion workflow: attempting to delete nodes: "+str(self.nodes))
@@ -302,7 +333,7 @@ class VirtualServerWorkflow:
     def __logDeletedObjects(self) -> None:
         for k, v in self.__deletedObjects.items():
             try:
-                if k in ("virtualServer", "pool", "monitor"):
+                if k in ("virtualServer", "pool", "monitor", "snatPool"):
                     if "name" in v:
                         History.add({
                             "username": self.username,
