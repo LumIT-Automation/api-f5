@@ -7,6 +7,7 @@ class F5VirtualServerSerializer(serializers.Serializer):
 
     class F5VirtualServerSourceAddressTranslationSerializer(serializers.Serializer):
         type = serializers.CharField(max_length=255, required=False)
+        pool = serializers.CharField(max_length=255, required=False)
 
     class F5VirtualServerSecurityLogProfilesReferenceSerializer(serializers.Serializer):
         link = serializers.CharField(max_length=255, required=False)

@@ -4,7 +4,8 @@ from f5.models.F5.backend.VirtualServer import VirtualServer as Backend
 
 
 SourceAddressTranslation: Dict[str, str] = {
-    "type": ""
+    "type": "",
+    "pool": ""
 }
 
 PoolReference: Dict[str, str] = {

@@ -46,7 +46,7 @@ class VirtualServersWorkflow:
 
     def add(self) -> None:
         vsType = self.data["virtualServer"]["type"]
-        # Performance Layer 4/7.
+
         self.__createNodes()
         self.__createMonitor()
         self.__createPool()
@@ -341,6 +341,7 @@ class VirtualServersWorkflow:
 
 
     def __createVirtualServer(self) -> None:
+        snatpoolName = ""
         profiles = list()
         irules = list()
 
@@ -348,7 +349,14 @@ class VirtualServersWorkflow:
         virtualServerDestination = self.data["virtualServer"]["destination"]
         virtualServerMask = self.data["virtualServer"]["mask"]
         virtualServerSource = self.data["virtualServer"]["source"]
-        virtualServerSnat = self.data["virtualServer"]["snat"]
+
+        if "snatPool" in self.data:
+            snatpoolName = self.data["snatPool"]["name"]
+
+        virtualServerSnat = {
+            "type": self.data["virtualServer"]["snat"],
+            "pool": snatpoolName
+        }
 
         if self.routeDomain:
             i, m = virtualServerSource.split("/")
@@ -383,9 +391,7 @@ class VirtualServersWorkflow:
                 "mask": virtualServerMask,
                 "pool":  "/"+self.partitionName+"/"+self.data["pool"]["name"],
                 "source": virtualServerSource,
-                "sourceAddressTranslation": {
-                    "type": virtualServerSnat
-                }
+                "sourceAddressTranslation": virtualServerSnat
             })
 
             # Keep track of CREATED virtual server.
@@ -408,7 +414,11 @@ class VirtualServersWorkflow:
         Log.log("Virtual server workflow: cleanup")
 
         # Reverse elements in order to delete from leaf to branch.
-        self.__createdObjects = OrderedDict(reversed(list(self.__createdObjects.items())))
+        self.__createdObjects = OrderedDict(
+            reversed(list(
+                self.__createdObjects.items())
+            )
+        )
 
         for k, v in self.__createdObjects.items():
             if k == "virtualServer":
