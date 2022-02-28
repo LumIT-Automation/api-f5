@@ -27,7 +27,7 @@ class F5DatagroupsController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="monitors_get", assetId=assetId, partitionName=partitionName) or user["authDisabled"]: # @todo: datagroups_get
+            if Permission.hasUserPermission(groups=user["groups"], action="datagroups_get", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
                 Log.actionLog("Datagroups list", user)
 
                 lock = Lock("datagroup", locals())
@@ -96,7 +96,7 @@ class F5DatagroupsController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="monitors_post", assetId=assetId, partitionName=partitionName) or user["authDisabled"]: # @todo: datagroups_post.
+            if Permission.hasUserPermission(groups=user["groups"], action="datagroups_post", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
                 Log.actionLog("Datagroup addition", user)
                 Log.actionLog("User data: "+str(request.data), user)
 

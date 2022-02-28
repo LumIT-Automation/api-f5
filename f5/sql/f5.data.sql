@@ -90,7 +90,12 @@ INSERT INTO `privilege` (`id`, `privilege`, `privilege_type`, `description`) VAL
 (55, 'irule_patch', 'object', NULL),
 (56, 'irule_delete', 'object', NULL),
 (57, 'routedomains_get', 'asset', NULL),
-(58, 'configuration_put', 'global', NULL);
+(58, 'configuration_put', 'global', NULL),
+(59, 'datagroups_get', 'object', NULL),
+(60, 'datagroups_post', 'object', NULL),
+(61, 'datagroup_delete', 'object', NULL),
+(62, 'datagroup_patch', 'object', NULL),
+(63, 'datagroup_get', 'object', NULL);
 
 --
 -- Dump dei dati per la tabella `role`
@@ -160,6 +165,11 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (1, 56),
 (1, 57),
 (1, 58),
+(1, 59),
+(1, 60),
+(1, 61),
+(1, 62),
+(1, 63),
 (2, 3),
 (2, 5),
 (2, 6),
@@ -207,6 +217,11 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (2, 55),
 (2, 56),
 (2, 57),
+(2, 59),
+(2, 60),
+(2, 61),
+(2, 62),
+(2, 63),
 (3, 3),
 (3, 6),
 (3, 8),
@@ -222,7 +237,9 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (3, 47),
 (3, 49),
 (3, 53),
-(3, 57);
+(3, 57),
+(3, 59),
+(3, 63);
 
 
 COMMIT;
