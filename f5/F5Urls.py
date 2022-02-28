@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .controllers import Root
-from .controllers.F5 import Partitions, RouteDomains, Node, Nodes, Monitor, Monitors, Certificate, Certificates, Pools, Pool, SnatPool, SnatPools, PoolMembers, PoolMember, PoolMemberStats, Profile, Profiles, Irule, Irules, Policy, Policies, VirtualServer, VirtualServers
+from .controllers.F5 import Partitions, RouteDomains, Datagroup, Datagroups, Node, Nodes, Monitor, Monitors, Certificate, Certificates, Pools, Pool, SnatPool, SnatPools, PoolMembers, PoolMember, PoolMemberStats, Profile, Profiles, Irule, Irules, Policy, Policies, VirtualServer, VirtualServers
 from .controllers.F5.Asset import Asset, Assets
 from .controllers.F5.Workflow import VirtualServersController as WorkflowVirtualServers, VirtualServerController as WorkflowVirtualServer
 from .controllers.Permission import Authorizations, IdentityGroups, IdentityGroup, Roles, Permission, Permissions
@@ -31,6 +31,11 @@ urlpatterns = [
 
     # Root domain.
     path('<int:assetId>/routedomains/', RouteDomains.F5RouteDomainsController.as_view(), name='f5-route-domains'),
+
+    # Datagroup.
+    path('<int:assetId>/<str:partitionName>/datagroup/<str:datagroupType>/<str:datagroupName>/', Datagroup.F5DatagroupController.as_view(), name='f5-datagroup'),
+    path('<int:assetId>/<str:partitionName>/datagroups/<str:datagroupType>/', Datagroups.F5DatagroupsController.as_view(), name='f5-datagroups'),
+    path('<int:assetId>/<str:partitionName>/datagroups/', Datagroups.F5DatagroupsController.as_view(), name='f5-datagroup-types'),
 
     # Node.
     path('<int:assetId>/<str:partitionName>/node/<str:nodeName>/', Node.F5NodeController.as_view(), name='f5-node'),

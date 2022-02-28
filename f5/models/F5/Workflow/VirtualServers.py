@@ -285,6 +285,8 @@ class VirtualServersWorkflow:
             if "chain" in el:
                 postData["chain"] = el["chain"]
 
+            # @todo: on-the-fly create cert/key, do not import.
+
             try:
                 Log.actionLog("Virtual server workflow: attempting to create profile: "+str(profileName))
 

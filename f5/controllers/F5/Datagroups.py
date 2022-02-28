@@ -1,16 +1,14 @@
-#import asyncio
-#from asgiref.sync import sync_to_async
 import threading
 
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
 
-from f5.models.F5.Profile import Profile
+from f5.models.F5.Datagroup import Datagroup
 from f5.models.Permission.Permission import Permission
 
-from f5.serializers.F5.Profiles import F5ProfilesSerializer as ProfilesSerializer
-from f5.serializers.F5.Profile import F5ProfileSerializer as ProfileSerializer
+from f5.serializers.F5.Datagroups import F5DatagroupsSerializer as DatagroupsSerializer
+from f5.serializers.F5.Datagroup import F5DatagroupSerializer as DatagroupSerializer
 
 from f5.controllers.CustomController import CustomController
 
@@ -19,9 +17,9 @@ from f5.helpers.Conditional import Conditional
 from f5.helpers.Log import Log
 
 
-class F5ProfilesController(CustomController):
+class F5DatagroupsController(CustomController):
     @staticmethod
-    def get(request: Request, assetId: int, partitionName: str, profileType: str = "") -> Response:
+    def get(request: Request, assetId: int, partitionName: str, datagroupType: str = "") -> Response:
         data = {"data": dict()}
         itemData = dict()
         etagCondition = { "responseEtag": "" }
@@ -29,38 +27,37 @@ class F5ProfilesController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="profiles_get", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
-                Log.actionLog("Profiles list", user)
+            if Permission.hasUserPermission(groups=user["groups"], action="monitors_get", assetId=assetId, partitionName=partitionName) or user["authDisabled"]: # @todo: datagroups_get
+                Log.actionLog("Datagroups list", user)
 
-                lock = Lock("profile", locals())
+                lock = Lock("datagroup", locals())
                 if lock.isUnlocked():
                     lock.lock()
 
-                    if profileType:
-                        if profileType != "ANY":
-                            # Profiles' list of that type.
-                            # F5 treats profile type as a sub-object instead of a property. Odd.
-                            itemData["items"] = Profile.list(assetId, partitionName, profileType)
-                            data["data"] = ProfilesSerializer(itemData).data
+                    if datagroupType:
+                        if datagroupType != "ANY":
+                            # Datagroups list of that type.
+                            itemData["items"] = Datagroup.list(assetId, partitionName, datagroupType)
+                            data["data"] = DatagroupsSerializer(itemData).data
                         else:
-                            # All monitors list, of any type.
-                            profileTypes = Profile.types(assetId, partitionName)
+                            # All datagroups, of any type.
+                            datagroupType = Datagroup.types(assetId, partitionName)
 
                             # The threading way.
                             # This requires a consistent throttle on remote appliance.
-                            def profilesListOfType(pType):
-                                itemData["items"] = Profile.list(assetId, partitionName, pType)
-                                data["data"][pType] = ProfilesSerializer(itemData).data
+                            def datagroupsListOfType(dgType):
+                                itemData["items"] = Datagroup.list(assetId, partitionName, dgType)
+                                data["data"][dgType] = DatagroupsSerializer(itemData).data
 
-                            workers = [threading.Thread(target=profilesListOfType, args=(m,)) for m in profileTypes]
+                            workers = [threading.Thread(target=datagroupsListOfType, args=(m,)) for m in datagroupType]
                             for w in workers:
                                 w.start()
                             for w in workers:
                                 w.join()
                     else:
-                        # Profiles' types list.
+                        # Datagroups types list.
                         # No need for a serializer: just a list of strings.
-                        data["data"]["items"] = Profile.types(assetId, partitionName)
+                        data["data"]["items"] = Datagroup.types(assetId, partitionName)
 
                     data["href"] = request.get_full_path()
 
@@ -81,7 +78,7 @@ class F5ProfilesController(CustomController):
                 data = None
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("profile", locals()).release()
+            Lock("datagroup", locals()).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
@@ -94,25 +91,25 @@ class F5ProfilesController(CustomController):
 
 
     @staticmethod
-    def post(request: Request, assetId: int, partitionName: str, profileType: str) -> Response:
+    def post(request: Request, assetId: int, partitionName: str, datagroupType: str) -> Response:
         response = None
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="profiles_post", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
-                Log.actionLog("Profile addition", user)
+            if Permission.hasUserPermission(groups=user["groups"], action="monitors_post", assetId=assetId, partitionName=partitionName) or user["authDisabled"]: # @todo: datagroups_post.
+                Log.actionLog("Datagroup addition", user)
                 Log.actionLog("User data: "+str(request.data), user)
 
-                serializer = ProfileSerializer(data=request.data["data"])
+                serializer = DatagroupSerializer(data=request.data["data"])
                 if serializer.is_valid():
                     data = serializer.validated_data
                     data["partition"] = partitionName
 
-                    lock = Lock("profile", locals(), profileType+data["name"])
+                    lock = Lock("datagroup", locals(), datagroupType+data["name"])
                     if lock.isUnlocked():
                         lock.lock()
 
-                        Profile.add(assetId, profileType, data)
+                        Datagroup.add(assetId, datagroupType, data)
 
                         httpStatus = status.HTTP_201_CREATED
                         lock.release()
@@ -131,7 +128,7 @@ class F5ProfilesController(CustomController):
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
             if "serializer" in locals():
-                Lock("profile", locals(), locals()["profileType"]+locals()["serializer"].data["name"]).release()
+                Lock("datagroup", locals(), locals()["datagroupType"]+locals()["serializer"].data["name"]).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

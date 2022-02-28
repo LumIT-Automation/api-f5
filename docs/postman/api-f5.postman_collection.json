@@ -716,7 +716,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"data\": {\n        \"virtualServer\": {\n            \"name\": \"vs_SERVICENAME\",\n            \"type\": \"L4\",\n            \"snat\": \"snat\",\n            \"routeDomainId\": \"0\",\n            \"destination\": \"11.11.11.61:80\",\n            \"mask\": \"255.255.255.255\",\n            \"source\": \"0.0.0.0/0\"\n        },\n        \"profiles\": [\n            {\n                \"name\": \"PROFILENAME_FAST\",\n                \"type\": \"fastl4\",\n                \"idleTimeout\": 300\n            }\n        ],\n        \"pool\": {\n            \"name\": \"POOLNAME_ROUNDROBIN1\",\n            \"loadBalancingMode\": \"round-robin\",\n            \"nodes\": [\n                {\n                    \"name\": \"NODE_1\",\n                    \"address\": \"111.111.115.100\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"NODE_2\",\n                    \"address\": \"111.111.115.101\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"NODE_3\",\n                    \"address\": \"111.111.115.102\",\n                    \"port\": 80\n                }\n            ]\n        },\n        \"irules\": [\n            {\n                \"name\": \"IRULE_VS\",\n                \"code\": \"when CLIENT_ACCEPTED {}\"\n            }\n        ],\n        \"snatPool\": {\n            \"name\": \"SNAT_POOL_NAME2\",\n            \"members\": [\n                \"121.111.115.112\"\n            ]\n        },\n        \"monitor\": {\n            \"name\": \"MONITORNAME_HTTP1\",\n            \"type\": \"http\",\n            \"send\": \"/\",\n            \"recv\": \"OK\"\n        }\n    }\n}",
+									"raw": "{\n    \"data\": {\n        \"virtualServer\": {\n            \"name\": \"vs_SERVICENAME\",\n            \"type\": \"L4\",\n            \"snat\": \"snat\",\n            \"routeDomainId\": \"0\",\n            \"destination\": \"11.11.11.61:80\",\n            \"mask\": \"255.255.255.255\",\n            \"source\": \"0.0.0.0/0\"\n        },\n        \"profiles\": [\n            {\n                \"name\": \"PROFILENAME_FAST120\",\n                \"type\": \"fastl4\",\n                \"idleTimeout\": 300\n            }\n        ],\n        \"pool\": {\n            \"name\": \"POOLNAME_ROUNDROBIN120\",\n            \"loadBalancingMode\": \"round-robin\",\n            \"nodes\": [\n                {\n                    \"name\": \"NODE_1\",\n                    \"address\": \"111.111.115.100\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"NODE_2\",\n                    \"address\": \"111.111.115.101\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"NODE_3\",\n                    \"address\": \"111.111.115.102\",\n                    \"port\": 80\n                }\n            ]\n        },\n        \"irules\": [\n            {\n                \"name\": \"IRULE_VS\",\n                \"code\": \"when CLIENT_ACCEPTED {}\"\n            }\n        ],\n        \"snatPool\": {\n            \"name\": \"SNATPOOL_NAME120\",\n            \"members\": [\n                \"121.111.115.120\"\n            ]\n        },\n        \"monitor\": {\n            \"name\": \"MONITORNAME_HTTP120\",\n            \"type\": \"http\",\n            \"send\": \"/\",\n            \"recv\": \"OK\"\n        }\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1019,6 +1019,265 @@
 								"f5",
 								"2",
 								"partitions",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "datagroup types",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/2/Common/datagroups/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"2",
+								"Common",
+								"datagroups",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "datagroup (of type)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/2/Common/datagroups/internal/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"2",
+								"Common",
+								"datagroups",
+								"internal",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "datagroup (all types)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/2/Common/datagroups/ANY/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"2",
+								"Common",
+								"datagroups",
+								"ANY",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "datagroups",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "62951e7f096cefb6a43b952ddcab869e",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\": \n    {\n        \"name\": \"DATAGROUP\",\n        \"type\": \"ip\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/2/Common/datagroups/internal/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"2",
+								"Common",
+								"datagroups",
+								"internal",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "datagroup",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "62951e7f096cefb6a43b952ddcab869e",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/2/Common/datagroup/internal/DATAGROUP/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"2",
+								"Common",
+								"datagroup",
+								"internal",
+								"DATAGROUP",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "datagroup",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "62951e7f096cefb6a43b952ddcab869e",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\": {\n        \"records\": [\n            {\n                \"name\": \"10.0.0.0/24\",\n                \"data\": \"data\"\n            }\n        ]\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/2/Common/datagroup/internal/DATAGROUP/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"2",
+								"Common",
+								"datagroup",
+								"internal",
+								"DATAGROUP",
 								""
 							]
 						}
