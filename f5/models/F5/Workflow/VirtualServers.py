@@ -104,7 +104,6 @@ class VirtualServersWorkflow:
                     "name": nodeName,
                     "address": nodeAddress+self.routeDomain,
                 })
-
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":
                     if "F5" in e.payload and e.status == 409 and "already exists" in e.payload["F5"]:
@@ -158,7 +157,6 @@ class VirtualServersWorkflow:
                     "name": monitorName,
                     "type": monitorType
                 }
-
             except Exception as e:
                 self.__cleanCreatedObjects()
                 raise e
@@ -186,7 +184,6 @@ class VirtualServersWorkflow:
                 "partition": self.partitionName,
                 "name": poolName
             }
-
         except Exception as e:
             self.__cleanCreatedObjects()
             raise e
@@ -221,7 +218,6 @@ class VirtualServersWorkflow:
                         "pool": poolName,
                         "name": poolMemberName
                     })
-
                 except Exception as e:
                     self.__cleanCreatedObjects()
                     raise e
@@ -253,7 +249,6 @@ class VirtualServersWorkflow:
                         "partition": self.partitionName,
                         "name": iruleName
                     })
-
                 except Exception as e:
                     self.__cleanCreatedObjects()
                     raise e
@@ -299,7 +294,6 @@ class VirtualServersWorkflow:
                     "name": profileName,
                     "type": profileType
                 })
-
             except Exception as e:
                 self.__cleanCreatedObjects()
                 raise e
@@ -332,7 +326,6 @@ class VirtualServersWorkflow:
                     "partition": self.partitionName,
                     "name": snatPoolName
                 }
-
             except Exception as e:
                 self.__cleanCreatedObjects()
                 raise e
@@ -404,7 +397,6 @@ class VirtualServersWorkflow:
                 "partition": self.partitionName,
                 "name": virtualServerName
             }
-
         except Exception as e:
             self.__cleanCreatedObjects()
             raise e

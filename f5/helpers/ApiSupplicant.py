@@ -89,16 +89,11 @@ class ApiSupplicant:
         # On KO status codes, a CustomException is raised, with response status and body.
 
         additionalHeaders = {} if additionalHeaders is None else additionalHeaders
-        standardHeaders = {
+        headers = {
             "Authorization": self.authorization
         }
 
-        # Merge headers.
-        for k, v in standardHeaders.items():
-            if standardHeaders[k] in additionalHeaders:
-                standardHeaders[k] = additionalHeaders[k] # additionalHeaders wins on common headers.
-
-        headers = {**standardHeaders, **additionalHeaders} # merge dicts.
+        headers.update(additionalHeaders)
 
         try:
             Log.actionLog("[API Supplicant] Posting to remote: "+str(self.endpoint))
@@ -150,16 +145,11 @@ class ApiSupplicant:
         # On KO status codes, a CustomException is raised, with response status and body.
 
         additionalHeaders = {} if additionalHeaders is None else additionalHeaders
-        standardHeaders = {
+        headers = {
             "Authorization": self.authorization
         }
 
-        # Merge headers.
-        for k, v in standardHeaders.items():
-            if standardHeaders[k] in additionalHeaders:
-                standardHeaders[k] = additionalHeaders[k] # additionalHeaders wins on common headers.
-
-        headers = {**standardHeaders, **additionalHeaders} # merge dicts.
+        headers.update(additionalHeaders)
 
         try:
             Log.actionLog("[API Supplicant] Putting to remote: "+str(self.endpoint))
@@ -210,16 +200,11 @@ class ApiSupplicant:
         # On KO status codes, a CustomException is raised, with response status and body.
 
         additionalHeaders = {} if additionalHeaders is None else additionalHeaders
-        standardHeaders = {
+        headers = {
             "Authorization": self.authorization
         }
 
-        # Merge headers.
-        for k, v in standardHeaders.items():
-            if standardHeaders[k] in additionalHeaders:
-                standardHeaders[k] = additionalHeaders[k] # additionalHeaders wins on common headers.
-
-        headers = {**standardHeaders, **additionalHeaders} # merge dicts.
+        headers.update(additionalHeaders)
 
         try:
             Log.actionLog("[API Supplicant] Patching remote: "+str(self.endpoint))

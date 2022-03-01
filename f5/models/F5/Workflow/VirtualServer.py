@@ -144,7 +144,6 @@ class VirtualServerWorkflow:
                 "partition": self.partitionName,
                 "name": self.virtualServerName
             }
-
         except Exception as e:
             if e.__class__.__name__ == "CustomException":
                 if "F5" in e.payload and e.status == 400 and "in use" in e.payload["F5"]:
@@ -172,7 +171,6 @@ class VirtualServerWorkflow:
                     "partition": self.partitionName,
                     "name": iruleName
                 })
-
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":
                     if "F5" in e.payload and e.status == 400 and "in use" in e.payload["F5"]:
@@ -203,7 +201,6 @@ class VirtualServerWorkflow:
                     "name": profileName,
                     "type": profileType
                 })
-
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":
                     if "F5" in e.payload and e.status == 400 and "in use" in e.payload["F5"]:
@@ -231,7 +228,6 @@ class VirtualServerWorkflow:
                     "name": self.monitor["name"],
                     "type": self.monitor["type"]
                 }
-
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":
                     if "F5" in e.payload and e.status == 400 and "in use" in e.payload["F5"]:
@@ -258,7 +254,6 @@ class VirtualServerWorkflow:
                     "partition": self.partitionName,
                     "name": self.poolName
                 }
-
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":
                     if "F5" in e.payload and e.status == 400 and "in use" in e.payload["F5"]:
@@ -285,7 +280,6 @@ class VirtualServerWorkflow:
                     "partition": self.partitionName,
                     "name": self.poolName
                 }
-
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":
                     if "F5" in e.payload and e.status == 400 and "in use" in e.payload["F5"]:
@@ -316,7 +310,6 @@ class VirtualServerWorkflow:
                     "name": nodeName,
                     "address": nodeAddress
                 })
-
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":
                     if "F5" in e.payload and e.status == 400 and "is referenced" in e.payload["F5"]:
