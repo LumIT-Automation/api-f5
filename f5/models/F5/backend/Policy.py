@@ -52,11 +52,7 @@ class Policy:
                 tlsVerify=f5.tlsverify
             )
 
-            api.delete(
-                additionalHeaders={
-                    "Content-Type": "application/json",
-                }
-            )
+            api.delete()
         except Exception as e:
             raise e
 

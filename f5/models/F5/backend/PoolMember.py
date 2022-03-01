@@ -101,11 +101,7 @@ class PoolMember:
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
-            api.delete(
-                additionalHeaders={
-                    "Content-Type": "application/json",
-                }
-            )
+            api.delete()
         except Exception as e:
             raise e
 
