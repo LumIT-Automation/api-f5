@@ -30,7 +30,9 @@ class Monitor:
     def info(self, silent: bool = False):
         try:
             i = Backend.info(self.assetId, self.partition, self.type, self.name, silent)
+
             i["assetId"] = self.assetId
+            i["type"] = self.type
 
             return i
         except Exception as e:
@@ -73,6 +75,7 @@ class Monitor:
             l = Backend.list(assetId, partitionName, monitorType)
             for el in l:
                 el["assetId"] = assetId
+                el["type"] = monitorType
 
             return l
         except Exception as e:

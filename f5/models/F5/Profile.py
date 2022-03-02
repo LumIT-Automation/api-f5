@@ -13,7 +13,7 @@ class Profile:
 
         self.assetId: int = int(assetId)
         self.partition: str = partitionName
-        self.profileType: str = profileType
+        self.type: str = profileType
         self.name: str = profileName
         self.fullPath: str = ""
         self.generation: int = 0
@@ -92,8 +92,10 @@ class Profile:
 
     def info(self, silent: bool = False):
         try:
-            i = Backend.info(self.assetId, self.profileType, self.partition, self.name, silent)
+            i = Backend.info(self.assetId, self.type, self.partition, self.name, silent)
+
             i["assetId"] = self.assetId
+            i["type"] = self.type
 
             return i
         except Exception as e:
@@ -103,7 +105,7 @@ class Profile:
 
     def modify(self, data):
         try:
-            Backend.modify(self.assetId, self.profileType, self.partition, self.name, data)
+            Backend.modify(self.assetId, self.type, self.partition, self.name, data)
         except Exception as e:
             raise e
 
@@ -111,7 +113,7 @@ class Profile:
 
     def delete(self):
         try:
-            Backend.delete(self.assetId, self.profileType, self.partition, self.name)
+            Backend.delete(self.assetId, self.type, self.partition, self.name)
         except Exception as e:
             raise e
 
@@ -127,6 +129,7 @@ class Profile:
             l = Backend.list(assetId, partitionName, profileType)
             for el in l:
                 el["assetId"] = assetId
+                el["type"] = profileType
 
             return l
         except Exception as e:

@@ -1,3 +1,5 @@
+import threading
+
 from f5.models.F5.Node import Node
 from f5.models.F5.Monitor import Monitor
 from f5.models.F5.Irule import Irule
@@ -14,6 +16,8 @@ class VirtualServerWorkflow:
     def __init__(self, assetId: int, partitionName: str, virtualServerName: str, user: dict):
         try:
             self.profiles = list()
+            self.certificates = list()
+            self.keys = list()
             self.irules = list()
             self.policies = list()
             self.monitor = {
@@ -30,6 +34,8 @@ class VirtualServerWorkflow:
                 "pool": {},
                 "poolMember": [],
                 "profile": [],
+                "certificate": [],
+                "key": [],
                 "irule": [],
                 "snatPool": {},
                 "virtualServer": {}
@@ -358,29 +364,27 @@ class VirtualServerWorkflow:
 
     @staticmethod
     def __getProfileType(assetId, partitionName, profileName):
-        # Profile type.
-        # The only way to get a profile type is to iterate through all the possible profile types.
-        # A not so small pain in the ass.
+        profileType = []
 
-        # Try avoiding the iterations method by testing the most used profiles, first.
-        for pt in ["fastl4", "tcp", "http", "client-ssl"]:
+        # The only way to get a profile type is to iterate through all the profile types. A not so small pain in the ass.
+        # The threading way. This requires a consistent throttle on remote appliance.
+        def profilesListOfType(a, p, t, n):
             try:
-                p = Profile(assetId, partitionName, pt, profileName)
-                p.info(silent=True) # probe.
-
-                return pt # if found valid profile.
+                profileType.append(
+                    Profile(a, p, t, n).info(silent=True)["type"]
+                ) # probe.
             except Exception:
                 pass
 
         profileTypes = Profile.types(assetId, partitionName)
-        for pt in profileTypes:
-            try:
-                p = Profile(assetId, partitionName, pt, profileName)
-                p.info(silent=True)
+        workers = [threading.Thread(target=profilesListOfType, args=(assetId, partitionName, m, profileName)) for m in profileTypes]
+        for w in workers:
+            w.start()
+        for w in workers:
+            w.join()
 
-                return pt
-            except Exception:
-                pass
+        Log.log(profileType[0], "_")
+        return profileType[0]
 
 
 

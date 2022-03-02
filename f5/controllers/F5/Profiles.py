@@ -43,7 +43,6 @@ class F5ProfilesController(CustomController):
                             itemData["items"] = Profile.list(assetId, partitionName, profileType)
                             data["data"] = ProfilesSerializer(itemData).data
                         else:
-                            # All monitors list, of any type.
                             profileTypes = Profile.types(assetId, partitionName)
 
                             # The threading way.

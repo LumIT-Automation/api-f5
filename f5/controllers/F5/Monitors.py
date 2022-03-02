@@ -43,7 +43,6 @@ class F5MonitorsController(CustomController):
                             itemData["items"] = Monitor.list(assetId, partitionName, monitorType)
                             data["data"] = MonitorsSerializer(itemData).data
                         else:
-                            # All monitors list, of any type.
                             monitorTypes = Monitor.types(assetId, partitionName)
 
                             # Event driven calls (no: still serialized).
