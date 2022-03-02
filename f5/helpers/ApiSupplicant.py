@@ -136,8 +136,6 @@ class ApiSupplicant:
             if not self.silent:
                 for j in (("status", self.responseStatus), ("headers", self.responseHeaders), ("payload", self.responsePayload)):
                     Log.actionLog("[API Supplicant] Remote response "+j[0]+": "+str(j[1]))
-            else:
-                Log.actionLog("[API Supplicant] Remote response silenced by caller.")
 
             # CustomException errors on connection ok but ko status code.
             if self.responseStatus == 200 or self.responseStatus == 201: # ok / ok on POST.

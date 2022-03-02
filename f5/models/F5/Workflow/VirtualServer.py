@@ -368,7 +368,7 @@ class VirtualServerWorkflow:
 
         # The only way to get a profile type is to iterate through all the profile types. A not so small pain in the ass.
         # The threading way. This requires a consistent throttle on remote appliance.
-        def profilesListOfType(a, p, t, n):
+        def profileDetail(a, p, t, n):
             try:
                 profileType.append(
                     Profile(a, p, t, n).info(silent=True)["type"]
@@ -377,34 +377,33 @@ class VirtualServerWorkflow:
                 pass
 
         profileTypes = Profile.types(assetId, partitionName)
-        workers = [threading.Thread(target=profilesListOfType, args=(assetId, partitionName, m, profileName)) for m in profileTypes]
+        workers = [threading.Thread(target=profileDetail, args=(assetId, partitionName, m, profileName)) for m in profileTypes]
         for w in workers:
             w.start()
         for w in workers:
             w.join()
 
-        Log.log(profileType[0], "_")
         return profileType[0]
 
 
 
     @staticmethod
     def __getMonitorType(assetId, partitionName, monitorName):
-        for mtype in ["tcp-half-open", "http"]:
-            try:
-                monitor = Monitor(assetId, partitionName, mtype, monitorName)
-                monitor.info(silent=True) # probe.
+        monitorType = []
 
-                return mtype # if found valid monitor.
+        def monitorDetail(a, p, t, n):
+            try:
+                monitorType.append(
+                    Monitor(a, p, t, n).info(silent=True)["type"]
+                )
             except Exception:
                 pass
 
         monitorTypes = Monitor.types(assetId, partitionName)
-        for mtype in monitorTypes:
-            try:
-                monitor = Monitor(assetId, partitionName, mtype, monitorName)
-                monitor.info(silent=True)
+        workers = [threading.Thread(target=monitorDetail, args=(assetId, partitionName, m, monitorName)) for m in monitorTypes]
+        for w in workers:
+            w.start()
+        for w in workers:
+            w.join()
 
-                return mtype
-            except Exception:
-                pass
+        return monitorType[0]
