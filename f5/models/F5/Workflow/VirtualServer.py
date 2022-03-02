@@ -6,6 +6,8 @@ from f5.models.F5.Irule import Irule
 from f5.models.F5.Pool import Pool
 from f5.models.F5.SnatPool import SnatPool
 from f5.models.F5.Profile import Profile
+from f5.models.F5.Certificate import Certificate
+from f5.models.F5.Key import Key
 from f5.models.F5.VirtualServer import VirtualServer
 from f5.models.History import History
 
@@ -61,6 +63,8 @@ class VirtualServerWorkflow:
         self.__deleteIrules()
         self.__deleteSnatPool()
         self.__deleteProfiles()
+        self.__deleteCertificates()
+        self.__deleteKeys()
         self.__deletePool()
         self.__deleteMonitor()
         self.__deleteNodes()
@@ -237,6 +241,62 @@ class VirtualServerWorkflow:
 
 
 
+    def __deleteCertificates(self) -> None:
+        Log.actionLog("Virtual server deletion workflow: attempting to delete certificates: "+str(self.certificates))
+
+        for c in self.certificates:
+            certificateName = c["name"]
+
+            try:
+                certificate = Certificate(self.assetId, self.partitionName, certificateName)
+                certificate.delete()
+
+                self.__deletedObjects["certificate"].append({
+                    "asset": self.assetId,
+                    "partition": self.partitionName,
+                    "name": certificateName
+                })
+            except Exception as e:
+                if e.__class__.__name__ == "CustomException":
+                    if "F5" in e.payload and e.status == 400 and "in use" in e.payload["F5"]:
+                        Log.log("Certificate "+str(certificateName)+" in use; not deleting it. ")
+                    else:
+                        Log.log("[ERROR] Virtual server deletion workflow: cannot delete certificate "+certificateName+": "+str(e.payload))
+                else:
+                    Log.log("[ERROR] Virtual server deletion workflow: cannot delete certificate "+certificateName+": "+e.__str__())
+
+        Log.actionLog("Deleted objects: "+str(self.__deletedObjects))
+
+
+
+    def __deleteKeys(self) -> None:
+        Log.actionLog("Virtual server deletion workflow: attempting to delete keys: "+str(self.keys))
+
+        for k in self.keys:
+            keyName = k["name"]
+
+            try:
+                key = Key(self.assetId, self.partitionName, keyName)
+                key.delete()
+
+                self.__deletedObjects["key"].append({
+                    "asset": self.assetId,
+                    "partition": self.partitionName,
+                    "name": keyName
+                })
+            except Exception as e:
+                if e.__class__.__name__ == "CustomException":
+                    if "F5" in e.payload and e.status == 400 and "in use" in e.payload["F5"]:
+                        Log.log("Key "+str(keyName)+" in use; not deleting it. ")
+                    else:
+                        Log.log("[ERROR] Virtual server deletion workflow: cannot delete key "+keyName+": "+str(e.payload))
+                else:
+                    Log.log("[ERROR] Virtual server deletion workflow: cannot delete key "+keyName+": "+e.__str__())
+
+        Log.actionLog("Deleted objects: "+str(self.__deletedObjects))
+
+
+
     def __deleteMonitor(self) -> None:
         if self.monitor["name"]:
             try:
@@ -360,7 +420,7 @@ class VirtualServerWorkflow:
                             "status": "deleted"
                             })
 
-                if k in ("node", "profile", "irule"):
+                if k in ("node", "profile", "irule", "certificate", "key"):
                     for n in v:
                         History.add({
                             "username": self.username,
