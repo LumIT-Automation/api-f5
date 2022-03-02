@@ -72,6 +72,8 @@ class Profile:
         self.tcpWscaleMode: str = ""
         self.tcpTimestampMode: str = ""
         self.timeoutRecovery: str = ""
+        self.cert: str = ""
+        self.key: str = ""
 
 
 

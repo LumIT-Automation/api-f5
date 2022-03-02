@@ -3,6 +3,8 @@ from collections import OrderedDict
 from f5.models.F5.Node import Node
 from f5.models.F5.Monitor import Monitor
 from f5.models.F5.Pool import Pool
+from f5.models.F5.Certificate import Certificate
+from f5.models.F5.Key import Key
 from f5.models.F5.SnatPool import SnatPool
 from f5.models.F5.Profile import Profile
 from f5.models.F5.Irule import Irule
@@ -28,9 +30,11 @@ class VirtualServersWorkflow:
             "monitor": {},
             "pool": {},
             "poolMember": [],
-            "irules": [],
-            "profiles": [],
+            "irule": [],
+            "profile": [],
             "snatPool": {},
+            "key": [],
+            "certificate": [],
             "virtualServer": {}
         }
 
@@ -69,7 +73,7 @@ class VirtualServersWorkflow:
 
     @staticmethod
     def relatedF5Objects() -> list:
-        return ["node", "monitor", "pool", "poolMember", "snatPool", "irule", "profile", "virtualServer"]
+        return ["node", "monitor", "pool", "poolMember", "snatPool", "irule", "profile", "certificate", "key", "virtualServer"]
 
 
 
@@ -244,7 +248,7 @@ class VirtualServersWorkflow:
                     })
 
                     # Keep track of CREATED irule.
-                    self.__createdObjects["irules"].append({
+                    self.__createdObjects["irule"].append({
                         "asset": self.assetId,
                         "partition": self.partitionName,
                         "name": iruleName
@@ -257,38 +261,77 @@ class VirtualServersWorkflow:
 
 
 
+    def __createCertificateOrKey(self, o: str, name: str, text: str) -> None:
+        if o in ("certificate", "key"):
+            try:
+                Log.actionLog("Virtual server workflow: attempting to create "+o+": "+str(name))
+
+                if o == "certificate":
+                    Certificate.install(self.assetId, {
+                        "name": name,
+                        "partition": self.partitionName,
+                        "content_base64": text
+                    })
+                else:
+                    Key.install(self.assetId, {
+                        "name": name,
+                        "partition": self.partitionName,
+                        "content_base64": text
+                    })
+
+                # Keep track of CREATED object.
+                self.__createdObjects[o].append({
+                    "asset": self.assetId,
+                    "partition": self.partitionName,
+                    "name": name
+                })
+            except Exception as e:
+                self.__cleanCreatedObjects()
+                raise e
+
+            Log.actionLog("Created objects: "+str(self.__createdObjects))
+        else:
+            raise NotImplementedError
+
+
+
     def __createProfiles(self) -> None:
         for el in self.data["profiles"]:
             profileName = el["name"]
             profileType = el["type"]
 
-            postData = {
+            data = {
                 "name": profileName,
                 "partition": self.partitionName
             }
 
             # Additional POST data.
             if "idleTimeout" in el:
-                postData["idleTimeout"] = el["idleTimeout"]
+                data["idleTimeout"] = el["idleTimeout"]
             if "defaultsFrom" in el:
-                postData["defaultsFrom"] = el["defaultsFrom"]
-
-            if "cert" in el:
-                postData["cert"] = el["cert"]
-            if "key" in el:
-                postData["key"] = el["key"]
-            if "chain" in el:
-                postData["chain"] = el["chain"]
-
-            # @todo: on-the-fly create cert/key, do not import.
+                data["defaultsFrom"] = el["defaultsFrom"]
 
             try:
+                # Create key and certificate.
+                if "cert" in el and el["cert"]:
+                    self.__createCertificateOrKey("certificate", name=profileName, text=el["cert"])
+                    data["cert"] = "/"+self.partitionName+"/"+profileName # use the created one.
+
+                if "key" in el and el["key"]:
+                    self.__createCertificateOrKey("key", name=profileName, text=el["key"])
+                    data["key"] = "/"+self.partitionName+"/"+profileName
+
+                if "chain" in el and el["chain"]:
+                    self.__createCertificateOrKey("certificate", name=profileName+"_chain", text=el["chain"])
+                    data["chain"] = "/"+self.partitionName+"/"+profileName+"_chain"
+
+                # Create profile.
                 Log.actionLog("Virtual server workflow: attempting to create profile: "+str(profileName))
 
-                Profile.add(self.assetId, profileType, postData)
+                Profile.add(self.assetId, profileType, data)
 
                 # Keep track of CREATED profile.
-                self.__createdObjects["profiles"].append({
+                self.__createdObjects["profile"].append({
                     "asset": self.assetId,
                     "partition": self.partitionName,
                     "name": profileName,
@@ -428,7 +471,7 @@ class VirtualServersWorkflow:
                         # If deletion failed, log.
                         Log.actionLog("[ERROR] Virtual server workflow: failed to clean "+virtualServerName)
 
-            if k == "irules":
+            if k == "irule":
                 for n in v:
                     iruleName = n["name"]
                     try:
@@ -440,7 +483,7 @@ class VirtualServersWorkflow:
                         # If deletion failed, log.
                         Log.actionLog("[ERROR] Virtual server workflow: failed to clean "+iruleName)
 
-            if k == "profiles":
+            if k == "profile":
                 for n in v:
                     profileName = n["name"]
                     profileType = n["type"]
@@ -452,6 +495,30 @@ class VirtualServersWorkflow:
                     except Exception:
                         # If deletion failed, log.
                         Log.actionLog("[ERROR] Virtual server workflow: failed to clean "+profileName)
+
+            if k == "certificate":
+                for n in v:
+                    certificateName = n["name"]
+                    try:
+                        Log.log("Virtual server workflow: cleanup certificate "+certificateName)
+
+                        certificate = Certificate(self.assetId, self.partitionName, certificateName)
+                        certificate.delete()
+                    except Exception:
+                        # If deletion failed, log.
+                        Log.actionLog("[ERROR] Virtual server workflow: failed to clean "+certificateName)
+
+            if k == "key":
+                for n in v:
+                    keyName = n["name"]
+                    try:
+                        Log.log("Virtual server workflow: cleanup certificate "+keyName)
+
+                        key = Key(self.assetId, self.partitionName, keyName)
+                        key.delete()
+                    except Exception:
+                        # If deletion failed, log.
+                        Log.actionLog("[ERROR] Virtual server workflow: failed to clean "+keyName)
 
             if k == "poolMember":
                 for n in v:
@@ -528,7 +595,7 @@ class VirtualServersWorkflow:
                             "status": "created"
                             })
 
-                if k in ("node", "poolMember", "irules", "profiles"):
+                if k in ("node", "poolMember", "irule", "profile", "key", "certificate"):
                     for n in v:
                         History.add({
                             "username": self.username,

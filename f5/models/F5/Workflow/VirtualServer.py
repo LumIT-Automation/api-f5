@@ -69,7 +69,7 @@ class VirtualServerWorkflow:
 
     @staticmethod
     def relatedF5Objects() -> list:
-        return ["node", "monitor", "pool", "poolMember", "snatPool", "irule", "profile", "virtualServer"]
+        return ["node", "monitor", "pool", "poolMember", "snatPool", "irule", "profile", "certificate", "key", "virtualServer"]
 
 
 
