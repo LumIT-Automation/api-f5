@@ -101,13 +101,27 @@ class VirtualServerWorkflow:
             except Exception:
                 pass
 
-            # Related profiles.
+            # Related profiles, certificates and keys.
             profiles = vs.profiles()["items"]
             for profile in profiles:
-                self.profiles.append({
-                    "name": profile["name"],
-                    "type": VirtualServerWorkflow.__getProfileType(self.assetId, self.partitionName, profile["name"])
-                })
+                try:
+                    details = VirtualServerWorkflow.__getProfileDetails(self.assetId, self.partitionName, profile["name"])
+                    self.profiles.append({
+                        "name": profile["name"],
+                        "type": details["type"]
+                    })
+
+                    if "cert" in details:
+                        self.certificates.append({
+                            "name": details["name"]
+                        })
+
+                    if "key" in details:
+                        self.keys.append({
+                            "name": details["name"]
+                        })
+                except Exception:
+                    pass
 
             # Related policies.
             #policies = vs.policies()["items"]
@@ -116,11 +130,14 @@ class VirtualServerWorkflow:
 
             if self.poolName:
                 # Pool info -> monitor.
-                pool = Pool(self.assetId, self.partitionName, self.poolName)
-                poolInfo = pool.info()
+                poolInfo = Pool(self.assetId, self.partitionName, self.poolName).info()
+
                 if "monitor" in poolInfo:
-                    self.monitor["name"] = poolInfo["monitor"].split("/")[2]
-                    self.monitor["type"] = VirtualServerWorkflow.__getMonitorType(self.assetId, self.partitionName, self.monitor["name"])
+                    try:
+                        self.monitor["name"] = poolInfo["monitor"].split("/")[2]
+                        self.monitor["type"] = VirtualServerWorkflow.__getMonitorDetails(self.assetId, self.partitionName, self.monitor["name"])["type"]
+                    except Exception:
+                        pass
 
                 # Pool members of self.poolName -> nodes.
                 poolMembers = Pool(self.assetId, self.partitionName, self.poolName).members()
@@ -363,47 +380,53 @@ class VirtualServerWorkflow:
     ####################################################################################################################
 
     @staticmethod
-    def __getProfileType(assetId, partitionName, profileName):
+    def __getProfileDetails(assetId, partitionName, profileName):
         profileType = []
 
-        # The only way to get a profile type is to iterate through all the profile types. A not so small pain in the ass.
-        # The threading way. This requires a consistent throttle on remote appliance.
-        def profileDetail(a, p, t, n):
-            try:
-                profileType.append(
-                    Profile(a, p, t, n).info(silent=True)["type"]
-                ) # probe.
-            except Exception:
-                pass
+        try:
+            # The only way to get a profile type is to iterate through all the profile types. A not so small pain in the ass.
+            # The threading way. This requires a consistent throttle on remote appliance.
+            def profileDetail(a, p, t, n):
+                try:
+                    profileType.append(
+                        Profile(a, p, t, n).info(silent=True)
+                    ) # probe.
+                except Exception:
+                    pass
 
-        profileTypes = Profile.types(assetId, partitionName)
-        workers = [threading.Thread(target=profileDetail, args=(assetId, partitionName, m, profileName)) for m in profileTypes]
-        for w in workers:
-            w.start()
-        for w in workers:
-            w.join()
+            profileTypes = Profile.types(assetId, partitionName)
+            workers = [threading.Thread(target=profileDetail, args=(assetId, partitionName, m, profileName)) for m in profileTypes]
+            for w in workers:
+                w.start()
+            for w in workers:
+                w.join()
 
-        return profileType[0]
+            return profileType[0]
+        except Exception as e:
+            raise e
 
 
 
     @staticmethod
-    def __getMonitorType(assetId, partitionName, monitorName):
+    def __getMonitorDetails(assetId, partitionName, monitorName):
         monitorType = []
 
-        def monitorDetail(a, p, t, n):
-            try:
-                monitorType.append(
-                    Monitor(a, p, t, n).info(silent=True)["type"]
-                )
-            except Exception:
-                pass
+        try:
+            def monitorDetail(a, p, t, n):
+                try:
+                    monitorType.append(
+                        Monitor(a, p, t, n).info(silent=True)
+                    )
+                except Exception:
+                    pass
 
-        monitorTypes = Monitor.types(assetId, partitionName)
-        workers = [threading.Thread(target=monitorDetail, args=(assetId, partitionName, m, monitorName)) for m in monitorTypes]
-        for w in workers:
-            w.start()
-        for w in workers:
-            w.join()
+            monitorTypes = Monitor.types(assetId, partitionName)
+            workers = [threading.Thread(target=monitorDetail, args=(assetId, partitionName, m, monitorName)) for m in monitorTypes]
+            for w in workers:
+                w.start()
+            for w in workers:
+                w.join()
 
-        return monitorType[0]
+            return monitorType[0]
+        except Exception as e:
+            raise e
