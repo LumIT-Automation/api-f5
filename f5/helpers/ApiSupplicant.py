@@ -20,7 +20,7 @@ class ApiSupplicant:
         self.silent = silent
 
         self.responseStatus = 500
-        self.responseObject = dict()
+        self.responsePayload = dict()
         self.responseHeaders = dict()
 
 
@@ -129,29 +129,29 @@ class ApiSupplicant:
             self.responseHeaders = response.headers
 
             try:
-                self.responseObject = response.json()
+                self.responsePayload = response.json()
             except Exception:
-                self.responseObject = {}
+                self.responsePayload = {}
 
             if not self.silent:
-                Log.actionLog("[API Supplicant] Remote response status: "+str(self.responseStatus))
-                Log.actionLog("[API Supplicant] Remote response headers: "+str(self.responseHeaders))
-                Log.actionLog("[API Supplicant] Remote response payload: "+str(self.responseObject))
+                for j in (("status", self.responseStatus), ("headers", self.responseHeaders), ("payload", self.responsePayload)):
+                    Log.actionLog("[API Supplicant] Remote response "+j[0]+": "+str(j[1]))
             else:
                 Log.actionLog("[API Supplicant] Remote response silenced by caller.")
 
+            # CustomException errors on connection ok but ko status code.
             if self.responseStatus == 200 or self.responseStatus == 201: # ok / ok on POST.
                 pass
             elif self.responseStatus == 401:
                 raise CustomException(status=400, payload={"F5": "Wrong credentials for the asset."})
             else:
-                if "message" in self.responseObject:
-                    f5Error = self.responseObject["message"]
+                if "message" in self.responsePayload:
+                    f5Error = self.responsePayload["message"]
                 else:
-                    f5Error = self.responseObject
+                    f5Error = self.responsePayload
 
                 raise CustomException(status=self.responseStatus, payload={"F5": f5Error})
         except Exception as e:
             raise e
 
-        return self.responseObject
+        return self.responsePayload
