@@ -15,7 +15,7 @@ class Node:
         super().__init__(*args, **kwargs)
 
         self.assetId = int(assetId)
-        self.partition = partitionName
+        self.partition: str = partitionName
         self.name: str = nodeName
         self.fullPath: str = ""
         self.generation: int = 0

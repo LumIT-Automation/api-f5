@@ -12,6 +12,7 @@ from f5.models.F5.VirtualServer import VirtualServer
 from f5.models.History import History
 
 from f5.helpers.Log import Log
+from f5.helpers.Exception import CustomException
 
 
 class VirtualServersWorkflow:
@@ -49,9 +50,9 @@ class VirtualServersWorkflow:
     ####################################################################################################################
 
     def add(self) -> None:
-        vsType = self.data["virtualServer"]["type"]
-
         try:
+            #vsType = self.data["virtualServer"]["type"]
+
             self.__createNodes()
             self.__createMonitor()
             self.__createPool()
@@ -62,6 +63,9 @@ class VirtualServersWorkflow:
             self.__createVirtualServer()
 
             self.__logCreatedObjects()
+        except KeyError:
+            self.__cleanCreatedObjects()
+            raise CustomException(status=400, payload={"F5": "Wrong input."})
         except Exception as e:
             raise e
 
@@ -346,34 +350,37 @@ class VirtualServersWorkflow:
 
 
     def __createSnatPool(self) -> None:
-        if "snatPool" in self.data:
-            snatPoolName = self.data["snatPool"]["name"]
-            snatPoolMembers = list()
+        if self.data["virtualServer"]["snat"] == "snat":
+            if "snatPool" in self.data:
+                snatPoolName = self.data["snatPool"]["name"]
+                snatPoolMembers = list()
 
-            try:
-                Log.actionLog("Virtual server workflow: attempting to create SNAT pool: "+str(snatPoolName))
+                try:
+                    Log.actionLog("Virtual server workflow: attempting to create SNAT pool: "+str(snatPoolName))
 
-                if "members" in self.data["snatPool"]:
-                    for m in self.data["snatPool"]["members"]:
-                        snatPoolMembers.append("/"+self.partitionName+"/"+m+self.routeDomain)
+                    if "members" in self.data["snatPool"]:
+                        for m in self.data["snatPool"]["members"]:
+                            snatPoolMembers.append("/"+self.partitionName+"/"+m+self.routeDomain)
 
-                SnatPool.add(self.assetId, {
-                    "name": snatPoolName,
-                    "partition": self.partitionName,
-                    "members": snatPoolMembers
-                })
+                    SnatPool.add(self.assetId, {
+                        "name": snatPoolName,
+                        "partition": self.partitionName,
+                        "members": snatPoolMembers
+                    })
 
-                # Keep track of CREATED snatPool.
-                self.__createdObjects["snatPool"] = {
-                    "asset": self.assetId,
-                    "partition": self.partitionName,
-                    "name": snatPoolName
-                }
-            except Exception as e:
-                self.__cleanCreatedObjects()
-                raise e
+                    # Keep track of CREATED snatPool.
+                    self.__createdObjects["snatPool"] = {
+                        "asset": self.assetId,
+                        "partition": self.partitionName,
+                        "name": snatPoolName
+                    }
+                except Exception as e:
+                    self.__cleanCreatedObjects()
+                    raise e
 
-        Log.actionLog("Created objects: "+str(self.__createdObjects))
+            Log.actionLog("Created objects: "+str(self.__createdObjects))
+        else:
+            Log.actionLog("Snat pool creation skipped.")
 
 
 
