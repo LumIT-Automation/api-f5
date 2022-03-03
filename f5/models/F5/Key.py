@@ -22,21 +22,17 @@ class Key(CertificateBase):
     ####################################################################################################################
 
     @staticmethod
-    def list(assetId: int) -> dict:
+    def list(assetId: int, partitionName: str) -> dict:
         try:
-            l = CertificateBase.list(assetId, "key")
-            for el in l:
-                el["assetId"] = assetId
-
-            return l
+            return CertificateBase.list(assetId, partitionName, "key")
         except Exception as e:
             raise e
 
 
 
     @staticmethod
-    def install(assetId: int, data: dict) -> None:
+    def install(assetId: int, partitionName: str, data: dict) -> None:
         try:
-            CertificateBase.install(assetId, "key", data)
+            CertificateBase.install(assetId, partitionName, "key", data)
         except Exception as e:
             raise e

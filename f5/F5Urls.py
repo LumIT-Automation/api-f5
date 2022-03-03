@@ -79,9 +79,9 @@ urlpatterns = [
 
     # Certificate/key.
     path('<int:assetId>/<str:partitionName>/certificate/<str:resourceName>/', Certificate.F5CertificateController.as_view(), name='f5-certificate'),
-    path('<int:assetId>/certificates/', Certificates.F5CertificatesController.as_view(), name='f5-certificates'), # not a broken-by-design feature: we need all partitions' certificates :)
+    path('<int:assetId>/<str:partitionName>/certificates/', Certificates.F5CertificatesController.as_view(), name='f5-certificates'),
     path('<int:assetId>/<str:partitionName>/key/<str:resourceName>/', Certificate.F5CertificateController.as_view(), name='f5-key'),
-    path('<int:assetId>/keys/', Certificates.F5CertificatesController.as_view(), name='f5-keys'),
+    path('<int:assetId>/<str:partitionName>/keys/', Certificates.F5CertificatesController.as_view(), name='f5-keys'),
 
     # Workflows.
     # Virtual server.

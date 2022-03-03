@@ -20,7 +20,7 @@ from f5.helpers.Log import Log
 
 class F5CertificatesController(CustomController):
     @staticmethod
-    def get(request: Request, assetId: int) -> Response:
+    def get(request: Request, assetId: int, partitionName: str) -> Response:
         data = dict()
         itemData = dict()
         etagCondition = { "responseEtag": "" }
@@ -28,7 +28,7 @@ class F5CertificatesController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="certificates_get", assetId=assetId) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="certificates_get", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
                 Log.actionLog("List certificate or key", user)
 
                 if "certificates" in request.get_full_path():
@@ -36,7 +36,7 @@ class F5CertificatesController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        itemData["items"] = Certificate.list(assetId)
+                        itemData["items"] = Certificate.list(assetId, partitionName)
                         data["data"] = CertificatesSerializer(itemData).data
                         data["href"] = request.get_full_path()
 
@@ -59,7 +59,7 @@ class F5CertificatesController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        itemData["items"] = Key.list(assetId)
+                        itemData["items"] = Key.list(assetId, partitionName)
                         data["data"] = KeysSerializer(itemData).data
 
                         # Check the response's ETag validity (against client request).
@@ -93,12 +93,12 @@ class F5CertificatesController(CustomController):
 
 
     @staticmethod
-    def post(request: Request, assetId: int) -> Response:
+    def post(request: Request, assetId: int, partitionName: str) -> Response:
         response = None
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="certificates_post", assetId=assetId) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="certificates_post", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
                 Log.actionLog("Upload certificate or key", user)
                 Log.actionLog("User data: "+str(request.data), user)
 
@@ -111,7 +111,7 @@ class F5CertificatesController(CustomController):
                         if lock.isUnlocked():
                             lock.lock()
 
-                            Certificate.install(assetId, data)
+                            Certificate.install(assetId, partitionName, data)
 
                             lock.release()
                             httpStatus = status.HTTP_201_CREATED
@@ -136,7 +136,7 @@ class F5CertificatesController(CustomController):
                         if lock.isUnlocked():
                             lock.lock()
 
-                            Key.install(assetId, data)
+                            Key.install(assetId, partitionName, data)
 
                             lock.release()
                             httpStatus = status.HTTP_201_CREATED

@@ -32,14 +32,14 @@ class Certificate:
 
 
     @staticmethod
-    def list(assetId: int, what: str) -> dict:
+    def list(assetId: int, partitionName: str, what: str) -> dict:
         o = dict()
 
         if any(w in what for w in ("cert", "key")):
             try:
                 f5 = Asset(assetId)
                 api = ApiSupplicant(
-                    endpoint=f5.baseurl+"tm/sys/crypto/"+what+"/",
+                    endpoint=f5.baseurl+"tm/sys/crypto/"+what+"/?$filter=partition+eq+"+partitionName,
                     auth=(f5.username, f5.password),
                     tlsVerify=f5.tlsverify
                 )
@@ -53,7 +53,7 @@ class Certificate:
 
 
     @staticmethod
-    def install(assetId: int, what: str, data: dict) -> None:
+    def install(assetId: int, partition: str, what: str, data: dict) -> None:
         if any(w in what for w in ("cert", "key")):
             try:
                 f5 = Asset(assetId)
@@ -85,10 +85,6 @@ class Certificate:
                 if "remainingByteCount" in r and int(r["remainingByteCount"]) == 0 and "localFilePath" in r and r["localFilePath"]:
                     # Install.
                     Log.log("installing "+what+".")
-
-                    partition = ""
-                    if "partition" in data:
-                        partition = data["partition"]
 
                     api = ApiSupplicant(
                         endpoint=f5.baseurl+"tm/sys/crypto/"+what+"/",

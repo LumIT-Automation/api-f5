@@ -30,17 +30,22 @@ class CertificateBase:
     ####################################################################################################################
 
     @staticmethod
-    def list(assetId: int, o: str) -> dict:
+    def list(assetId: int, partitionName: str, o: str) -> dict:
         try:
-            return Backend.list(assetId, o)
+            l = Backend.list(assetId, partitionName, o)
+            for el in l:
+                el["assetId"] = assetId
+                el["partition"] = partitionName
+
+            return l
         except Exception as e:
             raise e
 
 
 
     @staticmethod
-    def install(assetId: int, o: str, data: dict) -> None:
+    def install(assetId: int, partitionName: str, o: str, data: dict) -> None:
         try:
-            Backend.install(assetId, o, data)
+            Backend.install(assetId, partitionName, o, data)
         except Exception as e:
             raise e
