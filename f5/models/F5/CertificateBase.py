@@ -36,6 +36,7 @@ class CertificateBase:
             for el in l:
                 el["assetId"] = assetId
                 el["partition"] = partitionName
+                el["content_base64"] = "[undisclosed]"
 
             return l
         except Exception as e:
