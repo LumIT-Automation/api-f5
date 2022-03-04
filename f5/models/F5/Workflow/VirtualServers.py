@@ -271,15 +271,13 @@ class VirtualServersWorkflow:
                 Log.actionLog("Virtual server workflow: attempting to create "+o+": "+str(name))
 
                 if o == "certificate":
-                    Certificate.install(self.assetId, {
+                    Certificate.install(self.assetId, self.partitionName, {
                         "name": name,
-                        "partition": self.partitionName,
                         "content_base64": text
                     })
                 else:
-                    Key.install(self.assetId, {
+                    Key.install(self.assetId, self.partitionName, {
                         "name": name,
-                        "partition": self.partitionName,
                         "content_base64": text
                     })
 
