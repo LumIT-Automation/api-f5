@@ -21,7 +21,7 @@ class F5WorkflowVirtualServerSerializer(serializers.Serializer):
 
             class F5WorkflowVirtualServerInnerIruleSerializer(serializers.Serializer):
                 name = serializers.CharField(max_length=255, required=True)
-                code = serializers.CharField(max_length=255, required=False, allow_null=True)
+                code = serializers.CharField(max_length=255, required=False, allow_blank=True)
 
             class F5WorkflowVirtualServerInnerProfileSerializer(serializers.Serializer):
                 name = serializers.CharField(max_length=255, required=True)
