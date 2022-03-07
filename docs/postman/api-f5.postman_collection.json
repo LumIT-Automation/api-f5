@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "3c2e9841-eb99-4155-a016-2ad5f3055ccf",
+		"_postman_id": "5ab1d554-5684-4c32-af73-0f6936517ef9",
 		"name": "api-f5",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -892,7 +892,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"data\": {\n        \"configuration\": \"{\\\"config\\\": { todo }}\"\n    }\n}",
+									"raw": "{\n    \"data\": {\n        \"configuration\": \"[{\\\"key\\\": \\\"iruleHide\\\", \\\"value\\\": true }]\"\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
