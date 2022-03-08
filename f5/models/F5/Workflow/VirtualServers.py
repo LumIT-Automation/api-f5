@@ -315,17 +315,31 @@ class VirtualServersWorkflow:
 
             try:
                 # Create key and certificate.
+                certName = keyName = chainName = self.data["virtualServer"]["name"]
+
                 if "cert" in el and el["cert"]:
-                    self.__createCertificateOrKey("certificate", name=profileName, text=el["cert"])
-                    data["cert"] = "/"+self.partitionName+"/"+profileName # use the created one.
+                    if "certName" in el \
+                            and el["certName"]:
+                        certName = el["certName"]
+
+                    self.__createCertificateOrKey("certificate", name=certName, text=el["cert"])
+                    data["cert"] = "/"+self.partitionName+"/"+certName # use the created one.
 
                 if "key" in el and el["key"]:
-                    self.__createCertificateOrKey("key", name=profileName, text=el["key"])
-                    data["key"] = "/"+self.partitionName+"/"+profileName
+                    if "keyName" in el \
+                            and el["keyName"]:
+                        keyName = el["keyName"]
+
+                    self.__createCertificateOrKey("key", name=keyName, text=el["key"])
+                    data["key"] = "/"+self.partitionName+"/"+keyName
 
                 if "chain" in el and el["chain"]:
-                    self.__createCertificateOrKey("certificate", name=profileName+"_chain", text=el["chain"])
-                    data["chain"] = "/"+self.partitionName+"/"+profileName+"_chain"
+                    if "chainName" in el \
+                            and el["chainName"]:
+                        chainName = el["chainName"]
+
+                    self.__createCertificateOrKey("certificate", name=chainName, text=el["chain"])
+                    data["chain"] = "/"+self.partitionName+"/"+chainName
 
                 # Create profile.
                 Log.actionLog("Virtual server workflow: attempting to create profile: "+str(profileName))

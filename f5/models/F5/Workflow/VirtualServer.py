@@ -117,12 +117,12 @@ class VirtualServerWorkflow:
 
                     if "cert" in details:
                         self.certificates.append({
-                            "name": details["name"]
+                            "name": details["cert"].split("/")[2]
                         })
 
                     if "key" in details:
                         self.keys.append({
-                            "name": details["name"]
+                            "name": details["key"].split("/")[2]
                         })
                 except Exception:
                     pass

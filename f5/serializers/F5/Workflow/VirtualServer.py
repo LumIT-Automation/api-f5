@@ -29,8 +29,11 @@ class F5WorkflowVirtualServerSerializer(serializers.Serializer):
                 defaultsFrom = serializers.CharField(max_length=255, required=False)
                 context = serializers.ChoiceField(required=False, choices=("all", "clientside", "serverside"))
                 cert = serializers.CharField(max_length=65535, required=False)
+                certName = serializers.CharField(max_length=65535, required=False, allow_blank=True)
                 key = serializers.CharField(max_length=65535, required=False)
+                keyName = serializers.CharField(max_length=65535, required=False, allow_blank=True)
                 chain = serializers.CharField(max_length=65535, required=False, allow_blank=True)
+                chainName = serializers.CharField(max_length=65535, required=False, allow_blank=True)
                 idleTimeout = serializers.IntegerField(required=False)
 
             class F5WorkflowVirtualServerInnerSnatPoolSerializer(serializers.Serializer):
