@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `configuration` (
   `id` int(11) NOT NULL,
   `config_type` varchar(255) DEFAULT NULL,
-  `configuration` text DEFAULT NULL
+  `configuration` text NOT NULL DEFAULT '[]',
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
