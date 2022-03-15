@@ -25,8 +25,8 @@ SET time_zone = "+00:00";
 -- Dump dei dati per la tabella `configuration`
 --
 
-INSERT INTO `configuration` (`id`, `config_type`, `configuration`) VALUES
-(1, 'global', '{\"config\": {}}');
+INSERT INTO `configuration` (`id`, `config_type`) VALUES
+(1, 'global');
 
 
 --
