@@ -23,6 +23,25 @@ class Log:
             log.debug(title)
 
 
+    @staticmethod
+    def dump(o: any) -> None:
+        import re
+        log = logging.getLogger("django")
+
+        oOut = dict()
+        oVars = vars(o)
+        oDir = dir(o)
+
+        for i, v in enumerate(oDir):
+            if v in oVars:
+                oOut[v] = oVars[v]
+            else:
+                if not re.search("^__(.*)__$", str(v)):
+                    oOut[v] = getattr(o, v)
+
+        log.debug(oOut)
+
+
 
     @staticmethod
     def logException(e: Exception) -> None:

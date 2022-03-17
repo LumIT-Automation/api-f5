@@ -1,33 +1,33 @@
 from f5.models.F5.Asset.repository.Asset import Asset as Repository
 
 
-class Singleton(type):
-    _instances = {}
+class Asset:
+    # A custom pseudo-singleton (avoids initialization but uses different objects).
+    instances = {}
 
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
-        return cls._instances[cls]
-
-
-
-class Asset(metaclass=Singleton):
     def __init__(self, assetId: int, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.id = int(assetId)
-        self.address = ""
-        self.fqdn = ""
-        self.baseurl = ""
-        self.tlsverify = ""
-        self.datacenter = ""
-        self.environment = ""
-        self.position = ""
+        if assetId in Asset.instances:
+            # Use saved properties.
+            for k, v in vars(Asset.instances[assetId]).items():
+                setattr(self, k, v)
+        else:
+            self.id = int(assetId)
+            self.address = ""
+            self.fqdn = ""
+            self.baseurl = ""
+            self.tlsverify = ""
+            self.datacenter = ""
+            self.environment = ""
+            self.position = ""
 
-        self.username = ""
-        self.password = ""
+            self.username = ""
+            self.password = ""
 
-        self.__load()
+            self.__load()
+
+            Asset.instances[assetId] = self # save class instance in class variable.
 
 
 
