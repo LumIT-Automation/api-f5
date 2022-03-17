@@ -18,4 +18,4 @@ redis==3.5.3
 requests==2.25.1
 sqlparse==0.4.2
 typing_extensions==4.1.1
-urllib3==1.26.8
+urllib3==1.26.9
