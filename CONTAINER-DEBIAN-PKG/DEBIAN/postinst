@@ -10,6 +10,9 @@ if [ "$1" == "configure" ]; then
     # Build container image.
     buildah bud -t api-f5 .
 
+    # Grab the host timezone.
+    timeZone=$(timedatectl show| awk -F'=' '/Timezone/ {print $2}')
+
     # First container run: associate name, bind ports, bind fs volume, define init process, ...
     # api-f5 folder will be bound to /var/lib/containers/storage/volumes/.
     # Until the package is not uninstalled+purged, fs volumes remain untouched -> newly installed package's configuration files are then rewritten with volume's ones (this is why some services are restarted).
@@ -32,6 +35,9 @@ if [ "$1" == "configure" ]; then
     # Setup the JWT token public key (taken from SSO, which is a pre-depend): using host-bound folders.
     cp -f /var/lib/containers/storage/volumes/sso/_data/settings_jwt.py /var/lib/containers/storage/volumes/api-f5/_data/settings_jwt.py
     sed -i -e ':a;N;$!ba;s|\s*"privateKey.*}|\n}|g' /var/lib/containers/storage/volumes/api-f5/_data/settings_jwt.py
+
+    printf "\n Set the timezone of the container to be the same as the host timezone...\n"
+    podman exec api-f5 bash -c "timedatectl set-timezone $timeZone"
 
     printf "\n* Internal database configuration...\n"
     if podman exec api-f5 mysql -e "exit"; then

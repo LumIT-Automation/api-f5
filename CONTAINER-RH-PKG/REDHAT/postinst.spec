@@ -16,6 +16,9 @@ function containerSetup()
     wallBanner="RPM automation-interface-api-f5-container post-install configuration message:\n"
     cd /usr/lib/api-f5
 
+    # Grab the host timezone.
+    timeZone=$(timedatectl show| awk -F'=' '/Timezone/ {print $2}')
+
     # First container run: associate name, bind ports, bind fs volume, define init process, ...
     # api-f5 folder will be bound to /var/lib/containers/storage/volumes/.
     podman run --name api-f5 -v api-f5:/var/www/api/api -v api-f5-db:/var/lib/mysql -v api-f5-cacerts:/usr/local/share/ca-certificates -dt localhost/api-f5 /sbin/init
@@ -38,6 +41,9 @@ function containerSetup()
     # Setup the JWT token public key (taken from SSO): using host-bound folders.
     cp -f /var/lib/containers/storage/volumes/sso/_data/settings_jwt.py /var/lib/containers/storage/volumes/api-f5/_data/settings_jwt.py
     sed -i -e ':a;N;$!ba;s|\s*"privateKey.*}|\n}|g' /var/lib/containers/storage/volumes/api-f5/_data/settings_jwt.py
+
+    printf "$wallBanner Set the timezone of the container to be the same as the host timezone..." | wall -n
+    podman exec api-f5 bash -c "timedatectl set-timezone $timeZone"
 
     printf "$wallBanner Internal database configuration..." | wall -n
     if podman exec api-f5 mysql -e "exit"; then
