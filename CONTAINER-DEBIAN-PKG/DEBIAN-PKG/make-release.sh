@@ -177,7 +177,7 @@ function System_venv()
     # Install pip dependencies in the virtual environment.
     python -m pip install --upgrade pip
     python -m pip install -r var/lib/api-venv/pip.requirements
-    python -m pip freeze > /tmp/pip.freeze.venv
+    python -m pip list --format=freeze > /tmp/pip.freeze.venv # Workaround: see https://stackoverflow.com/questions/62885911/pip-freeze-creates-some-weird-path-instead-of-the-package-version
 
     # Exit from the virtual env.
     deactivate

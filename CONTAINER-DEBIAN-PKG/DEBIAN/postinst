@@ -96,6 +96,13 @@ if [ "$1" == "configure" ]; then
             podman exec api-f5 systemctl restart syslog-ng # on this container.
         fi
     fi
+
+    rm -f /home/bck/api-f5/placeholder
+    # Schedule the databases backup.
+    (
+        crontab -l
+        echo "03 3 * * * /usr/bin/bck-db_api-f5.sh api >/dev/null 2>&1"
+    ) | crontab -
 fi
 
 exit 0

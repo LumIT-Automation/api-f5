@@ -135,6 +135,7 @@ function System_systemFilesSetup()
     # Setting up system files.
     mkdir "$workingFolderPath"
 
+    cp -R ../CONTAINER-DEBIAN-PKG/home $workingFolderPath
     cp -R ../CONTAINER-DEBIAN-PKG/usr $workingFolderPath
     cp -R ../CONTAINER-DEBIAN-PKG/etc $workingFolderPath
     cp -R ../CONTAINER-DEBIAN-PKG/var $workingFolderPath
@@ -148,6 +149,7 @@ function System_systemFilesSetup()
     find "$workingFolderPath" -type d -exec chmod 0755 {} \;
     find "$workingFolderPath" -type f -exec chmod 0644 {} \;
 
+    chmod +x ${workingFolderPath}/usr/bin/bck-db_${shortName}.sh
     chmod +x ${workingFolderPath}/usr/bin/${shortName}-container.sh
     chmod +x ${workingFolderPath}/usr/lib/${shortName}/bootstrap.sh
 }

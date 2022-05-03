@@ -1,4 +1,4 @@
-asgiref==3.5.0
+asgiref==3.5.1
 certifi==2021.10.8
 cffi==1.15.0
 chardet==4.0.0
@@ -10,12 +10,14 @@ djangorestframework-simplejwt==4.6.0
 func-timeout==4.3.5
 idna==2.10
 mysqlclient==2.0.3
+pip==22.0.4
 pkg_resources==0.0.0
 pycparser==2.21
 PyJWT==2.0.1
 pytz==2022.1
 redis==3.5.3
 requests==2.25.1
+setuptools==40.8.0
 sqlparse==0.4.2
-typing_extensions==4.1.1
+typing_extensions==4.2.0
 urllib3==1.26.9

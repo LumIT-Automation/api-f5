@@ -123,6 +123,7 @@ function System_systemFilesSetup()
     # Setting up system files.
     mkdir "$workingFolderPath"
 
+    cp -R home $workingFolderPath
     cp -R usr $workingFolderPath
     cp -R etc $workingFolderPath
     cp -R var $workingFolderPath
@@ -136,6 +137,7 @@ function System_systemFilesSetup()
     find "$workingFolderPath" -type d -exec chmod 0755 {} \;
     find "$workingFolderPath" -type f -exec chmod 0644 {} \;
 
+    chmod +x $workingFolderPath/usr/bin/bck-db_${shortName}.sh
     chmod +x $workingFolderPath/usr/bin/${shortName}-container.sh
     chmod +x $workingFolderPath/usr/lib/${shortName}/bootstrap.sh
 }

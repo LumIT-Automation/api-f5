@@ -17,6 +17,9 @@ if [ "$1" == "purge" ]; then
     fi
 fi
 
+# De-schedule db backups.
+(crontab -l | sed '/bck-db_api-f5.sh/d') | crontab -
+
 # Force debconf cleanup.
 echo PURGE | debconf-communicate automation-interface-api-f5-container
 
