@@ -361,7 +361,7 @@ class VirtualServerWorkflow:
                 self.__deletedObjects["snatPool"] = {
                     "asset": self.assetId,
                     "partition": self.partitionName,
-                    "name": self.poolName
+                    "name": self.snatPool
                 }
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":

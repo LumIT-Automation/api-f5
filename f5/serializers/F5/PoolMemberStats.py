@@ -5,7 +5,7 @@ class F5PoolMemberStatsSerializer(serializers.Serializer):
     monitorRule = serializers.CharField(max_length=255, required=False)
     monitorStatus = serializers.CharField(max_length=255, required=False)
     serverside_curConns = serializers.CharField(max_length=255, required=False)
-    status_availabilityState =serializers.CharField(max_length=255, required=False)
+    status_availabilityState = serializers.CharField(max_length=255, required=False)
     status_enabledState = serializers.CharField(max_length=255, required=False)
     status_statusReason = serializers.CharField(max_length=255, required=False)
 

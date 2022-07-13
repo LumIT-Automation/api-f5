@@ -69,7 +69,7 @@ class Asset:
                 c.close()
 
         else:
-            raise CustomException(status=404, payload={"database": {"message": "Non existent F5 endpoint"}})
+            raise CustomException(status=404, payload={"database": "Non existent F5 endpoint"})
 
 
 
@@ -88,7 +88,7 @@ class Asset:
                 c.close()
 
         else:
-            raise CustomException(status=404, payload={"database": {"message": "Non existent F5 endpoint"}})
+            raise CustomException(status=404, payload={"database": "Non existent F5 endpoint"})
 
 
 
