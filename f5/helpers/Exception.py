@@ -3,6 +3,12 @@ class CustomException(Exception):
         self.status = int(status)
         self.payload = payload
 
+
+
     def status(self):
         return self.status
 
+
+    
+    def __str__(self):
+        return str(self.status)+", "+str(self.payload)
