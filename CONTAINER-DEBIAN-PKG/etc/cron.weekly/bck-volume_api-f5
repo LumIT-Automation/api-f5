@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Backup script for data volumes of the api-vmware container.
+# Should be placed in /etc/cron.weekly
+
+PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin
+
+
+now=`date +%Y%m%d-%H.%M`
+api="api-f5"
+vols=(api-f5 api-f5-cacerts)
+
+bckDir="/home/bck/${api}/volumes"
+containerVolDir="/var/lib/containers/storage/volumes"
+
+
+cd $containerVolDir || exit 1
+
+for vol in ${vols[@]}; do
+    bckFile="${vol}_${now}.tar.xz"
+
+    tar cfJp ${bckDir}/$bckFile $vol && chmod 400 ${bckDir}/${bckFile}
+done
+
+# The backup script should run once a week.
+# Delete backups older than 120 days.
+find $bckDir -name "${vol}_*" -mtime +120 -exec rm -f {} \;
+

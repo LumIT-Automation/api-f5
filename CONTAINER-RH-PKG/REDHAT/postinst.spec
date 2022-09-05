@@ -104,10 +104,6 @@ function containerSetup()
         fi
     fi
 
-    rm -f /home/bck/api-f5/placeholder
-    # Schedule the databases backup.
-    (crontab -l ; echo "03 3 * * * /usr/bin/bck-db_api-f5.sh api >/dev/null 2>&1") | crontab -
-
     printf "$wallBanner Installation completed." | wall -n
 }
 

@@ -6,7 +6,7 @@ Summary:    Automation Interface UI Backend, container image
 License:    GPLv3+
 Source0:    RPM_SOURCE
 
-Requires:   podman, buildah, at
+Requires:   podman, buildah, at, cronie
 Requires:   automation-interface-sso-container >= 2.0, automation-interface-log >= 1.2
 
 BuildArch:  x86_64

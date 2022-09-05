@@ -1,7 +1,7 @@
 Package: automation-interface-api-f5-container
 Version: RELEASE
 Architecture: amd64
-Depends: podman, buildah, runc
+Depends: podman, buildah, runc, cron
 Pre-Depends: automation-interface-sso-container (>= 2.0), automation-interface-log (>= 1.2)
 Maintainer: LumIT A-Team, automation@lumit.it
 Homepage: https://www.lumit.it

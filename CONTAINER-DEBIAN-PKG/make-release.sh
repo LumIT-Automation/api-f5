@@ -130,6 +130,7 @@ function System_systemFilesSetup()
 
     # Cleanup.
     rm -f $workingFolderPath/var/log/automation/${shortName}/placeholder
+    rm -f $workingFolderPath/home/bck/${shortName}/volumes/placeholder
 
     mv $serviceProjectPackage $workingFolderPath/usr/lib/${shortName}
     sed -i "s/PACKAGE/${serviceProjectName}.deb/g" $workingFolderPath/usr/lib/${shortName}/Dockerfile
@@ -137,9 +138,12 @@ function System_systemFilesSetup()
     find "$workingFolderPath" -type d -exec chmod 0755 {} \;
     find "$workingFolderPath" -type f -exec chmod 0644 {} \;
 
-    chmod +x $workingFolderPath/usr/bin/bck-db_${shortName}.sh
+    chmod +x $workingFolderPath/etc/cron.weekly/bck-volume_${shortName}
+    chmod +x $workingFolderPath/etc/cron.daily/bck-db_${shortName}
     chmod +x $workingFolderPath/usr/bin/${shortName}-container.sh
     chmod +x $workingFolderPath/usr/lib/${shortName}/bootstrap.sh
+    chmod 700 $workingFolderPath/home/bck/${shortName}/volumes
+    chmod 700 $workingFolderPath/home/bck/${shortName}
 }
 
 
