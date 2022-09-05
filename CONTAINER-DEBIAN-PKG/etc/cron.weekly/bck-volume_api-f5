@@ -9,7 +9,7 @@ PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin
 now=`date +%Y%m%d-%H.%M`
 api="api-f5"
 
-# Name of the container volumes that shoul be backupped.
+# Name of the container volumes that shoul be backed up.
 vols=(api-f5 api-f5-cacerts)
 
 # Number of days of retention: delete backups older than this number of days.
@@ -28,7 +28,7 @@ for vol in ${vols[@]}; do
 done
 
 # The backup script should run once a week.
-# Delete backups older than 120 days.
+# Delete backups older than $retention days.
 for vol in $vols; do
     find $bckDir -name "${vol}_*" -mtime +${retention} -exec rm -f {} \;
 done

@@ -7,7 +7,12 @@ PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin
 
 now=`date +%Y%m%d-%H.%M`
 api="api-f5"
+
+# Name of the databases that shoul be backed up.
 dbs=(api)
+
+# Number of days of retention: delete backups older than this number of days.
+retention=30
 
 bckDir="/home/bck/${api}"
 containerDir="/var/www/api/api"
@@ -31,6 +36,6 @@ for db in ${dbs[@]}; do
 done
 
 # The backup script should run daily.
-# Delete backups older than 30 days.
-find $bckDir -name "${db}_${api}_*" -mtime +30 -exec rm -f {} \;
+# Delete backups older than $retention days.
+find $bckDir -name "${db}_${api}_*" -mtime +${retention} -exec rm -f {} \;
 
