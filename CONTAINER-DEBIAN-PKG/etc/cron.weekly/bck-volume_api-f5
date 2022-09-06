@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Backup script for data volumes of the api-vmware container.
+# Backup script for data volumes of the api-f5 container.
 # Should be placed in /etc/cron.weekly
 
 PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin
@@ -10,7 +10,7 @@ PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin
 now=`date +%Y%m%d-%H.%M`
 api="api-f5"
 
-# Name of the container volumes that shoul be backed up.
+# Name of the container volumes that should be backed up.
 vols=(api-f5 api-f5-cacerts)
 
 bckDir="/home/bck/${api}/volumes"

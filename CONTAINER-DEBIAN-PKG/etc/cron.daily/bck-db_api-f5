@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Backup script for databases in the api-vmware container.
+# Backup script for databases in the api-f5 container.
 # Run from the host via podman exec, so the backup is not deleted even if the container package is purged.
 
 PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin
@@ -15,7 +15,7 @@ bckDir="/home/bck/${api}"
 containerDir="/var/www/api/api"
 containerDirOnHost="/var/lib/containers/storage/volumes/${api}/_data"
 
-# Name of the databases that shoul be backed up.
+# Name of the databases that should be backed up.
 dbs=(api)
 
 # Number of days of retention: delete backups older than this number of days.
