@@ -1,0 +1,6 @@
+# Days of Retention for api-vmare databases backup
+API_F5_DB_RETENTION=30
+
+# Days of Retention for api-vmare volumes backup
+API_F5_VOL_RETENTION=120
+

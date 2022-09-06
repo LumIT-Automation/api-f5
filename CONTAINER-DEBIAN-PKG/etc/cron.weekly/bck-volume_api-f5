@@ -5,6 +5,7 @@
 
 PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin
 
+[ -r /etc/default/api-f5 ] && . /etc/default/api-f5
 
 now=`date +%Y%m%d-%H.%M`
 api="api-f5"
@@ -12,11 +13,15 @@ api="api-f5"
 # Name of the container volumes that shoul be backed up.
 vols=(api-f5 api-f5-cacerts)
 
-# Number of days of retention: delete backups older than this number of days.
-retention=120
-
 bckDir="/home/bck/${api}/volumes"
 containerVolDir="/var/lib/containers/storage/volumes"
+
+# Number of days of retention: delete backups older than this number of days.
+if echo $API_F5_VOL_RETENTION | grep -Eq '^[0-9]+$'; then
+    retention=$API_F5_VOL_RETENTION
+else
+    retention=120
+fi
 
 
 cd $containerVolDir || exit 1

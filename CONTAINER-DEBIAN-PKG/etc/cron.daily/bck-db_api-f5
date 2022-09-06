@@ -5,18 +5,26 @@
 
 PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin
 
+# Grab some settings.
+[ -r /etc/default/api-f5 ] && . /etc/default/api-f5
+
 now=`date +%Y%m%d-%H.%M`
 api="api-f5"
+
+bckDir="/home/bck/${api}"
+containerDir="/var/www/api/api"
+containerDirOnHost="/var/lib/containers/storage/volumes/${api}/_data"
 
 # Name of the databases that shoul be backed up.
 dbs=(api)
 
 # Number of days of retention: delete backups older than this number of days.
-retention=30
+if echo $API_F5_DB_RETENTION | grep -Eq '^[0-9]+$'; then
+    retention=$API_F5_DB_RETENTION
+else
+    retention=30
+fi
 
-bckDir="/home/bck/${api}"
-containerDir="/var/www/api/api"
-containerDirOnHost="/var/lib/containers/storage/volumes/${api}/_data"
 
 cd $bckDir || exit 1
 
