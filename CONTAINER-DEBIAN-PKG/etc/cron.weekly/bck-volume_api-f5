@@ -5,7 +5,7 @@
 
 PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin
 
-[ -r /etc/default/api-f5 ] && . /etc/default/api-f5
+[ -r /etc/default/api-f5-container ] && . /etc/default/api-f5-container
 
 now=`date +%Y%m%d-%H.%M`
 api="api-f5"
