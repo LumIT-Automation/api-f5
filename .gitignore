@@ -3,4 +3,5 @@
 *.swp
 */__pycache__
 api/*.db
+f5.db
 f5/sql/f5.data-development.sql
