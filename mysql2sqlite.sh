@@ -68,6 +68,8 @@ inTrigger != 0 { print; next }
 	gsub( /AUTO_INCREMENT|auto_increment/, "" )
 	gsub( /(CHARACTER SET|character set) [^ ]+ /, "" )
 	gsub( /DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP|default current_timestamp on update current_timestamp/, "" )
+	gsub( /DEFAULT current_timestamp\(\)/, "" )
+	gsub( /ON UPDATE current_timestamp\(\)/, "" )
 	gsub( /(COLLATE|collate) [^ ]+ /, "" )
 	gsub(/(ENUM|enum)[^)]+\)/, "text ")
 	gsub(/(SET|set)\([^)]+\)/, "text ")
