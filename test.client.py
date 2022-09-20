@@ -13,7 +13,6 @@ from django.test import Client
 #     (pip install --upgrade pip)
 # Django~=3.2
 # djangorestframework~=3.12.4
-# djangorestframework-simplejwt
 # requests
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "api.settings")
@@ -31,9 +30,7 @@ settings.CACHES = {
     }
 }
 settings.REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
-    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': None,
     'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.AnonRateThrottle',
         'rest_framework.throttling.UserRateThrottle'
@@ -52,6 +49,8 @@ try:
     )
 except KeyError:
     pass
+except Exception:
+    print("Some error occurred.")
 
 # Call:
 # python -W ignore::Warning /var/www/api/test.client.py

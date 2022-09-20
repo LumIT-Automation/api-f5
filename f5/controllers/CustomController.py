@@ -1,18 +1,17 @@
-import jwt
-
 from django.conf import settings
 
 from rest_framework.views import APIView
 from rest_framework.request import Request
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.authentication import JWTTokenUserAuthentication
 
 from f5.helpers.Log import Log
 
 
 class CustomController(APIView):
     if not settings.DISABLE_AUTHENTICATION:
+        from rest_framework_simplejwt.authentication import JWTTokenUserAuthentication
+
         permission_classes = [IsAuthenticated]
         authentication_classes = [JWTTokenUserAuthentication]
 
@@ -27,6 +26,8 @@ class CustomController(APIView):
             }
         else:
             # Retrieve user from the JWT token.
+            import jwt
+
             authenticator = request.successful_authenticator
             user = jwt.decode(
                 authenticator.get_raw_token(authenticator.get_header(request)),
