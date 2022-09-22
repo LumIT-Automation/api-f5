@@ -67,9 +67,8 @@ inTrigger != 0 { print; next }
 /^  / && !/^(  KEY|\);)/ {
 	gsub( /AUTO_INCREMENT|auto_increment/, "" )
 	gsub( /(CHARACTER SET|character set) [^ ]+ /, "" )
-	gsub( /DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP|default current_timestamp on update current_timestamp/, "" )
-	gsub( /DEFAULT current_timestamp\(\)/, "" )
-	gsub( /ON UPDATE current_timestamp\(\)/, "" )
+	gsub( /[Dd][Ee][Ff][Aa][Uu][Ll][Tt] [Cc][Uu][Rr][Rr][Ee][Nn][Tt]_[Tt][Ii][Mm][Ee][Ss][Tt][Aa][Mm][Pp]\(?\)?/, "DEFAULT (datetime(\047now\047,\047localtime\047))" )
+	gsub( /[Oo][Nn] [Uu][Pp][Dd][Aa][Tt][Ee] [Cc][Uu][Rr][Rr][Ee][Nn][Tt]_[Tt][Ii][Mm][Ee][Ss][Tt][Aa][Mm][Pp]\(?\)?/, "" )
 	gsub( /(COLLATE|collate) [^ ]+ /, "" )
 	gsub(/(ENUM|enum)[^)]+\)/, "text ")
 	gsub(/(SET|set)\([^)]+\)/, "text ")
