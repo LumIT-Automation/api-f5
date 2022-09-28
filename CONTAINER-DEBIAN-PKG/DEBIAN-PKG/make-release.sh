@@ -136,7 +136,7 @@ function System_codeConfig()
 
     # The following settings are emptied here and filled-in by postinst/s (debconf).
     sed -i "s/^SECRET_KEY =.*/SECRET_KEY = \"1234567890\"/g" $workingFolderPath/var/www/api/api/settings.py
-    sed -i "s/^ALLOWED_HOSTS =.*/ALLOWED_HOSTS = \"['*']\"/g" $workingFolderPath/var/www/api/api/settings.py
+    sed -i "s/^ALLOWED_HOSTS =.*/ALLOWED_HOSTS = ['*']/g" $workingFolderPath/var/www/api/api/settings.py
 
     sed -i -e ':a;N;$!ba;s|"publicKey.*,|"publicKey": '\'\'\'\'\'\','|g' $workingFolderPath/var/www/api/api/settings_jwt.py
 
