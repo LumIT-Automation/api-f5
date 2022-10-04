@@ -412,15 +412,6 @@
 										"value": "Bearer {{jwttoken}}"
 									}
 								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"data\": {\n        \"name\": \"groupStaff\",\n        \"ldap_dn\": \"cn=groupStaff,cn=users,dc=lab,dc=localxx\",\n        \"radius_group\": \"\",\n        \"roles\": [\n            \"admin\", \"wwwww\"\n        ]\n    }\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
 								"url": {
 									"raw": "http://10.0.111.22/api/v1/f5/identity-group/cn=groupStaff,cn=users,dc=lab,dc=localNewModified/",
 									"protocol": "http",
