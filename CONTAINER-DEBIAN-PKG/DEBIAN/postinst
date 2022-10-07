@@ -19,8 +19,8 @@ if [ "$1" == "configure" ]; then
     # Side effect is that new package's configuration directives are ignored, so the user must be informed ("Differences from stock config").
     podman run --name api-f5 -v api-f5:/var/www/api/api -v api-f5-db:/var/lib/mysql -v api-f5-cacerts:/usr/local/share/ca-certificates -dt localhost/api-f5 /sbin/init
 
-    podman exec api-f5 chown www-data:www-data /var/www/api/api # within container.
-    podman exec api-f5 chown mysql:mysql /var/lib/mysql; podman exec api-f5 systemctl restart mariadb # within container.
+    podman exec api-f5 chown -R www-data:www-data /var/www/api/api # within container.
+    podman exec api-f5 chown -R mysql:mysql /var/lib/mysql; podman exec api-f5 systemctl restart mariadb # within container.
 
     printf "\n* Starting Container Service on HOST...\n"
     systemctl daemon-reload
