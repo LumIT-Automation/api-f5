@@ -4,10 +4,10 @@ from f5.models.Permission.repository.Partition import Partition as Repository
 
 
 class Partition:
-    def __init__(self, id: int, partitionName: str, *args, **kwargs):
+    def __init__(self, assetId: int, partitionName: str, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.id = id
+        self.id_asset = assetId
         self.partition = partitionName
         self.description = ""
 
@@ -28,7 +28,7 @@ class Partition:
 
     def info(self) -> dict:
         try:
-            return Repository.get(self.id, self.partition)
+            return Repository.get(self.id_asset, self.partition)
         except Exception as e:
             raise e
 
@@ -36,7 +36,7 @@ class Partition:
 
     def delete(self) -> None:
         try:
-            Repository.delete(self.id, self.partition)
+            Repository.delete(self.id_asset, self.partition)
         except Exception as e:
             raise e
 
@@ -47,22 +47,22 @@ class Partition:
     ####################################################################################################################
 
     @staticmethod
-    def add(id, partition) -> int:
+    def add(assetId, partition) -> int:
         if partition == "any":
             try:
-                pid = Repository.add(id, partition)
+                pid = Repository.add(assetId, partition)
                 return pid
             except Exception as e:
                 raise e
 
         else:
             # Check if assetId/partition is a valid F5 partition (at the time of the insert).
-            partitions = F5Partition.list(id)
+            partitions = F5Partition.list(assetId)
 
             for v in partitions:
                 if v["name"] == partition:
                     try:
-                        pid = Repository.add(id, partition)
+                        pid = Repository.add(assetId, partition)
                         return pid
                     except Exception as e:
                         raise e
