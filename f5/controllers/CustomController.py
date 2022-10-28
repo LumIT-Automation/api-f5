@@ -43,18 +43,35 @@ class CustomController(APIView):
 
 
     @staticmethod
-    def validate(data, Serializer):
+    def validate(data, Serializer, validationType: str):
+        cleanData = None
+        mismatch = False
+
         try:
             if Serializer:
-                serializer = Serializer(data={"items": data}) # serializer needs an "items" key.
-                if serializer.is_valid():
-                    return serializer.validated_data["items"]
+                if validationType == "value":
+                    serializer = Serializer(data=data)
+                    if serializer.is_valid():
+                        cleanData = serializer.validated_data
+                    else:
+                        mismatch = True
+                elif validationType == "list":
+                    serializer = Serializer(data={"items": data}) # serializer needs an "items" key.
+                    if serializer.is_valid():
+                        cleanData = serializer.validated_data["items"]
+                    else:
+                        mismatch = True
                 else:
+                    raise NotImplemented
+
+                if mismatch:
                     Log.log("Upstream data incorrect: " + str(serializer.errors))
                     raise CustomException(
                         status=500,
                         payload={"CheckPoint": "upstream data mismatch."}
                     )
+                else:
+                    return cleanData
             else:
                 return data
         except Exception as e:

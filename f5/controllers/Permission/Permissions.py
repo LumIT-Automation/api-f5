@@ -33,7 +33,8 @@ class PermissionsController(CustomController):
                     "data": {
                         "items": CustomController.validate(
                             Permission.permissionsRawList(),
-                            PermissionsSerializer
+                            PermissionsSerializer,
+                            "list"
                         )
                     },
                     "href": request.get_full_path()

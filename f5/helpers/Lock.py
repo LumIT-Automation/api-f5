@@ -90,42 +90,43 @@ class Lock:
                 # Check if the API endpoint/s related to objectClass are locked for the asset and partition (if set), on objectName,
                 # in regards of the HTTP method "compatibility" (see table).
                 for oc in self.objectClass:
-                    if str(httpMethod) in table:
-                        for method, compatibility in table[httpMethod].items():
-                            entry = oc+":"+str(method)+":"+self.assetId+":"+self.partitionName
+                    if oc:
+                        if str(httpMethod) in table:
+                            for method, compatibility in table[httpMethod].items():
+                                entry = oc+":"+str(method)+":"+self.assetId+":"+self.partitionName
 
-                            # <httpMethod>: {
-                            #    "POST": "x",
-                            #    "GET": "v",
-                            #    "PATCH": "*",
-                            #    "DELETE": "*",
-                            # }
+                                # <httpMethod>: {
+                                #    "POST": "x",
+                                #    "GET": "v",
+                                #    "PATCH": "*",
+                                #    "DELETE": "*",
+                                # }
 
-                            if compatibility == "x":
-                                # Always block if entry present (regardless of its value).
-                                c = cache.get(entry)
-                                # If entry present.
-                                if isinstance(c, dict):
-                                    if "lock" in c:
-                                        if isinstance(c["lock"], list):
-                                            if c["lock"]:
-                                                Log.log("Locked on API.")
-                                                Log.log("Available locks: "+str(c))
+                                if compatibility == "x":
+                                    # Always block if entry present (regardless of its value).
+                                    c = cache.get(entry)
+                                    # If entry present.
+                                    if isinstance(c, dict):
+                                        if "lock" in c:
+                                            if isinstance(c["lock"], list):
+                                                if c["lock"]:
+                                                    Log.log("Locked on API.")
+                                                    Log.log("Available locks: "+str(c))
 
-                                                return False
+                                                    return False
 
-                            if compatibility == "*":
-                                # Block if entry present and objectName in the lock list.
-                                c = cache.get(entry)
-                                # If entry present.
-                                if isinstance(c, dict):
-                                    if "lock" in c:
-                                        if isinstance(c["lock"], list):
-                                            if self.objectName in c["lock"]:
-                                                Log.log("Locked on object "+self.objectName)
-                                                Log.log("Available locks: "+str(c))
+                                if compatibility == "*":
+                                    # Block if entry present and objectName in the lock list.
+                                    c = cache.get(entry)
+                                    # If entry present.
+                                    if isinstance(c, dict):
+                                        if "lock" in c:
+                                            if isinstance(c["lock"], list):
+                                                if self.objectName in c["lock"]:
+                                                    Log.log("Locked on object "+self.objectName)
+                                                    Log.log("Available locks: "+str(c))
 
-                                                return False
+                                                    return False
         except Exception:
             pass
 
@@ -151,21 +152,22 @@ class Lock:
             httpMethod = self.__httpMethod() # request HTTP method.
             if httpMethod:
                 for oc in self.objectClass:
-                    # @todo: a Redis cache transaction lock is needed here.
-                    entry = oc+":"+str(httpMethod)+":"+self.assetId+":"+self.partitionName
-                    c = cache.get(entry)
+                    if oc:
+                        # @todo: a Redis cache transaction lock is needed here.
+                        entry = oc+":"+str(httpMethod)+":"+self.assetId+":"+self.partitionName
+                        c = cache.get(entry)
 
-                    # If some locked objectName already set, add the current one.
-                    if isinstance(c, dict):
-                        if "lock" in c:
-                            if self.objectName not in c["lock"]:
-                                c["lock"].append(self.objectName)
+                        # If some locked objectName already set, add the current one.
+                        if isinstance(c, dict):
+                            if "lock" in c:
+                                if self.objectName not in c["lock"]:
+                                    c["lock"].append(self.objectName)
 
-                            #lockedObjects = list(dict.fromkeys(c["lock"])) # deduplicate.
-                            lockedObjects = c["lock"]
+                                #lockedObjects = list(dict.fromkeys(c["lock"])) # deduplicate.
+                                lockedObjects = c["lock"]
 
-                    cache.set(entry, { "lock": lockedObjects }, timeout=settings.LOCK_MAX_VALIDITY)
-                    Log.log("Lock set for "+entry+", which now values "+str(lockedObjects))
+                        cache.set(entry, { "lock": lockedObjects }, timeout=settings.LOCK_MAX_VALIDITY)
+                        Log.log("Lock set for "+entry+", which now values "+str(lockedObjects))
         except Exception:
             pass
 
@@ -178,21 +180,22 @@ class Lock:
             httpMethod = self.__httpMethod() # request HTTP method.
             if httpMethod:
                 for oc in self.objectClass:
-                    entry = oc+":"+str(httpMethod)+":"+self.assetId+":"+self.partitionName
-                    c = cache.get(entry)
+                    if oc:
+                        entry = oc+":"+str(httpMethod)+":"+self.assetId+":"+self.partitionName
+                        c = cache.get(entry)
 
-                    if "lock" in c:
-                        if isinstance(c["lock"], list):
-                            c["lock"].remove(self.objectName)
+                        if "lock" in c:
+                            if isinstance(c["lock"], list):
+                                c["lock"].remove(self.objectName)
 
-                            if c["lock"]:
-                                # Overwrite if c["lock"] not empty.
-                                cache.set(entry, c, timeout=settings.LOCK_MAX_VALIDITY)
-                            else:
-                                # Delete the entry completely.
-                                cache.delete(entry)
+                                if c["lock"]:
+                                    # Overwrite if c["lock"] not empty.
+                                    cache.set(entry, c, timeout=settings.LOCK_MAX_VALIDITY)
+                                else:
+                                    # Delete the entry completely.
+                                    cache.delete(entry)
 
-                            Log.log("Lock released for "+entry+"; now it values: "+str(cache.get(entry)))
+                                Log.log("Lock released for "+entry+"; now it values: "+str(cache.get(entry)))
         except Exception:
             pass
 

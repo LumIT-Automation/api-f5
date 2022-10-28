@@ -14,18 +14,21 @@ from f5.helpers.Log import Log
 class ConfigurationController(CustomController):
     @staticmethod
     def get(request: Request, configType: str) -> Response:
-        data = dict()
         user = CustomController.loggedUser(request)
 
         try:
             Log.actionLog("Configuration read", user)
 
-            itemData = Configuration.getByType(configType)
-            data["data"] = Serializer(itemData).data
-            data["href"] = request.get_full_path()
+            data = {
+                "data": CustomController.validate(
+                    Configuration.getByType(configType),
+                    Serializer,
+                    "value"
+                ),
+                "href": request.get_full_path()
+            }
 
             httpStatus = status.HTTP_200_OK
-
         except Exception as e:
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
@@ -65,7 +68,6 @@ class ConfigurationController(CustomController):
                     Log.actionLog("User data incorrect: "+str(response), user)
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
-
         except Exception as e:
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

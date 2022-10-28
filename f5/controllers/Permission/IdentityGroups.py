@@ -36,7 +36,8 @@ class PermissionIdentityGroupsController(CustomController):
                     "data": {
                         "items": CustomController.validate(
                             IdentityGroup.listWithPermissionsPrivileges(showPrivileges),
-                            GroupsSerializer
+                            GroupsSerializer,
+                            "list"
                         )
                     },
                     "href": request.get_full_path()

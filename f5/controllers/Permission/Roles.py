@@ -35,7 +35,8 @@ class PermissionRolesController(CustomController):
                     "data": {
                         "items": CustomController.validate(
                             Role.list(loadPrivilege=loadPrivilege),
-                            Serializer
+                            Serializer,
+                            "list"
                         )
                     },
                     "href": request.get_full_path()

@@ -16,9 +16,6 @@ class HistoryLogsController(CustomController):
     @staticmethod
     def get(request: Request) -> Response:
         allUsersHistory = False
-        data = dict()
-        itemData = dict()
-
         user = CustomController.loggedUser(request)
 
         try:
@@ -27,9 +24,16 @@ class HistoryLogsController(CustomController):
 
             Log.actionLog("History log", user)
 
-            itemData["items"] = History.list(user["username"], allUsersHistory)
-            data["data"] = Serializer(itemData).data
-            data["href"] = request.get_full_path()
+            data = {
+                "data": {
+                    "items": CustomController.validate(
+                        History.list(user["username"], allUsersHistory),
+                        Serializer,
+                        "list"
+                    )
+                },
+                "href": request.get_full_path()
+            }
 
             # Check the response's ETag validity (against client request).
             conditional = Conditional(request)
@@ -39,7 +43,6 @@ class HistoryLogsController(CustomController):
                 httpStatus = status.HTTP_304_NOT_MODIFIED
             else:
                 httpStatus = status.HTTP_200_OK
-
         except Exception as e:
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

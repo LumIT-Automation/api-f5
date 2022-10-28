@@ -1,10 +1,6 @@
 import logging
 import traceback
 
-from django.utils.html import strip_tags
-from django.db import connection
-
-
 
 class Log:
     @staticmethod
