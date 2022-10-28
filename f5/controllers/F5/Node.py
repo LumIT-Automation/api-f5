@@ -19,7 +19,7 @@ class F5NodeController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="node_delete", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="node_delete", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Node deletion", user)
 
                 lock = Lock("node", locals(), nodeName)
@@ -53,7 +53,7 @@ class F5NodeController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="node_patch", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="node_patch", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Node modification", user)
                 Log.actionLog("User data: "+str(request.data), user)
 

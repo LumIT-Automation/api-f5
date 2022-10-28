@@ -19,7 +19,7 @@ class F5SnatPoolController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="snatPool_delete", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="snatPool_delete", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Snat pool deletion", user)
 
                 lock = Lock("snatPool", locals(), snatPoolName)
@@ -53,7 +53,7 @@ class F5SnatPoolController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="snatPool_patch", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="snatPool_patch", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Snat pool modification", user)
                 Log.actionLog("User data: "+str(request.data), user)
 

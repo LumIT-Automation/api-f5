@@ -25,7 +25,7 @@ class F5SnatPoolsController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="snatPools_get", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="snatPools_get", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Snat pools list", user)
 
                 lock = Lock("snatPool", locals())
@@ -71,7 +71,7 @@ class F5SnatPoolsController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="snatPools_post", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="snatPools_post", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Snat pool addition", user)
                 Log.actionLog("User data: "+str(request.data), user)
 

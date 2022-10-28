@@ -25,7 +25,7 @@ class F5PoliciesController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="policies_get", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="policies_get", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Policies list", user)
 
                 lock = Lock("policy", locals())
@@ -82,7 +82,7 @@ class F5PoliciesController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="policies_post", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="policies_post", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Policy addition", user)
                 Log.actionLog("User data: "+str(request.data), user)
 

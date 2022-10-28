@@ -19,7 +19,7 @@ class F5IruleController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="irule_delete", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="irule_delete", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("iRule deletion", user)
 
                 lock = Lock("irule", locals(), iruleName)
@@ -53,7 +53,7 @@ class F5IruleController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="irule_patch", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="irule_patch", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("iRule modification", user)
                 Log.actionLog("User data: "+str(request.data), user)
 

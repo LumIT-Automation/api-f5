@@ -19,7 +19,7 @@ class F5ProfileController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="profile_delete", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="profile_delete", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Profile deletion", user)
 
                 lock = Lock("profile", locals(), profileType+profileName)
@@ -53,7 +53,7 @@ class F5ProfileController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="profile_patch", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="profile_patch", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Profile modification", user)
                 Log.actionLog("User data: "+str(request.data), user)
 

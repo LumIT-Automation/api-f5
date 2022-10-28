@@ -25,7 +25,7 @@ class F5NodesController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="nodes_get", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="nodes_get", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Nodes list", user)
 
                 lock = Lock("node", locals())
@@ -71,7 +71,7 @@ class F5NodesController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="nodes_post", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="nodes_post", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Node addition", user)
                 Log.actionLog("User data: "+str(request.data), user)
 

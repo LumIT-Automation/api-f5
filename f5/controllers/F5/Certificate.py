@@ -18,7 +18,7 @@ class F5CertificateController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="certificate_delete", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="certificate_delete", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Certificate or key deletion", user)
 
                 if "certificate" in request.get_full_path():

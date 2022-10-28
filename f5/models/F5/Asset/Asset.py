@@ -66,12 +66,13 @@ class Asset:
 
     @staticmethod
     def add(data: dict) -> None:
-        try:
-            aid = Repository.add(data)
+        from f5.models.Permission.Partition import Partition as PermissionPartition
 
-            # When inserting an asset, add the "any" partition (Permission).
-            from f5.models.Permission.Partition import Partition as PermissionPartition
-            PermissionPartition.add(aid, "any")
+        try:
+            aId = Repository.add(data)
+
+            # When inserting an asset, add the "any" domain (Permission).
+            PermissionPartition.add(aId, "any")
         except Exception as e:
             raise e
 

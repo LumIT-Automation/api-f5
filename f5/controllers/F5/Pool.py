@@ -19,7 +19,7 @@ class F5PoolController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="pool_delete", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="pool_delete", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Pool deletion", user)
 
                 lock = Lock("pool", locals(), poolName)
@@ -53,7 +53,7 @@ class F5PoolController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="pool_patch", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="pool_patch", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Pool modification", user)
                 Log.actionLog("User data: "+str(request.data), user)
 

@@ -23,7 +23,7 @@ class F5PoolMemberStatsController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="poolMemberStats_get", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="poolMemberStats_get", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Pool members list", user)
 
                 lock = Lock("poolMember", locals())

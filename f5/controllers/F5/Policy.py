@@ -19,7 +19,7 @@ class F5PolicyController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="policy_delete", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="policy_delete", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Policy deletion", user)
 
                 lock = Lock("policy", locals(), policySubPath+policyName)
@@ -53,7 +53,7 @@ class F5PolicyController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="policy_patch", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="policy_patch", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Policy modification", user)
                 Log.actionLog("User data: "+str(request.data), user)
 

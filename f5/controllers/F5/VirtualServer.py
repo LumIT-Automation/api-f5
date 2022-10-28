@@ -23,7 +23,7 @@ class F5VirtualServerController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="virtualServer_get", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="virtualServer_get", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Virtual server information", user)
 
                 lock = Lock("virtualServer", locals())
@@ -70,7 +70,7 @@ class F5VirtualServerController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="virtualServer_delete", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="virtualServer_delete", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Virtual server deletion", user)
 
                 lock = Lock("virtualServer", locals(), virtualServerName)
@@ -104,7 +104,7 @@ class F5VirtualServerController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="virtualServer_patch", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="virtualServer_patch", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Virtual server modification", user)
                 Log.actionLog("User data: "+str(request.data), user)
 

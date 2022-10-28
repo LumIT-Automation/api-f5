@@ -29,7 +29,7 @@ class F5ProfilesController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="profiles_get", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="profiles_get", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Profiles list", user)
 
                 lock = Lock("profile", locals())
@@ -98,7 +98,7 @@ class F5ProfilesController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="profiles_post", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="profiles_post", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Profile addition", user)
                 Log.actionLog("User data: "+str(request.data), user)
 

@@ -29,7 +29,7 @@ class F5MonitorsController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="monitors_get", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="monitors_get", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Monitors list", user)
 
                 lock = Lock("monitor", locals())
@@ -113,7 +113,7 @@ class F5MonitorsController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="monitors_post", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="monitors_post", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Monitor addition", user)
                 Log.actionLog("User data: "+str(request.data), user)
 

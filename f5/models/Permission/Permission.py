@@ -1,21 +1,24 @@
 from f5.models.Permission.Role import Role
 from f5.models.Permission.Partition import Partition
+from f5.models.Permission.IdentityGroup import IdentityGroup
 
 from f5.models.Permission.repository.Permission import Permission as Repository
+from f5.models.Permission.repository.PermissionPrivilege import PermissionPrivilege as PermissionPrivilegeRepository
 
 
 class Permission:
 
     # IdentityGroupRolePartition
 
-    def __init__(self, id: int, groupId: int = 0, roleId: int = 0, partitionId: int = 0, *args, **kwargs):
+    def __init__(self, permissionId: int, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.id = id
-        
-        self.id_group = groupId
-        self.id_role = roleId
-        self.id_partition = partitionId
+        self.id: int = int(permissionId)
+        self.identityGroup: IdentityGroup
+        self.role: Role
+        self.partition: Partition
+
+        self.__load()
 
 
 
@@ -23,20 +26,14 @@ class Permission:
     # Public methods
     ####################################################################################################################
 
-    def modify(self, identityGroupId: int, role: str, assetId: int, partitionName: str) -> None:
+    def modify(self, identityGroup: IdentityGroup, role: Role, partition: Partition) -> None:
         try:
-            if role == "admin":
-                # If admin, "any" is the only valid choice for partitionName (on selected assetId).
-                partitionName = "any"
-
-            # RoleId.
-            r = Role(role=role)
-            roleId = r.info()["id"]
-
-            # Partition id.
-            partitionId = Permission.__getPartition(assetId, partitionName)
-
-            Repository.modify(self.id, identityGroupId, roleId, partitionId)
+            Repository.modify(
+                self.id,
+                identityGroupId=identityGroup.id,
+                roleId=role.id,
+                partitionId=partition.id
+            )
         except Exception as e:
             raise e
 
@@ -55,7 +52,11 @@ class Permission:
     ####################################################################################################################
 
     @staticmethod
-    def hasUserPermission(groups: list, action: str, assetId: int = 0, partitionName: str = "") -> bool:
+    def hasUserPermission(groups: list, action: str, assetId: int = 0, partition: str = "") -> bool:
+        # Authorizations' list allowed for any (authenticated) user.
+        if action == "authorizations_get":
+            return True
+
         # Superadmin's group.
         for gr in groups:
             if gr.lower() == "automation.local":
@@ -63,7 +64,7 @@ class Permission:
 
         try:
             return bool(
-                Repository.countUserPermissions(groups, action, assetId, partitionName)
+                PermissionPrivilegeRepository.countUserPermissions(groups, action, assetId, partition)
             )
         except Exception as e:
             raise e
@@ -71,7 +72,19 @@ class Permission:
 
 
     @staticmethod
-    def listIdentityGroupsRolesPartitions() -> list:
+    def permissionsRawList() -> list:
+
+        #     {
+        #         "id": 2,
+        #         "identity_group_name": "groupAdmin",
+        #         "identity_group_identifier": "cn=groupadmin,cn=users,dc=lab,dc=local",
+        #         "role": "admin",
+        #         "partition": {
+        #             "asset_id": 1,
+        #             "name": "any"
+        #         }
+        #     },
+
         try:
             return Repository.list()
         except Exception as e:
@@ -80,20 +93,56 @@ class Permission:
 
 
     @staticmethod
-    def add(identityGroupId: int, role: str, assetId: int, partitionName: str) -> None:
+    def authorizationsList(groups: list) -> dict:
+
+        #     "assets_get": [
+        #         {
+        #             "assetId": "1",
+        #             "partition": "any"
+        #         }
+        #     ],
+        #     "partitions_get": [
+        #         {
+        #             "assetId": "1",
+        #             "partition": "any"
+        #         }
+        #     ],
+        #     ...
+
+        superadmin = False
+        for gr in groups:
+            if gr.lower() == "automation.local":
+                superadmin = True
+                break
+
+        if superadmin:
+            # Superadmin's permissions override.
+            authorizations = {
+                "any": [
+                    {
+                        "assetId": 0,
+                        "partition": "any"
+                    }
+                ]
+            }
+        else:
+            try:
+                authorizations = PermissionPrivilegeRepository.authorizationsList(groups)
+            except Exception as e:
+                raise e
+
+        return authorizations
+
+
+
+    @staticmethod
+    def add(identityGroup: IdentityGroup, role: Role, partition: Partition) -> None:
         try:
-            if role == "admin":
-                # If admin, "any" is the only valid choice for partitionName (on selected assetId).
-                partitionName = "any"
-
-            # RoleId.
-            r = Role(role=role)
-            roleId = r.info()["id"]
-
-            # Partition id.
-            partitionId = Permission.__getPartition(assetId, partitionName)
-
-            Repository.add(identityGroupId, roleId, partitionId)
+            Repository.add(
+                identityGroupId=identityGroup.id,
+                roleId=role.id,
+                partitionId=partition.id
+            )
         except Exception as e:
             raise e
 
@@ -103,13 +152,12 @@ class Permission:
     # Private methods
     ####################################################################################################################
 
-    @staticmethod
-    def __getPartition(assetId: int, partitionName: str):
-        p = Partition(assetId, partitionName)
-        if p.exists():
-            partitionId = p.info()["id"]
-        else:
-            # If partition does not exist, create it (on Permissions database, not F5 endpoint).
-            partitionId = p.add(assetId, partitionName)
+    def __load(self) -> None:
+        try:
+            info = Repository.get(self.id)
 
-        return partitionId
+            self.identityGroup = IdentityGroup(id=info["id_group"])
+            self.role = Role(id=info["id_role"])
+            self.partition = Partition(id=info["id_partition"])
+        except Exception as e:
+            raise e

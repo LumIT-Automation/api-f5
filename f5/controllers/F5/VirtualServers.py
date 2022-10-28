@@ -25,7 +25,7 @@ class F5VirtualServersController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="virtualServers_get", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="virtualServers_get", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Virtual servers list", user)
 
                 lock = Lock("virtualServer", locals())
@@ -72,7 +72,7 @@ class F5VirtualServersController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="virtualServers_post", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="virtualServers_post", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Virtual server addition", user)
                 Log.actionLog("User data: "+str(request.data), user)
 

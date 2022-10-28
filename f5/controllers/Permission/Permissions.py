@@ -3,15 +3,18 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from f5.models.Permission.IdentityGroup import IdentityGroup
+from f5.models.Permission.Role import Role
+from f5.models.Permission.Partition import Partition
 from f5.models.Permission.Permission import Permission
 
 from f5.serializers.Permission.Permissions import PermissionsSerializer as PermissionsSerializer
 from f5.serializers.Permission.Permission import PermissionSerializer as PermissionSerializer
 
 from f5.controllers.CustomController import CustomController
+
 from f5.helpers.Conditional import Conditional
-from f5.helpers.Log import Log
 from f5.helpers.Exception import CustomException
+from f5.helpers.Log import Log
 
 
 class PermissionsController(CustomController):
@@ -27,7 +30,7 @@ class PermissionsController(CustomController):
             if Permission.hasUserPermission(groups=user["groups"], action="permission_identityGroups_get") or user["authDisabled"]:
                 Log.actionLog("Permissions list", user)
 
-                itemData["items"] = Permission.listIdentityGroupsRolesPartitions()
+                itemData["items"] = Permission.permissionsRawList()
                 data["data"] = PermissionsSerializer(itemData).data
                 data["href"] = request.get_full_path()
 
@@ -67,17 +70,27 @@ class PermissionsController(CustomController):
                 if serializer.is_valid():
                     data = serializer.validated_data
 
-                    ig = IdentityGroup(data["identity_group_identifier"])
+                    assetId = data["domain"]["id_asset"]
+                    group = data["identity_group_identifier"]
+                    role = data["role"]
+                    partitionName = data["partition"]["name"]
+
+                    # Get existent or new partition.
                     try:
-                        identityGroupId = ig.info()["id"]
-                    except Exception:
-                        raise CustomException(status=status.HTTP_422_UNPROCESSABLE_ENTITY, payload={"database": "Group identifier doesn't exist."})
+                        partition = Partition(assetId=assetId, name=partitionName)
+                    except CustomException as e:
+                        if e.status == 404:
+                            # If domain does not exist, create it (on Permissions database).
+                            partition = Partition(
+                                id=Partition.add(assetId, partitionName, role)
+                            )
+                        else:
+                            raise e
 
                     Permission.add(
-                        identityGroupId,
-                        data["role"],
-                        data["partition"]["id_asset"],
-                        data["partition"]["name"]
+                        identityGroup=IdentityGroup(identityGroupIdentifier=group),
+                        role=Role(role=role),
+                        partition=partition
                     )
 
                     httpStatus = status.HTTP_201_CREATED

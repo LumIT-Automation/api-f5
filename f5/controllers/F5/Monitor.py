@@ -19,7 +19,7 @@ class F5MonitorController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="monitor_delete", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="monitor_delete", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Monitor deletion", user)
 
                 lock = Lock("monitor", locals(), monitorType+monitorName)
@@ -53,7 +53,7 @@ class F5MonitorController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="monitor_patch", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="monitor_patch", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Monitor modification", user)
                 Log.actionLog("User data: "+str(request.data), user)
 

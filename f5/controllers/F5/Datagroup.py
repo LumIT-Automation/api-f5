@@ -19,7 +19,7 @@ class F5DatagroupController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="datagroup_delete", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="datagroup_delete", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Datagroup deletion", user)
 
                 lock = Lock("datagroup", locals(), datagroupType+datagroupName)
@@ -52,7 +52,7 @@ class F5DatagroupController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="datagroup_patch", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="datagroup_patch", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Datagroup modification", user)
                 Log.actionLog("User data: "+str(request.data), user)
 

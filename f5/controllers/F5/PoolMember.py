@@ -23,7 +23,7 @@ class F5PoolMemberController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="poolMember_get", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="poolMember_get", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Pool member information", user)
 
                 lock = Lock("poolMember", locals())
@@ -70,7 +70,7 @@ class F5PoolMemberController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="poolMember_delete", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="poolMember_delete", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Pool members deletion", user)
 
                 lock = Lock("poolMember", locals(), poolMemberName)
@@ -104,7 +104,7 @@ class F5PoolMemberController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="poolMember_patch", assetId=assetId, partitionName=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="poolMember_patch", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Pool members modify", user)
                 Log.actionLog("User data: "+str(request.data), user)
 
