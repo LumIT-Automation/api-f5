@@ -1,15 +1,7 @@
 from rest_framework import serializers
 
+from f5.serializers.F5.Asset.Asset import F5AssetSerializer
+
 
 class F5AssetsSerializer(serializers.Serializer):
-    class F5AssestItems(serializers.Serializer):
-        id = serializers.IntegerField(required=True) # @todo: only valid data.
-        address = serializers.CharField(max_length=64, required=True) # @todo: only valid data.
-        fqdn = serializers.CharField(max_length=255, required=True) # @todo: only valid data.
-        baseurl = serializers.CharField(max_length=255, required=True)
-        tlsverify = serializers.IntegerField(required=True)
-        datacenter = serializers.CharField(max_length=255, required=True)
-        environment = serializers.CharField(max_length=255, required=True)
-        position = serializers.CharField(max_length=255, required=True)
-
-    items = F5AssestItems(many=True)
+    items = F5AssetSerializer(many=True)

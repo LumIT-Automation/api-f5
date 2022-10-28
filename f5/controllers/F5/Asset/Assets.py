@@ -15,10 +15,7 @@ from f5.helpers.Log import Log
 class F5AssetsController(CustomController):
     @staticmethod
     def get(request: Request) -> Response:
-        data = dict()
-        allowedData = {
-            "items": []
-        }
+        allowedData = list()
         user = CustomController.loggedUser(request)
 
         try:
@@ -26,17 +23,25 @@ class F5AssetsController(CustomController):
                 Log.actionLog("Asset list", user)
 
                 itemData = Asset.list()
-
-                # Filter assets' list basing on actual permissions.
                 for p in itemData:
+                    # Filter assets' list basing on actual permissions.
                     if Permission.hasUserPermission(groups=user["groups"], action="assets_get", assetId=p["id"]) or user["authDisabled"]:
-                        allowedData["items"].append(p)
+                        allowedData.append(p)
 
-                data["data"] = AssetsSerializer(allowedData).data
-                data["href"] = request.get_full_path()
+                data = {
+                    "data": {
+                        "items": CustomController.validate(
+                            allowedData,
+                            AssetsSerializer,
+                            "list"
+                        )
+                    },
+                    "href": request.get_full_path()
+                }
 
                 httpStatus = status.HTTP_200_OK
             else:
+                data = None
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
             data, httpStatus, headers = CustomController.exceptionHandler(e)

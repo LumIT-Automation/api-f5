@@ -19,13 +19,11 @@ class F5AssetController(CustomController):
             if Permission.hasUserPermission(groups=user["groups"], action="asset_delete") or user["authDisabled"]:
                 Log.actionLog("Asset deletion", user)
 
-                f5 = Asset(assetId)
-                f5.delete()
+                Asset(assetId).delete()
 
                 httpStatus = status.HTTP_200_OK
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
-
         except Exception as e:
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
@@ -50,8 +48,7 @@ class F5AssetController(CustomController):
                 if serializer.is_valid():
                     data = serializer.validated_data
 
-                    f5 = Asset(assetId)
-                    f5.modify(data)
+                    Asset(assetId).modify(data)
 
                     httpStatus = status.HTTP_200_OK
                 else:
@@ -65,7 +62,6 @@ class F5AssetController(CustomController):
                     Log.actionLog("User data incorrect: "+str(response), user)
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
-
         except Exception as e:
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
