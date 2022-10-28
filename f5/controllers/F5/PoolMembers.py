@@ -28,7 +28,7 @@ class F5PoolMembersController(CustomController):
             if Permission.hasUserPermission(groups=user["groups"], action="poolMembers_get", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Pool members list", user)
 
-                lock = Lock("poolMember", locals())
+                lock = Lock("poolMember", locals()) # @todo: lock logic also on father pool.
                 if lock.isUnlocked():
                     lock.lock()
 
@@ -82,7 +82,7 @@ class F5PoolMembersController(CustomController):
                         data["State"] = data["state"] # curious F5 field's name.
                         del(data["state"])
 
-                    lock = Lock("poolMember", locals(), data["name"])
+                    lock = Lock("poolMember", locals(), data["name"]) # @todo: lock logic also on father pool.
                     if lock.isUnlocked():
                         lock.lock()
 
