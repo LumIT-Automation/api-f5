@@ -5,7 +5,7 @@ from f5.models.Permission.Role import Role
 
 class IdentityGroupsAssestRolesSubItems(serializers.Serializer):
     assetId = serializers.IntegerField(required=True)
-    domain = serializers.CharField(max_length=64, required=True)
+    partition = serializers.CharField(max_length=64, required=True)
 
 class IdentityGroupsAssestRolesItems(serializers.Serializer):
     def __init__(self, *args, **kwargs):
@@ -40,5 +40,5 @@ class IdentityGroupSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=64, required=True)
     identity_group_identifier = serializers.CharField(max_length=255, required=True)
 
-    roles_domain = IdentityGroupsAssestRolesItems(required=False)
-    privileges_domain = IdentityGroupsAssestPrivilegeItems(required=False)
+    roles_partition = IdentityGroupsAssestRolesItems(required=False)
+    privileges_partition = IdentityGroupsAssestPrivilegeItems(required=False)
