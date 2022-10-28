@@ -62,7 +62,6 @@ class PermissionIdentityGroupsController(CustomController):
     @staticmethod
     def post(request: Request) -> Response:
         response = None
-        roles = dict()
         user = CustomController.loggedUser(request)
 
         try:

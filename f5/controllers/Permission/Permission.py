@@ -54,7 +54,7 @@ class PermissionController(CustomController):
                 if serializer.is_valid():
                     data = serializer.validated_data
 
-                    assetId = data["domain"]["id_asset"]
+                    assetId = data["partition"]["id_asset"]
                     group = data["identity_group_identifier"]
                     role = data["role"]
                     partitionName = data["partition"]["name"]
@@ -64,10 +64,13 @@ class PermissionController(CustomController):
                         partition = Partition(assetId=assetId, name=partitionName)
                     except CustomException as e:
                         if e.status == 404:
-                            # If domain does not exist, create it (on Permissions database).
-                            partition = Partition(
-                                id=Partition.add(assetId, partitionName, role)
-                            )
+                            try:
+                                # If domain does not exist, create it (on Permissions database).
+                                partition = Partition(
+                                    id=Partition.add(assetId, partitionName, role)
+                                )
+                            except Exception:
+                                raise e
                         else:
                             raise e
 
