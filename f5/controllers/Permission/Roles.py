@@ -16,8 +16,7 @@ class PermissionRolesController(CustomController):
     @staticmethod
     def get(request: Request) -> Response:
         data = dict()
-        itemData = dict()
-        showPrivileges = False
+        loadPrivilege = False
         etagCondition = {"responseEtag": ""}
 
         user = CustomController.loggedUser(request)
@@ -30,14 +29,16 @@ class PermissionRolesController(CustomController):
                 if "related" in request.GET:
                     rList = request.GET.getlist('related')
                     if "privileges" in rList:
-                        showPrivileges = True
+                        loadPrivilege = True
 
-                if showPrivileges:
-                    itemData["items"] = Role.listWithPrivileges()
-                else:
-                    itemData["items"] = Role.list()
-                data["data"] = Serializer(itemData).data
-                data["href"] = request.get_full_path()
+                data = {
+                    "data": {
+                        "items": CustomController.validate(
+                            Role.list(loadPrivilege=loadPrivilege), Serializer
+                        )
+                    },
+                    "href": request.get_full_path()
+                }
 
                 # Check the response's ETag validity (against client request).
                 conditional = Conditional(request)
