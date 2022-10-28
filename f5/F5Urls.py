@@ -6,7 +6,7 @@ from .controllers.F5.Asset import Asset, Assets
 from .controllers.F5.Workflow import VirtualServersController as WorkflowVirtualServers, VirtualServerController as WorkflowVirtualServer
 from .controllers.Permission import Authorizations, IdentityGroups, IdentityGroup, Roles, Permission, Permissions
 from .controllers.Configuration import Configuration
-from .controllers import History
+from .controllers.History import History
 
 
 urlpatterns = [

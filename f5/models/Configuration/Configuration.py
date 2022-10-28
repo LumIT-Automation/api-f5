@@ -1,18 +1,13 @@
-from f5.models.repository.History import History as Repository
+from f5.models.Configuration.repository.Configuration import Configuration as Repository
 
 
-class History:
+class Configuration:
     def __init__(self, id: int, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.id = id
-        self.username = ""
-        self.action = ""
-        self.asset_id = 0
-        self.config_object_type = ""
-        self.config_object = ""
-        self.status = ""
-        self.date = ""
+        self.config_type = ""
+        self.configuration = ""
 
 
 
@@ -21,17 +16,17 @@ class History:
     ####################################################################################################################
 
     @staticmethod
-    def list(username: str, allUsersHistory: bool) -> list:
+    def getByType(configType: str) -> dict:
         try:
-            return Repository.list(username, allUsersHistory)
+            return Repository.get(configType)
         except Exception as e:
             raise e
 
 
 
     @staticmethod
-    def add(data: dict) -> None:
+    def rewriteByType(configType: str, data: dict) -> None:
         try:
-            Repository.add(data)
+            Repository.modify(configType, data)
         except Exception as e:
             raise e

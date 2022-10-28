@@ -2,10 +2,10 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
 
-from f5.models.History import History
+from f5.models.History.History import History
 from f5.models.Permission.Permission import Permission
 
-from f5.serializers.History import HistorySerializer as Serializer
+from f5.serializers.History.History import HistorySerializer as Serializer
 
 from f5.controllers.CustomController import CustomController
 from f5.helpers.Conditional import Conditional

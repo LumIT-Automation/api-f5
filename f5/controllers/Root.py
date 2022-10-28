@@ -5,7 +5,8 @@ from rest_framework.reverse import reverse_lazy
 
 
 class RootController(APIView):
-    def get(self, request: Request) -> Response:
+    @staticmethod
+    def get(request: Request) -> Response:
         return Response({
             'asset': reverse_lazy('f5-assets', request=request)
         })

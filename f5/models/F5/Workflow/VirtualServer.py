@@ -9,7 +9,7 @@ from f5.models.F5.Profile import Profile
 from f5.models.F5.Certificate import Certificate
 from f5.models.F5.Key import Key
 from f5.models.F5.VirtualServer import VirtualServer
-from f5.models.History import History
+from f5.models.History.History import History
 
 from f5.helpers.Log import Log
 
