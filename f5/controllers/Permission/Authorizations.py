@@ -12,9 +12,7 @@ class AuthorizationsController(CustomController):
     @staticmethod
     # Enlist caller's permissions (depending on groups user belongs to).
     def get(request: Request) -> Response:
-        data = {"data": dict()}
         etagCondition = {"responseEtag": ""}
-
         user = CustomController.loggedUser(request)
 
         try:
@@ -39,7 +37,6 @@ class AuthorizationsController(CustomController):
             else:
                 data = None
                 httpStatus = status.HTTP_200_OK
-
         except Exception as e:
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

@@ -17,7 +17,6 @@ class PermissionIdentityGroupsController(CustomController):
     @staticmethod
     def get(request: Request) -> Response:
         data = dict()
-        itemData = dict()
         showPrivileges = False
         etagCondition = {"responseEtag": ""}
 
@@ -33,9 +32,15 @@ class PermissionIdentityGroupsController(CustomController):
                     if "privileges" in rList:
                         showPrivileges = True
 
-                itemData["items"] = IdentityGroup.listWithPermissionsPrivileges(showPrivileges)
-                data["data"] = GroupsSerializer(itemData).data
-                data["href"] = request.get_full_path()
+                data = {
+                    "data": {
+                        "items": CustomController.validate(
+                            IdentityGroup.listWithPermissionsPrivileges(showPrivileges),
+                            GroupsSerializer
+                        )
+                    },
+                    "href": request.get_full_path()
+                }
 
                 # Check the response's ETag validity (against client request).
                 conditional = Conditional(request)
@@ -47,7 +52,6 @@ class PermissionIdentityGroupsController(CustomController):
                     httpStatus = status.HTTP_200_OK
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
-
         except Exception as e:
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
@@ -86,7 +90,6 @@ class PermissionIdentityGroupsController(CustomController):
                     Log.actionLog("User data incorrect: "+str(response), user)
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
-
         except Exception as e:
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

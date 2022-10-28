@@ -34,7 +34,8 @@ class PermissionRolesController(CustomController):
                 data = {
                     "data": {
                         "items": CustomController.validate(
-                            Role.list(loadPrivilege=loadPrivilege), Serializer
+                            Role.list(loadPrivilege=loadPrivilege),
+                            Serializer
                         )
                     },
                     "href": request.get_full_path()
@@ -50,7 +51,6 @@ class PermissionRolesController(CustomController):
                     httpStatus = status.HTTP_200_OK
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
-
         except Exception as e:
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
