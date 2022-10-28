@@ -2,9 +2,9 @@ from django.utils.html import strip_tags
 from django.db import connection
 from django.db import transaction
 
-from f5.helpers.Log import Log
 from f5.helpers.Exception import CustomException
 from f5.helpers.Database import Database as DBHelper
+from f5.helpers.Log import Log
 
 
 class Asset:
@@ -33,12 +33,12 @@ class Asset:
         c = connection.cursor()
 
         try:
-            c.execute("SELECT * FROM asset WHERE id = %s", [
-                assetId
-            ])
-
+            c.execute("SELECT * FROM asset WHERE id = %s", [assetId])
             info = DBHelper.asDict(c)[0]
+
             return info
+        except IndexError:
+            raise CustomException(status=404, payload={"database": "non existent asset"})
         except Exception as e:
             raise CustomException(status=400, payload={"database": e.__str__()})
         finally:
@@ -53,42 +53,34 @@ class Asset:
 
         c = connection.cursor()
 
-        if Asset.__exists(assetId):
-            # Build SQL query according to dict fields.
-            for k, v in data.items():
-                sql += k+"=%s,"
-                values.append(strip_tags(v)) # no HTML allowed.
+        # Build SQL query according to dict fields.
+        for k, v in data.items():
+            sql += k+"=%s,"
+            values.append(strip_tags(v)) # no HTML allowed.
 
-            try:
-                c.execute("UPDATE asset SET "+sql[:-1]+" WHERE id = "+str(assetId),
-                    values
-                )
-            except Exception as e:
+        try:
+            c.execute("UPDATE asset SET "+sql[:-1]+" WHERE id = "+str(assetId), values)
+        except Exception as e:
+            if e.__class__.__name__ == "IntegrityError" \
+                    and e.args and e.args[0] and e.args[0] == 1062:
+                        raise CustomException(status=400, payload={"database": "duplicated values"})
+            else:
                 raise CustomException(status=400, payload={"database": e.__str__()})
-            finally:
-                c.close()
-
-        else:
-            raise CustomException(status=404, payload={"database": "Non existent F5 endpoint"})
+        finally:
+            c.close()
 
 
 
     @staticmethod
     def delete(assetId: int) -> None:
-        if Asset.__exists(assetId):
-            c = connection.cursor()
+        c = connection.cursor()
 
-            try:
-                c.execute("DELETE FROM asset WHERE id = %s", [
-                    assetId
-                ])
-            except Exception as e:
-                raise CustomException(status=400, payload={"database": e.__str__()})
-            finally:
-                c.close()
-
-        else:
-            raise CustomException(status=404, payload={"database": "Non existent F5 endpoint"})
+        try:
+            c.execute("DELETE FROM asset WHERE id = %s", [assetId])
+        except Exception as e:
+            raise CustomException(status=400, payload={"database": e.__str__()})
+        finally:
+            c.close()
 
 
 
@@ -133,28 +125,10 @@ class Asset:
                 )
                 return c.lastrowid
         except Exception as e:
-            raise CustomException(status=400, payload={"database": e.__str__()})
-        finally:
-            c.close()
-
-
-
-    ####################################################################################################################
-    # Private static methods
-    ####################################################################################################################
-
-    @staticmethod
-    def __exists(assetId: int) -> int:
-        c = connection.cursor()
-
-        try:
-            c.execute("SELECT COUNT(*) AS c FROM asset WHERE id = %s", [
-                assetId
-            ])
-            o = DBHelper.asDict(c)
-
-            return int(o[0]['c'])
-        except Exception:
-            return 0
+            if e.__class__.__name__ == "IntegrityError" \
+                    and e.args and e.args[0] and e.args[0] == 1062:
+                        raise CustomException(status=400, payload={"database": "duplicated values"})
+            else:
+                raise CustomException(status=400, payload={"database": e.__str__()})
         finally:
             c.close()
