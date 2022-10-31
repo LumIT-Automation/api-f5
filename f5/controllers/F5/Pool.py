@@ -26,8 +26,7 @@ class F5PoolController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    pool = Pool(assetId, partitionName, poolName)
-                    pool.delete()
+                    Pool(assetId, partitionName, poolName).delete()
 
                     httpStatus = status.HTTP_200_OK
                     lock.release()
@@ -65,8 +64,7 @@ class F5PoolController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        pool = Pool(assetId, partitionName, poolName)
-                        pool.modify(data)
+                        Pool(assetId, partitionName, poolName).modify(data)
 
                         httpStatus = status.HTTP_200_OK
                         lock.release()

@@ -32,8 +32,7 @@ class F5WorkflowVirtualServersController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        vsw = VirtualServersWorkflow(assetId, partitionName, data, user)
-                        vsw.add()
+                        VirtualServersWorkflow(assetId, partitionName, data, user).add()
 
                         httpStatus = status.HTTP_201_CREATED
                         lock.release()

@@ -19,7 +19,6 @@ class F5IrulesController(CustomController):
     @staticmethod
     def get(request: Request, assetId: int, partitionName: str) -> Response:
         data = dict()
-        itemData = dict()
         etagCondition = { "responseEtag": "" }
 
         user = CustomController.loggedUser(request)
@@ -32,27 +31,25 @@ class F5IrulesController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    itemData["items"] = Irule.list(assetId, partitionName)
-                    serializer = IrulesSerializer(data=itemData)
-                    if serializer.is_valid():
-                        data["data"] = serializer.validated_data
-                        data["href"] = request.get_full_path()
+                    data = {
+                        "data": {
+                            "items": CustomController.validate(
+                                Irule.list(assetId, partitionName),
+                                IrulesSerializer,
+                                "list"
+                            )
+                        },
+                        "href": request.get_full_path()
+                    }
 
-                        # Check the response's ETag validity (against client request).
-                        conditional = Conditional(request)
-                        etagCondition = conditional.responseEtagFreshnessAgainstRequest(data["data"])
-                        if etagCondition["state"] == "fresh":
-                            data = None
-                            httpStatus = status.HTTP_304_NOT_MODIFIED
-                        else:
-                            httpStatus = status.HTTP_200_OK
+                    # Check the response's ETag validity (against client request).
+                    conditional = Conditional(request)
+                    etagCondition = conditional.responseEtagFreshnessAgainstRequest(data["data"])
+                    if etagCondition["state"] == "fresh":
+                        data = None
+                        httpStatus = status.HTTP_304_NOT_MODIFIED
                     else:
-                        httpStatus = status.HTTP_500_INTERNAL_SERVER_ERROR
-                        data = {
-                            "F5": {
-                                "error": str(serializer.errors)
-                            }
-                        }
+                        httpStatus = status.HTTP_200_OK
 
                     lock.release()
                 else:

@@ -26,8 +26,7 @@ class F5IruleController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    pool = Irule(assetId, partitionName, iruleName)
-                    pool.delete()
+                    Irule(assetId, partitionName, iruleName).delete()
 
                     httpStatus = status.HTTP_200_OK
                     lock.release()
@@ -65,8 +64,7 @@ class F5IruleController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        irule = Irule(assetId, partitionName, iruleName)
-                        irule.modify(data)
+                        Irule(assetId, partitionName, iruleName).modify(data)
 
                         httpStatus = status.HTTP_200_OK
                         lock.release()

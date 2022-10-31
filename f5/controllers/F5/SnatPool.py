@@ -26,8 +26,7 @@ class F5SnatPoolController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    pool = SnatPool(assetId, partitionName, snatPoolName)
-                    pool.delete()
+                    SnatPool(assetId, partitionName, snatPoolName).delete()
 
                     httpStatus = status.HTTP_200_OK
                     lock.release()
@@ -65,8 +64,7 @@ class F5SnatPoolController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        pool = SnatPool(assetId, partitionName, snatPoolName)
-                        pool.modify(data)
+                        SnatPool(assetId, partitionName, snatPoolName).modify(data)
 
                         httpStatus = status.HTTP_200_OK
                         lock.release()

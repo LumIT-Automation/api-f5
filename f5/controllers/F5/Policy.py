@@ -26,8 +26,7 @@ class F5PolicyController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    policy = Policy(assetId, partitionName, policySubPath, policyName)
-                    policy.delete()
+                    Policy(assetId, partitionName, policySubPath, policyName).delete()
 
                     httpStatus = status.HTTP_200_OK
                     lock.release()
@@ -65,8 +64,7 @@ class F5PolicyController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        policy = Policy(assetId, partitionName, policySubPath, policyName)
-                        policy.modify(data)
+                        Policy(assetId, partitionName, policySubPath, policyName).modify(data)
 
                         httpStatus = status.HTTP_200_OK
                         lock.release()

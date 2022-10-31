@@ -26,8 +26,7 @@ class F5CertificateController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        c = Certificate(assetId, partitionName, resourceName)
-                        c.delete()
+                        Certificate(assetId, partitionName, resourceName).delete()
 
                         httpStatus = status.HTTP_200_OK
                         lock.release()
@@ -39,8 +38,7 @@ class F5CertificateController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        k = Key(assetId, partitionName, resourceName)
-                        k.delete()
+                        Key(assetId, partitionName, resourceName).delete()
 
                         httpStatus = status.HTTP_200_OK
                         lock.release()

@@ -17,4 +17,4 @@ class F5SnatPoolSerializer(serializers.Serializer):
             required=False
         )
     )
-    membersReference = F5SnatPoolItemsMembersReferenceSerializer(required=False, many=False)
+    membersReference = F5SnatPoolItemsMembersReferenceSerializer(required=False, many=True)

@@ -30,11 +30,14 @@ class F5PoolMemberStatsController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    pm = Pool(assetId, poolName, partitionName).member(poolMemberName)
-                    itemData = pm.stats()
-
-                    data["data"] = Serializer(sanitize(itemData)).data
-                    data["href"] = request.get_full_path()
+                    data = {
+                        "data": CustomController.validate(
+                            Pool(assetId, poolName, partitionName).member(poolMemberName).stats(),
+                            Serializer,
+                            "value"
+                        ),
+                        "href": request.get_full_path()
+                    }
 
                     # Check the response's ETag validity (against client request).
                     conditional = Conditional(request)

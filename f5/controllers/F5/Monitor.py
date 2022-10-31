@@ -26,8 +26,7 @@ class F5MonitorController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    monitor = Monitor(assetId, partitionName, monitorType, monitorName)
-                    monitor.delete()
+                    Monitor(assetId, partitionName, monitorType, monitorName).delete()
 
                     httpStatus = status.HTTP_200_OK
                     lock.release()
@@ -65,8 +64,7 @@ class F5MonitorController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        monitor = Monitor(assetId, partitionName, monitorType, monitorName)
-                        monitor.modify(data)
+                        Monitor(assetId, partitionName, monitorType, monitorName).modify(data)
 
                         httpStatus = status.HTTP_200_OK
                         lock.release()

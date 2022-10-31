@@ -19,7 +19,6 @@ class F5VirtualServersController(CustomController):
     @staticmethod
     def get(request: Request, assetId: int, partitionName) -> Response:
         data = dict()
-        itemData = dict()
         etagCondition = { "responseEtag": "" }
 
         user = CustomController.loggedUser(request)
@@ -32,10 +31,16 @@ class F5VirtualServersController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    itemData["items"] = VirtualServer.list(assetId, partitionName)
-
-                    data["data"] = VirtualServersSerializer(itemData).data
-                    data["href"] = request.get_full_path()
+                    data = {
+                        "data": {
+                            "items": CustomController.validate(
+                                VirtualServer.list(assetId, partitionName),
+                                VirtualServersSerializer,
+                                "list"
+                            )
+                        },
+                        "href": request.get_full_path()
+                    }
 
                     # Check the response's ETag validity (against client request).
                     conditional = Conditional(request)

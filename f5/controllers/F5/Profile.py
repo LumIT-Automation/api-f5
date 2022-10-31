@@ -26,8 +26,7 @@ class F5ProfileController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    profile = Profile(assetId, partitionName, profileType, profileName)
-                    profile.delete()
+                    Profile(assetId, partitionName, profileType, profileName).delete()
 
                     httpStatus = status.HTTP_200_OK
                     lock.release()
@@ -65,8 +64,7 @@ class F5ProfileController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        profile = Profile(assetId, partitionName, profileType, profileName)
-                        profile.modify(data)
+                        Profile(assetId, partitionName, profileType, profileName).modify(data)
 
                         httpStatus = status.HTTP_200_OK
                         lock.release()

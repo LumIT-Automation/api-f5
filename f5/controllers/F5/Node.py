@@ -26,8 +26,7 @@ class F5NodeController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    node = Node(assetId, partitionName, nodeName)
-                    node.delete()
+                    Node(assetId, partitionName, nodeName).delete()
 
                     httpStatus = status.HTTP_200_OK
                     lock.release()
@@ -65,8 +64,7 @@ class F5NodeController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        node = Node(assetId, partitionName, nodeName)
-                        node.modify(data)
+                        Node(assetId, partitionName, nodeName).modify(data)
 
                         httpStatus = status.HTTP_200_OK
                         lock.release()

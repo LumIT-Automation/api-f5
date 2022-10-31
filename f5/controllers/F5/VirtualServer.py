@@ -30,11 +30,14 @@ class F5VirtualServerController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    vs = VirtualServer(assetId, partitionName, virtualServerName)
-                    itemData = vs.info()
-
-                    data["data"] = Serializer(itemData).data
-                    data["href"] = request.get_full_path()
+                    data = {
+                        "data": CustomController.validate(
+                            VirtualServer(assetId, partitionName, virtualServerName).info(),
+                            Serializer,
+                            "value"
+                        ),
+                        "href": request.get_full_path()
+                    }
 
                     # Check the response's ETag validity (against client request).
                     conditional = Conditional(request)
@@ -77,8 +80,7 @@ class F5VirtualServerController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    vs = VirtualServer(assetId, partitionName, virtualServerName)
-                    vs.delete()
+                    VirtualServer(assetId, partitionName, virtualServerName).delete()
 
                     httpStatus = status.HTTP_200_OK
                     lock.release()
@@ -117,8 +119,7 @@ class F5VirtualServerController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        vs = VirtualServer(assetId, partitionName, virtualServerName)
-                        vs.modify(data)
+                        VirtualServer(assetId, partitionName, virtualServerName).modify(data)
 
                         httpStatus = status.HTTP_200_OK
                         lock.release()

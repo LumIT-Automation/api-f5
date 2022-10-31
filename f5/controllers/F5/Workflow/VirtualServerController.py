@@ -24,8 +24,7 @@ class F5WorkflowVirtualServerController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    vsw = VirtualServerWorkflow(assetId, partitionName, virtualServerName, user)
-                    vsw.delete()
+                    VirtualServerWorkflow(assetId, partitionName, virtualServerName, user).delete()
 
                     httpStatus = status.HTTP_200_OK
                     lock.release()

@@ -19,7 +19,6 @@ class F5PoolsController(CustomController):
     @staticmethod
     def get(request: Request, assetId: int, partitionName: str) -> Response:
         data = dict()
-        itemData = dict()
         etagCondition = { "responseEtag": "" }
 
         user = CustomController.loggedUser(request)
@@ -32,9 +31,16 @@ class F5PoolsController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    itemData["items"] = Pool.list(assetId, partitionName)
-                    data["data"] = PoolsSerializer(itemData).data
-                    data["href"] = request.get_full_path()
+                    data = {
+                        "data": {
+                            "items": CustomController.validate(
+                                Pool.list(assetId, partitionName),
+                                PoolsSerializer,
+                                "list"
+                            )
+                        },
+                        "href": request.get_full_path()
+                    }
 
                     # Check the response's ETag validity (against client request).
                     conditional = Conditional(request)

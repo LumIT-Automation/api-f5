@@ -30,11 +30,14 @@ class F5PoolMemberController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    pm = Pool(assetId, poolName, partitionName).member(poolMemberName)
-                    itemData = pm.info()
-
-                    data["data"] = Serializer(itemData).data
-                    data["href"] = request.get_full_path()
+                    data = {
+                        "data": CustomController.validate(
+                            Pool(assetId, poolName, partitionName).member(poolMemberName).info(),
+                            Serializer,
+                            "value"
+                        ),
+                        "href": request.get_full_path()
+                    }
 
                     # Check the response's ETag validity (against client request).
                     conditional = Conditional(request)
@@ -77,8 +80,7 @@ class F5PoolMemberController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    pm = Pool(assetId, poolName, partitionName).member(poolMemberName)
-                    pm.delete()
+                    Pool(assetId, poolName, partitionName).member(poolMemberName).delete()
 
                     httpStatus = status.HTTP_200_OK
                     lock.release()
@@ -116,8 +118,7 @@ class F5PoolMemberController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        pm = Pool(assetId, poolName, partitionName).member(poolMemberName)
-                        pm.modify(data)
+                        Pool(assetId, poolName, partitionName).member(poolMemberName).modify(data)
 
                         httpStatus = status.HTTP_200_OK
                         lock.release()

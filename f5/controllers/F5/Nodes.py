@@ -19,7 +19,6 @@ class F5NodesController(CustomController):
     @staticmethod
     def get(request: Request, assetId: int, partitionName: str) -> Response:
         data = dict()
-        itemData = dict()
         etagCondition = { "responseEtag": "" }
 
         user = CustomController.loggedUser(request)
@@ -32,9 +31,16 @@ class F5NodesController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    itemData["items"] = Node.list(assetId, partitionName)
-                    data["data"] = NodesSerializer(itemData).data
-                    data["href"] = request.get_full_path()
+                    data = {
+                        "data": {
+                            "items": CustomController.validate(
+                                Node.list(assetId, partitionName),
+                                NodesSerializer,
+                                "list"
+                            )
+                        },
+                        "href": request.get_full_path()
+                    }
 
                     # Check the response's ETag validity (against client request).
                     conditional = Conditional(request)

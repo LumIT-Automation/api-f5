@@ -22,7 +22,6 @@ class F5CertificatesController(CustomController):
     @staticmethod
     def get(request: Request, assetId: int, partitionName: str) -> Response:
         data = dict()
-        itemData = dict()
         etagCondition = { "responseEtag": "" }
 
         user = CustomController.loggedUser(request)
@@ -36,9 +35,16 @@ class F5CertificatesController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        itemData["items"] = Certificate.list(assetId, partitionName)
-                        data["data"] = CertificatesSerializer(itemData).data
-                        data["href"] = request.get_full_path()
+                        data = {
+                            "data": {
+                                "items": CustomController.validate(
+                                    Certificate.list(assetId, partitionName),
+                                    CertificatesSerializer,
+                                    "list"
+                                )
+                            },
+                            "href": request.get_full_path()
+                        }
 
                         # Check the response's ETag validity (against client request).
                         conditional = Conditional(request)
@@ -59,8 +65,16 @@ class F5CertificatesController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        itemData["items"] = Key.list(assetId, partitionName)
-                        data["data"] = KeysSerializer(itemData).data
+                        data = {
+                            "data": {
+                                "items": CustomController.validate(
+                                    Key.list(assetId, partitionName),
+                                    KeysSerializer,
+                                    "list"
+                                )
+                            },
+                            "href": request.get_full_path()
+                        }
 
                         # Check the response's ETag validity (against client request).
                         conditional = Conditional(request)
@@ -76,6 +90,7 @@ class F5CertificatesController(CustomController):
                         data = None
                         httpStatus = status.HTTP_423_LOCKED
                 else:
+                    data = None
                     httpStatus = status.HTTP_400_BAD_REQUEST
             else:
                 data = None
