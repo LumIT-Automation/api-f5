@@ -26,9 +26,12 @@ class F5PoolMemberController(CustomController):
             if Permission.hasUserPermission(groups=user["groups"], action="poolMember_get", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Pool member information", user)
 
-                lock = Lock("poolMember", locals()) # @todo: lock logic also on father pool.
-                if lock.isUnlocked():
-                    lock.lock()
+                # Locking logic for pool member and pool.
+                lockp = Lock("pool", locals(), poolName)
+                lockpm = Lock("poolMember", locals(), poolMemberName)
+                if lockp.isUnlocked() and lockpm.isUnlocked():
+                    lockp.lock()
+                    lockpm.lock()
 
                     data = {
                         "data": CustomController.validate(
@@ -48,7 +51,8 @@ class F5PoolMemberController(CustomController):
                     else:
                         httpStatus = status.HTTP_200_OK
 
-                    lock.release()
+                    lockp.release()
+                    lockpm.release()
                 else:
                     data = None
                     httpStatus = status.HTTP_423_LOCKED
@@ -56,7 +60,8 @@ class F5PoolMemberController(CustomController):
                 data = None
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("poolMember", locals()).release()
+            Lock("pool", locals(), poolName).release()
+            Lock("poolMember", locals(), locals()["poolMemberName"]).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
@@ -76,19 +81,24 @@ class F5PoolMemberController(CustomController):
             if Permission.hasUserPermission(groups=user["groups"], action="poolMember_delete", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Pool members deletion", user)
 
-                lock = Lock("poolMember", locals(), poolMemberName) # @todo: lock logic also on father pool.
-                if lock.isUnlocked():
-                    lock.lock()
+                # Locking logic for pool member and pool.
+                lockp = Lock("pool", locals(), poolName)
+                lockpm = Lock("poolMember", locals(), poolMemberName)
+                if lockp.isUnlocked() and lockpm.isUnlocked():
+                    lockp.lock()
+                    lockpm.lock()
 
                     Pool(assetId, poolName, partitionName).member(poolMemberName).delete()
 
                     httpStatus = status.HTTP_200_OK
-                    lock.release()
+                    lockp.release()
+                    lockpm.release()
                 else:
                     httpStatus = status.HTTP_423_LOCKED
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
+            Lock("pool", locals(), poolName).release()
             Lock("poolMember", locals(), locals()["poolMemberName"]).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
@@ -114,14 +124,17 @@ class F5PoolMemberController(CustomController):
                 if serializer.is_valid():
                     data = serializer.validated_data
 
-                    lock = Lock("poolMember", locals(), poolMemberName)
-                    if lock.isUnlocked():
-                        lock.lock()
+                    lockp = Lock("pool", locals(), poolName)
+                    lockpm = Lock("poolMember", locals(), poolMemberName)
+                    if lockp.isUnlocked() and lockpm.isUnlocked():
+                        lockp.lock()
+                        lockpm.lock()
 
                         Pool(assetId, poolName, partitionName).member(poolMemberName).modify(data)
 
                         httpStatus = status.HTTP_200_OK
-                        lock.release()
+                        lockp.release()
+                        lockpm.release()
                     else:
                         httpStatus = status.HTTP_423_LOCKED
                 else:
@@ -136,6 +149,7 @@ class F5PoolMemberController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
+            Lock("pool", locals(), poolName).release()
             Lock("poolMember", locals(), locals()["poolMemberName"]).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
