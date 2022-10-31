@@ -54,9 +54,9 @@ class Log:
     @staticmethod
     def actionLog(o: any, user: dict = None) -> None:
         # Sends input logs to the "f5" logger (settings).
-        user = {} if user is None else user
-
+        user = user or {}
         log = logging.getLogger("django")
+
         try:
             if "username" in user:
                 log.debug("["+user['username']+"] "+o)

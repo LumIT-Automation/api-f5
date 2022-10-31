@@ -42,7 +42,7 @@ class ApiSupplicant:
 
 
     def post(self, data: str, additionalHeaders: dict = None) -> dict:
-        additionalHeaders = {} if additionalHeaders is None else additionalHeaders
+        additionalHeaders = additionalHeaders or {}
 
         try:
             Log.actionLog("[API Supplicant] Posting to remote: "+str(self.endpoint))
@@ -55,7 +55,7 @@ class ApiSupplicant:
 
 
     def put(self, data: str, additionalHeaders: dict = None) -> dict:
-        additionalHeaders = {} if additionalHeaders is None else additionalHeaders
+        additionalHeaders = additionalHeaders or {}
 
         try:
             Log.actionLog(
@@ -69,7 +69,7 @@ class ApiSupplicant:
 
 
     def patch(self, data: str, additionalHeaders: dict = None) -> dict:
-        additionalHeaders = {} if additionalHeaders is None else additionalHeaders
+        additionalHeaders = additionalHeaders or {}
 
         try:
             Log.actionLog(
@@ -99,8 +99,8 @@ class ApiSupplicant:
     ####################################################################################################################
 
     def __request(self, request: Callable, additionalHeaders: dict = None, params: dict = None, data: str = ""):
-        params = {} if params is None else params
-        additionalHeaders = {} if additionalHeaders is None else additionalHeaders
+        params = params or {}
+        additionalHeaders = additionalHeaders or {}
 
         # In the event of a network problem (e.g. DNS failure, refused connection, etc), Requests will raise a ConnectionError exception.
         # If a request times out, a Timeout exception is raised.
