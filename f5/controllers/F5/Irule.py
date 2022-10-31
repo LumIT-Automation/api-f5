@@ -35,7 +35,7 @@ class F5IruleController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("irule", locals(), locals()["iruleName"]).release()
+            Lock("irule", locals(), iruleName).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
@@ -82,7 +82,7 @@ class F5IruleController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("irule", locals(), locals()["iruleName"]).release()
+            Lock("irule", locals(), iruleName).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

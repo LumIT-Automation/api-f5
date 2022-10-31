@@ -61,7 +61,7 @@ class F5PoolMemberController(CustomController):
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
             Lock("pool", locals(), poolName).release()
-            Lock("poolMember", locals(), locals()["poolMemberName"]).release()
+            #Lock("poolMember", locals(), poolMemberName).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
@@ -99,7 +99,7 @@ class F5PoolMemberController(CustomController):
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
             Lock("pool", locals(), poolName).release()
-            Lock("poolMember", locals(), locals()["poolMemberName"]).release()
+            Lock("poolMember", locals(), poolMemberName).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
@@ -150,7 +150,7 @@ class F5PoolMemberController(CustomController):
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
             Lock("pool", locals(), poolName).release()
-            Lock("poolMember", locals(), locals()["poolMemberName"]).release()
+            Lock("poolMember", locals(), poolMemberName).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

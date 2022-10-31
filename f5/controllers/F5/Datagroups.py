@@ -128,7 +128,7 @@ class F5DatagroupsController(CustomController):
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
             if "serializer" in locals():
-                Lock("datagroup", locals(), locals()["datagroupType"]+locals()["serializer"].data["name"]).release()
+                Lock("datagroup", locals(), datagroupType+locals()["serializer"].data["name"]).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

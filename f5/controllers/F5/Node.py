@@ -35,7 +35,7 @@ class F5NodeController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("node", locals(), locals()["nodeName"]).release()
+            Lock("node", locals(), nodeName).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
@@ -82,7 +82,7 @@ class F5NodeController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("node", locals(), locals()["nodeName"]).release()
+            Lock("node", locals(), nodeName).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

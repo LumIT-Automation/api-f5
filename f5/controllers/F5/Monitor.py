@@ -35,7 +35,7 @@ class F5MonitorController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("monitor", locals(), locals()["monitorType"]+locals()["monitorName"]).release()
+            Lock("monitor", locals(), monitorType+monitorName).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
@@ -82,7 +82,7 @@ class F5MonitorController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("monitor", locals(), locals()["monitorType"]+locals()["monitorName"]).release()
+            Lock("monitor", locals(), monitorType+monitorName).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

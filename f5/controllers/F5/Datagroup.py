@@ -35,7 +35,7 @@ class F5DatagroupController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("datagroup", locals(), locals()["datagroupType"]+locals()["datagroupName"]).release()
+            Lock("datagroup", locals(), datagroupType+datagroupName).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
@@ -82,7 +82,7 @@ class F5DatagroupController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("datagroup", locals(), locals()["datagroupType"]+locals()["datagroupName"]).release()
+            Lock("datagroup", locals(), datagroupType+datagroupName).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

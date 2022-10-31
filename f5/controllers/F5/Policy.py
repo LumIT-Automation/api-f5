@@ -35,7 +35,7 @@ class F5PolicyController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("policy", locals(), locals()["policySubPath"]+locals()["policyName"]).release()
+            Lock("policy", locals(), policySubPath+policyName).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
@@ -82,7 +82,7 @@ class F5PolicyController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("policy", locals(), locals()["policySubPath"]+locals()["policyName"]).release()
+            Lock("policy", locals(), policySubPath+policyName).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
