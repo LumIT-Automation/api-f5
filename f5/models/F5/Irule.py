@@ -1,3 +1,5 @@
+from typing import List
+
 from f5.models.F5.backend.Irule import Irule as Backend
 
 
@@ -40,7 +42,7 @@ class Irule:
     ####################################################################################################################
 
     @staticmethod
-    def list(assetId: int, partitionName: str) -> dict:
+    def list(assetId: int, partitionName: str) -> List[dict]:
         try:
             l = Backend.list(assetId, partitionName)
             for el in l:

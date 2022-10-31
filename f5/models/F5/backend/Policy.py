@@ -1,4 +1,5 @@
 import json
+from typing import List
 
 from f5.models.F5.Asset.Asset import Asset
 
@@ -59,7 +60,7 @@ class Policy:
 
 
     @staticmethod
-    def list(assetId: int, partitionName: str) -> dict:
+    def list(assetId: int, partitionName: str) -> List[dict]:
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(

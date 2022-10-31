@@ -1,4 +1,4 @@
-from typing import Dict, Union
+from typing import List, Dict, Union
 
 from f5.models.F5.CertificateBase import CertificateBase
 
@@ -43,7 +43,7 @@ class Certificate(CertificateBase):
     ####################################################################################################################
 
     @staticmethod
-    def list(assetId: int, partitionName: str) -> dict:
+    def list(assetId: int, partitionName: str) -> List[dict]:
         try:
             return CertificateBase.list(assetId, partitionName, "cert")
         except Exception as e:

@@ -1,4 +1,4 @@
-from typing import Dict, Union
+from typing import List, Dict, Union
 
 from f5.models.F5.backend.Policy import Policy as Backend
 
@@ -56,7 +56,7 @@ class Policy:
     ####################################################################################################################
 
     @staticmethod
-    def list(assetId: int, partitionName: str) -> dict:
+    def list(assetId: int, partitionName: str) -> List[dict]:
         try:
             l = Backend.list(assetId, partitionName)
             for el in l:

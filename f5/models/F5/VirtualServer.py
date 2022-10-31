@@ -1,4 +1,4 @@
-from typing import Dict, Union
+from typing import List, Dict, Union
 
 from f5.models.F5.backend.VirtualServer import VirtualServer as Backend
 
@@ -117,7 +117,7 @@ class VirtualServer:
     ####################################################################################################################
 
     @staticmethod
-    def list(assetId: int, partitionName: str) -> dict:
+    def list(assetId: int, partitionName: str) -> List[Dict]:
         try:
             l = Backend.list(assetId, partitionName)
             for el in l:

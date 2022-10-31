@@ -1,3 +1,5 @@
+from typing import List
+
 from f5.models.F5.CertificateBase import CertificateBase
 
 
@@ -22,7 +24,7 @@ class Key(CertificateBase):
     ####################################################################################################################
 
     @staticmethod
-    def list(assetId: int, partitionName: str) -> dict:
+    def list(assetId: int, partitionName: str) -> List[dict]:
         try:
             return CertificateBase.list(assetId, partitionName, "key")
         except Exception as e:
