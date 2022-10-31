@@ -26,7 +26,7 @@ class F5VirtualServerController(CustomController):
             if Permission.hasUserPermission(groups=user["groups"], action="virtualServer_get", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Virtual server information", user)
 
-                lock = Lock("virtualServer", locals())
+                lock = Lock("virtualServer", locals(), virtualServerName)
                 if lock.isUnlocked():
                     lock.lock()
 
@@ -56,7 +56,7 @@ class F5VirtualServerController(CustomController):
                 data = None
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("virtualServer", locals()).release()
+            Lock("virtualServer", locals(), virtualServerName).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
