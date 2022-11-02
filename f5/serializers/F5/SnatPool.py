@@ -13,7 +13,7 @@ class F5SnatPoolSerializer(serializers.Serializer):
     selfLink = serializers.CharField(max_length=255, required=False)
     members = serializers.ListField(
         child=serializers.RegexField(
-            regex='^/.*/([01]?\d\d?|2[0-4]\d|25[0-5])(?:\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])){3}(%\d)?$',
+            regex=r"(^/.*/(?!^(?:(?:.*(?:::.*::|:::).*)|::|[0:]+[01]|.*[^:]:|[0-9a-fA-F](?:.*:.*){8}[0-9a-fA-F]|(?:[0-9a-fA-F]:){1,6}[0-9a-fA-F])$)^(?:(::|[0-9a-fA-F]{1,4}:{1,2})([0-9a-fA-F]{1,4}:{1,2}){0,6}([0-9a-fA-F]{1,4}|::)?)(%\d)?$|^/.*/([01]?\d\d?|2[0-4]\d|25[0-5])(?:\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])){3}(%\d)?$)", # /.*/ipv6 or /.*/ipv4 with or without %rd.
             required=False
         )
     )

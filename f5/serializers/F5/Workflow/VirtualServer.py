@@ -52,7 +52,10 @@ class F5WorkflowVirtualServerSerializer(serializers.Serializer):
                     regex='^([01]?\d\d?|2[0-4]\d|25[0-5])(?:\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])){3}(:\d*)?$',
                     required=True
                 )
-                mask = serializers.IPAddressField(required=True)
+                mask = serializers.RegexField(
+                    regex='(^(((255\.){3}(255|254|252|248|240|224|192|128|0+))|((255\.){2}(255|254|252|248|240|224|192|128|0+)\.0)|((255\.)(255|254|252|248|240|224|192|128|0+)(\.0+){2})|((255|254|252|248|240|224|192|128|0+)(\.0+){3}))$|any|any4|any6)',
+                    required=True
+                )
                 source = serializers.RegexField(
                     regex='^([01]?\d\d?|2[0-4]\d|25[0-5])(?:\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])){3}(?:/\d*)?$',
                     required=True

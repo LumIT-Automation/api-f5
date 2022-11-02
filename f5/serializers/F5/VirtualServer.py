@@ -41,13 +41,17 @@ class F5VirtualServerSerializer(serializers.Serializer):
     creationTime = serializers.CharField(max_length=255, required=False)
     destination = serializers.RegexField(
         regex='^/.*/([01]?\d\d?|2[0-4]\d|25[0-5])(?:\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])){3}(%\d)?(:\d*)?$',
-        required=True)
+        required=True
+    )
     enabled = serializers.BooleanField(required=False)
     evictionProtected = serializers.CharField(max_length=255, required=False)
     gtmScore = serializers.IntegerField(required=False)
     ipProtocol = serializers.CharField(max_length=255, required=False)
     lastModifiedTime = serializers.CharField(max_length=255, required=False)
-    mask = serializers.IPAddressField(required=True)
+    mask = serializers.RegexField(
+        regex='(^(((255\.){3}(255|254|252|248|240|224|192|128|0+))|((255\.){2}(255|254|252|248|240|224|192|128|0+)\.0)|((255\.)(255|254|252|248|240|224|192|128|0+)(\.0+){2})|((255|254|252|248|240|224|192|128|0+)(\.0+){3}))$|any|any4|any6)',
+        required=True
+    )
     mirror = serializers.CharField(max_length=255, required=False)
     mobileAppTunnel = serializers.CharField(max_length=255, required=False)
     nat64 = serializers.CharField(max_length=255, required=False)
@@ -60,7 +64,9 @@ class F5VirtualServerSerializer(serializers.Serializer):
     rateLimitSrcMask = serializers.IntegerField(required=False)
     serviceDownImmediateAction = serializers.CharField(max_length=255, required=False)
     source = serializers.RegexField(
-        regex='^([01]?\d\d?|2[0-4]\d|25[0-5])(?:\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])){3}(%\d)?(?:/\d*)?$', required=True)
+        regex='^([01]?\d\d?|2[0-4]\d|25[0-5])(?:\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])){3}(%\d)?(?:/\d*)?$',
+        required=True
+    )
     sourceAddressTranslation = F5VirtualServerSourceAddressTranslationSerializer(required=True)
     sourcePort = serializers.CharField(max_length=255, required=False)
     synCookieStatus = serializers.CharField(max_length=255, required=False)
