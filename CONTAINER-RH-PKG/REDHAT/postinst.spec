@@ -21,7 +21,7 @@ function containerSetup()
 
     # First container run: associate name, bind ports, bind fs volume, define init process, ...
     # api-f5 folder will be bound to /var/lib/containers/storage/volumes/.
-    podman run --name api-f5 -v api-f5:/var/www/api/api -v api-f5-db:/var/lib/mysql -v api-f5-cacerts:/usr/local/share/ca-certificates -dt localhost/api-f5 /sbin/init
+    podman run --name api-f5 -v api-f5:/var/www/api/api -v api-f5-db:/var/lib/mysql -v api-f5-cacerts:/usr/local/share/ca-certificates -dt localhost/api-f5 /lib/systemd/systemd
 
     podman exec api-f5 chown -R www-data:www-data /var/www/api/api # within container.
     podman exec api-f5 chown -R mysql:mysql /var/lib/mysql # within container.
@@ -79,9 +79,6 @@ function containerSetup()
         # Database update via diff.sql (migrations).
         echo "Applying migrations..."
         podman exec api-f5 bash /var/www/api/f5/sql/migrate.sh
-
-        # Activate mysql audit plugin.
-        podman exec api-f5 bash -c "cp -p /usr/share/automation-interface-api/51-mariadb.cnf /etc/mysql/mariadb.conf.d"
     else
         echo "Failed to access MariaDB RDBMS, auth_socket plugin must be enabled for the database root user. Quitting."
         exit 1

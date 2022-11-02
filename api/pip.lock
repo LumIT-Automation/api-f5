@@ -14,10 +14,9 @@ pip==22.3
 pkg_resources==0.0.0
 pycparser==2.21
 PyJWT==2.0.1
-pytz==2022.5
+pytz==2022.6
 redis==3.5.3
 requests==2.25.1
-setuptools==40.8.0
+setuptools==44.1.1
 sqlparse==0.4.3
-typing_extensions==4.4.0
 urllib3==1.26.12

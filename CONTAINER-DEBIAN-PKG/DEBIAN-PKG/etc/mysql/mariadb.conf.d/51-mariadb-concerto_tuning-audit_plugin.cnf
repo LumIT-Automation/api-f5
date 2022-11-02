@@ -1,0 +1,26 @@
+[mysqld]
+# * Fine Tuning
+#
+#key_buffer_size        = 16M
+#max_allowed_packet     = 16M
+thread_stack           = 192K
+thread_cache_size      = 1024
+# This replaces the startup script and checks MyISAM tables if needed
+# the first time they are touched
+#myisam_recover_options = BACKUP
+max_connections        = 1024
+#table_cache            = 64
+# thread_concurrency     = 1024
+
+
+[mariadb]
+plugin_load_add = server_audit
+server_audit=FORCE_PLUS_PERMANENT
+server_audit_logging = on
+server-audit-output-type = syslog
+server_audit_syslog_ident = 'mysql-server_auditing'
+# server_audit_syslog_info = 'info string'
+server_audit_syslog_facility = 'LOG_DAEMON'
+server_audit_syslog_priority = 'LOG_INFO'
+
+

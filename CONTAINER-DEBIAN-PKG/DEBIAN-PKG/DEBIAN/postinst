@@ -7,7 +7,7 @@ if [ "$1" == "configure" ]; then
     sed -i -r -e 's#.*Unattended-Upgrade::SyslogEnable .*#Unattended-Upgrade::SyslogEnable "true";#' -e 's#.*Unattended-Upgrade::SyslogFacility .*#Unattended-Upgrade::SyslogFacility "local5";#' /etc/apt/apt.conf.d/50unattended-upgrades
 
     printf "\n* Setting up Python3 as default Python interpreter...\n"
-    update-alternatives --install /usr/bin/python python /usr/bin/python3.7 1
+    update-alternatives --install /usr/bin/python python /usr/bin/python3.9 1
     update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1 # best practice for simply creating a symlink.
 
     printf "\n* Enabling shell capabilities for the Apache user...\n"
@@ -37,12 +37,9 @@ if [ "$1" == "configure" ]; then
 
     # Configure mariadb logging if it is installed.
     if dpkg -l | grep -q mariadb-server; then
-        # By default /etc/systemd/system/mysql.service and mysqld.service are symlink to /lib/systemd/system/mariadb.service.
-        sed -i -r -e '/^\[Service\]$/a StandardOutput=syslog\nStandardError=syslog\nSyslogFacility=daemon\nSyslogLevel=warn\nSyslogIdentifier=mysql' /etc/systemd/system/mysql.service # this one replaces the symlink with a new file.
-        chmod 644 /etc/systemd/system/mysql.service
-        rm -f /etc/systemd/system/mysqld.service
-        ln -s /etc/systemd/system/mysql.service /etc/systemd/system/mysqld.service
-        ln -s /etc/systemd/system/mysql.service /etc/systemd/system/mariadb.service
+        ln -s /etc/systemd/system/mariadb.service /etc/systemd/system/mysql.service
+        ln -s /etc/systemd/system/mariadb.service /etc/systemd/system/mysqld.service
+        systemctl enable mariadb.service
     fi
 
     printf "\n* Enabling local services...\n"

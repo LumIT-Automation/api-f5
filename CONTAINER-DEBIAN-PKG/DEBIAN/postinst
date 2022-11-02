@@ -17,10 +17,11 @@ if [ "$1" == "configure" ]; then
     # api-f5 folder will be bound to /var/lib/containers/storage/volumes/.
     # Until the package is not uninstalled+purged, fs volumes remain untouched -> newly installed package's configuration files are then rewritten with volume's ones (this is why some services are restarted).
     # Side effect is that new package's configuration directives are ignored, so the user must be informed ("Differences from stock config").
-    podman run --name api-f5 -v api-f5:/var/www/api/api -v api-f5-db:/var/lib/mysql -v api-f5-cacerts:/usr/local/share/ca-certificates -dt localhost/api-f5 /sbin/init
+    podman run --name api-f5 -v api-f5:/var/www/api/api -v api-f5-db:/var/lib/mysql -v api-f5-cacerts:/usr/local/share/ca-certificates -dt localhost/api-f5 /lib/systemd/systemd
 
     podman exec api-f5 chown -R www-data:www-data /var/www/api/api # within container.
     podman exec api-f5 chown -R mysql:mysql /var/lib/mysql; podman exec api-f5 systemctl restart mariadb # within container.
+    podman exec sso systemctl restart mysql
 
     printf "\n* Starting Container Service on HOST...\n"
     systemctl daemon-reload
@@ -74,9 +75,6 @@ if [ "$1" == "configure" ]; then
         # Database update via diff.sql (migrations).
         echo "Applying migrations..."
         podman exec api-f5 bash /var/www/api/f5/sql/migrate.sh
-
-        # Activate mysql audit plugin.
-        podman exec api-f5 bash -c "cp -p /usr/share/automation-interface-api/51-mariadb.cnf /etc/mysql/mariadb.conf.d"
     else
         echo "Failed to access MariaDB RDBMS, auth_socket plugin must be enabled for the database root user. Quitting."
         exit 1

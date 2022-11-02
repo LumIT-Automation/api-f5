@@ -1,4 +1,4 @@
-FROM docker.io/amd64/debian:buster
+FROM docker.io/amd64/debian:bullseye
 LABEL AUTOMATION_CONTAINER_IMAGE="api-f5"
 EXPOSE 80/tcp
 
