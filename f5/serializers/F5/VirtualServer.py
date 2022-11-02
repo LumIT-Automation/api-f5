@@ -84,6 +84,6 @@ class F5VirtualServerSerializer(serializers.Serializer):
     profilesReference = F5VirtualServerReferenceSerializer(required=False)
     profiles = serializers.CharField(max_length=255, required=False)
     rules = serializers.ListField(
-        serializers.CharField(max_length=255, required=False)
+        child=serializers.CharField(max_length=255, required=False)
     )
     rulesReference = F5VirtualServersRulesReferenceSerializer(many=True, required=False)
