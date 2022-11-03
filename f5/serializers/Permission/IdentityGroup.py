@@ -27,7 +27,7 @@ class IdentityGroupsAssestPrivilegeItems(serializers.Serializer):
 
         # Adding dynamic fields as taken from the Privilege model.
         additionalFields = []
-        r = Privilege.list()
+        r = Privilege.dataList()
         for additionalField in r:
             if "privilege" in additionalField:
                 additionalFields.append(additionalField["privilege"])
