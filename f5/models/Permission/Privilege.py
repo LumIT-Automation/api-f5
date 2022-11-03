@@ -10,6 +10,8 @@ class Privilege:
         self.privilege_type = ""
         self.description = ""
 
+        self.__load()
+
 
 
     ####################################################################################################################
@@ -20,5 +22,21 @@ class Privilege:
     def list() -> list:
         try:
             return Repository.list()
+        except Exception as e:
+            raise e
+
+
+
+    ####################################################################################################################
+    # Private methods
+    ####################################################################################################################
+
+    def __load(self) -> None:
+        try:
+            info = Repository.get(self.id)
+
+            # Set attributes.
+            for k, v in info.items():
+                setattr(self, k, v)
         except Exception as e:
             raise e
