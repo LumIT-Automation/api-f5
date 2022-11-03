@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from f5.serializers.Permission.Role import IdentityRoleSerializer
+from f5.serializers.Permission.Role import RoleSerializer
 
 
-class IdentityRolesSerializer(serializers.Serializer):
-    items = IdentityRoleSerializer(many=True)
+class RolesSerializer(serializers.Serializer):
+    items = RoleSerializer(many=True)

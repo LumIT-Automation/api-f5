@@ -5,7 +5,7 @@ from rest_framework import status
 from f5.models.Permission.Role import Role
 from f5.models.Permission.Permission import Permission
 
-from f5.serializers.Permission.Roles import IdentityRolesSerializer as Serializer
+from f5.serializers.Permission.Roles import RolesSerializer as Serializer
 
 from f5.controllers.CustomController import CustomController
 from f5.helpers.Conditional import Conditional

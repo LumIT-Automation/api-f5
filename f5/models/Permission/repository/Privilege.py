@@ -2,7 +2,6 @@ from django.db import connection
 
 from f5.helpers.Exception import CustomException
 from f5.helpers.Database import Database as DBHelper
-from f5.helpers.Log import Log
 
 
 class Privilege:
@@ -40,6 +39,7 @@ class Privilege:
     @staticmethod
     def list() -> list:
         c = connection.cursor()
+
         try:
             c.execute("SELECT * FROM privilege")
 
