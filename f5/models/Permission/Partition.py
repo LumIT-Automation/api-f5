@@ -8,7 +8,7 @@ class Partition:
         super().__init__(*args, **kwargs)
 
         self.id: int = int(id)
-        self.id_asset: int = int(assetId)
+        self.id_asset: int = int(assetId) # simple property, not composition.
         self.partition: str = name
         self.description: str = ""
 
@@ -33,25 +33,25 @@ class Partition:
     ####################################################################################################################
 
     @staticmethod
-    def add(assetId: int, partition: str, role: str = "") -> int:
+    def add(asset: int, partition: str, role: str = "") -> int:
         # If admin: "any" is the only valid choice (on selected assetId).
         if role == "admin":
             partition = "any"
 
         if partition == "any":
             try:
-                did = Repository.add(assetId, partition)
+                did = Repository.add(asset, partition)
                 return did
             except Exception as e:
                 raise e
 
         else:
             # Check if assetId/partition is a valid F5 partition (at the time of the insert).
-            partitions = F5Partition.list(assetId)
+            partitions = F5Partition.list(asset)
             for v in partitions:
                 if v["name"] == partition:
                     try:
-                        pid = Repository.add(assetId, partition)
+                        pid = Repository.add(asset, partition)
                         return pid
                     except Exception as e:
                         raise e
