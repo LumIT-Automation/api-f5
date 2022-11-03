@@ -39,7 +39,7 @@ class IdentityGroup:
     ####################################################################################################################
 
     @staticmethod
-    def list() -> list:
+    def dataList() -> list:
         try:
             return Repository.list()
         except Exception as e:
