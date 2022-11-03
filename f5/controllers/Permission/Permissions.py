@@ -32,7 +32,7 @@ class PermissionsController(CustomController):
                 data = {
                     "data": {
                         "items": CustomController.validate(
-                            Permission.permissionsRawList(),
+                            Permission.permissionsDataList(),
                             PermissionsSerializer,
                             "list"
                         )

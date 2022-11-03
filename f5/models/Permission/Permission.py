@@ -72,7 +72,10 @@ class Permission:
 
 
     @staticmethod
-    def permissionsRawList() -> list:
+    def permissionsDataList() -> list:
+
+        # List of permissions as List[dict].
+        # Note. Partition information differ a bit from Partition model (historical reasons).
 
         #     {
         #         "id": 2,
@@ -94,6 +97,8 @@ class Permission:
 
     @staticmethod
     def authorizationsList(groups: list) -> dict:
+
+        # List of authorizations a user has, grouped by authorization type.
 
         #     "assets_get": [
         #         {
