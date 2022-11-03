@@ -4,7 +4,6 @@ from f5.models.Permission.Privilege import Privilege
 
 from f5.models.Permission.repository.Role import Role as Repository
 from f5.models.Permission.repository.RolePrivilege import RolePrivilege as RolePrivilegeRepository
-from f5.models.Permission.repository.Privilege import Privilege as PrivilegeRepository
 
 
 class Role:
@@ -15,7 +14,7 @@ class Role:
         self.role: str = role
         self.description: str = ""
 
-        self.privileges: List[PrivilegeRepository] = []
+        self.privileges: List[Privilege] = []
 
         self.__load(loadPrivilege=loadPrivilege)
 
