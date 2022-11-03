@@ -7,10 +7,10 @@ class Privilege:
     def __init__(self, id: int, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.id = id
-        self.privilege = ""
-        self.privilege_type = ""
-        self.description = ""
+        self.id: int = int(id)
+        self.privilege: str = ""
+        self.privilege_type: str = ""
+        self.description: str = ""
 
         self.__load()
 

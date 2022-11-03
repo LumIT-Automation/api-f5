@@ -26,7 +26,7 @@ class PermissionPrivilege:
             # Build WHERE clause when filterGroups is specified.
             if filterGroups:
                 groupWhere = "WHERE ("
-                for g in filterGroups:
+                for _ in filterGroups:
                     groupWhere += "identity_group.identity_group_identifier = %s || "
                 groupWhere = groupWhere[:-4] + ") "
 
