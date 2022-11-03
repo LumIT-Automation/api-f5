@@ -34,7 +34,7 @@ class PermissionRolesController(CustomController):
                 data = {
                     "data": {
                         "items": CustomController.validate(
-                            Role.list(loadPrivilege=loadPrivilege),
+                            Role.dataList(loadPrivilege=loadPrivilege),
                             Serializer,
                             "list"
                         )

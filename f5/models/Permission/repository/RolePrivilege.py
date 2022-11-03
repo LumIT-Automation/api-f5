@@ -23,6 +23,32 @@ class RolePrivilege:
     ####################################################################################################################
 
     @staticmethod
+    def rolePrivileges(roleId: int) -> List[int]:
+        c = connection.cursor()
+        privilegesId = []
+
+        try:
+            c.execute(
+                "SELECT privilege.id FROM role "
+                "LEFT JOIN role_privilege ON role_privilege.id_role = role.id "
+                "LEFT JOIN privilege ON privilege.id = role_privilege.id_privilege "
+                "WHERE role.id = %s", [roleId])
+
+            r = DBHelper.asDict(c)
+            for p in r:
+                privilegesId.append(p["id"])
+
+            return privilegesId
+        except IndexError:
+            raise CustomException(status=404, payload={"database": "non existent role"})
+        except Exception as e:
+            raise CustomException(status=400, payload={"database": e.__str__()})
+        finally:
+            c.close()
+
+
+
+    @staticmethod
     def list() -> List[Dict]:
         j = 0
         c = connection.cursor()

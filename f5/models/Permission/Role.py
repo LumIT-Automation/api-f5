@@ -1,8 +1,10 @@
 from typing import List
 
+from f5.models.Permission.Privilege import Privilege
+
 from f5.models.Permission.repository.Role import Role as Repository
 from f5.models.Permission.repository.RolePrivilege import RolePrivilege as RolePrivilegeRepository
-from f5.models.Permission.repository.Privilege import Privilege
+from f5.models.Permission.repository.Privilege import Privilege as PrivilegeRepository
 
 
 class Role:
@@ -13,7 +15,7 @@ class Role:
         self.role: str = role
         self.description: str = ""
 
-        self.privileges: List[Privilege] = []
+        self.privileges: List[PrivilegeRepository] = []
 
         self.__load(loadPrivilege=loadPrivilege)
 
@@ -25,6 +27,22 @@ class Role:
 
     @staticmethod
     def list(loadPrivilege: bool = False) -> list:
+        roles = []
+
+        try:
+            for role in Repository.list():
+                roles.append(
+                    Role(id=role["id"], loadPrivilege=loadPrivilege)
+                )
+
+            return roles
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
+    def dataList(loadPrivilege: bool = False) -> list:
         try:
             if loadPrivilege:
                 return RolePrivilegeRepository.list()
@@ -44,7 +62,10 @@ class Role:
             info = Repository.get(id=self.id, role=self.role)
 
             if loadPrivilege:
-                pass #@todo.
+                for privilegeId in RolePrivilegeRepository.rolePrivileges(roleId=self.id):
+                    self.privileges.append(
+                        Privilege(privilegeId)
+                    )
 
             # Set attributes.
             for k, v in info.items():
