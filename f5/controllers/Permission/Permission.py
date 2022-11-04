@@ -2,16 +2,12 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
 
-from f5.models.Permission.IdentityGroup import IdentityGroup
-from f5.models.Permission.Role import Role
-from f5.models.Permission.Partition import Partition
 from f5.models.Permission.Permission import Permission
 
 from f5.serializers.Permission.Permission import PermissionSerializer as Serializer
 
 from f5.controllers.CustomController import CustomController
 
-from f5.helpers.Exception import CustomException
 from f5.helpers.Log import Log
 
 
@@ -53,35 +49,14 @@ class PermissionController(CustomController):
                 if serializer.is_valid():
                     data = serializer.validated_data
 
-                    group = data["identity_group_identifier"]
-                    role = data["role"]
-                    partitionAssetId = data["partition"]["id_asset"]
-                    partitionName = data["partition"]["name"]
-
-                    # Get existent or new partition.
-                    if role == "admin":
-                        # role admin -> partition "any", which always exists.
-                        partition = Partition(assetId=partitionAssetId, name="any")
-                    else:
-                        try:
-                            # Try retrieving partitionId.
-                            partition = Partition(assetId=partitionAssetId, name=partitionName)
-                        except CustomException as e:
-                            if e.status == 404:
-                                try:
-                                    # If partition does not exist, create it (Permissions database).
-                                    partition = Partition(
-                                        id=Partition.add(partitionAssetId, partitionName)
-                                    )
-                                except Exception:
-                                    raise e
-                            else:
-                                raise e
-
-                    Permission(permissionId).modify(
-                        identityGroup=IdentityGroup(identityGroupIdentifier=group),
-                        role=Role(role=role),
-                        partition=partition
+                    Permission.modifyFacade(
+                        permissionId=permissionId,
+                        identityGroupId=data["identity_group_identifier"],
+                        role=data["role"],
+                        partitionInfo={
+                            "assetId": data["partition"]["id_asset"],
+                            "name": data["partition"]["name"]
+                        }
                     )
 
                     httpStatus = status.HTTP_200_OK

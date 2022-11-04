@@ -5,6 +5,8 @@ from f5.models.Permission.IdentityGroup import IdentityGroup
 from f5.models.Permission.repository.Permission import Permission as Repository
 from f5.models.Permission.repository.PermissionPrivilege import PermissionPrivilege as PermissionPrivilegeRepository
 
+from f5.helpers.Exception import CustomException
+
 
 class Permission:
 
@@ -147,6 +149,78 @@ class Permission:
                 identityGroupId=identityGroup.id,
                 roleId=role.id,
                 partitionId=partition.id
+            )
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
+    def addFacade(identityGroupId: str, role: str, partitionInfo: dict) -> None:
+        partitionAssetId = partitionInfo.get("assetId", "")
+        partitionName = partitionInfo.get("name", "")
+
+        try:
+            # Get existent or new partition.
+            if role == "admin":
+                # role admin -> "any" partition, which always exists.
+                partition = Partition(assetId=partitionAssetId, name="any")
+            else:
+                try:
+                    # Try retrieving partition.
+                    partition = Partition(assetId=partitionAssetId, name=partitionName)
+                except CustomException as e:
+                    if e.status == 404:
+                        try:
+                            # If partition does not exist, create it (permissions database).
+                            partition = Partition(
+                                id=Partition.add(partitionAssetId, partitionName)
+                            )
+                        except Exception:
+                            raise e
+                    else:
+                        raise e
+
+            Permission.add(
+                identityGroup=IdentityGroup(identityGroupIdentifier=identityGroupId),
+                role=Role(role=role),
+                partition=partition
+            )
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
+    def modifyFacade(permissionId: int, identityGroupId: str, role: str, partitionInfo: dict) -> None:
+        partitionAssetId = partitionInfo.get("assetId", "")
+        partitionName = partitionInfo.get("name", "")
+
+        try:
+            # Get existent or new partition.
+            if role == "admin":
+                # role admin -> "any" partition, which always exists.
+                partition = Partition(assetId=partitionAssetId, name="any")
+            else:
+                try:
+                    # Try retrieving partition.
+                    partition = Partition(assetId=partitionAssetId, name=partitionName)
+                except CustomException as e:
+                    if e.status == 404:
+                        try:
+                            # If partition does not exist, create it (permissions database).
+                            partition = Partition(
+                                id=Partition.add(partitionAssetId, partitionName)
+                            )
+                        except Exception:
+                            raise e
+                    else:
+                        raise e
+
+            Permission(permissionId).modify(
+                identityGroup=IdentityGroup(identityGroupIdentifier=identityGroupId),
+                role=Role(role=role),
+                partition=partition
             )
         except Exception as e:
             raise e
