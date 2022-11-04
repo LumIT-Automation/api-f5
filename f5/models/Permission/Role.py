@@ -41,7 +41,7 @@ class Role:
 
 
     @staticmethod
-    def dataList(loadPrivilege: bool = False) -> list:
+    def dataList(loadPrivilege: bool = False) -> List[dict]:
         try:
             if loadPrivilege:
                 return RolePrivilegeRepository.list()

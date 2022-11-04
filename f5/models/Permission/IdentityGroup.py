@@ -48,13 +48,11 @@ class IdentityGroup:
 
 
     @staticmethod
-    def listWithPermissionsPrivileges(showPrivileges: bool = False, filterGroups: list = None) -> list:
+    def listWithPermissionsPrivileges(showPrivileges: bool = False) -> list:
         # List identity groups with related information regarding the associated roles on partitions,
         # and optionally detailed privileges' descriptions.
-        filterGroups = filterGroups or []
-
         try:
-            return PermissionPrivilegeRepository.list(filterGroups, showPrivileges)
+            return PermissionPrivilegeRepository.list(showPrivileges=showPrivileges)
         except Exception as e:
             raise e
 
