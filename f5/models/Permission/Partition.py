@@ -33,26 +33,19 @@ class Partition:
     ####################################################################################################################
 
     @staticmethod
-    def add(asset: int, partition: str, role: str = "") -> int:
-        # If admin: "any" is the only valid choice (on selected assetId).
-        if role == "admin":
-            partition = "any"
-
+    def add(asset: int, partition: str) -> int:
         if partition == "any":
             try:
-                did = Repository.add(asset, partition)
-                return did
+                return Repository.add(asset, partition)
             except Exception as e:
                 raise e
-
         else:
             # Check if assetId/partition is a valid F5 partition (at the time of the insert).
             partitions = F5Partition.list(asset)
             for v in partitions:
                 if v["name"] == partition:
                     try:
-                        pid = Repository.add(asset, partition)
-                        return pid
+                        return Repository.add(asset, partition)
                     except Exception as e:
                         raise e
 

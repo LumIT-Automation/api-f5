@@ -81,19 +81,24 @@ class PermissionsController(CustomController):
                     partitionAssetId = data["partition"]["id_asset"]
 
                     # Get existent or new partition.
-                    try:
-                        partition = Partition(assetId=partitionAssetId, name=partitionName)
-                    except CustomException as e:
-                        if e.status == 404:
-                            try:
-                                # If domain does not exist, create it (on Permissions database).
-                                partition = Partition(
-                                    id=Partition.add(partitionAssetId, partitionName, role)
-                                )
-                            except Exception:
+                    if role == "admin":
+                        # role admin -> partition "any", which always exists.
+                        partition = Partition(assetId=partitionAssetId, name="any")
+                    else:
+                        try:
+                            # Try retrieving partitionId.
+                            partition = Partition(assetId=partitionAssetId, name=partitionName)
+                        except CustomException as e:
+                            if e.status == 404:
+                                try:
+                                    # If partition does not exist, create it (Permissions database).
+                                    partition = Partition(
+                                        id=Partition.add(partitionAssetId, partitionName)
+                                    )
+                                except Exception:
+                                    raise e
+                            else:
                                 raise e
-                        else:
-                            raise e
 
                     Permission.add(
                         identityGroup=IdentityGroup(identityGroupIdentifier=group),
