@@ -61,7 +61,7 @@ class Asset:
         try:
             aId = Repository.add(data)
 
-            # When inserting an asset, add the "any" domain (Permission).
+            # When inserting an asset, add the "any" partition (Permission).
             PermissionPartition.add(aId, "any")
         except Exception as e:
             raise e
