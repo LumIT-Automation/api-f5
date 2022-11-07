@@ -28,19 +28,6 @@ class Permission:
     # Public methods
     ####################################################################################################################
 
-    def modify(self, identityGroup: IdentityGroup, role: Role, partition: Partition) -> None:
-        try:
-            Repository.modify(
-                self.id,
-                identityGroupId=identityGroup.id,
-                roleId=role.id,
-                partitionId=partition.id
-            )
-        except Exception as e:
-            raise e
-
-
-
     def delete(self) -> None:
         try:
             Repository.delete(self.id)
@@ -143,19 +130,6 @@ class Permission:
 
 
     @staticmethod
-    def add(identityGroup: IdentityGroup, role: Role, partition: Partition) -> None:
-        try:
-            Repository.add(
-                identityGroupId=identityGroup.id,
-                roleId=role.id,
-                partitionId=partition.id
-            )
-        except Exception as e:
-            raise e
-
-
-
-    @staticmethod
     def addFacade(identityGroupId: str, role: str, partitionInfo: dict) -> None:
         partitionAssetId = partitionInfo.get("assetId", "")
         partitionName = partitionInfo.get("name", "")
@@ -181,7 +155,7 @@ class Permission:
                     else:
                         raise e
 
-            Permission.add(
+            Permission.__add(
                 identityGroup=IdentityGroup(identityGroupIdentifier=identityGroupId),
                 role=Role(role=role),
                 partition=partition
@@ -217,7 +191,7 @@ class Permission:
                     else:
                         raise e
 
-            Permission(permissionId).modify(
+            Permission(permissionId).__modify(
                 identityGroup=IdentityGroup(identityGroupIdentifier=identityGroupId),
                 role=Role(role=role),
                 partition=partition
@@ -238,5 +212,35 @@ class Permission:
             self.identityGroup = IdentityGroup(id=info["id_group"])
             self.role = Role(id=info["id_role"])
             self.partition = Partition(id=info["id_partition"])
+        except Exception as e:
+            raise e
+
+
+
+    def __modify(self, identityGroup: IdentityGroup, role: Role, partition: Partition) -> None:
+        try:
+            Repository.modify(
+                self.id,
+                identityGroupId=identityGroup.id,
+                roleId=role.id,
+                partitionId=partition.id
+            )
+        except Exception as e:
+            raise e
+
+
+
+    ####################################################################################################################
+    # Private static methods
+    ####################################################################################################################
+
+    @staticmethod
+    def __add(identityGroup: IdentityGroup, role: Role, partition: Partition) -> None:
+        try:
+            Repository.add(
+                identityGroupId=identityGroup.id,
+                roleId=role.id,
+                partitionId=partition.id
+            )
         except Exception as e:
             raise e
