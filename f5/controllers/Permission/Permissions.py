@@ -45,6 +45,7 @@ class PermissionsController(CustomController):
                 else:
                     httpStatus = status.HTTP_200_OK
             else:
+                data = None
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
             data, httpStatus, headers = CustomController.exceptionHandler(e)
