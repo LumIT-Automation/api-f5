@@ -21,7 +21,7 @@ if [ "$1" == "configure" ]; then
 
     podman exec api-f5 chown -R www-data:www-data /var/www/api/api # within container.
     podman exec api-f5 chown -R mysql:mysql /var/lib/mysql; podman exec api-f5 systemctl restart mariadb # within container.
-    podman exec sso systemctl restart mysql
+    podman exec api-f5 systemctl restart mysql
 
     printf "\n* Starting Container Service on HOST...\n"
     systemctl daemon-reload
