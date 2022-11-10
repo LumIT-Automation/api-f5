@@ -39,10 +39,7 @@ class F5VirtualServerSerializer(serializers.Serializer):
     cmpEnabled = serializers.CharField(max_length=255, required=False)
     connectionLimit = serializers.IntegerField(required=False)
     creationTime = serializers.CharField(max_length=255, required=False)
-    destination = serializers.RegexField(
-        regex='^/.*/([01]?\d\d?|2[0-4]\d|25[0-5])(?:\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])){3}(%\d)?(:\d*)?$',
-        required=True
-    )
+    destination = serializers.CharField(max_length=255, required=False)
     enabled = serializers.BooleanField(required=False)
     evictionProtected = serializers.CharField(max_length=255, required=False)
     gtmScore = serializers.IntegerField(required=False)
@@ -63,10 +60,7 @@ class F5VirtualServerSerializer(serializers.Serializer):
     rateLimitMode = serializers.CharField(max_length=255, required=False)
     rateLimitSrcMask = serializers.IntegerField(required=False)
     serviceDownImmediateAction = serializers.CharField(max_length=255, required=False)
-    source = serializers.RegexField(
-        regex='^([01]?\d\d?|2[0-4]\d|25[0-5])(?:\.(?:[01]?\d\d?|2[0-4]\d|25[0-5])){3}(%\d)?(?:/\d*)?$',
-        required=True
-    )
+    source = serializers.CharField(max_length=255, required=False)
     sourceAddressTranslation = F5VirtualServerSourceAddressTranslationSerializer(required=True)
     sourcePort = serializers.CharField(max_length=255, required=False)
     synCookieStatus = serializers.CharField(max_length=255, required=False)
