@@ -1,31 +1,43 @@
 from rest_framework import serializers
 
 
-class F5PoolMemberStatsSerializer(serializers.Serializer):
-    monitorRule = serializers.CharField(max_length=255, required=False)
-    monitorStatus = serializers.CharField(max_length=255, required=False)
-    serverside_curConns = serializers.CharField(max_length=255, required=False)
-    status_availabilityState = serializers.CharField(max_length=255, required=False)
-    status_enabledState = serializers.CharField(max_length=255, required=False)
-    status_statusReason = serializers.CharField(max_length=255, required=False)
-
-
-
 def sanitize(data: dict) -> dict:
-    # Invalid key for a serializer: sanitize it.
-    # "status.enabledState": {
-    #     "description": "enabled"
-    # },
     cleanData = dict()
 
     for k, v in data.items():
-        if "." in k:
-            k = k.replace(".", "_")
+        if not "." in k:
+            kn = k
+        else:
+            kn = k.replace(".", "_") # k is immutable.
 
         if "value" in v:
-            cleanData[k] = v["value"]
-
-        if "description" in v:
-            cleanData[k] = v["description"]
+            cleanData[kn] = v["value"]
+        elif "description" in v:
+            cleanData[kn] = v["description"]
+        else:
+            cleanData[kn] = v
 
     return cleanData
+
+class F5PoolMemberDescriptionDictSerializer(serializers.Serializer):
+    description = serializers.CharField(max_length=255, required=False)
+
+class F5PoolMemberValueDictSerializer(serializers.Serializer):
+    value = serializers.IntegerField(required=False)
+
+class F5PoolMemberStatsSerializer(serializers.Serializer):
+
+    def to_internal_value(self, data):
+        try:
+            newData = sanitize(data)
+
+            return super().to_internal_value(newData)
+        except Exception as e:
+            raise e
+
+    monitorRule = serializers.CharField(max_length=255, required=False)
+    monitorStatus = serializers.CharField(max_length=255, required=False)
+    serverside_curConns =  serializers.IntegerField(required=False)
+    status_availabilityState =  serializers.CharField(max_length=255, required=False)
+    status_enabledState =  serializers.CharField(max_length=255, required=False)
+    status_statusReason = serializers.CharField(max_length=255, required=False)
