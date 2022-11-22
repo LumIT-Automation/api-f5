@@ -24,7 +24,7 @@ function containerSetup()
     podman run --name api-f5 -v api-f5:/var/www/api/api -v api-f5-db:/var/lib/mysql -v api-f5-cacerts:/usr/local/share/ca-certificates -dt localhost/api-f5 /lib/systemd/systemd
 
     podman exec api-f5 chown -R www-data:www-data /var/www/api/api # within container.
-    podman exec api-f5 chown -R mysql:mysql /var/lib/mysql # within container.
+    podman exec api-f5 chown -R mysql:mysql /var/lib/mysql
     podman exec api-f5 systemctl restart mysql
 
     printf "$wallBanner Starting Container Service on HOST..." | wall -n
