@@ -13,6 +13,21 @@ class Policy:
     ####################################################################################################################
 
     @staticmethod
+    def info(assetId: int, id: str) -> dict:
+        try:
+            f5 = Asset(assetId)
+            api = ApiSupplicant(
+                endpoint=f5.baseurl+"tm/asm/policies/"+id+"/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
+            )
+            return api.get()
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
     def list(assetId: int) -> List[dict]:
         try:
             f5 = Asset(assetId)

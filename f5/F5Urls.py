@@ -2,7 +2,7 @@ from django.urls import path
 
 from .controllers import Root
 from .controllers.F5 import Partitions, RouteDomains, Datagroup, Datagroups, Node, Nodes, Monitor, Monitors, Certificate, Certificates, Pools, Pool, SnatPool, SnatPools, PoolMembers, PoolMember, PoolMemberStats, Profile, Profiles, Irule, Irules, Policy, Policies, VirtualServer, VirtualServers
-from .controllers.F5.ASM import Policies as ASMPolicies
+from .controllers.F5.ASM import Policies as ASMPolicies, Policy as ASMPolicy
 from .controllers.F5.Asset import Asset, Assets
 from .controllers.F5.Workflow import VirtualServersController as WorkflowVirtualServers, VirtualServerController as WorkflowVirtualServer
 from .controllers.Permission import Authorizations, IdentityGroups, IdentityGroup, Roles, Permission, Permissions
@@ -35,6 +35,7 @@ urlpatterns = [
 
     # ASM endpoints.
     path('<int:assetId>/asm/policies/', ASMPolicies.F5ASMMPoliciesController.as_view(), name='f5-asm-policies'),
+    path('<int:assetId>/asm/policy/<str:policyId>/', ASMPolicy.F5PolicyController.as_view(), name='f5-asm-policy'),
 
     # Datagroup.
     path('<int:assetId>/<str:partitionName>/datagroup/<str:datagroupType>/<str:datagroupName>/', Datagroup.F5DatagroupController.as_view(), name='f5-datagroup'),

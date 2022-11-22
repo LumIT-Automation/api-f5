@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "59fda16b-ca3d-4754-aed1-6c3492e154d5",
+		"_postman_id": "55bc5474-c0eb-4eee-a3af-1752c602999b",
 		"name": "api-f5",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -905,6 +905,97 @@
 										"f5",
 										"configuration",
 										"global",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "ASM",
+					"item": [
+						{
+							"name": "policies",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "edfb456005712c3e68d97b525e247981",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/2/asm/policies/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"2",
+										"asm",
+										"policies",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "policiy",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "edfb456005712c3e68d97b525e247981",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/2/asm/policy/uIGB1pBIcH8WprjX8KBR0w//",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"2",
+										"asm",
+										"policy",
+										"uIGB1pBIcH8WprjX8KBR0w",
+										"",
 										""
 									]
 								}

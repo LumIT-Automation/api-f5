@@ -13,16 +13,27 @@ RulesReference: Dict[str, Union[str, bool]] = {
 }
 
 class Policy:
-    def __init__(self, assetId: int, *args, **kwargs):
+    def __init__(self, assetId: int, id: str, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.assetId: int = int(assetId)
+        self.id: str = id
 
 
 
     ####################################################################################################################
     # Public methods
     ####################################################################################################################
+
+    def info(self) -> dict:
+        try:
+            i = Backend.info(self.assetId, self.id)
+            i["assetId"] = self.assetId
+
+            return i
+        except Exception as e:
+            raise e
+
 
 
     ####################################################################################################################
