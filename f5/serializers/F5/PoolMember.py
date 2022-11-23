@@ -20,5 +20,5 @@ class F5PoolMemberSerializer(serializers.Serializer):
     ratio = serializers.IntegerField(required=False)
     session = serializers.CharField(max_length=255, required=False)
     state = serializers.CharField(max_length=255, required=False)
-    enabledState = serializers.CharField(max_length=255, required=False)
+    parentState = serializers.CharField(max_length=255, required=False)
     fqdn = F5PoolMemberInnerFQDNSerializer(required=False)

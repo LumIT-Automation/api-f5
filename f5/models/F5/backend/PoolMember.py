@@ -138,7 +138,7 @@ class PoolMember:
             for el in o:
                 for m in membersStats:
                     if el["fullPath"] == m["fullPath"]:
-                        el["enabledState"] = m["enabledState"]
+                        el["parentState"] = m["enabledState"]
 
             return o
         except KeyError:
