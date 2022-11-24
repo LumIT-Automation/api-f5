@@ -20,7 +20,7 @@ class PoolMember:
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
-            return api.get()
+            return api.get()["payload"]
         except Exception as e:
             raise e
 
@@ -37,7 +37,7 @@ class PoolMember:
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
-            r = api.get()
+            r = api.get()["payload"]
 
             #{
             #    "kind": "tm:ltm:pool:members:membersstats",
@@ -116,7 +116,7 @@ class PoolMember:
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
-            return api.get()["items"]
+            return api.get()["payload"]["items"]
         except Exception as e:
             raise e
 

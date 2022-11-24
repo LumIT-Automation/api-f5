@@ -61,7 +61,7 @@ class Datagroup:
                 tlsVerify=f5.tlsverify
             )
 
-            for m in api.get()["items"]:
+            for m in api.get()["payload"]["items"]:
                 matches = re.search(r"data-group\/(.*)\?", m["reference"]["link"])
                 if matches:
                     dgType = str(matches.group(1)).strip()
@@ -83,7 +83,7 @@ class Datagroup:
                 tlsVerify=f5.tlsverify
             )
 
-            return api.get()["items"]
+            return api.get()["payload"]["items"]
         except Exception as e:
             raise e
 

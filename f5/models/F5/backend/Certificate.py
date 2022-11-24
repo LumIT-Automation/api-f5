@@ -44,7 +44,7 @@ class Certificate:
                     tlsVerify=f5.tlsverify
                 )
 
-                o = api.get()["items"]
+                o = api.get()["payload"]["items"]
             except Exception as e:
                 raise e
 
@@ -79,7 +79,7 @@ class Certificate:
                         "Content-Type": "application/octet-stream; charset=utf-8",
                     },
                     data=content
-                )
+                )["payload"]
 
                 # Successfully uploaded.
                 if "remainingByteCount" in r and int(r["remainingByteCount"]) == 0 and "localFilePath" in r and r["localFilePath"]:
@@ -101,7 +101,7 @@ class Certificate:
                             "from-local-file": str(r["localFilePath"]),
                             "partition": partition
                         })
-                    )
+                    )["payload"]
 
                     if "from-local-file" not in r or r["from-local-file"] == "":
                         raise CustomException(status=400, payload={"message": "Install failed."})

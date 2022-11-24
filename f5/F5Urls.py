@@ -2,7 +2,7 @@ from django.urls import path
 
 from .controllers import Root
 from .controllers.F5 import Partitions, RouteDomains, Datagroup, Datagroups, Node, Nodes, Monitor, Monitors, Certificate, Certificates, Pools, Pool, SnatPool, SnatPools, PoolMembers, PoolMember, PoolMemberStats, Profile, Profiles, Irule, Irules, Policy, Policies, VirtualServer, VirtualServers
-from .controllers.F5.ASM import Policies as ASMPolicies, Policy as ASMPolicy
+from .controllers.F5.ASM import Policies as ASMPolicies, Policy as ASMPolicy, PolicyMerge
 from .controllers.F5.Asset import Asset, Assets
 from .controllers.F5.Workflow import VirtualServersController as WorkflowVirtualServers, VirtualServerController as WorkflowVirtualServer
 from .controllers.Permission import Authorizations, IdentityGroups, IdentityGroup, Roles, Permission, Permissions
@@ -36,6 +36,8 @@ urlpatterns = [
     # ASM endpoints.
     path('<int:assetId>/asm/policies/', ASMPolicies.F5ASMMPoliciesController.as_view(), name='f5-asm-policies'),
     path('<int:assetId>/asm/policy/<str:policyId>/', ASMPolicy.F5PolicyController.as_view(), name='f5-asm-policy'),
+
+    path('<int:assetId>/asm/policy-merge/<str:policyId>/', PolicyMerge.F5PolicyMergeController.as_view(), name='f5-asm-policy-merge'),
 
     # Datagroup.
     path('<int:assetId>/<str:partitionName>/datagroup/<str:datagroupType>/<str:datagroupName>/', Datagroup.F5DatagroupController.as_view(), name='f5-datagroup'),
@@ -92,8 +94,6 @@ urlpatterns = [
     # Virtual server.
     path('<int:assetId>/<str:partitionName>/workflow/virtualservers/<str:virtualServerName>/', WorkflowVirtualServer.F5WorkflowVirtualServerController.as_view(), name='f5-workflow-virtualserver'),
     path('<int:assetId>/<str:partitionName>/workflow/virtualservers/', WorkflowVirtualServers.F5WorkflowVirtualServersController.as_view(), name='f5-workflow-virtualservers'),
-
-
 
     # Log history.
     path('history/', History.HistoryLogsController.as_view(), name='f5-log-history'),

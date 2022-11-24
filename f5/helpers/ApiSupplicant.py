@@ -29,13 +29,15 @@ class ApiSupplicant:
     # Public methods
     ####################################################################################################################
 
-    def get(self) -> dict:
+    def get(self, raw: bool = False, additionalHeaders: dict = None) -> dict:
+        additionalHeaders = additionalHeaders or {}
+
         try:
             Log.actionLog(
                 "[API Supplicant] Fetching remote: GET "+str(self.endpoint)+" with params: "+str(self.params)
             )
 
-            return self.__request(requests.get, params=self.params)
+            return self.__request(requests.get, params=self.params, additionalHeaders=additionalHeaders, raw=raw)
         except Exception as e:
             raise e
 
@@ -98,7 +100,7 @@ class ApiSupplicant:
     # Private methods
     ####################################################################################################################
 
-    def __request(self, request: Callable, additionalHeaders: dict = None, params: dict = None, data: str = ""):
+    def __request(self, request: Callable, additionalHeaders: dict = None, params: dict = None, data: str = "", raw: bool = False) -> dict:
         params = params or {}
         additionalHeaders = additionalHeaders or {}
 
@@ -122,14 +124,18 @@ class ApiSupplicant:
                 timeout=settings.API_SUPPLICANT_NETWORK_TIMEOUT,
                 headers=headers,
                 params=params, # GET parameters.
-                data=data
+                data=data,
+                stream=True
             )
 
             self.responseStatus = response.status_code
             self.responseHeaders = response.headers
 
             try:
-                self.responsePayload = response.json()
+                if raw:
+                    self.responsePayload = response.text
+                else:
+                    self.responsePayload = response.json()
             except Exception:
                 self.responsePayload = {}
 
@@ -138,7 +144,7 @@ class ApiSupplicant:
                     Log.actionLog("[API Supplicant] Remote response "+j[0]+": "+str(j[1]))
 
             # CustomException errors on connection ok but ko status code.
-            if self.responseStatus == 200 or self.responseStatus == 201: # ok / ok on POST.
+            if self.responseStatus == 200 or self.responseStatus == 201 or self.responseStatus == 206: # ok / ok on POST / ok partial content.
                 pass
             elif self.responseStatus == 401:
                 raise CustomException(status=400, payload={"F5": "Wrong credentials for the asset."})
@@ -152,4 +158,7 @@ class ApiSupplicant:
         except Exception as e:
             raise e
 
-        return self.responsePayload
+        return {
+            "headers": self.responseHeaders,
+            "payload": self.responsePayload
+        }

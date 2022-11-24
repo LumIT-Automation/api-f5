@@ -69,7 +69,7 @@ class Policy:
                 tlsVerify=f5.tlsverify
             )
 
-            return api.get()["items"]
+            return api.get()["payload"]["items"]
         except Exception as e:
             raise e
 

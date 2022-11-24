@@ -32,7 +32,7 @@ class F5PolicyController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
                     data = {
-                         "data": Policy(assetId=assetId, id=policyId).info(),
+                        "data": Policy(assetId=assetId, id=policyId).info(),
                         "href": request.get_full_path()
                     }
 

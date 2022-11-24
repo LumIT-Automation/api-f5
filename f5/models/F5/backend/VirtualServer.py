@@ -22,7 +22,7 @@ class VirtualServer:
                 tlsVerify=f5.tlsverify
             )
 
-            return api.get()
+            return api.get()["payload"]
         except Exception as e:
             raise e
 
@@ -38,7 +38,7 @@ class VirtualServer:
                 tlsVerify=f5.tlsverify
             )
 
-            return api.get()
+            return api.get()["payload"]
         except Exception as e:
             raise e
 
@@ -54,7 +54,7 @@ class VirtualServer:
                 tlsVerify=f5.tlsverify
             )
 
-            return api.get()
+            return api.get()["payload"]
         except Exception as e:
             raise e
 
@@ -107,7 +107,7 @@ class VirtualServer:
                 tlsVerify=f5.tlsverify
             )
 
-            return api.get()["items"]
+            return api.get()["payload"]["items"]
         except Exception as e:
             raise e
 
