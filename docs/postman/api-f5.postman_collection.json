@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "55bc5474-c0eb-4eee-a3af-1752c602999b",
+		"_postman_id": "ed12d235-c4ba-486c-80d8-9562dc6fa3d0",
 		"name": "api-f5",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -996,6 +996,58 @@
 										"policy",
 										"uIGB1pBIcH8WprjX8KBR0w",
 										"",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "policiy merge",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "edfb456005712c3e68d97b525e247981",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {}\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/2/asm/policy-merge/LLLpm2asnlSXZFpkuVL6qA/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"2",
+										"asm",
+										"policy-merge",
+										"LLLpm2asnlSXZFpkuVL6qA",
 										""
 									]
 								}
