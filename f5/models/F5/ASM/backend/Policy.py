@@ -124,7 +124,7 @@ class Policy:
     @staticmethod
     def downloadPolicy(assetId: int, filename: str):
         fullResponse = ""
-        fullSize = 0
+        fileSize = 0
         segmentStart = 0
         segmentEnd = 0
 
@@ -142,8 +142,9 @@ class Policy:
                 additionalHeaders = {
                     "Content-Type": "application/json",
                 }
-                if fullSize:
-                    additionalHeaders["Content-Range"] = str(segmentStart) + "-" + str(segmentEnd) + "/" + str(fullSize)
+
+                if fileSize:
+                    additionalHeaders["Content-Range"] = str(segmentStart) + "-" + str(segmentEnd) + "/" + str(fileSize)
 
                 response = api.get(
                     additionalHeaders=additionalHeaders,
@@ -151,23 +152,21 @@ class Policy:
                 )
 
                 if response["status"] == 200:
-                    fullResponse = response["payload"]
+                    fullResponse += response["payload"]
                     break
                 if response["status"] == 206:
                     fullResponse += response["payload"]
 
                     segment = response["headers"]["Content-Range"].split('/')[0]
-                    if not fullSize:
-                        fullSize = int(response["headers"]["Content-Range"].split('/')[1])
+                    if not fileSize:
+                        fileSize = int(response["headers"]["Content-Range"].split('/')[1])
 
-                    segmentStart = int(segment.split('-')[0])
                     segmentEnd = int(segment.split('-')[1])
-
-                    if segmentEnd >= fullSize - 1:
+                    if segmentEnd >= fileSize - 1:
                         break
                     else:
                         segmentStart = segmentEnd + 1
-                        segmentEnd = min(segmentStart + 1048575, fullSize - 1)
+                        segmentEnd = min(segmentStart + 1048575, fileSize - 1)
 
             return fullResponse
         except Exception as e:
