@@ -155,15 +155,15 @@ class Policy:
                     break
                 if response["status"] == 206:
                     fullResponse += response["payload"]
-                    contentRange = response["headers"]["Content-Range"]
 
-                    segment = contentRange.split('/')[0]
+                    segment = response["headers"]["Content-Range"].split('/')[0]
+                    if not fullSize:
+                        fullSize = int(response["headers"]["Content-Range"].split('/')[1])
+
                     segmentStart = int(segment.split('-')[0])
                     segmentEnd = int(segment.split('-')[1])
-                    if not fullSize:
-                        fullSize = int(contentRange.split('/')[1])
 
-                    if segmentEnd == fullSize:
+                    if segmentEnd >= fullSize - 1:
                         break
                     else:
                         segmentStart = segmentEnd + 1
