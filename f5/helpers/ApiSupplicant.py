@@ -160,5 +160,6 @@ class ApiSupplicant:
 
         return {
             "headers": self.responseHeaders,
-            "payload": self.responsePayload
+            "payload": self.responsePayload,
+            "status": self.responseStatus
         }

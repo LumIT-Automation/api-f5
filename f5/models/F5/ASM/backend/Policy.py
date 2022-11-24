@@ -124,6 +124,9 @@ class Policy:
     @staticmethod
     def downloadPolicy(assetId: int, filename: str):
         fullResponse = ""
+        fullSize = 0
+        segmentStart = 0
+        segmentEnd = 0
 
         try:
             f5 = Asset(assetId)
@@ -136,16 +139,36 @@ class Policy:
                     tlsVerify=f5.tlsverify
                 )
 
+                additionalHeaders = {
+                    "Content-Type": "application/json",
+                }
+                if fullSize:
+                    additionalHeaders["Content-Range"] = str(segmentStart) + "-" + str(segmentEnd) + "/" + str(fullSize)
+
                 response = api.get(
-                    additionalHeaders={
-                        "Content-Range": "application/json",
-                    },
+                    additionalHeaders=additionalHeaders,
                     raw=True
                 )
 
-                headers = response["headers"]
-                payload = response["payload"]
+                if response["status"] == 200:
+                    fullResponse = response["payload"]
+                    break
+                if response["status"] == 206:
+                    fullResponse += response["payload"]
+                    contentRange = response["headers"]["Content-Range"]
 
-            return headers["Content-Range"]
+                    segment = contentRange.split('/')[0]
+                    segmentStart = int(segment.split('-')[0])
+                    segmentEnd = int(segment.split('-')[1])
+                    if not fullSize:
+                        fullSize = int(contentRange.split('/')[1])
+
+                    if segmentEnd == fullSize:
+                        break
+                    else:
+                        segmentStart = segmentEnd + 1
+                        segmentEnd = min(segmentStart + 1048575, fullSize - 1)
+
+            return fullResponse
         except Exception as e:
             raise e
