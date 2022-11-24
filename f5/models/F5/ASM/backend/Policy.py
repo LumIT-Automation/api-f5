@@ -124,49 +124,50 @@ class Policy:
     @staticmethod
     def downloadPolicy(assetId: int, filename: str):
         fullResponse = ""
-        fileSize = 0
-        segmentStart = 0
         segmentEnd = 0
 
         try:
             f5 = Asset(assetId)
+            api = ApiSupplicant(
+                endpoint=f5.baseurl + "cm/autodeploy/software-image-downloads/" + filename,
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
+            )
 
-            while True:
-                # Download file (partial content).
-                api = ApiSupplicant(
-                    endpoint=f5.baseurl+"cm/autodeploy/software-image-downloads/" + filename,
-                    auth=(f5.username, f5.password),
-                    tlsVerify=f5.tlsverify
-                )
+            response = api.get(
+                raw=True
+            )
 
-                additionalHeaders = {
-                    "Content-Type": "application/json",
-                }
+            if response["status"] == 200:
+                fullResponse = response["payload"]
 
-                if fileSize:
-                    additionalHeaders["Content-Range"] = str(segmentStart) + "-" + str(segmentEnd) + "/" + str(fileSize)
+            if response["status"] == 206:
+                fileSize = int(response["headers"]["Content-Range"].split('/')[1])
+                fullResponse += response["payload"]
 
-                response = api.get(
-                    additionalHeaders=additionalHeaders,
-                    raw=True
-                )
+                while segmentEnd < fileSize - 1:
+                    Log.log(segmentEnd, "SEGMENT END")
+                    Log.log(fileSize, "FILESIZE")
 
-                if response["status"] == 200:
+                    segment = response["headers"]["Content-Range"].split('/')[0] # 0-1048575.
+                    segmentStart = int(segment.split('-')[1]) + 1
+                    segmentEnd = min(segmentStart + 1048575, fileSize - 1)
+
+                    # Download file (chunk).
+                    api = ApiSupplicant(
+                        endpoint=f5.baseurl+"cm/autodeploy/software-image-downloads/" + filename,
+                        auth=(f5.username, f5.password),
+                        tlsVerify=f5.tlsverify
+                    )
+
+                    response = api.get(
+                        additionalHeaders={
+                            "Content-Range": str(segmentStart) + "-" + str(segmentEnd) + "/" + str(fileSize)
+                        },
+                        raw=True
+                    )
+
                     fullResponse += response["payload"]
-                    break
-                if response["status"] == 206:
-                    fullResponse += response["payload"]
-
-                    segment = response["headers"]["Content-Range"].split('/')[0]
-                    if not fileSize:
-                        fileSize = int(response["headers"]["Content-Range"].split('/')[1])
-
-                    segmentEnd = int(segment.split('-')[1])
-                    if segmentEnd >= fileSize - 1:
-                        break
-                    else:
-                        segmentStart = segmentEnd + 1
-                        segmentEnd = min(segmentStart + 1048575, fileSize - 1)
 
             return fullResponse
         except Exception as e:
