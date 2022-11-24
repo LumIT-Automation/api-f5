@@ -129,7 +129,7 @@ class Policy:
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl + "cm/autodeploy/software-image-downloads/" + filename,
+                endpoint=f5.baseurl+"cm/autodeploy/software-image-downloads/" + filename,
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
@@ -142,13 +142,10 @@ class Policy:
                 fullResponse = response["payload"]
 
             if response["status"] == 206:
-                fileSize = int(response["headers"]["Content-Range"].split('/')[1])
+                fileSize = int(response["headers"]["Content-Range"].split('/')[1]) # 1140143.
                 fullResponse += response["payload"]
 
                 while segmentEnd < fileSize - 1:
-                    Log.log(segmentEnd, "SEGMENT END")
-                    Log.log(fileSize, "FILESIZE")
-
                     segment = response["headers"]["Content-Range"].split('/')[0] # 0-1048575.
                     segmentStart = int(segment.split('-')[1]) + 1
                     segmentEnd = min(segmentStart + 1048575, fileSize - 1)
