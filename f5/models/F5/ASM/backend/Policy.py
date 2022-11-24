@@ -1,5 +1,7 @@
+import sys
 import json
 import time
+from random import randrange
 from datetime import datetime
 from typing import List
 
@@ -125,6 +127,7 @@ class Policy:
     def downloadPolicy(assetId: int, filename: str):
         fullResponse = ""
         segmentEnd = 0
+        delta = 1000000
 
         try:
             f5 = Asset(assetId)
@@ -148,7 +151,7 @@ class Policy:
                 while segmentEnd < fileSize - 1:
                     segment = response["headers"]["Content-Range"].split('/')[0] # 0-1048575.
                     segmentStart = int(segment.split('-')[1]) + 1
-                    segmentEnd = min(segmentStart + 1048575, fileSize - 1)
+                    segmentEnd = min(segmentStart + delta, fileSize - 1)
 
                     # Download file (chunk).
                     api = ApiSupplicant(
@@ -169,3 +172,44 @@ class Policy:
             return fullResponse
         except Exception as e:
             raise e
+
+
+
+    @staticmethod
+    def uploadPolicy(assetId: int, policyContent: str):
+        # policyContent = policyContent.encode("UTF-8")
+        fileSize = sys.getsizeof(policyContent)
+        segmentStart = 0
+        delta = 1000000
+        segmentEnd = delta
+        fileName = "import-policy-" + str(randrange(0, 9999)) + ".xml"
+
+        try:
+            f5 = Asset(assetId)
+            api = ApiSupplicant(
+                endpoint=f5.baseurl+"tm/asm/file-transfer/uploads/" + fileName,
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
+            )
+
+            while segmentEnd < fileSize:
+                Log.log(segmentEnd, 'CCCCCCCCCCCCCCCCCCCCCCCCCCCC')
+                policyContentChunk = policyContent[segmentStart:segmentEnd + 1]
+                # Upload file (chunk).
+                response = api.post(
+                    additionalHeaders={
+                        "Content-Type": "application/xml",
+                        "Content-Range": str(segmentStart) + "-" + str(segmentEnd) + "/" + str(fileSize)
+                    },
+                    data=policyContentChunk
+                )["payload"]
+
+                segmentStart = segmentEnd + 1
+                segmentEnd = min(segmentStart + delta, fileSize - 1)
+
+                Log.log(response, 'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG')
+                Log.log(segmentEnd, 'EEEEEEEEEEEEEEEEEEEEEEEEECCCCCC')
+        except Exception as e:
+            raise e
+
+

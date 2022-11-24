@@ -35,7 +35,7 @@ class F5PolicyMergeController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        response = Policy.importPolicy(assetId, policyId)
+                        response = Policy.importPolicy(assetId, assetId, policyId)
 
                         httpStatus = status.HTTP_200_OK
                         lock.release()
