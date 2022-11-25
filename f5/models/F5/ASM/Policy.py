@@ -57,7 +57,7 @@ class Policy:
 
 
     @staticmethod
-    def importPolicy(assetSrcId: int, assetDstId: int, sourcePolicyId: str, cleanupPreviouslyImportedPolicy: bool = False):
+    def importPolicy(assetSrcId: int, assetDstId: int, sourcePolicyId: str, cleanupPreviouslyImportedPolicy: bool = False) -> dict:
         try:
             sourcePolicyName = Policy(assetId=assetSrcId, id=sourcePolicyId).info(silent=True)["name"]
             destinationPolicyName = sourcePolicyName + ".imported-from-target"
@@ -77,7 +77,7 @@ class Policy:
             except KeyError:
                 pass
 
-            Backend.importFromLocalFile(
+            return Backend.importFromLocalFile(
                 assetId=assetSrcId,
                 filename=Backend.uploadPolicyData(
                     assetId=assetDstId,

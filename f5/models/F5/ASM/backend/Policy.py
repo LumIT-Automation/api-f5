@@ -235,7 +235,7 @@ class Policy:
 
 
     @staticmethod
-    def importFromLocalFile(assetId: int, filename: str, name: str, cleanup: bool = False) -> None:
+    def importFromLocalFile(assetId: int, filename: str, name: str, cleanup: bool = False) -> dict:
         timeout = 120 # [second]
 
         try:
@@ -269,9 +269,10 @@ class Policy:
                         tlsVerify=f5.tlsverify
                     )
 
-                    taskStatus = api.get()["payload"]["status"].lower()
+                    taskOutput = api.get()["payload"]
+                    taskStatus = taskOutput["status"].lower()
                     if taskStatus == "completed":
-                        break
+                        return taskOutput.get("result", {})
                     if taskStatus == "failure":
                         raise CustomException(status=400, payload={"F5": f"import policy failed for policy " + name})
 
