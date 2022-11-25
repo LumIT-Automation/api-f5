@@ -134,7 +134,8 @@ class Policy:
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"cm/autodeploy/software-image-downloads/" + filename,
                 auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
+                tlsVerify=f5.tlsverify,
+                silent=True
             )
 
             response = api.get(
@@ -145,24 +146,18 @@ class Policy:
                 fullResponse = response["payload"]
 
             if response["status"] == 206:
-                fileSize = int(response["headers"]["Content-Range"].split('/')[1]) # 1140143.
+                streamSize = int(response["headers"]["Content-Range"].split('/')[1]) # 1140143.
                 fullResponse += response["payload"]
 
-                while segmentEnd < fileSize - 1:
+                while segmentEnd < streamSize - 1:
                     segment = response["headers"]["Content-Range"].split('/')[0] # 0-1048575.
                     segmentStart = int(segment.split('-')[1]) + 1
-                    segmentEnd = min(segmentStart + delta, fileSize - 1)
+                    segmentEnd = min(segmentStart + delta, streamSize - 1)
 
-                    # Download file (chunk).
-                    api = ApiSupplicant(
-                        endpoint=f5.baseurl+"cm/autodeploy/software-image-downloads/" + filename,
-                        auth=(f5.username, f5.password),
-                        tlsVerify=f5.tlsverify
-                    )
-
+                    # Download file (chunks).
                     response = api.get(
                         additionalHeaders={
-                            "Content-Range": str(segmentStart) + "-" + str(segmentEnd) + "/" + str(fileSize)
+                            "Content-Range": str(segmentStart) + "-" + str(segmentEnd) + "/" + str(streamSize)
                         },
                         raw=True
                     )
@@ -176,43 +171,42 @@ class Policy:
 
 
     @staticmethod
-    def uploadPolicy(assetId: int, policyContent: str):
-        fileName = "import-policy-" + str(randrange(0, 9999)) + ".xml"
-        fileSize = len(policyContent)
+    def uploadPolicy(assetId: int, policyContent: str) -> str:
+        streamSize = len(policyContent)
         segmentStart = 0
-        delta = 999999
+        delta = 1000000
         segmentEnd = delta
 
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/asm/file-transfer/uploads/" + fileName,
+                endpoint=f5.baseurl+"tm/asm/file-transfer/uploads/import-policy-" + str(randrange(0, 9999)) + ".xml",
                 auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
+                tlsVerify=f5.tlsverify,
+                silent=True
             )
 
-            while segmentEnd <= fileSize:
+            while True:
                 if segmentEnd - segmentStart == delta:
-                    range = str(segmentStart) + "-" + str(segmentEnd) + "/" + str(fileSize)
+                    r = str(segmentStart) + "-" + str(segmentEnd) + "/" + str(streamSize)
                 else:
-                    range = str(segmentStart) + "-" + str(segmentEnd - 1) + "/" + str(fileSize)
-                policyContentChunk = policyContent[ segmentStart:segmentEnd + 1]
+                    r = str(segmentStart) + "-" + str(segmentEnd - 1) + "/" + str(streamSize)
 
                 response = api.post(
                     additionalHeaders={
                         "Content-Type": "application/xml",
-                        "Content-Range": range,
+                        "Content-Range": r,
                         "Charset": "utf-8"
                     },
-                    data = policyContentChunk
+                    data=policyContent[segmentStart:segmentEnd + 1]
                 )["payload"]
 
                 segmentStart = segmentEnd + 1
-                segmentEnd = min(segmentStart + delta, fileSize)
-                Log.log(response, 'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG')
+                segmentEnd = min(segmentStart + delta, streamSize)
+
                 if segmentEnd <= segmentStart:
                     break
+
+            return response
         except Exception as e:
             raise e
-
-

@@ -352,11 +352,12 @@ class Policy:
     @staticmethod
     def importPolicy(assetSrcId: int, assetDstId: int, policyId: str):
         try:
-            policy = Backend.downloadPolicy(
-                assetSrcId,
-                Backend.createExportFile(assetSrcId, policyId)
+            return Backend.uploadPolicy(
+                assetId=assetDstId,
+                policyContent=Backend.downloadPolicy(
+                    assetSrcId,
+                    Backend.createExportFile(assetSrcId, policyId)
+                )
             )
-            # return policy
-            Backend.uploadPolicy(assetId=assetDstId,  policyContent=policy)
         except Exception as e:
             raise e
