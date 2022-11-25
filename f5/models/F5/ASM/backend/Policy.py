@@ -18,13 +18,14 @@ class Policy:
     ####################################################################################################################
 
     @staticmethod
-    def info(assetId: int, id: str) -> dict:
+    def info(assetId: int, id: str, silent: bool = False) -> dict:
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/asm/policies/"+id+"/",
                 auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
+                tlsVerify=f5.tlsverify,
+                silent=silent
             )
 
             return api.get()["payload"]
@@ -95,7 +96,7 @@ class Policy:
                     if time.time() >= t0 + timeout: # timeout reached.
                         raise CustomException(status=400, payload={"F5": f"create export file timed out for policy " + id})
 
-                    time.sleep(5)
+                    time.sleep(10)
                 except KeyError:
                     raise CustomException(status=400, payload={"F5": f"create export file failed for policy " + id})
 
@@ -112,7 +113,7 @@ class Policy:
                 },
                 data=json.dumps({
                     "command": "run",
-                    "utilCmdArgs": " -c ' for f in $(ls /ts/var/rest/*" + filename + "); do mv -f $f /shared/images/" + filename + "; done'" # internally, <f5user>-filename is given.
+                    "utilCmdArgs": " -c 'for f in $(ls /ts/var/rest/*" + filename + "); do mv -f $f /shared/images/" + filename + "; done'" # internally, <f5user>-filename is given.
                 })
             )
 
@@ -123,7 +124,7 @@ class Policy:
 
 
     @staticmethod
-    def downloadPolicy(assetId: int, filename: str):
+    def downloadPolicyFile(assetId: int, filename: str, cleanup: bool = False):
         fullResponse = ""
         segmentEnd = 0
         delta = 1000000
@@ -166,11 +167,14 @@ class Policy:
             return fullResponse
         except Exception as e:
             raise e
+        finally:
+            if cleanup:
+                Policy.__cleanupLocalFile(assetId=assetId, task="export", filename=filename)
 
 
 
     @staticmethod
-    def uploadPolicy(assetId: int, policyContent: str) -> str:
+    def uploadPolicyData(assetId: int, policyContent: str) -> str:
         filename = "import-policy-" + str(randrange(0, 9999)) + ".xml"
 
         streamSize = len(policyContent)
@@ -179,6 +183,7 @@ class Policy:
         segmentEnd = delta
 
         try:
+            # Upload policy data as file.
             f5 = Asset(assetId)
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/asm/file-transfer/uploads/" + filename,
@@ -210,3 +215,93 @@ class Policy:
                 raise CustomException(status=400, payload={"F5": f"upload policy file error: " + str(response)})
         except Exception as e:
             raise e
+
+
+
+    @staticmethod
+    def importFromLocalFile(assetId: int, filename: str, name: str, cleanup: bool = False) -> None:
+        timeout = 120 # [second]
+
+        try:
+            f5 = Asset(assetId)
+
+            # Create policy from (pre-imported) file.
+            api = ApiSupplicant(
+                endpoint=f5.baseurl+"tm/asm/tasks/import-policy/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
+            )
+
+            taskInformation = api.post(
+                additionalHeaders={
+                    "Content-Type": "application/json",
+                },
+                data=json.dumps({
+                    "filename": filename,
+                    "name": name
+                })
+            )["payload"]
+
+            # Monitor export file creation (async tasks).
+            t0 = time.time()
+
+            while True:
+                try:
+                    api = ApiSupplicant(
+                        endpoint=f5.baseurl+"tm/asm/tasks/import-policy/" + taskInformation["id"] + "/",
+                        auth=(f5.username, f5.password),
+                        tlsVerify=f5.tlsverify
+                    )
+
+                    taskStatus = api.get()["payload"]["status"].lower()
+                    if taskStatus == "completed":
+                        break
+                    if taskStatus == "failure":
+                        raise CustomException(status=400, payload={"F5": f"import policy failed for policy " + name})
+
+                    if time.time() >= t0 + timeout: # timeout reached.
+                        raise CustomException(status=400, payload={"F5": f"import policy timed out for policy " + name})
+
+                    time.sleep(15)
+                except KeyError:
+                    raise CustomException(status=400, payload={"F5": f"import policy failed for policy " + name})
+        except Exception as e:
+            raise e
+        finally:
+            if cleanup:
+                Policy.__cleanupLocalFile(assetId=assetId, task="import", filename=filename)
+
+
+
+    ####################################################################################################################
+    # private static methods
+    ####################################################################################################################
+
+    @staticmethod
+    def __cleanupLocalFile(assetId: int, task: str, filename: str):
+        fpath = ""
+        if task == "export":
+            fpath = "/shared/images/" + filename
+        if task == "import":
+            fpath = "/ts/var/rest/*" + filename
+
+        if fpath:
+            try:
+                f5 = Asset(assetId)
+                api = ApiSupplicant(
+                    endpoint=f5.baseurl + "tm/util/bash",
+                    auth=(f5.username, f5.password),
+                    tlsVerify=f5.tlsverify
+                )
+
+                api.post(
+                    additionalHeaders={
+                        "Content-Type": "application/json",
+                    },
+                    data=json.dumps({
+                        "command": "run",
+                        "utilCmdArgs": " -c 'rm -f " + fpath + "'"
+                    })
+                )
+            except Exception:
+                pass

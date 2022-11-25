@@ -48,7 +48,9 @@ class ApiSupplicant:
 
         try:
             Log.actionLog("[API Supplicant] Posting to remote: "+str(self.endpoint))
-            Log.actionLog("[API Supplicant] Posting data: "+str(data))
+
+            if not self.silent:
+                Log.actionLog("[API Supplicant] Posting data: "+str(data))
 
             return self.__request(requests.post, additionalHeaders=additionalHeaders, data=data)
         except Exception as e:
