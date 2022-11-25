@@ -192,7 +192,6 @@ class Policy:
             )
 
             while segmentEnd <= fileSize:
-                Log.log('FACCIO UN GIRO')
                 if segmentEnd - segmentStart == delta:
                     range = str(segmentStart) + "-" + str(segmentEnd) + "/" + str(fileSize)
                 else:
@@ -212,7 +211,6 @@ class Policy:
                 segmentEnd = min(segmentStart + delta, fileSize)
                 Log.log(response, 'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG')
                 if segmentEnd <= segmentStart:
-                    Log.log('EEECCCCHHHECCCAAZZZZZ')
                     break
         except Exception as e:
             raise e
