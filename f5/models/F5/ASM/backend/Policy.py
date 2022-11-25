@@ -171,6 +171,8 @@ class Policy:
 
     @staticmethod
     def uploadPolicy(assetId: int, policyContent: str) -> str:
+        filename = "import-policy-" + str(randrange(0, 9999)) + ".xml"
+
         streamSize = len(policyContent)
         segmentStart = 0
         delta = 1000000
@@ -179,7 +181,7 @@ class Policy:
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/asm/file-transfer/uploads/import-policy-" + str(randrange(0, 9999)) + ".xml",
+                endpoint=f5.baseurl+"tm/asm/file-transfer/uploads/" + filename,
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify,
                 silent=True
@@ -201,6 +203,10 @@ class Policy:
                 if segmentEnd <= segmentStart:
                     break
 
-            return response
+            if "remainingByteCount" in response \
+                    and int(response["remainingByteCount"]) == 0:
+                return filename
+            else:
+                raise CustomException(status=400, payload={"F5": f"upload policy file error: " + str(response)})
         except Exception as e:
             raise e
