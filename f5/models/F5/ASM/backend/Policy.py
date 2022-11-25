@@ -177,12 +177,17 @@ class Policy:
 
     @staticmethod
     def uploadPolicy(assetId: int, policyContent: str):
-        # policyContent = policyContent.encode("UTF-8")
-        fileSize = sys.getsizeof(policyContent)
-        segmentStart = 0
-        delta = 1000000
-        segmentEnd = delta
         fileName = "import-policy-" + str(randrange(0, 9999)) + ".xml"
+
+        #Log.log(sys.getsizeof(policyContent), 'NNNNNNNNNNNNNNNNNNNNNNNN')
+        #Log.log(sys.getsizeof(policyContent.encode("UTF-8")), 'EEEEEEEEEEEEEEEEEEEEEEEEEEE')
+        #policyContent = policyContent.encode("UTF-8")
+        #fileSize = sys.getsizeof(policyContent) + 1
+        fileSize = len(policyContent)
+        segmentStart = 0
+        delta = 999999
+        segmentEnd = delta
+        Log.log(policyContent[1140100:], 'PPPPPPPPPPPPPPPPPPPPPPPP')
 
         try:
             f5 = Asset(assetId)
@@ -192,23 +197,36 @@ class Policy:
                 tlsVerify=f5.tlsverify
             )
 
-            while segmentEnd < fileSize:
-                Log.log(segmentEnd, 'CCCCCCCCCCCCCCCCCCCCCCCCCCCC')
-                policyContentChunk = policyContent[segmentStart:segmentEnd + 1]
+            while segmentEnd <= fileSize:
+                if segmentEnd < 1000000: # Last run should be different
+                    range = str(segmentStart) + "-" + str(segmentEnd) + "/" + str(fileSize)
+                else:
+                    range = str(segmentStart) + "-" + str(segmentEnd - 1) + "/" + str(fileSize)
+                policyContentChunk = policyContent[ segmentStart:segmentEnd + 1]
+
+
                 # Upload file (chunk).
+                Log.log( range, 'RRRRRRRRRRRRRRRRRRRRRRRRRRRRR')
+                #Log.log(sys.getsizeof(policyContentChunk), 'KKKKKKKKKKKKKKKKKKKKKKKK')
+                Log.log(len(policyContentChunk), 'KKKKKKKKKKKKKKKKKKKKKKKK')
+                Log.log(policyContentChunk[0:20], 'SSSSSSSSSSSSSSSSSSS')
+                Log.log(policyContentChunk[-20:], 'EEEEEEEEEEEEEEE')
+
+                additionalHeaders = {
+                    "Content-Type": "application/xml",
+                    "Content-Range": range,
+                    "charset": "utf-8"
+                }
                 response = api.post(
-                    additionalHeaders={
-                        "Content-Type": "application/xml",
-                        "Content-Range": str(segmentStart) + "-" + str(segmentEnd) + "/" + str(fileSize)
-                    },
-                    data=policyContentChunk
+                    additionalHeaders = additionalHeaders,
+                    data = policyContentChunk
                 )["payload"]
 
                 segmentStart = segmentEnd + 1
-                segmentEnd = min(segmentStart + delta, fileSize - 1)
-
+                segmentEnd = min(segmentStart + delta, fileSize)
                 Log.log(response, 'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG')
-                Log.log(segmentEnd, 'EEEEEEEEEEEEEEEEEEEEEEEEECCCCCC')
+                if segmentEnd <= segmentStart:
+                    break
         except Exception as e:
             raise e
 

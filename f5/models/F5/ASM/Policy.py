@@ -356,7 +356,7 @@ class Policy:
                 assetSrcId,
                 Backend.createExportFile(assetSrcId, policyId)
             )
-            return policy
-            # Backend.uploadPolicy(assetId=assetDstId,  policyContent=policy)
+            # return policy
+            Backend.uploadPolicy(assetId=assetDstId,  policyContent=policy)
         except Exception as e:
             raise e
