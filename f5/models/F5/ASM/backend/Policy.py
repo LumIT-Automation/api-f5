@@ -1,4 +1,3 @@
-import sys
 import json
 import time
 from random import randrange
@@ -187,22 +186,17 @@ class Policy:
             )
 
             while True:
-                if segmentEnd - segmentStart == delta:
-                    r = str(segmentStart) + "-" + str(segmentEnd) + "/" + str(streamSize)
-                else:
-                    r = str(segmentStart) + "-" + str(segmentEnd - 1) + "/" + str(streamSize)
-
                 response = api.post(
                     additionalHeaders={
                         "Content-Type": "application/xml",
-                        "Content-Range": r,
+                        "Content-Range": str(segmentStart) + "-" + str(segmentEnd) + "/" + str(streamSize),
                         "Charset": "utf-8"
                     },
                     data=policyContent[segmentStart:segmentEnd + 1]
                 )["payload"]
 
                 segmentStart = segmentEnd + 1
-                segmentEnd = min(segmentStart + delta, streamSize)
+                segmentEnd = min(segmentStart + delta, streamSize - 1)
 
                 if segmentEnd <= segmentStart:
                     break
