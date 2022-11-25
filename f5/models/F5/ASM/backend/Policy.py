@@ -51,6 +51,22 @@ class Policy:
 
 
     @staticmethod
+    def delete(assetId: int, id: str):
+        try:
+            f5 = Asset(assetId)
+            api = ApiSupplicant(
+                endpoint=f5.baseurl+"tm/asm/policies/"+id+"/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
+            )
+
+            api.delete()
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
     def createExportFile(assetId: int, id: str) -> str:
         timeout = 120 # [second]
 

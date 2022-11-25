@@ -25,7 +25,7 @@ class F5PolicyController(CustomController):
         try:
             #if Permission.hasUserPermission(groups=user["groups"], action="poolMember_get", assetId=assetId) or user["authDisabled"]:
             if True:
-                Log.actionLog("ASM Policy information", user)
+                Log.actionLog("ASM policy information", user)
 
                 # Locking logic for pool member and pool.
                 lock = Lock("asm-policy", locals(), policyId)
@@ -71,4 +71,37 @@ class F5PolicyController(CustomController):
         return Response(data, status=httpStatus, headers={
             "ETag": etagCondition["responseEtag"],
             "Cache-Control": "must-revalidate"
+        })
+
+
+
+    @staticmethod
+    def delete(request: Request, assetId: int, policyId: str) -> Response:
+        user = CustomController.loggedUser(request)
+
+        try:
+            #if Permission.hasUserPermission(groups=user["groups"], action="node_delete", assetId=assetId, partition=partitionName) or user["authDisabled"]:
+            if True:
+                Log.actionLog("ASM policy deletion", user)
+
+                lock = Lock("asm-policy", locals(), policyId)
+                if lock.isUnlocked():
+                    lock.lock()
+
+                    Policy(assetId, policyId).delete()
+
+                    httpStatus = status.HTTP_200_OK
+                    lock.release()
+                else:
+                    httpStatus = status.HTTP_423_LOCKED
+            else:
+                httpStatus = status.HTTP_403_FORBIDDEN
+        except Exception as e:
+            Lock("asm-policy", locals(), policyId).release()
+
+            data, httpStatus, headers = CustomController.exceptionHandler(e)
+            return Response(data, status=httpStatus, headers=headers)
+
+        return Response(None, status=httpStatus, headers={
+            "Cache-Control": "no-cache"
         })

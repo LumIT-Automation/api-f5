@@ -2,6 +2,9 @@ from typing import List
 
 from f5.models.F5.ASM.backend.Policy import Policy as Backend
 
+from f5.helpers.Exception import CustomException
+from f5.helpers.Log import Log
+
 
 class Policy:
     def __init__(self, assetId: int, id: str, *args, **kwargs):
@@ -28,6 +31,14 @@ class Policy:
 
 
 
+    def delete(self):
+        try:
+            Backend.delete(self.assetId, self.id)
+        except Exception as e:
+            raise e
+
+
+
     ####################################################################################################################
     # Public static methods
     ####################################################################################################################
@@ -46,9 +57,25 @@ class Policy:
 
 
     @staticmethod
-    def importPolicy(assetSrcId: int, assetDstId: int, sourcePolicyId: str):
+    def importPolicy(assetSrcId: int, assetDstId: int, sourcePolicyId: str, cleanupPreviouslyImportedPolicy: bool = False):
         try:
-            policyName = Policy(assetId=assetSrcId, id=sourcePolicyId).info(silent=True)["name"]
+            sourcePolicyName = Policy(assetId=assetSrcId, id=sourcePolicyId).info(silent=True)["name"]
+            destinationPolicyName = sourcePolicyName + ".imported-from-target"
+
+            l = [(el["name"], el["id"])
+                 for el in Policy.list(assetId=assetSrcId) if el["name"] == destinationPolicyName] # list of 1 tuple if policy exists, or [].
+
+            try:
+                # If destinationPolicyName already exists in policies' list,
+                # delete or raise exception, depending on cleanupPreviouslyImportedPolicy.
+                if destinationPolicyName == l[0][0]:
+                    if cleanupPreviouslyImportedPolicy:
+                        Policy(assetId=assetSrcId, id=l[0][1]).delete()
+                    else:
+                        raise CustomException(status=400, payload={
+                            "F5": f"duplicate policy {destinationPolicyName}, please cleanup first"})
+            except KeyError:
+                pass
 
             Backend.importFromLocalFile(
                 assetId=assetSrcId,
@@ -60,7 +87,7 @@ class Policy:
                         cleanup=True
                     )
                 ),
-                name=policyName + ".imported-from-target",
+                name=sourcePolicyName + ".imported-from-target",
                 cleanup=True
             )
         except Exception as e:
