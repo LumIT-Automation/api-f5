@@ -1,5 +1,6 @@
 from typing import List
 
+from f5.models.F5.Asset.Asset import Asset
 from f5.models.F5.ASM.backend.Policy import Policy as Backend
 
 from f5.helpers.Exception import CustomException
@@ -60,7 +61,7 @@ class Policy:
     def importPolicy(assetSrcId: int, assetDstId: int, sourcePolicyId: str, cleanupPreviouslyImportedPolicy: bool = False) -> dict:
         try:
             sourcePolicyName = Policy(assetId=assetSrcId, id=sourcePolicyId).info(silent=True)["name"]
-            destinationPolicyName = sourcePolicyName + ".imported-from-target"
+            destinationPolicyName = sourcePolicyName + ".imported-from-" + Asset(assetId=assetSrcId).fqdn
 
             l = [(el["name"], el["id"])
                  for el in Policy.list(assetId=assetDstId) if el["name"] == destinationPolicyName] # list of 1 tuple if policy exists, or [].
@@ -73,7 +74,7 @@ class Policy:
                         Policy(assetId=assetDstId, id=l[0][1]).delete()
                     else:
                         raise CustomException(status=400, payload={
-                            "F5": f"duplicate policy {destinationPolicyName}, please cleanup first"})
+                            "F5": f"duplicate policy {destinationPolicyName} on destination asset, please cleanup first"})
             except IndexError:
                 pass
 
