@@ -63,31 +63,28 @@ class Policy:
             destinationPolicyName = sourcePolicyName + ".imported-from-target"
 
             l = [(el["name"], el["id"])
-                 for el in Policy.list(assetId=assetSrcId) if el["name"] == destinationPolicyName] # list of 1 tuple if policy exists, or [].
+                 for el in Policy.list(assetId=assetDstId) if el["name"] == destinationPolicyName] # list of 1 tuple if policy exists, or [].
 
             try:
                 # If destinationPolicyName already exists in policies' list,
                 # delete or raise exception, depending on cleanupPreviouslyImportedPolicy.
                 if destinationPolicyName == l[0][0]:
                     if cleanupPreviouslyImportedPolicy:
-                        Policy(assetId=assetSrcId, id=l[0][1]).delete()
+                        Policy(assetId=assetDstId, id=l[0][1]).delete()
                     else:
                         raise CustomException(status=400, payload={
                             "F5": f"duplicate policy {destinationPolicyName}, please cleanup first"})
-            except KeyError:
+            except IndexError:
                 pass
 
-            return Backend.importFromLocalFile(
-                assetId=assetSrcId,
-                filename=Backend.uploadPolicyData(
-                    assetId=assetDstId,
-                    policyContent=Backend.downloadPolicyFile(
-                        assetSrcId,
-                        Backend.createExportFile(assetSrcId, sourcePolicyId),
-                        cleanup=True
-                    )
+            return Backend.importPolicyFacade(
+                assetId=assetDstId,
+                policyContent=Backend.downloadPolicyFileFacade(
+                    assetId=assetSrcId,
+                    policyId=sourcePolicyId,
+                    cleanup=True
                 ),
-                name=sourcePolicyName + ".imported-from-target",
+                newPolicyName=destinationPolicyName,
                 cleanup=True
             )
         except Exception as e:
