@@ -58,20 +58,21 @@ class Policy:
 
 
     @staticmethod
-    def importPolicy(assetSrcId: int, assetDstId: int, sourcePolicyId: str, cleanupPreviouslyImportedPolicy: bool = False) -> dict:
+    def importPolicy(sourceAssetId: int, destAssetId: int, sourcePolicyId: str, cleanupPreviouslyImportedPolicy: bool = False) -> dict:
         try:
-            sourcePolicyName = Policy(assetId=assetSrcId, id=sourcePolicyId).info(silent=True)["name"]
-            destinationPolicyName = sourcePolicyName + ".imported-from-" + Asset(assetId=assetSrcId).fqdn
+            # Import sourcePolicyId from source asset into destination asset with destinationPolicyName.
+            sourcePolicyName = Policy(assetId=sourceAssetId, id=sourcePolicyId).info(silent=True)["name"]
+            destinationPolicyName = sourcePolicyName + ".imported-from-" + Asset(assetId=sourceAssetId).fqdn
 
             l = [(el["name"], el["id"])
-                 for el in Policy.list(assetId=assetDstId) if el["name"] == destinationPolicyName] # list of 1 tuple if policy exists, or [].
+                 for el in Policy.list(assetId=destAssetId) if el["name"] == destinationPolicyName] # list of 1 tuple if policy exists, or [].
 
             try:
                 # If destinationPolicyName already exists in policies' list,
                 # delete or raise exception, depending on cleanupPreviouslyImportedPolicy.
                 if destinationPolicyName == l[0][0]:
                     if cleanupPreviouslyImportedPolicy:
-                        Policy(assetId=assetDstId, id=l[0][1]).delete()
+                        Policy(assetId=destAssetId, id=l[0][1]).delete()
                     else:
                         raise CustomException(status=400, payload={
                             "F5": f"duplicate policy {destinationPolicyName} on destination asset, please cleanup first"})
@@ -79,14 +80,26 @@ class Policy:
                 pass
 
             return Backend.importPolicyFacade(
-                assetId=assetDstId,
+                assetId=destAssetId,
                 policyContent=Backend.downloadPolicyFileFacade(
-                    assetId=assetSrcId,
+                    assetId=sourceAssetId,
                     policyId=sourcePolicyId,
                     cleanup=True
                 ),
                 newPolicyName=destinationPolicyName,
                 cleanup=True
             )
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
+    def createDifferences(assetId: int, firstPolicy: str, secondPolicy: str):
+        try:
+            if firstPolicy and secondPolicy:
+                return Backend.createDiff(assetId, firstPolicy, secondPolicy)
+            else:
+                raise CustomException(status=400, payload={"F5": f"no fata to process"})
         except Exception as e:
             raise e

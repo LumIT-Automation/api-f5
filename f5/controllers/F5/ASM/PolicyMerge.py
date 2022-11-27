@@ -15,7 +15,7 @@ from f5.helpers.Log import Log
 
 class F5PolicyMergeController(CustomController):
     @staticmethod
-    def put(request: Request, assetId: int, policyId: str) -> Response:
+    def put(request: Request, sourceAssetId: int, destinationAssetId: int, policyId: str) -> Response:
         response = None
         user = CustomController.loggedUser(request)
 
@@ -35,7 +35,11 @@ class F5PolicyMergeController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        response = Policy.importPolicy(assetId, assetId, policyId, cleanupPreviouslyImportedPolicy=True)
+                        response = Policy.createDifferences(
+                            assetId=destinationAssetId,
+                            firstPolicy="https://localhost/mgmt/tm/asm/policies/7oVv7uJjXPLWvk9iYHzbaA",
+                            secondPolicy=Policy.importPolicy(sourceAssetId, destinationAssetId, policyId, cleanupPreviouslyImportedPolicy=True).get("policyReference", {}).get("link", "")
+                        )
 
                         httpStatus = status.HTTP_200_OK
                         lock.release()

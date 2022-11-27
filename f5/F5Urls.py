@@ -37,7 +37,7 @@ urlpatterns = [
     path('<int:assetId>/asm/policies/', ASMPolicies.F5ASMMPoliciesController.as_view(), name='f5-asm-policies'),
     path('<int:assetId>/asm/policy/<str:policyId>/', ASMPolicy.F5PolicyController.as_view(), name='f5-asm-policy'),
 
-    path('<int:assetId>/asm/policy-merge/<str:policyId>/', PolicyMerge.F5PolicyMergeController.as_view(), name='f5-asm-policy-merge'),
+    path('<int:sourceAssetId>/<int:destinationAssetId>/asm/policy-merge/<str:policyId>/', PolicyMerge.F5PolicyMergeController.as_view(), name='f5-asm-policy-merge'),
 
     # Datagroup.
     path('<int:assetId>/<str:partitionName>/datagroup/<str:datagroupType>/<str:datagroupName>/', Datagroup.F5DatagroupController.as_view(), name='f5-datagroup'),
