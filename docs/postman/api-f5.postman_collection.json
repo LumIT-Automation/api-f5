@@ -959,7 +959,7 @@
 							"response": []
 						},
 						{
-							"name": "policiy",
+							"name": "policy",
 							"request": {
 								"auth": {
 									"type": "noauth"
@@ -979,7 +979,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/asm/policy/uIGB1pBIcH8WprjX8KBR0w//",
+									"raw": "http://10.0.111.22/api/v1/f5/2/asm/policy/uIGB1pBIcH8WprjX8KBR0w/",
 									"protocol": "http",
 									"host": [
 										"10",
@@ -995,7 +995,49 @@
 										"asm",
 										"policy",
 										"uIGB1pBIcH8WprjX8KBR0w",
-										"",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "policiy",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "edfb456005712c3e68d97b525e247981",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/2/asm/policy/_gzCjGA0oBICVI6Lkznebw/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"2",
+										"asm",
+										"policy",
+										"_gzCjGA0oBICVI6Lkznebw",
 										""
 									]
 								}
