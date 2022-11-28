@@ -98,7 +98,7 @@ class Policy:
     def createDifferences(assetId: int, firstPolicy: str, secondPolicy: str) -> dict:
         try:
             if firstPolicy and secondPolicy:
-                return Backend.createDiff(assetId, firstPolicy, secondPolicy)
+                return Backend.createDiffFacade(assetId, firstPolicy, secondPolicy)
             else:
                 raise CustomException(status=400, payload={"F5": f"no fata to process"})
         except Exception as e:
@@ -107,7 +107,8 @@ class Policy:
 
 
     @staticmethod
-    def showDifferences(diffReference: str):
-        # @todo, paginated.
-        # https://192.168.22.20/mgmt/tm/asm/policy-diffs/TVK8W2SIN0yqmYnFiva3Mw/differences/?$skip=0&$top=100
-        pass
+    def showDifferences(assetId: int, diffReference: str):
+        try:
+            return Backend.showDifferencesFacade(assetId, diffReference)
+        except Exception as e:
+            raise e

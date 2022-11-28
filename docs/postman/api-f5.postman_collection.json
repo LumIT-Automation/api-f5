@@ -1002,7 +1002,7 @@
 							"response": []
 						},
 						{
-							"name": "policiy",
+							"name": "policy",
 							"request": {
 								"auth": {
 									"type": "noauth"
@@ -1045,7 +1045,7 @@
 							"response": []
 						},
 						{
-							"name": "policiy merge",
+							"name": "policy merge",
 							"request": {
 								"auth": {
 									"type": "noauth"
@@ -1074,7 +1074,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/asm/policy-merge/LLLpm2asnlSXZFpkuVL6qA/",
+									"raw": "http://10.0.111.22/api/v1/f5/2/2/asm/policy-merge/LLLpm2asnlSXZFpkuVL6qA/",
 									"protocol": "http",
 									"host": [
 										"10",
@@ -1086,6 +1086,7 @@
 										"api",
 										"v1",
 										"f5",
+										"2",
 										"2",
 										"asm",
 										"policy-merge",
