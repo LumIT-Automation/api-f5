@@ -3,13 +3,14 @@ import json
 import time
 
 from f5.models.F5.Asset.Asset import Asset
+from f5.models.F5.ASM.backend.PolicyBase import PolicyBase
 
 from f5.helpers.ApiSupplicant import ApiSupplicant
 from f5.helpers.Exception import CustomException
 from f5.helpers.Log import Log
 
 
-class PolicyDiffManager:
+class PolicyDiffManager(PolicyBase):
 
     ####################################################################################################################
     # Public static methods
@@ -43,6 +44,10 @@ class PolicyDiffManager:
                 })
             )["payload"]
 
+            PolicyDiffManager._log(
+                f"[AssetID: {assetId}] Creating differences between {firstPolicy} and {secondPolicy}..."
+            )
+
             # Monitor export file creation (async tasks).
             t0 = time.time()
 
@@ -54,10 +59,19 @@ class PolicyDiffManager:
                         tlsVerify=f5.tlsverify
                     )
 
+                    PolicyDiffManager._log(
+                        f"[AssetID: {assetId}] Waiting for task to complete..."
+                    )
+
                     taskOutput = api.get()["payload"]
                     taskStatus = taskOutput["status"].lower()
                     if taskStatus == "completed":
-                        return taskOutput.get("result", {})
+                        out = taskOutput.get("result", {})
+                        PolicyDiffManager._log(
+                            f"[AssetID: {assetId}] Creating differences between {firstPolicy} and {secondPolicy} result: str({out})"
+                        )
+
+                        return out
                     if taskStatus == "failure":
                         raise CustomException(status=400, payload={"F5": f"policy diff failed for {firstPolicy} and {secondPolicy}"})
 
@@ -73,10 +87,14 @@ class PolicyDiffManager:
 
 
     @staticmethod
-    def showDifferences(assetId: int, diffReference: str) -> list:
+    def listDifferences(assetId: int, diffReference: str) -> list:
         page = 0
         items = 100
         differences = []
+
+        PolicyDiffManager._log(
+            f"[AssetID: {assetId}] Downloading differences for {diffReference}..."
+        )
 
         try:
             matches = re.search(r"(?<=diffs\/)(.*)(?=\?)", diffReference)
@@ -86,6 +104,7 @@ class PolicyDiffManager:
                     f5 = Asset(assetId)
 
                     while True:
+                        # Collect all differences - request must be paginated.
                         skip = items * page
 
                         api = ApiSupplicant(
@@ -96,7 +115,11 @@ class PolicyDiffManager:
                         )
 
                         response = api.get()["payload"]
-                        differences.extend(response.get("items", []))
+                        differences.extend(
+                            PolicyDiffManager.__elaborateDifferences(
+                                response.get("items", [])
+                            )
+                        )
 
                         if int(response.get("pageIndex", 0)) == int(response.get("totalPages", 0)):
                             break
@@ -104,5 +127,31 @@ class PolicyDiffManager:
                             page += 1
 
             return differences
+        except Exception as e:
+            raise e
+
+
+
+    ####################################################################################################################
+    # Private static methods
+    ####################################################################################################################
+
+    @staticmethod
+    def __elaborateDifferences(differences: list) -> list:
+        diffs = []
+
+        try:
+            for el in differences:
+                diffs.append({
+                    "id": el["id"],
+                    "entityKind": el["entityKind"],
+                    "diffType": el["diffType"],
+                    "details": el.get("details", []),
+                    "entityName": el["entityName"],
+                    "canMergeSecondToFirst": el["canMergeSecondToFirst"],
+                    "canMergeFirstToSecond": el["canMergeFirstToSecond"],
+                })
+
+            return diffs
         except Exception as e:
             raise e

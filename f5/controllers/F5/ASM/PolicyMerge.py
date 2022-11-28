@@ -35,19 +35,26 @@ class F5PolicyMergeController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        # response = Policy.showDifferences(
+                        # response = Policy.createDifferences(
                         #     assetId=destinationAssetId,
-                        #     diffReference=Policy.createDifferences(
-                        #         assetId=destinationAssetId,
-                        #         firstPolicy="https://localhost/mgmt/tm/asm/policies/7oVv7uJjXPLWvk9iYHzbaA",
-                        #         secondPolicy=Policy.importPolicy(sourceAssetId, destinationAssetId, policyId, cleanupPreviouslyImportedPolicy=True).get("policyReference", {}).get("link", "")
-                        #     ).get("policyDiffReference", {}).get("link", "")
+                        #     firstPolicy="https://localhost/mgmt/tm/asm/policies/7oVv7uJjXPLWvk9iYHzbaA",
+                        #     secondPolicy=Policy.importPolicy(sourceAssetId, destinationAssetId, policyId, cleanupPreviouslyImportedPolicy=True).get(
+                        #         "policyReference", {}).get("link", "")
                         # )
 
                         response = Policy.showDifferences(
                             assetId=destinationAssetId,
-                            diffReference="https://localhost/mgmt/tm/asm/policy-diffs/BJHo4B9ZSwPV1ewmzQno_A?ver=16.1.0"
+                            diffReference=Policy.createDifferences(
+                                assetId=destinationAssetId,
+                                firstPolicy="https://localhost/mgmt/tm/asm/policies/7oVv7uJjXPLWvk9iYHzbaA",
+                                secondPolicy=Policy.importPolicy(sourceAssetId, destinationAssetId, policyId, cleanupPreviouslyImportedPolicy=True).get("policyReference", {}).get("link", "")
+                            ).get("policyDiffReference", {}).get("link", "")
                         )
+
+                        # response = Policy.showDifferences(
+                        #     assetId=destinationAssetId,
+                        #     diffReference="https://localhost/mgmt/tm/asm/policy-diffs/BJHo4B9ZSwPV1ewmzQno_A?ver=16.1.0"
+                        # )
 
                         httpStatus = status.HTTP_200_OK
                         lock.release()

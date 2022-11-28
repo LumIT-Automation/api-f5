@@ -110,6 +110,6 @@ class Policy:
     @staticmethod
     def showDifferencesFacade(assetId: int, diffReference: str) -> list:
         try:
-            return PolicyDiffManager.showDifferences(assetId, diffReference)
+            return PolicyDiffManager.listDifferences(assetId, diffReference)
         except Exception as e:
             raise e

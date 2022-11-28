@@ -3,6 +3,7 @@ import json
 from f5.models.F5.Asset.Asset import Asset
 
 from f5.helpers.ApiSupplicant import ApiSupplicant
+from f5.helpers.Log import Log
 
 
 class PolicyBase:
@@ -29,6 +30,10 @@ class PolicyBase:
                     tlsVerify=f5.tlsverify
                 )
 
+                PolicyBase._log(
+                    f"[AssetID: {assetId}] Cleaning up {filename}..."
+                )
+
                 api.post(
                     additionalHeaders={
                         "Content-Type": "application/json",
@@ -40,3 +45,9 @@ class PolicyBase:
                 )
             except Exception:
                 pass
+
+
+
+    @staticmethod
+    def _log(message):
+        Log.log("[ASM POLICY]" + message, "_")

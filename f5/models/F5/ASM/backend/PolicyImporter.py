@@ -7,7 +7,6 @@ from f5.models.F5.ASM.backend.PolicyBase import PolicyBase
 
 from f5.helpers.ApiSupplicant import ApiSupplicant
 from f5.helpers.Exception import CustomException
-from f5.helpers.Log import Log
 
 
 class PolicyImporter(PolicyBase):
@@ -24,6 +23,10 @@ class PolicyImporter(PolicyBase):
         segmentStart = 0
         delta = 1000000
         segmentEnd = delta
+
+        PolicyImporter._log(
+            f"[AssetID: {assetId}] Uploading policy data..."
+        )
 
         try:
             # Upload policy data as file.
@@ -85,6 +88,10 @@ class PolicyImporter(PolicyBase):
                 })
             )["payload"]
 
+            PolicyImporter._log(
+                f"[AssetID: {assetId}] Importing policy from local import file {localImportFile} as policy name: {name}..."
+            )
+
             # Monitor export file creation (async tasks).
             t0 = time.time()
 
@@ -94,6 +101,10 @@ class PolicyImporter(PolicyBase):
                         endpoint=f5.baseurl+"tm/asm/tasks/import-policy/" + taskInformation["id"] + "/",
                         auth=(f5.username, f5.password),
                         tlsVerify=f5.tlsverify
+                    )
+
+                    PolicyImporter._log(
+                        f"[AssetID: {assetId}] Waiting for task to complete..."
                     )
 
                     taskOutput = api.get()["payload"]

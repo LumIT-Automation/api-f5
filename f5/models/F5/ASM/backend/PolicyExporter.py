@@ -8,7 +8,6 @@ from f5.models.F5.ASM.backend.PolicyBase import PolicyBase
 
 from f5.helpers.ApiSupplicant import ApiSupplicant
 from f5.helpers.Exception import CustomException
-from f5.helpers.Log import Log
 
 
 class PolicyExporter(PolicyBase):
@@ -43,6 +42,10 @@ class PolicyExporter(PolicyBase):
                     }})
             )["payload"]
 
+            PolicyExporter._log(
+                f"[AssetID: {assetId}] Creating export file {filename} for policy {policyId}..."
+            )
+
             # Monitor export file creation (async tasks).
             t0 = time.time()
 
@@ -52,6 +55,10 @@ class PolicyExporter(PolicyBase):
                         endpoint=f5.baseurl+"tm/asm/tasks/export-policy/" + taskInformation["id"] + "/",
                         auth=(f5.username, f5.password),
                         tlsVerify=f5.tlsverify
+                    )
+
+                    PolicyExporter._log(
+                        f"[AssetID: {assetId}] Waiting for task to complete..."
                     )
 
                     taskStatus = api.get()["payload"]["status"].lower()
@@ -84,6 +91,10 @@ class PolicyExporter(PolicyBase):
                 })
             )
 
+            PolicyExporter._log(
+                f"[AssetID: {assetId}] Export file for policy {policyId} created: /shared/images/{filename}."
+            )
+
             return filename
         except Exception as e:
             raise e
@@ -95,6 +106,10 @@ class PolicyExporter(PolicyBase):
         fullResponse = ""
         segmentEnd = 0
         delta = 1000000
+
+        PolicyExporter._log(
+            f"[AssetID: {assetId}] Downloading data for export file {localExportFile}..."
+        )
 
         try:
             f5 = Asset(assetId)
