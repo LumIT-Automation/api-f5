@@ -1074,7 +1074,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/2/asm/policy-merge/LLLpm2asnlSXZFpkuVL6qA/",
+									"raw": "http://10.0.111.22/api/v1/f5/2/2/asm/policy-merge/K-78hGsC0JAvnuDbF1Vh2A/9n2I7YaXBn94jfKETtsidA/",
 									"protocol": "http",
 									"host": [
 										"10",
@@ -1090,7 +1090,8 @@
 										"2",
 										"asm",
 										"policy-merge",
-										"LLLpm2asnlSXZFpkuVL6qA",
+										"K-78hGsC0JAvnuDbF1Vh2A",
+										"9n2I7YaXBn94jfKETtsidA",
 										""
 									]
 								}

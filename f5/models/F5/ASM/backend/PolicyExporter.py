@@ -146,6 +146,13 @@ class PolicyExporter(PolicyBase):
 
                     fullResponse += response["payload"]
 
+            try:
+                PolicyExporter._log("[AssetID: {assetId}] Saving response to file (*nix only)...")
+                with open('/tmp/response.xml', 'w') as file:
+                    file.write(fullResponse)
+            except Exception:
+                pass
+
             return fullResponse
         except Exception as e:
             raise e

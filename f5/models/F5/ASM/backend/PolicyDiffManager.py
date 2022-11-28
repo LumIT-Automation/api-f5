@@ -68,7 +68,7 @@ class PolicyDiffManager(PolicyBase):
                     if taskStatus == "completed":
                         out = taskOutput.get("result", {})
                         PolicyDiffManager._log(
-                            f"[AssetID: {assetId}] Creating differences between {firstPolicy} and {secondPolicy} result: str({out})"
+                            f"[AssetID: {assetId}] Differences between {firstPolicy} and {secondPolicy} result: {out}"
                         )
 
                         return out
@@ -78,7 +78,7 @@ class PolicyDiffManager(PolicyBase):
                     if time.time() >= t0 + timeout: # timeout reached.
                         raise CustomException(status=400, payload={"F5": f"policy diff times out for {firstPolicy} and {secondPolicy}"})
 
-                    time.sleep(60)
+                    time.sleep(30)
                 except KeyError:
                     raise CustomException(status=400, payload={"F5": f"policy diff failed for {firstPolicy} and {secondPolicy}"})
         except Exception as e:
@@ -146,6 +146,7 @@ class PolicyDiffManager(PolicyBase):
                     "id": el["id"],
                     "entityKind": el["entityKind"],
                     "diffType": el["diffType"],
+                    "firstLastUpdateMicros": el["firstLastUpdateMicros"],
                     "details": el.get("details", []),
                     "entityName": el["entityName"],
                     "canMergeSecondToFirst": el["canMergeSecondToFirst"],

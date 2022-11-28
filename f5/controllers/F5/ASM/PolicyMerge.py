@@ -15,7 +15,7 @@ from f5.helpers.Log import Log
 
 class F5PolicyMergeController(CustomController):
     @staticmethod
-    def put(request: Request, sourceAssetId: int, destinationAssetId: int, policyId: str) -> Response:
+    def put(request: Request, sourceAssetId: int, destinationAssetId: int, sourcePolicyId: str, destinationPolicyId: str) -> Response:
         response = None
         user = CustomController.loggedUser(request)
 
@@ -37,7 +37,7 @@ class F5PolicyMergeController(CustomController):
 
                         # response = Policy.createDifferences(
                         #     assetId=destinationAssetId,
-                        #     firstPolicy="https://localhost/mgmt/tm/asm/policies/7oVv7uJjXPLWvk9iYHzbaA",
+                        #     firstPolicy="https://localhost/mgmt/tm/asm/policies/"+destinationPolicyId,
                         #     secondPolicy=Policy.importPolicy(sourceAssetId, destinationAssetId, policyId, cleanupPreviouslyImportedPolicy=True).get(
                         #         "policyReference", {}).get("link", "")
                         # )
@@ -46,14 +46,14 @@ class F5PolicyMergeController(CustomController):
                             assetId=destinationAssetId,
                             diffReference=Policy.createDifferences(
                                 assetId=destinationAssetId,
-                                firstPolicy="https://localhost/mgmt/tm/asm/policies/7oVv7uJjXPLWvk9iYHzbaA",
-                                secondPolicy=Policy.importPolicy(sourceAssetId, destinationAssetId, policyId, cleanupPreviouslyImportedPolicy=True).get("policyReference", {}).get("link", "")
+                                firstPolicy="https://localhost/mgmt/tm/asm/policies/"+destinationPolicyId,
+                                secondPolicy=Policy.importPolicy(sourceAssetId, destinationAssetId, sourcePolicyId, cleanupPreviouslyImportedPolicy=True).get("policyReference", {}).get("link", "")
                             ).get("policyDiffReference", {}).get("link", "")
                         )
 
                         # response = Policy.showDifferences(
                         #     assetId=destinationAssetId,
-                        #     diffReference="https://localhost/mgmt/tm/asm/policy-diffs/BJHo4B9ZSwPV1ewmzQno_A?ver=16.1.0"
+                        #     diffReference="https://localhost/mgmt/tm/asm/policy-diffs/b1yvhXEC-gx1CaLbWNOWiA?ver=16.1.0"
                         # )
 
                         httpStatus = status.HTTP_200_OK
