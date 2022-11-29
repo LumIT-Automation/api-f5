@@ -65,14 +65,14 @@ class PolicyExporter(PolicyBase):
                     if taskStatus == "completed":
                         break
                     if taskStatus == "failed":
-                        raise CustomException(status=400, payload={"F5": f"create export file failed for policy " + policyId})
+                        raise CustomException(status=400, payload={"F5": f"create export file failed"})
 
                     if time.time() >= t0 + timeout: # timeout reached.
-                        raise CustomException(status=400, payload={"F5": f"create export file timed out for policy " + policyId})
+                        raise CustomException(status=400, payload={"F5": f"create export file timed out"})
 
                     time.sleep(10)
                 except KeyError:
-                    raise CustomException(status=400, payload={"F5": f"create export file failed for policy " + policyId})
+                    raise CustomException(status=400, payload={"F5": f"create export file failed"})
 
             # Move file internally to be able to download it.
             api = ApiSupplicant(
@@ -92,7 +92,7 @@ class PolicyExporter(PolicyBase):
             )
 
             PolicyExporter._log(
-                f"[AssetID: {assetId}] Export file for policy {policyId} created: /shared/images/{filename}."
+                f"[AssetID: {assetId}] Export file /shared/images/{filename} created"
             )
 
             return filename
@@ -148,7 +148,7 @@ class PolicyExporter(PolicyBase):
 
             try:
                 PolicyExporter._log("[AssetID: {assetId}] Saving response to file (*nix only)...")
-                with open('/tmp/response.xml', 'w') as file:
+                with open("/tmp/" + str(datetime.now().strftime("%Y%m%d-%H%M%s")) + "-response.xml", "w") as file:
                     file.write(fullResponse)
             except Exception:
                 pass

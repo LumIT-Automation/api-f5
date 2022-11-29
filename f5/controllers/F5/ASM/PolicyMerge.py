@@ -42,12 +42,14 @@ class F5PolicyMergeController(CustomController):
                         #         "policyReference", {}).get("link", "")
                         # )
 
+                        secondPolicy = Policy.importPolicy(sourceAssetId, destinationAssetId, sourcePolicyId, cleanupPreviouslyImportedPolicy=True).get("policyReference", {}).get("link", "")
+
                         response = Policy.showDifferences(
                             assetId=destinationAssetId,
                             diffReference=Policy.createDifferences(
                                 assetId=destinationAssetId,
                                 firstPolicy="https://localhost/mgmt/tm/asm/policies/"+destinationPolicyId,
-                                secondPolicy=Policy.importPolicy(sourceAssetId, destinationAssetId, sourcePolicyId, cleanupPreviouslyImportedPolicy=True).get("policyReference", {}).get("link", "")
+                                secondPolicy=secondPolicy
                             ).get("policyDiffReference", {}).get("link", "")
                         )
 

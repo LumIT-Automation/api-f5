@@ -68,19 +68,19 @@ class PolicyDiffManager(PolicyBase):
                     if taskStatus == "completed":
                         out = taskOutput.get("result", {})
                         PolicyDiffManager._log(
-                            f"[AssetID: {assetId}] Differences between {firstPolicy} and {secondPolicy} result: {out}"
+                            f"[AssetID: {assetId}] Differences' result: {out}"
                         )
 
                         return out
                     if taskStatus == "failure":
-                        raise CustomException(status=400, payload={"F5": f"policy diff failed for {firstPolicy} and {secondPolicy}"})
+                        raise CustomException(status=400, payload={"F5": f"policy diff failed"})
 
                     if time.time() >= t0 + timeout: # timeout reached.
-                        raise CustomException(status=400, payload={"F5": f"policy diff times out for {firstPolicy} and {secondPolicy}"})
+                        raise CustomException(status=400, payload={"F5": f"policy diff times out"})
 
                     time.sleep(30)
                 except KeyError:
-                    raise CustomException(status=400, payload={"F5": f"policy diff failed for {firstPolicy} and {secondPolicy}"})
+                    raise CustomException(status=400, payload={"F5": f"policy diff failed"})
         except Exception as e:
             raise e
 

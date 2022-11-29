@@ -112,14 +112,14 @@ class PolicyImporter(PolicyBase):
                     if taskStatus == "completed":
                         return taskOutput.get("result", {})
                     if taskStatus == "failure":
-                        raise CustomException(status=400, payload={"F5": f"import policy failed for policy " + name})
+                        raise CustomException(status=400, payload={"F5": f"import policy failed"})
 
                     if time.time() >= t0 + timeout: # timeout reached.
-                        raise CustomException(status=400, payload={"F5": f"import policy timed out for policy " + name})
+                        raise CustomException(status=400, payload={"F5": f"import policy timed out"})
 
                     time.sleep(15)
                 except KeyError:
-                    raise CustomException(status=400, payload={"F5": f"import policy failed for policy " + name})
+                    raise CustomException(status=400, payload={"F5": f"import policy failed"})
         except Exception as e:
             raise e
         finally:
