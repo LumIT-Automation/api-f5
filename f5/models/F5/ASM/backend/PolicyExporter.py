@@ -148,7 +148,7 @@ class PolicyExporter(PolicyBase):
 
             if saveResponse:
                 try:
-                    PolicyExporter._log("[AssetID: {assetId}] Saving response to file (*nix only)...")
+                    PolicyExporter._log(f"[AssetID: {assetId}] Saving response to file (*nix only)...")
                     with open("/tmp/" + str(datetime.now().strftime("%Y%m%d-%H%M%s")) + "-response.xml", "w") as file:
                         file.write(fullResponse)
                 except Exception:

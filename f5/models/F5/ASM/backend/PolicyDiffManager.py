@@ -196,15 +196,34 @@ class PolicyDiffManager(PolicyBase):
             xml = xmltodict.parse(firstPolicyXML)
 
             for k, v in differences.items():
+                if k == "filetypes":
+                    xmlParameters: List[dict] = xml.get("policy").get("file_types").get("file_type")
+                    for el in v:
+                        try:
+                            el["secondLastUpdateMicros"] = list(filter(lambda i: i["@name"] == el["entityName"], xmlParameters))[0]["last_updated"]
+                        except Exception:
+                            el["secondLastUpdateMicros"] = 0
+
                 if k == "parameters":
                     xmlParameters: List[dict] = xml.get("policy").get("parameters").get("parameter")
-
                     for el in v:
                         try:
                             # Read date from xml data, for corresponding object name.
                             el["secondLastUpdateMicros"] = list(filter(lambda i: i["@name"] == el["entityName"], xmlParameters))[0]["last_updated"]
                         except Exception:
                             el["secondLastUpdateMicros"] = 0
+
+                if k == "urls":
+                    xmlParameters: List[dict] = xml.get("policy").get("urls").get("url")
+                    for el in v:
+                        try:
+                            el["secondLastUpdateMicros"] = list(filter(lambda i: "[" + i["@protocol"] + "] " + i["@name"] == el["entityName"], xmlParameters))[0]["last_updated"]
+                        except Exception:
+                            el["secondLastUpdateMicros"] = 0
+
+                if k in ("cookies", "json-profiles", "methods"):
+                    for el in v:
+                        el["secondLastUpdateMicros"] = 0
 
             return differences
         except Exception as e:
