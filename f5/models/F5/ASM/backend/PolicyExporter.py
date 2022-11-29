@@ -102,7 +102,7 @@ class PolicyExporter(PolicyBase):
 
 
     @staticmethod
-    def downloadPolicyData(assetId: int, localExportFile: str, cleanup: bool = False) -> str:
+    def downloadPolicyData(assetId: int, localExportFile: str, cleanup: bool = False, saveResponse: bool = False) -> str:
         fullResponse = ""
         segmentEnd = 0
         delta = 1000000
@@ -146,12 +146,13 @@ class PolicyExporter(PolicyBase):
 
                     fullResponse += response["payload"]
 
-            try:
-                PolicyExporter._log("[AssetID: {assetId}] Saving response to file (*nix only)...")
-                with open("/tmp/" + str(datetime.now().strftime("%Y%m%d-%H%M%s")) + "-response.xml", "w") as file:
-                    file.write(fullResponse)
-            except Exception:
-                pass
+            if saveResponse:
+                try:
+                    PolicyExporter._log("[AssetID: {assetId}] Saving response to file (*nix only)...")
+                    with open("/tmp/" + str(datetime.now().strftime("%Y%m%d-%H%M%s")) + "-response.xml", "w") as file:
+                        file.write(fullResponse)
+                except Exception:
+                    pass
 
             return fullResponse
         except Exception as e:

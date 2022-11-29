@@ -89,7 +89,7 @@ class Policy:
                 cleanup=True
             )
 
-            result["policyContent"] = sourcePolicyContent # policy content to returned result.
+            result["sourcePolicyXMLContent"] = sourcePolicyContent # policy content to returned result.
 
             return result
         except Exception as e:
@@ -98,12 +98,13 @@ class Policy:
 
 
     @staticmethod
-    def differences(assetId: int, firstPolicy: str, secondPolicy: str):
+    def differences(assetId: int, firstPolicy: str, secondPolicy: str, firstPolicyXML: str):
         try:
             if firstPolicy and secondPolicy:
                 return Backend.showDifferencesFacade(
                     assetId=assetId,
-                    diffReference=Backend.createDiffFacade(assetId, firstPolicy, secondPolicy).get("policyDiffReference", {}).get("link", "")
+                    diffReference=Backend.createDiffFacade(assetId, firstPolicy, secondPolicy).get("policyDiffReference", {}).get("link", ""),
+                    firstPolicyXML=firstPolicyXML
                 )
             else:
                 raise CustomException(status=400, payload={"F5": f"no fata to process"})

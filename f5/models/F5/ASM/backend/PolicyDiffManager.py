@@ -1,6 +1,9 @@
 import re
 import json
 import time
+import xmltodict
+
+from typing import List, Dict
 
 from f5.models.F5.Asset.Asset import Asset
 from f5.models.F5.ASM.backend.PolicyBase import PolicyBase
@@ -87,16 +90,18 @@ class PolicyDiffManager(PolicyBase):
 
 
     @staticmethod
-    def listDifferences(assetId: int, diffReference: str) -> list:
+    def listDifferences(assetId: int, diffReference: str, firstPolicyXML: str) -> dict:
         page = 0
         items = 100
         differences = []
 
         PolicyDiffManager._log(
-            f"[AssetID: {assetId}] Downloading differences for {diffReference}..."
+            f"[AssetID: {assetId}] Downloading and parsing differences for {diffReference}..."
         )
 
         try:
+            #Log.log(xmltodict.parse(firstPolicyXML)["policy"]["@integrity_check"], "_")
+
             matches = re.search(r"(?<=diffs\/)(.*)(?=\?)", diffReference)
             if matches:
                 diffReferenceId = str(matches.group(1)).strip()
@@ -116,7 +121,7 @@ class PolicyDiffManager(PolicyBase):
 
                         response = api.get()["payload"]
                         differences.extend(
-                            PolicyDiffManager.__elaborateDifferences(
+                            PolicyDiffManager.__cleanupDifferences(
                                 response.get("items", [])
                             )
                         )
@@ -125,6 +130,8 @@ class PolicyDiffManager(PolicyBase):
                             break
                         else:
                             page += 1
+
+                    differences = PolicyDiffManager.__differencesOrderByType(differences)
 
             return differences
         except Exception as e:
@@ -137,14 +144,14 @@ class PolicyDiffManager(PolicyBase):
     ####################################################################################################################
 
     @staticmethod
-    def __elaborateDifferences(differences: list) -> list:
+    def __cleanupDifferences(differences: list) -> list:
         diffs = []
 
         try:
             for el in differences:
                 diffs.append({
                     "id": el["id"],
-                    "entityKind": el["entityKind"],
+                    "entityType": el["entityKind"].split(":")[3],
                     "diffType": el["diffType"],
                     "firstLastUpdateMicros": el["firstLastUpdateMicros"],
                     "details": el.get("details", []),
@@ -152,6 +159,28 @@ class PolicyDiffManager(PolicyBase):
                     "canMergeSecondToFirst": el["canMergeSecondToFirst"],
                     "canMergeFirstToSecond": el["canMergeFirstToSecond"],
                 })
+
+            return diffs
+        except IndexError:
+            pass
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
+    def __differencesOrderByType(differences: list) -> dict:
+        diffs: Dict[str, List[dict]] = {}
+
+        try:
+
+            for el in differences:
+                entityType = el["entityType"]
+                if entityType not in diffs:
+                    diffs[entityType] = []
+
+                del(el["entityType"])
+                diffs[entityType].append(el)
 
             return diffs
         except Exception as e:

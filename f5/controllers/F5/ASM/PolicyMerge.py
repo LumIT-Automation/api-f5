@@ -39,6 +39,7 @@ class F5PolicyMergeController(CustomController):
                         differences = Policy.differences(
                             assetId=destinationAssetId,
                             firstPolicy="https://localhost/mgmt/tm/asm/policies/"+destinationPolicyId,
+                            firstPolicyXML=sourcePolicy.get("sourcePolicyXMLContent", ""),
                             secondPolicy=sourcePolicy.get("policyReference", {}).get("link", "")
                         )
 
