@@ -35,28 +35,14 @@ class F5PolicyMergeController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        # response = Policy.createDifferences(
-                        #     assetId=destinationAssetId,
-                        #     firstPolicy="https://localhost/mgmt/tm/asm/policies/"+destinationPolicyId,
-                        #     secondPolicy=Policy.importPolicy(sourceAssetId, destinationAssetId, policyId, cleanupPreviouslyImportedPolicy=True).get(
-                        #         "policyReference", {}).get("link", "")
-                        # )
-
-                        secondPolicy = Policy.importPolicy(sourceAssetId, destinationAssetId, sourcePolicyId, cleanupPreviouslyImportedPolicy=True).get("policyReference", {}).get("link", "")
-
-                        response = Policy.showDifferences(
+                        sourcePolicy = Policy.importPolicy(sourceAssetId, destinationAssetId, sourcePolicyId, cleanupPreviouslyImportedPolicy=True)
+                        differences = Policy.differences(
                             assetId=destinationAssetId,
-                            diffReference=Policy.createDifferences(
-                                assetId=destinationAssetId,
-                                firstPolicy="https://localhost/mgmt/tm/asm/policies/"+destinationPolicyId,
-                                secondPolicy=secondPolicy
-                            ).get("policyDiffReference", {}).get("link", "")
+                            firstPolicy="https://localhost/mgmt/tm/asm/policies/"+destinationPolicyId,
+                            secondPolicy=sourcePolicy.get("policyReference", {}).get("link", "")
                         )
 
-                        # response = Policy.showDifferences(
-                        #     assetId=destinationAssetId,
-                        #     diffReference="https://localhost/mgmt/tm/asm/policy-diffs/b1yvhXEC-gx1CaLbWNOWiA?ver=16.1.0"
-                        # )
+                        response = differences
 
                         httpStatus = status.HTTP_200_OK
                         lock.release()

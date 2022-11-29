@@ -79,36 +79,33 @@ class Policy:
             except IndexError:
                 pass
 
-            return Backend.importPolicyFacade(
+            # Load policy content for sourcePolicyId on sourceAssetId.
+            sourcePolicyContent = Backend.downloadPolicyFileFacade(sourceAssetId, sourcePolicyId, cleanup=True)
+
+            result = Backend.importPolicyFacade(
                 assetId=destAssetId,
-                policyContent=Backend.downloadPolicyFileFacade(
-                    assetId=sourceAssetId,
-                    policyId=sourcePolicyId,
-                    cleanup=True
-                ),
+                policyContent=sourcePolicyContent,
                 newPolicyName=destinationPolicyName,
                 cleanup=True
             )
+
+            result["policyContent"] = sourcePolicyContent # policy content to returned result.
+
+            return result
         except Exception as e:
             raise e
 
 
 
     @staticmethod
-    def createDifferences(assetId: int, firstPolicy: str, secondPolicy: str) -> dict:
+    def differences(assetId: int, firstPolicy: str, secondPolicy: str):
         try:
             if firstPolicy and secondPolicy:
-                return Backend.createDiffFacade(assetId, firstPolicy, secondPolicy)
+                return Backend.showDifferencesFacade(
+                    assetId=assetId,
+                    diffReference=Backend.createDiffFacade(assetId, firstPolicy, secondPolicy).get("policyDiffReference", {}).get("link", "")
+                )
             else:
                 raise CustomException(status=400, payload={"F5": f"no fata to process"})
-        except Exception as e:
-            raise e
-
-
-
-    @staticmethod
-    def showDifferences(assetId: int, diffReference: str):
-        try:
-            return Backend.showDifferencesFacade(assetId, diffReference)
         except Exception as e:
             raise e
