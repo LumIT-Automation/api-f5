@@ -94,14 +94,13 @@ class PolicyDiffManager(PolicyBase):
         page = 0
         items = 100
         differences = []
+        completeDifferences = {}
 
         PolicyDiffManager._log(
             f"[AssetID: {assetId}] Downloading and parsing differences for {diffReference}..."
         )
 
         try:
-            #Log.log(xmltodict.parse(firstPolicyXML)["policy"]["@integrity_check"], "_")
-
             matches = re.search(r"(?<=diffs\/)(.*)(?=\?)", diffReference)
             if matches:
                 diffReferenceId = str(matches.group(1)).strip()
@@ -131,9 +130,12 @@ class PolicyDiffManager(PolicyBase):
                         else:
                             page += 1
 
-                    differences = PolicyDiffManager.__differencesOrderByType(differences)
+                    completeDifferences = PolicyDiffManager.__differencesAddSourceObjectDate(
+                        PolicyDiffManager.__differencesOrderByType(differences),
+                        firstPolicyXML
+                    )
 
-            return differences
+            return completeDifferences
         except Exception as e:
             raise e
 
@@ -183,5 +185,27 @@ class PolicyDiffManager(PolicyBase):
                 diffs[entityType].append(el)
 
             return diffs
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
+    def __differencesAddSourceObjectDate(differences: dict, firstPolicyXML: str) -> dict:
+        try:
+            xml = xmltodict.parse(firstPolicyXML)
+
+            for k, v in differences.items():
+                if k == "parameters":
+                    xmlParameters: List[dict] = xml.get("policy").get("parameters").get("parameter")
+
+                    for el in v:
+                        try:
+                            # Read date from xml data, for corresponding object name.
+                            el["secondLastUpdateMicros"] = list(filter(lambda i: i["@name"] == el["entityName"], xmlParameters))[0]["last_updated"]
+                        except Exception:
+                            el["secondLastUpdateMicros"] = 0
+
+            return differences
         except Exception as e:
             raise e
