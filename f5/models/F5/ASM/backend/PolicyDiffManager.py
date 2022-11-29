@@ -2,6 +2,7 @@ import re
 import json
 import time
 import xmltodict
+from datetime import datetime
 
 from typing import List, Dict
 
@@ -191,6 +192,17 @@ class PolicyDiffManager(PolicyBase):
 
 
     @staticmethod
+    def __toEpoch(isoformat: str):
+        try:
+            e = int(datetime.strptime(isoformat, "%Y-%m-%dT%H:%M:%SZ").timestamp())
+        except Exception:
+            e = 0
+
+        return e
+
+
+
+    @staticmethod
     def __differencesAddSourceObjectDate(differences: dict, firstPolicyXML: str) -> dict:
         try:
             xml = xmltodict.parse(firstPolicyXML)
@@ -200,28 +212,34 @@ class PolicyDiffManager(PolicyBase):
                     xmlParameters: List[dict] = xml.get("policy").get("file_types").get("file_type")
                     for el in v:
                         try:
-                            el["secondLastUpdateMicros"] = list(filter(lambda i: i["@name"] == el["entityName"], xmlParameters))[0]["last_updated"]
+                            # Read date from xml data, for corresponding object name.
+                            el["secondLastUpdateMicros"] = PolicyDiffManager.__toEpoch(
+                                list(filter(lambda i: i["@name"] == el["entityName"], xmlParameters))[0]["last_updated"]
+                            )
                         except Exception:
                             el["secondLastUpdateMicros"] = 0
 
-                if k == "parameters":
+                elif k == "parameters":
                     xmlParameters: List[dict] = xml.get("policy").get("parameters").get("parameter")
                     for el in v:
                         try:
-                            # Read date from xml data, for corresponding object name.
-                            el["secondLastUpdateMicros"] = list(filter(lambda i: i["@name"] == el["entityName"], xmlParameters))[0]["last_updated"]
+                            el["secondLastUpdateMicros"] = PolicyDiffManager.__toEpoch(
+                                list(filter(lambda i: i["@name"] == el["entityName"], xmlParameters))[0]["last_updated"]
+                            )
                         except Exception:
                             el["secondLastUpdateMicros"] = 0
 
-                if k == "urls":
+                elif k == "urls":
                     xmlParameters: List[dict] = xml.get("policy").get("urls").get("url")
                     for el in v:
                         try:
-                            el["secondLastUpdateMicros"] = list(filter(lambda i: "[" + i["@protocol"] + "] " + i["@name"] == el["entityName"], xmlParameters))[0]["last_updated"]
+                            el["secondLastUpdateMicros"] = PolicyDiffManager.__toEpoch(
+                                list(filter(lambda i: "[" + i["@protocol"] + "] " + i["@name"] == el["entityName"], xmlParameters))[0]["last_updated"]
+                            )
                         except Exception:
                             el["secondLastUpdateMicros"] = 0
 
-                if k in ("cookies", "json-profiles", "methods"):
+                else:
                     for el in v:
                         el["secondLastUpdateMicros"] = 0
 
