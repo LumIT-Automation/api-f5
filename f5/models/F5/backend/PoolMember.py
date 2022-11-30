@@ -65,6 +65,8 @@ class PoolMember:
                     for k, v in r["entries"].items():
                         if "entries" in v["nestedStats"]:
                             o = v["nestedStats"]["entries"]
+                            o["parentState"] = o["status.enabledState"] # rename field as in list.
+                            del o["status.enabledState"]
 
         except Exception as e:
             raise e
