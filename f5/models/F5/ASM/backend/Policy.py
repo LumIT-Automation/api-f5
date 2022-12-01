@@ -99,7 +99,7 @@ class Policy:
 
 
     @staticmethod
-    def createDiffFacade(assetId: int, destinationPolicyId: str, sourcePolicy: str) -> dict:
+    def createDiffFacade(assetId: int, destinationPolicyId: str, sourcePolicy: str) -> str:
         try:
             return PolicyDiffManager.createDiff(assetId, destinationPolicyId, sourcePolicy)
         except Exception as e:

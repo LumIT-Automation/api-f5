@@ -1,3 +1,4 @@
+import re
 import json
 import time
 import xmltodict
@@ -20,7 +21,8 @@ class PolicyDiffManager(PolicyBase):
     ####################################################################################################################
 
     @staticmethod
-    def createDiff(assetId: int, destinationPolicyId: str, firstPolicy: str) -> dict:
+    def createDiff(assetId: int, destinationPolicyId: str, firstPolicy: str) -> str:
+        diffReference = ""
         timeout = 3600 # [second]
 
         try:
@@ -69,12 +71,16 @@ class PolicyDiffManager(PolicyBase):
                     taskOutput = api.get()["payload"]
                     taskStatus = taskOutput["status"].lower()
                     if taskStatus == "completed":
-                        out = taskOutput.get("result", {})
+                        result = taskOutput.get("result", {})
                         PolicyDiffManager._log(
-                            f"[AssetID: {assetId}] Differences' result: {out}"
+                            f"[AssetID: {assetId}] Differences' result: {result}"
                         )
 
-                        return out
+                        matches = re.search(r"(?<=diffs\/)(.*)(?=\?)", result.get("policyDiffReference", {}).get("link", ""))
+                        if matches:
+                            diffReference = str(matches.group(1)).strip()
+
+                        return diffReference
                     if taskStatus == "failure":
                         raise CustomException(status=400, payload={"F5": f"policy diff failed"})
 
