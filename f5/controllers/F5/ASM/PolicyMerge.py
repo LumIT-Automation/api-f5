@@ -1,5 +1,3 @@
-import re
-
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
@@ -38,19 +36,15 @@ class F5PolicyMergeController(CustomController):
                         lock.lock()
 
                         sourcePolicy = Policy.importPolicy(sourceAssetId, destinationAssetId, sourcePolicyId, cleanupPreviouslyImportedPolicy=True)
+                        differences = Policy.differences(
+                            destinationAssetId=destinationAssetId,
+                            destinationPolicyId=destinationPolicyId,
+                            sourceAssetId=sourceAssetId,
+                            sourcePolicyId=sourcePolicy.get("importedPolicyId"),
+                            sourcePolicyXML=sourcePolicy.get("sourcePolicyXMLContent", "")
+                        )
 
-                        matches = re.search(r"(?<=policies\/)(.*)(?=\?)", sourcePolicy.get("policyReference", {}).get("link", ""))
-                        if matches:
-                            sourcePolicyId = str(matches.group(1)).strip()
-                            differences = Policy.differences(
-                                destinationAssetId=destinationAssetId,
-                                destinationPolicyId=destinationPolicyId,
-                                sourceAssetId=sourceAssetId,
-                                sourcePolicyId=sourcePolicyId,
-                                sourcePolicyXML=sourcePolicy.get("sourcePolicyXMLContent", "")
-                            )
-
-                            response = differences
+                        response = differences
 
                         httpStatus = status.HTTP_200_OK
                         lock.release()

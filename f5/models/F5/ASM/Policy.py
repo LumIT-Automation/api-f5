@@ -1,3 +1,5 @@
+import re
+
 from typing import List
 
 from f5.models.F5.Asset.Asset import Asset
@@ -82,16 +84,20 @@ class Policy:
             # Load policy content for sourcePolicyId on sourceAssetId.
             sourcePolicyContent = Backend.downloadPolicyFileFacade(sourceAssetId, sourcePolicyId, cleanup=True)
 
-            result = Backend.importPolicyFacade(
+            importedPolicy = Backend.importPolicyFacade(
                 assetId=destAssetId,
                 policyContent=sourcePolicyContent,
                 newPolicyName=destinationPolicyName,
                 cleanup=True
             )
 
-            result["sourcePolicyXMLContent"] = sourcePolicyContent # policy content to returned result.
+            matches = re.search(r"(?<=policies\/)(.*)(?=\?)", importedPolicy.get("policyReference", {}).get("link", ""))
+            if matches:
+                importedPolicy["importedPolicyId"] = str(matches.group(1)).strip()
 
-            return result
+            importedPolicy["sourcePolicyXMLContent"] = sourcePolicyContent # policy content to returned result.
+
+            return importedPolicy
         except Exception as e:
             raise e
 
