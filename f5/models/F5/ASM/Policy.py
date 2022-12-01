@@ -1,3 +1,4 @@
+import re
 from typing import List
 
 from f5.models.F5.Asset.Asset import Asset
@@ -98,15 +99,27 @@ class Policy:
 
 
     @staticmethod
-    def differences(assetId: int, firstPolicy: str, secondPolicy: str, firstPolicyXML: str):
+    def differences(sourceAssetId: int, destinationAssetId: int, destinationPolicyId: str, sourcePolicyId: str, sourcePolicyXML: str) -> list:
         try:
-            if firstPolicy and secondPolicy:
-                return Backend.showDifferencesFacade(
-                    assetId=assetId,
-                    diffReference=Backend.createDiffFacade(assetId, firstPolicy, secondPolicy).get("policyDiffReference", {}).get("link", ""),
-                    firstPolicyXML=firstPolicyXML
+            if destinationPolicyId and sourcePolicyId:
+                differences = Backend.createDiffFacade(destinationAssetId, destinationPolicyId, sourcePolicyId)
+                matches = re.search(r"(?<=diffs\/)(.*)(?=\?)", differences.get(
+                    "policyDiffReference", {}).get("link", "")
                 )
+
+                if matches:
+                    diffReferenceId = str(matches.group(1)).strip()
+
+                    return Backend.showDifferencesFacade(
+                        sourceAssetId=sourceAssetId,
+                        sourcePolicyId=sourcePolicyId,
+                        sourcePolicyXML=sourcePolicyXML,
+                        destinationAssetId=destinationAssetId,
+                        diffReferenceId=diffReferenceId
+                    )
+                else:
+                    raise CustomException(status=400, payload={"F5": f"no data to process"})
             else:
-                raise CustomException(status=400, payload={"F5": f"no fata to process"})
+                raise CustomException(status=400, payload={"F5": f"no data to process"})
         except Exception as e:
             raise e
