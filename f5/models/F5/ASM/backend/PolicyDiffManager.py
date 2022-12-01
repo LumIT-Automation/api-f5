@@ -149,7 +149,7 @@ class PolicyDiffManager(PolicyBase):
     def __cleanupDifferences(differences: list) -> list:
         diffs = []
 
-        def dType(t):
+        def cleanDiffType(t):
             if t == "only-in-first":
                 return "only-in-source"
             elif t == "only-in-second":
@@ -157,13 +157,26 @@ class PolicyDiffManager(PolicyBase):
             else:
                 return t
 
+        def cleanDetails(details):
+            clean = list()
+
+            for j in details:
+                clean.append({
+                    "sourceValue": j["firstValue"],
+                    "sourceElement": j["firstElement"],
+                    "destinationValue": j["secondValue"],
+                    "destinationElement": j["secondElement"],
+                    "field": j["firstElement"]
+                })
+            return clean
+
         try:
             for el in differences:
                 diffs.append({
                     "id": el["id"],
                     "entityType": el["entityKind"].split(":")[3],
-                    "diffType": dType(el["diffType"]),
-                    "details": el.get("details", []),
+                    "diffType": cleanDiffType(el["diffType"]),
+                    "details": cleanDetails(el.get("details", [])),
                     "entityName": el["entityName"],
                     "canMerge": {
                         "destinationToSource": el["canMergeSecondToFirst"],
@@ -185,7 +198,6 @@ class PolicyDiffManager(PolicyBase):
         diffs: Dict[str, List[dict]] = {}
 
         try:
-
             for el in differences:
                 entityType = el["entityType"]
                 if entityType not in diffs:
@@ -208,7 +220,6 @@ class PolicyDiffManager(PolicyBase):
                 f5 = Asset(sourceAssetId)
 
                 for k, v in differences.items():
-                    Log.log(k, "_")
                     api = ApiSupplicant(
                         endpoint=f5.baseurl + "tm/asm/policies/" + sourcePolicyId + "/" + k + "/",
                         auth=(f5.username, f5.password),
