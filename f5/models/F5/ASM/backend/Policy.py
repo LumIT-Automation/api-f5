@@ -99,17 +99,17 @@ class Policy:
 
 
     @staticmethod
-    def createDiffFacade(assetId: int, destinationPolicyId: str, sourcePolicy: str) -> str:
+    def createDiffFacade(assetId: int, destinationPolicyId: str, importedPolicyId: str) -> str:
         try:
-            return PolicyDiffManager.createDiff(assetId, destinationPolicyId, sourcePolicy)
+            return PolicyDiffManager.createDiff(assetId, destinationPolicyId, importedPolicyId)
         except Exception as e:
             raise e
 
 
 
     @staticmethod
-    def showDifferencesFacade(sourceAssetId: int, sourcePolicyId: str, destinationAssetId: int, diffReferenceId: str, sourcePolicyXML: str) -> list:
+    def showDifferencesFacade(sourceAssetId: int, sourcePolicyId: str, destinationAssetId: int, diffReferenceId: str) -> list:
         try:
-            return PolicyDiffManager.listDifferences(sourceAssetId, sourcePolicyId, destinationAssetId, diffReferenceId, sourcePolicyXML)
+            return PolicyDiffManager.listDifferences(sourceAssetId, sourcePolicyId, destinationAssetId, diffReferenceId)
         except Exception as e:
             raise e

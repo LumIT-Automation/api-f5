@@ -35,13 +35,13 @@ class F5PolicyMergeController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        sourcePolicy = Policy.importPolicy(sourceAssetId, destinationAssetId, sourcePolicyId, cleanupPreviouslyImportedPolicy=True)
+                        importedPolicy = Policy.importPolicy(sourceAssetId, destinationAssetId, sourcePolicyId, cleanupPreviouslyImportedPolicy=True)
                         differences = Policy.differences(
                             destinationAssetId=destinationAssetId,
                             destinationPolicyId=destinationPolicyId,
                             sourceAssetId=sourceAssetId,
-                            sourcePolicyId=sourcePolicy.get("importedPolicyId"),
-                            sourcePolicyXML=sourcePolicy.get("sourcePolicyXMLContent", "")
+                            sourcePolicyId=sourcePolicyId,
+                            importedPolicyId=importedPolicy.get("importedPolicyId")
                         )
 
                         response = differences

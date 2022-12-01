@@ -102,7 +102,7 @@ class PolicyExporter(PolicyBase):
 
 
     @staticmethod
-    def downloadPolicyData(assetId: int, localExportFile: str, cleanup: bool = False, saveResponse: bool = True) -> str:
+    def downloadPolicyData(assetId: int, localExportFile: str, cleanup: bool = False, saveResponse: bool = False) -> str:
         fullResponse = ""
         segmentEnd = 0
         delta = 1000000

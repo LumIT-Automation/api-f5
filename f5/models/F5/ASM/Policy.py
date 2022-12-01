@@ -104,14 +104,13 @@ class Policy:
 
 
     @staticmethod
-    def differences(sourceAssetId: int, destinationAssetId: int, destinationPolicyId: str, sourcePolicyId: str, sourcePolicyXML: str) -> list:
+    def differences(sourceAssetId: int, destinationAssetId: int, destinationPolicyId: str, sourcePolicyId: str, importedPolicyId: str) -> list:
         try:
-            if destinationPolicyId and sourcePolicyId:
-                diffReferenceId = Backend.createDiffFacade(destinationAssetId, destinationPolicyId, sourcePolicyId)
+            if destinationPolicyId and importedPolicyId:
+                diffReferenceId = Backend.createDiffFacade(destinationAssetId, destinationPolicyId, importedPolicyId)
                 return Backend.showDifferencesFacade(
                     sourceAssetId=sourceAssetId,
                     sourcePolicyId=sourcePolicyId,
-                    sourcePolicyXML=sourcePolicyXML,
                     destinationAssetId=destinationAssetId,
                     diffReferenceId=diffReferenceId
                 )

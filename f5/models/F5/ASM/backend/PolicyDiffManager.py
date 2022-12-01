@@ -1,8 +1,6 @@
 import re
 import json
 import time
-import xmltodict
-from datetime import datetime
 
 from typing import List, Dict
 
@@ -21,7 +19,7 @@ class PolicyDiffManager(PolicyBase):
     ####################################################################################################################
 
     @staticmethod
-    def createDiff(assetId: int, destinationPolicyId: str, firstPolicy: str) -> str:
+    def createDiff(assetId: int, destinationPolicyId: str, importedPolicyId: str) -> str:
         diffReference = ""
         timeout = 3600 # [second]
 
@@ -41,16 +39,16 @@ class PolicyDiffManager(PolicyBase):
                 },
                 data=json.dumps({
                     "firstPolicyReference": {
-                        "link": "https://localhost/mgmt/tm/asm/policies/" + destinationPolicyId
+                        "link": "https://localhost/mgmt/tm/asm/policies/" + importedPolicyId
                     },
                     "secondPolicyReference": {
-                        "link": firstPolicy
+                        "link": "https://localhost/mgmt/tm/asm/policies/" + destinationPolicyId
                     }
                 })
             )["payload"]
 
             PolicyDiffManager._log(
-                f"[AssetID: {assetId}] Creating differences between {destinationPolicyId} and {firstPolicy}..."
+                f"[AssetID: {assetId}] Creating differences between {destinationPolicyId} and {importedPolicyId}..."
             )
 
             # Monitor export file creation (async tasks).
@@ -87,7 +85,7 @@ class PolicyDiffManager(PolicyBase):
                     if time.time() >= t0 + timeout: # timeout reached.
                         raise CustomException(status=400, payload={"F5": f"policy diff times out"})
 
-                    time.sleep(30)
+                    time.sleep(20)
                 except KeyError:
                     raise CustomException(status=400, payload={"F5": f"policy diff failed"})
         except Exception as e:
@@ -96,7 +94,7 @@ class PolicyDiffManager(PolicyBase):
 
 
     @staticmethod
-    def listDifferences(sourceAssetId: int, sourcePolicyId: str, destinationAssetId: int, diffReferenceId: str, sourcePolicyXML: str) -> dict:
+    def listDifferences(sourceAssetId: int, sourcePolicyId: str, destinationAssetId: int, diffReferenceId: str) -> dict:
         page = 0
         items = 100
         differences = []
@@ -133,7 +131,6 @@ class PolicyDiffManager(PolicyBase):
 
             completeDifferences = PolicyDiffManager.__differencesAddSourceObjectDate(
                 PolicyDiffManager.__differencesOrderByType(differences),
-                sourcePolicyXML,
                 sourceAssetId,
                 sourcePolicyId
             )
@@ -152,17 +149,27 @@ class PolicyDiffManager(PolicyBase):
     def __cleanupDifferences(differences: list) -> list:
         diffs = []
 
+        def dType(t):
+            if t == "only-in-first":
+                return "only-in-source"
+            elif t == "only-in-second":
+                return "only-in-destination"
+            else:
+                return t
+
         try:
             for el in differences:
                 diffs.append({
                     "id": el["id"],
                     "entityType": el["entityKind"].split(":")[3],
-                    "diffType": el["diffType"],
-                    "firstLastUpdateMicros": el["firstLastUpdateMicros"],
+                    "diffType": dType(el["diffType"]),
                     "details": el.get("details", []),
                     "entityName": el["entityName"],
-                    "canMergeSecondToFirst": el["canMergeSecondToFirst"],
-                    "canMergeFirstToSecond": el["canMergeFirstToSecond"],
+                    "canMerge": {
+                        "destinationToSource": el["canMergeSecondToFirst"],
+                        "sourceToDestination": el["canMergeFirstToSecond"]
+                    },
+                    "destinationLastUpdateMicros": el["secondLastUpdateMicros"],
                 })
 
             return diffs
@@ -194,366 +201,30 @@ class PolicyDiffManager(PolicyBase):
 
 
     @staticmethod
-    def __toEpoch(isoformat: str):
+    def __differencesAddSourceObjectDate(differences: dict, sourceAssetId: int, sourcePolicyId: str) -> dict:
         try:
-            e = int(datetime.strptime(isoformat, "%Y-%m-%dT%H:%M:%SZ").timestamp())
-        except Exception:
-            e = 0
+            # @todo: create and use models.
+            try:
+                f5 = Asset(sourceAssetId)
 
-        return e
+                for k, v in differences.items():
+                    Log.log(k, "_")
+                    api = ApiSupplicant(
+                        endpoint=f5.baseurl + "tm/asm/policies/" + sourcePolicyId + "/" + k + "/",
+                        auth=(f5.username, f5.password),
+                        tlsVerify=f5.tlsverify
+                    )
 
-
-
-    @staticmethod
-    def __differencesAddSourceObjectDate(differences: dict, sourcePolicyXML: str, sourceAssetId: int, sourcePolicyId: str) -> dict:
-        try:
-            f5 = Asset(sourceAssetId)
-            xml = xmltodict.parse(sourcePolicyXML)
-
-            for k, v in differences.items():
-                # Some last modify timestamps are contained within the XML file.
-                if k == "filetypes":
-                    xmlParameters: List[dict] = xml.get("policy").get("file_types").get("file_type")
+                    o = api.get()["payload"]["items"]
                     for el in v:
-                        try:
-                            # Read date from xml data, for corresponding object name.
-                            el["secondLastUpdateMicros"] = PolicyDiffManager.__toEpoch(
-                                list(filter(lambda i: i["@name"] == el["entityName"], xmlParameters))[0]["last_updated"]
-                            )
-                        except Exception:
-                            el["secondLastUpdateMicros"] = 0
-
-                elif k == "parameters":
-                    xmlParameters: List[dict] = xml.get("policy").get("parameters").get("parameter")
-                    for el in v:
-                        try:
-                            el["secondLastUpdateMicros"] = PolicyDiffManager.__toEpoch(
-                                list(filter(lambda i: i["@name"] == el["entityName"], xmlParameters))[0]["last_updated"]
-                            )
-                        except Exception:
-                            el["secondLastUpdateMicros"] = 0
-
-                elif k == "urls":
-                    xmlParameters: List[dict] = xml.get("policy").get("urls").get("url")
-                    for el in v:
-                        try:
-                            el["secondLastUpdateMicros"] = PolicyDiffManager.__toEpoch(
-                                list(filter(lambda i: "[" + i["@protocol"] + "] " + i["@name"] == el["entityName"], xmlParameters))[0]["last_updated"]
-                            )
-                        except Exception:
-                            el["secondLastUpdateMicros"] = 0
-
-                else:
-                    # For all the other timestamps, callbacks to source policy are needed.
-                    # @todo: create models.
-                    # @stub.
-                    for el in v:
-                        el["secondLastUpdateMicros"] = 0
-
-                    try:
-                        api = ApiSupplicant(
-                            endpoint=f5.baseurl + "tm/asm/policies/" + sourcePolicyId + "/cookies/",
-                            auth=(f5.username, f5.password),
-                            tlsVerify=f5.tlsverify
-                        )
-
-                        o = api.get()["payload"]
-                    except Exception as e:
-                        raise e
+                        for elm in o:
+                            if elm["name"] == el["entityName"]:
+                                el["sourceLastUpdateMicros"] = elm["lastUpdateMicros"]
+            except KeyError:
+                pass
+            except Exception as e:
+                raise e
 
             return differences
         except Exception as e:
             raise e
-
-        # {
-        #             "signatureRequirementReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/signature-requirements"
-        #             },
-        #
-        #             "plainTextProfileReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/plain-text-profiles"
-        #             },
-        #
-        #             "behavioralEnforcementReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/behavioral-enforcement?"
-        #             },
-        #
-        #             "dataGuardReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/data-guard?"
-        #             },
-        #
-        #             "databaseProtectionReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/database-protection?"
-        #             },
-        #
-        #             "cookieSettingsReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/cookie-settings?"
-        #             },
-        #
-        #             "csrfUrlReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/csrf-urls"
-        #             },
-        #
-        #             "headerSettingsReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/header-settings?"
-        #             },
-        #
-        #             "sectionReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/sections"
-        #             },
-        #
-        #             "flowReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/flows"
-        #             },
-        #
-        #             "loginPageReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/login-pages"
-        #             },
-        #
-        #             "policyBuilderParameterReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/policy-builder-parameter?"
-        #             },
-        #
-        #             "threatCampaignReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/threat-campaigns"
-        #             },
-        #
-        #             "csrfProtectionReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/csrf-protection?"
-        #             },
-        #
-        #             "graphqlProfileReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/graphql-profiles"
-        #             },
-        #
-        #             "policyAntivirusReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/antivirus?"
-        #             },
-        #
-        #             "policyBuilderCookieReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/policy-builder-cookie?"
-        #             },
-        #
-        #             "ipIntelligenceReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/ip-intelligence?"
-        #             },
-        #
-        #             "sessionAwarenessSettingsReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/session-tracking?"
-        #             },
-        #
-        #             "policyBuilderUrlReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/policy-builder-url?"
-        #             },
-        #
-        #             "policyBuilderServerTechnologiesReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/policy-builder-server-technologies?"
-        #             },
-        #
-        #             "policyBuilderFiletypeReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/policy-builder-filetype?"
-        #             },
-        #
-        #             "signatureSetReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/signature-sets"
-        #             },
-        #
-        #             "parameterReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/parameters"
-        #             },
-        #
-        #             "loginEnforcementReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/login-enforcement?"
-        #             },
-        #
-        #             "openApiFileReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/open-api-files"
-        #             },
-        #
-        #             "navigationParameterReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/navigation-parameters"
-        #             },
-        #
-        #             "gwtProfileReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/gwt-profiles"
-        #             },
-        #
-        #             "webhookReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/webhooks"
-        #             },
-        #
-        #             "whitelistIpReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/whitelist-ips"
-        #             },
-        #
-        #             "historyRevisionReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/history-revisions"
-        #             },
-        #
-        #             "policyBuilderReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/policy-builder?"
-        #             },
-        #
-        #             "responsePageReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/response-pages"
-        #             },
-        #
-        #             "vulnerabilityAssessmentReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/vulnerability-assessment?"
-        #             },
-        #
-        #             "serverTechnologyReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/server-technologies"
-        #             },
-        #
-        #             "cookieReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/cookies"
-        #             },
-        #
-        #             "blockingSettingReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/blocking-settings"
-        #             },
-        #
-        #             "hostNameReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/host-names"
-        #             },
-        #
-        #             "threatCampaignSettingReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/threat-campaign-settings?"
-        #             },
-        #
-        #             "signatureReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/signatures"
-        #             },
-        #
-        #             "policyBuilderRedirectionProtectionReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/policy-builder-redirection-protection?"
-        #             },
-        #
-        #             "filetypeReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/filetypes"
-        #             },
-        #
-        #             "ssrfHostReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/ssrf-hosts"
-        #             },
-        #
-        #             "sessionTrackingStatusReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/session-tracking-statuses"
-        #             },
-        #
-        #             "auditLogReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/audit-logs"
-        #             },
-        #
-        #             "disallowedGeolocationReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/disallowed-geolocations"
-        #             },
-        #
-        #             "redirectionProtectionDomainReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/redirection-protection-domains"
-        #             },
-        #
-        #             "signatureSettingReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/signature-settings?"
-        #             },
-        #
-        #             "deceptionResponsePageReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/deception-response-pages"
-        #             },
-        #
-        #             "websocketUrlReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/websocket-urls"
-        #             },
-        #
-        #             "xmlProfileReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/xml-profiles"
-        #             },
-        #
-        #             "methodReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/methods"
-        #             },
-        #
-        #             "vulnerabilityReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/vulnerabilities"
-        #             },
-        #
-        #             "redirectionProtectionReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/redirection-protection?"
-        #             },
-        #
-        #             "policyBuilderSessionsAndLoginsReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/policy-builder-sessions-and-logins?"
-        #             },
-        #
-        #             "templateReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policy-templates/EzpBNMs9gbVsF5uuiBjYDw"
-        #             },
-        #
-        #             "policyBuilderHeaderReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/policy-builder-header?"
-        #             },
-        #
-        #             "urlReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/urls"
-        #             },
-        #
-        #             "headerReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/headers"
-        #             },
-        #
-        #             "actionItemReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/action-items"
-        #             },
-        #
-        #             "microserviceReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/microservices"
-        #             },
-        #
-        #             "xmlValidationFileReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/xml-validation-files"
-        #             },
-        #
-        #             "jsonProfileReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/json-profiles"
-        #             },
-        #
-        #             "bruteForceAttackPreventionReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/brute-force-attack-preventions"
-        #             },
-        #
-        #             "disabledActionItemReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/disabled-action-items"
-        #             },
-        #
-        #             "jsonValidationFileReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/json-validation-files"
-        #             },
-        #
-        #             "extractionReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/extractions"
-        #             },
-        #
-        #             "characterSetReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/character-sets"
-        #             },
-        #
-        #             "suggestionReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/suggestions"
-        #             },
-        #
-        #             "deceptionSettingsReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/deception-settings?"
-        #             },
-        #
-        #             "sensitiveParameterReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/sensitive-parameters"
-
-        #             },
-        #             "generalReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/general?"
-        #             },
-        #
-        #             "policyBuilderCentralConfigurationReference": {
-        #                 "link": "https://localhost/mgmt/tm/asm/policies/K-78hGsC0JAvnuDbF1Vh2A/policy-builder-central-configuration?"
-        #             }
