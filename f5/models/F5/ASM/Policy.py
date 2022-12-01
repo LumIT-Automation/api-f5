@@ -34,9 +34,9 @@ class Policy:
 
 
 
-    def delete(self):
+    def delete(self, silent: bool = False):
         try:
-            Backend.delete(self.assetId, self.id)
+            Backend.delete(self.assetId, self.id, silent=silent)
         except Exception as e:
             raise e
 
@@ -74,7 +74,7 @@ class Policy:
                 # delete or raise exception, depending on cleanupPreviouslyImportedPolicy.
                 if destinationPolicyName == l[0][0]:
                     if cleanupPreviouslyImportedPolicy:
-                        Policy(assetId=destAssetId, id=l[0][1]).delete()
+                        Policy(assetId=destAssetId, id=l[0][1]).delete(silent=True)
                     else:
                         raise CustomException(status=400, payload={
                             "F5": f"duplicate policy {destinationPolicyName} on destination asset, please cleanup first"})

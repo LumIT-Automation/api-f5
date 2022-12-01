@@ -50,13 +50,14 @@ class Policy:
 
 
     @staticmethod
-    def delete(assetId: int, id: str) -> None:
+    def delete(assetId: int, id: str, silent: bool = False) -> None:
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/asm/policies/"+id+"/",
                 auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
+                tlsVerify=f5.tlsverify,
+                silent=silent
             )
 
             api.delete()

@@ -223,7 +223,8 @@ class PolicyDiffManager(PolicyBase):
                     api = ApiSupplicant(
                         endpoint=f5.baseurl + "tm/asm/policies/" + sourcePolicyId + "/" + k + "/",
                         auth=(f5.username, f5.password),
-                        tlsVerify=f5.tlsverify
+                        tlsVerify=f5.tlsverify,
+                        silent=True
                     )
 
                     o = api.get()["payload"]["items"]
