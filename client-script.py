@@ -105,7 +105,8 @@ def deleteAsset(assetId):
         print(e.args)
 
 
-
+# To reset the autoincrement number try this shell command:
+# echo "UPDATE sqlite_sequence SET seq=0 WHERE name='asset';" | sqlite3 f5.db
 def purgeAssets():
     try:
         assetsList = listAsset()["data"]["items"]
@@ -118,6 +119,17 @@ def purgeAssets():
         print(e.args)
 
 
+
+def listPolicies(assetId):
+    url = '/api/v1/f5/' + str(assetId) + '/asm/policies/'
+    try:
+        r = Client().get(url).json()
+        print(r)
+    except Exception as e:
+        print(e.args)
+
+
+
 ####################
 django.setup()
 
@@ -126,7 +138,11 @@ loadAsset(ip=srcIpAsset, user=srcUser, passwd=srcPasswd)
 loadAsset(ip=dstIpAsset, user=dstUser, passwd=dstPasswd)
 print("Assets loaded:")
 print(listAsset())
-purgeAssets()
 
+print('Policies on source asset:')
+print(listPolicies(1))
+
+
+purgeAssets()
 print("Assets cleaned up")
 print(listAsset())
