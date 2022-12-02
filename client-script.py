@@ -1,0 +1,132 @@
+#!/usr/bin/python3
+
+import os
+import argparse
+
+import django
+from django.conf import settings
+from django.test import Client
+
+
+####################
+parser = argparse.ArgumentParser()
+parser.add_argument('-a','--src_asset',help='Source asset of the policies (ip/hostname)',required=True)
+parser.add_argument('-A','--dst_asset',help='Destination asset of the policies (ip/hostname)',required=True)
+parser.add_argument('-u','--src_user',help='Source asset username',required=False)
+parser.add_argument('-U','--dst_user',help='Destination asset username',required=False)
+parser.add_argument('-p','--src_passwd',help='Source asset password',required=True)
+parser.add_argument('-P','--dst_passwd',help='Destination asset password',required=True)
+args = parser.parse_args()
+
+srcIpAsset = args.src_asset
+dstIpAsset = args.dst_asset
+if args.src_user:
+    srcUser = args.src_user
+else:
+    srcUser = 'admin'
+if args.dst_user:
+    dstUser = args.dst_user
+else:
+    dstUser = 'admin'
+srcPasswd = args.src_passwd
+dstPasswd = args.dst_passwd
+
+
+####################
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "api.settings")
+settings.DISABLE_AUTHENTICATION = True
+settings.DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'f5.db',
+    }
+}
+settings.CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': '/tmp/django_cache',
+    }
+}
+settings.REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [],
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '600/minute',
+        'user': '600/minute'
+    }
+}
+
+
+def loadAsset(ip: str, user: str, passwd: str):
+    baseUrl = "https://" + ip + "/mgmt/"
+    try:
+        r = Client().post(
+                path = '/api/v1/f5/assets/',
+                data = {
+                    "data": {
+                        "address": ip,
+                        "fqdn": ip,
+                        "baseurl": baseUrl,
+                        "tlsverify": 0,
+                        "datacenter": "",
+                        "environment": "src",
+                        "position": "",
+                        "username": user,
+                        "password": passwd
+                    }
+                },
+                content_type = "application/json"
+        )
+
+        print(r)
+    except Exception as e:
+        print(e.args)
+
+
+
+def listAsset():
+    try:
+        return Client().get('/api/v1/f5/assets/').json()
+    except Exception as e:
+        print(e.args)
+
+
+
+def deleteAsset(assetId):
+    url = '/api/v1/f5/asset/' + str(assetId) + '/'
+    try:
+        r = Client().delete(url)
+
+        print(r)
+    except Exception as e:
+        print(e.args)
+
+
+
+def purgeAssets():
+    try:
+        assetsList = listAsset()["data"]["items"]
+        for asset in assetsList:
+            deleteAsset(asset["id"])
+
+    except KeyError:
+        pass
+    except Exception as e:
+        print(e.args)
+
+
+####################
+django.setup()
+
+
+loadAsset(ip=srcIpAsset, user=srcUser, passwd=srcPasswd)
+loadAsset(ip=dstIpAsset, user=dstUser, passwd=dstPasswd)
+print("Assets loaded:")
+print(listAsset())
+purgeAssets()
+
+print("Assets cleaned up")
+print(listAsset())
