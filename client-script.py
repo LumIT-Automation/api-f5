@@ -63,7 +63,7 @@ settings.REST_FRAMEWORK = {
 def loadAsset(ip: str, user: str, passwd: str):
     baseUrl = "https://" + ip + "/mgmt/"
     try:
-        r = Client().post(
+        return Client().post(
                 path = '/api/v1/f5/assets/',
                 data = {
                     "data": {
@@ -81,7 +81,6 @@ def loadAsset(ip: str, user: str, passwd: str):
                 content_type = "application/json"
         )
 
-        print(r)
     except Exception as e:
         print(e.args)
 
@@ -98,9 +97,7 @@ def listAsset():
 def deleteAsset(assetId):
     url = '/api/v1/f5/asset/' + str(assetId) + '/'
     try:
-        r = Client().delete(url)
-
-        print(r)
+        return Client().delete(url)
     except Exception as e:
         print(e.args)
 
@@ -123,8 +120,16 @@ def purgeAssets():
 def listPolicies(assetId):
     url = '/api/v1/f5/' + str(assetId) + '/asm/policies/'
     try:
-        r = Client().get(url).json()
-        print(r)
+        return Client().get(url).json()
+    except Exception as e:
+        print(e.args)
+
+
+
+def getPolicy(assetId, policyId):
+    url = '/api/v1/f5/' + str(assetId) + '/asm/policy/' + policyId + '/'
+    try:
+        return Client().get(url).json()
     except Exception as e:
         print(e.args)
 
@@ -139,9 +144,14 @@ loadAsset(ip=dstIpAsset, user=dstUser, passwd=dstPasswd)
 print("Assets loaded:")
 print(listAsset())
 
+print('#################')
 print('Policies on source asset:')
 print(listPolicies(1))
+print('#################')
 
+print('POLICY on ASSET 2')
+print(getPolicy(2, 'uIGB1pBIcH8WprjX8KBR0w'))
+print('#################')
 
 purgeAssets()
 print("Assets cleaned up")
