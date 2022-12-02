@@ -135,6 +135,19 @@ def getPolicy(assetId, policyId):
 
 
 
+def mergePolicy(srcAssetId: int, dstAssetId: int, srcPolicyId: str, dstPolicyId: str):
+    url = '/api/v1/f5/' + str(srcAssetId) + '/' + str(dstAssetId) + '/asm/policy-merge/' + srcPolicyId + '/' + dstPolicyId + '/'
+    try:
+        return Client().put(
+                path = url,
+                data = { "data": {}},
+                content_type = "application/json"
+        )
+
+    except Exception as e:
+        print(e.args)
+
+
 ####################
 django.setup()
 
@@ -151,6 +164,10 @@ print('#################')
 
 print('POLICY on ASSET 2')
 print(getPolicy(2, 'uIGB1pBIcH8WprjX8KBR0w'))
+print('#################')
+
+print('MERGE POLICY on ASSET 2')
+#print(mergePolicy(srcAssetId=1, dstAssetId=2, srcPolicyId='K-78hGsC0JAvnuDbF1Vh2A',  dstPolicyId='9n2I7YaXBn94jfKETtsidA'))
 print('#################')
 
 purgeAssets()
