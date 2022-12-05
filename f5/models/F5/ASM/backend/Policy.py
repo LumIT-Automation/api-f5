@@ -114,3 +114,12 @@ class Policy:
             return PolicyDiffManager.listDifferences(sourceAssetId, sourcePolicyId, destinationAssetId, diffReferenceId)
         except Exception as e:
             raise e
+
+
+
+    @staticmethod
+    def diffMergeFacade(assetId: int, destinationPolicyId: str, diffReferenceId: str) -> None:
+        try:
+            pass
+        except Exception as e:
+            raise e

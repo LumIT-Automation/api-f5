@@ -20,20 +20,20 @@ class F5ASMPoliciesMergeController(CustomController):
         try:
             #if Permission.hasUserPermission(groups=user["groups"], action="asm_policy_merge_post", assetId=assetId) or user["authDisabled"]:
             if True:
-                Log.actionLog("ASM policy merge addition", user)
+                Log.actionLog("ASM policy merge", user)
                 Log.actionLog("User data: "+str(request.data), user)
 
                 #serializer = Serializer(data=request.data["data"])
                 #if serializer.is_valid():
                 if True:
                     #data = serializer.validated_data
-                    data = request.data
+                    data = request.data["data"]
 
                     lock = Lock("asm-policy", locals(), policyId)
                     if lock.isUnlocked():
                         lock.lock()
 
-                        Policy.mergeDifferences(data)
+                        Policy(assetId, policyId).mergeDifferences(data)
 
                         httpStatus = status.HTTP_201_CREATED
                         lock.release()
