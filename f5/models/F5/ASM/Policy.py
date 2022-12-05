@@ -60,7 +60,9 @@ class Policy:
 
 
     @staticmethod
-    def importPolicy(sourceAssetId: int, destAssetId: int, sourcePolicyId: str, cleanupPreviouslyImportedPolicy: bool = False) -> dict:
+    def importPolicy(sourceAssetId: int, destAssetId: int, sourcePolicyId: str, cleanupPreviouslyImportedPolicy: bool = False) -> str:
+        importedPolicyId = ""
+
         try:
             # Import sourcePolicyId from source asset into destination asset with destinationPolicyName.
             sourcePolicyName = Policy(assetId=sourceAssetId, id=sourcePolicyId).info(silent=True)["name"]
@@ -84,6 +86,7 @@ class Policy:
             # Load policy content for sourcePolicyId on sourceAssetId.
             sourcePolicyContent = Backend.downloadPolicyFileFacade(sourceAssetId, sourcePolicyId, cleanup=True)
 
+            # Import policy on destination asset.
             importedPolicy = Backend.importPolicyFacade(
                 assetId=destAssetId,
                 policyContent=sourcePolicyContent,
@@ -93,11 +96,9 @@ class Policy:
 
             matches = re.search(r"(?<=policies\/)(.*)(?=\?)", importedPolicy.get("policyReference", {}).get("link", ""))
             if matches:
-                importedPolicy["importedPolicyId"] = str(matches.group(1)).strip()
+                importedPolicyId = str(matches.group(1)).strip()
 
-            importedPolicy["sourcePolicyXMLContent"] = sourcePolicyContent # policy content to returned result.
-
-            return importedPolicy
+            return importedPolicyId
         except Exception as e:
             raise e
 
@@ -108,12 +109,22 @@ class Policy:
         try:
             if destinationPolicyId and importedPolicyId:
                 diffReferenceId = Backend.createDiffFacade(destinationAssetId, destinationPolicyId, importedPolicyId)
-                return Backend.showDifferencesFacade(
+                differences = Backend.showDifferencesFacade(
                     sourceAssetId=sourceAssetId,
                     sourcePolicyId=sourcePolicyId,
                     destinationAssetId=destinationAssetId,
                     diffReferenceId=diffReferenceId
                 )
+
+                return {
+                    "sourceAssetId": sourceAssetId,
+                    "sourcePolicyId": sourcePolicyId,
+                    "importedPolicyId": importedPolicyId,
+                    "destinationAssetId": destinationAssetId,
+                    "destinationPolicyId": destinationPolicyId,
+                    "diffReferenceId": diffReferenceId,
+                    "differences": differences
+                }
             else:
                 raise CustomException(status=400, payload={"F5": f"no data to process"})
         except Exception as e:
