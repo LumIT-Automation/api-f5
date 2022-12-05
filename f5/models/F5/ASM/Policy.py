@@ -42,14 +42,6 @@ class Policy:
 
 
 
-    def mergeDifferences(self, data: dict):
-        try:
-            Backend.diffMergeFacade(self.assetId, self.id, diffReferenceId=data["diff-reference"])
-        except Exception as e:
-            raise e
-
-
-
     ####################################################################################################################
     # Public static methods
     ####################################################################################################################
@@ -130,5 +122,14 @@ class Policy:
                 }
             else:
                 raise CustomException(status=400, payload={"F5": f"no data to process"})
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
+    def mergeDifferences(assetId: int, policyDifferenceId: str, data: dict):
+        try:
+            Backend.diffMergeFacade(assetId, diffReferenceId=policyDifferenceId)
         except Exception as e:
             raise e

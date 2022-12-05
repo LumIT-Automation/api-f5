@@ -1113,7 +1113,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"data\": {\n        \"diff-reference\": \"bpUGwCScCiXyB-qCn0bLpw\",\n        \"entity-type\": []\n    }\n}",
+									"raw": "{\n    \"data\": {\n        \"entity-type\": []\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1121,7 +1121,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/asm/policy/K-78hGsC0JAvnuDbF1Vh2A/merge/",
+									"raw": "http://10.0.111.22/api/v1/f5/2/asm/policy-diff/bpUGwCScCiXyB-qCn0bLpw/merge/",
 									"protocol": "http",
 									"host": [
 										"10",
@@ -1135,8 +1135,8 @@
 										"f5",
 										"2",
 										"asm",
-										"policy",
-										"K-78hGsC0JAvnuDbF1Vh2A",
+										"policy-diff",
+										"bpUGwCScCiXyB-qCn0bLpw",
 										"merge",
 										""
 									]
