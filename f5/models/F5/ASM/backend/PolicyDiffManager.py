@@ -165,7 +165,7 @@ class PolicyDiffManager(PolicyBase):
                     "addMissingEntitiesToSecond": True, # destination.
                     "handleCommonEntities": "accept-from-first",
                     "handleMissingEntities": "accept-from-first",
-                    "itemFilter": ""
+                    "itemFilter": "" # example: "id eq DIFF_ID1 or id qd DIFF_ID2 or ..."
                 })
             )["payload"]
 
@@ -287,19 +287,41 @@ class PolicyDiffManager(PolicyBase):
 
                 for k, v in differences.items():
                     api = ApiSupplicant(
-                        endpoint=f5.baseurl + "tm/asm/policies/" + sourcePolicyId + "/" + k + "/",
+                        endpoint=f5.baseurl + "tm/asm/policies/" + sourcePolicyId + "/" + k + "/", # no pagination needed.
                         auth=(f5.username, f5.password),
                         tlsVerify=f5.tlsverify,
                         silent=True
                     )
 
-                    o = api.get()["payload"]["items"]
-                    for el in v:
-                        for elm in o:
-                            if elm["name"] == el["entityName"]:
-                                el["sourceLastUpdateMicros"] = elm["lastUpdateMicros"]
-            except KeyError:
-                pass
+                    try:
+                        o = api.get()["payload"]["items"]
+                        for el in v:
+                            for elm in o:
+                                if k == "signatures":
+                                    if elm["signatureReference"]["name"] == el["entityName"]:
+                                        el["sourceLastUpdateMicros"] = elm["lastUpdateMicros"]
+
+                                elif k == "signature-sets":
+                                    if elm["signatureSetReference"]["name"] == el["entityName"]:
+                                        el["sourceLastUpdateMicros"] = elm["lastUpdateMicros"]
+
+                                elif k == "server-technologies":
+                                    if elm["serverTechnologyReference"]["serverTechnologyName"] == el["entityName"]:
+                                        el["sourceLastUpdateMicros"] = elm["lastUpdateMicros"]
+
+                                elif k == "whitelist-ips":
+                                    if elm["ipAddress"]+"/"+elm["ipMask"] == el["entityName"]:
+                                        el["sourceLastUpdateMicros"] = elm["lastUpdateMicros"]
+
+                                elif k == "urls":
+                                    if "["+elm["protocol"].upper()+"] "+elm["name"] == el["entityName"]:
+                                        el["sourceLastUpdateMicros"] = elm["lastUpdateMicros"]
+
+                                else:
+                                    if elm["name"] == el["entityName"]:
+                                        el["sourceLastUpdateMicros"] = elm["lastUpdateMicros"]
+                    except KeyError:
+                        pass
             except Exception as e:
                 raise e
 

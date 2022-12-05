@@ -66,7 +66,7 @@ class PolicyImporter(PolicyBase):
 
     @staticmethod
     def importFromLocalFile(assetId: int, localImportFile: str, name: str, cleanup: bool = False) -> dict:
-        timeout = 120 # [second]
+        timeout = 1800 # [second]
 
         try:
             f5 = Asset(assetId)
