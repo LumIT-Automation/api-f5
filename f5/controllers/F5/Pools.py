@@ -58,7 +58,6 @@ class F5PoolsController(CustomController):
             else:
                 data = None
                 httpStatus = status.HTTP_403_FORBIDDEN
-
         except Exception as e:
             Lock("pool", locals()).release()
             data, httpStatus, headers = CustomController.exceptionHandler(e)

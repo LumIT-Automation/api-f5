@@ -5,48 +5,37 @@ from rest_framework import status
 from f5.models.F5.ASM.Policy import Policy
 from f5.models.Permission.Permission import Permission
 
-from f5.serializers.F5.Node import F5NodeSerializer as Serializer
-
 from f5.controllers.CustomController import CustomController
 
 from f5.helpers.Lock import Lock
 from f5.helpers.Log import Log
 
 
-class F5PolicyMergeController(CustomController):
+class F5ASMPoliciesMergeController(CustomController):
     @staticmethod
-    def put(request: Request, sourceAssetId: int, destinationAssetId: int, sourcePolicyId: str, destinationPolicyId: str) -> Response:
+    def post(request: Request, assetId: int, policyId: str) -> Response:
         response = None
         user = CustomController.loggedUser(request)
 
         try:
-            #if Permission.hasUserPermission(groups=user["groups"], action="node_patch", assetId=assetId, partition=partitionName) or user["authDisabled"]:
+            #if Permission.hasUserPermission(groups=user["groups"], action="asm_policy_merge_post", assetId=assetId) or user["authDisabled"]:
             if True:
-                Log.actionLog("Policy merge", user)
+                Log.actionLog("ASM policy merge addition", user)
                 Log.actionLog("User data: "+str(request.data), user)
 
-                #serializer = Serializer(data=request.data["data"], partial=True)
+                #serializer = Serializer(data=request.data["data"])
                 #if serializer.is_valid():
                 if True:
                     #data = serializer.validated_data
-                    data = request.data["data"]
+                    data = request.data
 
-                    lock = Lock("asm-policy", locals())
+                    lock = Lock("asm-policy", locals(), policyId)
                     if lock.isUnlocked():
                         lock.lock()
 
-                        importedPolicyId = Policy.importPolicy(sourceAssetId, destinationAssetId, sourcePolicyId, cleanupPreviouslyImportedPolicy=True)
-                        differences = Policy.differences(
-                            destinationAssetId=destinationAssetId,
-                            destinationPolicyId=destinationPolicyId,
-                            sourceAssetId=sourceAssetId,
-                            sourcePolicyId=sourcePolicyId,
-                            importedPolicyId=importedPolicyId
-                        )
+                        Policy.mergeDifferences(data)
 
-                        response = differences
-
-                        httpStatus = status.HTTP_200_OK
+                        httpStatus = status.HTTP_201_CREATED
                         lock.release()
                     else:
                         httpStatus = status.HTTP_423_LOCKED
@@ -62,7 +51,7 @@ class F5PolicyMergeController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("asm-policy", locals()).release()
+            Lock("asm-policy", locals(), policyId).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

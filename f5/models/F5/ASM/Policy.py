@@ -60,7 +60,7 @@ class Policy:
 
 
     @staticmethod
-    def importPolicy(sourceAssetId: int, destAssetId: int, sourcePolicyId: str, cleanupPreviouslyImportedPolicy: bool = False) -> str:
+    def externalPolicyImport(sourceAssetId: int, destAssetId: int, sourcePolicyId: str, cleanupPreviouslyImportedPolicy: bool = False) -> str:
         importedPolicyId = ""
 
         try:
@@ -109,12 +109,7 @@ class Policy:
         try:
             if destinationPolicyId and importedPolicyId:
                 diffReferenceId = Backend.createDiffFacade(destinationAssetId, destinationPolicyId, importedPolicyId)
-                differences = Backend.showDifferencesFacade(
-                    sourceAssetId=sourceAssetId,
-                    sourcePolicyId=sourcePolicyId,
-                    destinationAssetId=destinationAssetId,
-                    diffReferenceId=diffReferenceId
-                )
+                differences = Backend.showDifferencesFacade(sourceAssetId, sourcePolicyId, destinationAssetId, diffReferenceId)
 
                 return {
                     "sourceAssetId": sourceAssetId,
@@ -129,3 +124,9 @@ class Policy:
                 raise CustomException(status=400, payload={"F5": f"no data to process"})
         except Exception as e:
             raise e
+
+
+
+    @staticmethod
+    def mergeDifferences(data: dict):
+        Log.log(data, "_")

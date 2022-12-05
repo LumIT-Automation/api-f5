@@ -1045,12 +1045,59 @@
 							"response": []
 						},
 						{
+							"name": "policies' differences",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "edfb456005712c3e68d97b525e247981",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/2/2/asm/source-policy/K-78hGsC0JAvnuDbF1Vh2A/destination-policy/9n2I7YaXBn94jfKETtsidA/differences/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"2",
+										"2",
+										"asm",
+										"source-policy",
+										"K-78hGsC0JAvnuDbF1Vh2A",
+										"destination-policy",
+										"9n2I7YaXBn94jfKETtsidA",
+										"differences",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "policy merge",
 							"request": {
 								"auth": {
 									"type": "noauth"
 								},
-								"method": "PUT",
+								"method": "POST",
 								"header": [
 									{
 										"key": "Authorization",
@@ -1066,7 +1113,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"data\": {}\n}",
+									"raw": "{\n    \"data\": {\n        \"diff-reference\": \"bpUGwCScCiXyB-qCn0bLpw\",\n        \"entity-type\": []\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1074,7 +1121,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/2/asm/policy-merge/K-78hGsC0JAvnuDbF1Vh2A/9n2I7YaXBn94jfKETtsidA/",
+									"raw": "http://10.0.111.22/api/v1/f5/2/asm/policy/K-78hGsC0JAvnuDbF1Vh2A/merge/",
 									"protocol": "http",
 									"host": [
 										"10",
@@ -1087,11 +1134,10 @@
 										"v1",
 										"f5",
 										"2",
-										"2",
 										"asm",
-										"policy-merge",
+										"policy",
 										"K-78hGsC0JAvnuDbF1Vh2A",
-										"9n2I7YaXBn94jfKETtsidA",
+										"merge",
 										""
 									]
 								}
