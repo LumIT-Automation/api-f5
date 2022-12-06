@@ -237,9 +237,13 @@ class PolicyDiffManager(PolicyBase):
 
         try:
             for el in differences:
+                entityType = el["entityKind"].split(":")[3]
+                if "blocking-settings" in el["entityKind"]:
+                    entityType += "/" + el["entityKind"].split(":")[4]
+
                 diffs.append({
                     "id": el["id"],
-                    "entityType": el["entityKind"].split(":")[3],
+                    "entityType": entityType,
                     "entityKind": el["entityKind"],
                     "diffType": cleanDiffType(el["diffType"]),
                     "details": cleanDetails(el.get("details", [])),
@@ -295,6 +299,7 @@ class PolicyDiffManager(PolicyBase):
 
                     try:
                         o = api.get()["payload"]["items"]
+
                         for el in v:
                             for elm in o:
                                 if k == "signatures":
@@ -315,6 +320,10 @@ class PolicyDiffManager(PolicyBase):
 
                                 elif k == "urls":
                                     if "["+elm["protocol"].upper()+"] "+elm["name"] == el["entityName"]:
+                                        el["sourceLastUpdateMicros"] = elm["lastUpdateMicros"]
+
+                                elif "blocking-settings" in k:
+                                    if elm["description"] == el["entityName"]:
                                         el["sourceLastUpdateMicros"] = elm["lastUpdateMicros"]
 
                                 else:
