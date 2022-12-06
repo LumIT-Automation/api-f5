@@ -80,14 +80,14 @@ class PolicyDiffManager(PolicyBase):
 
                         return diffReference
                     if taskStatus == "failure":
-                        raise CustomException(status=400, payload={"F5": f"policy diff failed"})
+                        raise CustomException(status=400, payload={"F5": "policy diff failed"})
 
                     if time.time() >= t0 + timeout: # timeout reached.
-                        raise CustomException(status=400, payload={"F5": f"policy diff timed out"})
+                        raise CustomException(status=400, payload={"F5": "policy diff timed out"})
 
                     time.sleep(20)
                 except KeyError:
-                    raise CustomException(status=400, payload={"F5": f"policy diff failed"})
+                    raise CustomException(status=400, payload={"F5": "policy diff failed"})
         except Exception as e:
             raise e
 
@@ -142,67 +142,77 @@ class PolicyDiffManager(PolicyBase):
 
 
     @staticmethod
-    def mergeDifferences(assetId: int, diffReferenceId: str) -> None:
+    def mergeDifferences(assetId: int, diffReferenceId: str, diffIds: list) -> None:
+        itemFilter = ""
         timeout = 3600 # [second]
 
-        try:
-            f5 = Asset(assetId)
-            api = ApiSupplicant(
-                endpoint=f5.baseurl + "tm/asm/tasks/policy-merge/",
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
+        if diffIds:
+            # Merge only differences with id contained within diffIds.
+            # Only a few ids seems to work.
+            for diffId in diffIds:
+                itemFilter += f"id eq {diffId} or "
+            itemFilter = itemFilter[:-4]
 
-            taskInformation = api.post(
-                additionalHeaders={
-                    "Content-Type": "application/json",
-                },
-                data=json.dumps({
-                    "policyDiffReference": {
-                        "link": "/mgmt/tm/asm/policy-diffs/" + diffReferenceId,
+            try:
+                f5 = Asset(assetId)
+                api = ApiSupplicant(
+                    endpoint=f5.baseurl + "tm/asm/tasks/policy-merge/",
+                    auth=(f5.username, f5.password),
+                    tlsVerify=f5.tlsverify
+                )
+
+                taskInformation = api.post(
+                    additionalHeaders={
+                        "Content-Type": "application/json",
                     },
-                    "addMissingEntitiesToFirst": False,
-                    "addMissingEntitiesToSecond": True, # destination.
-                    "handleCommonEntities": "accept-from-first",
-                    "handleMissingEntities": "accept-from-first",
-                    "itemFilter": "" # example: "id eq DIFF_ID1 or id qd DIFF_ID2 or ..."
-                })
-            )["payload"]
+                    data=json.dumps({
+                        "policyDiffReference": {
+                            "link": "/mgmt/tm/asm/policy-diffs/" + diffReferenceId,
+                        },
+                        "addMissingEntitiesToFirst": False,
+                        "addMissingEntitiesToSecond": True, # destination.
+                        "handleCommonEntities": "accept-from-first",
+                        "handleMissingEntities": "accept-from-first",
+                        "itemFilter": itemFilter # example: "id eq DIFF_ID1 or id qd DIFF_ID2 or ..."
+                    })
+                )["payload"]
 
-            PolicyDiffManager._log(
-                f"[AssetID: {assetId}] Merging differences..."
-            )
+                PolicyDiffManager._log(
+                    f"[AssetID: {assetId}] Merging differences..."
+                )
 
-            # Monitor export file creation (async tasks).
-            t0 = time.time()
+                # Monitor export file creation (async tasks).
+                t0 = time.time()
 
-            while True:
-                try:
-                    api = ApiSupplicant(
-                        endpoint=f5.baseurl + "tm/asm/tasks/policy-merge/" + taskInformation["id"] + "/",
-                        auth=(f5.username, f5.password),
-                        tlsVerify=f5.tlsverify
-                    )
+                while True:
+                    try:
+                        api = ApiSupplicant(
+                            endpoint=f5.baseurl + "tm/asm/tasks/policy-merge/" + taskInformation["id"] + "/",
+                            auth=(f5.username, f5.password),
+                            tlsVerify=f5.tlsverify
+                        )
 
-                    PolicyDiffManager._log(
-                        f"[AssetID: {assetId}] Waiting for task to complete..."
-                    )
+                        PolicyDiffManager._log(
+                            f"[AssetID: {assetId}] Waiting for task to complete..."
+                        )
 
-                    taskOutput = api.get()["payload"]
-                    taskStatus = taskOutput["status"].lower()
-                    if taskStatus == "completed":
-                        break
-                    if taskStatus == "failure":
-                        raise CustomException(status=400, payload={"F5": f"policy merge failed"})
+                        taskOutput = api.get()["payload"]
+                        taskStatus = taskOutput["status"].lower()
+                        if taskStatus == "completed":
+                            break
+                        if taskStatus == "failure":
+                            raise CustomException(status=400, payload={"F5": "policy merge failed"})
 
-                    if time.time() >= t0 + timeout: # timeout reached.
-                        raise CustomException(status=400, payload={"F5": f"policy merge timed out"})
+                        if time.time() >= t0 + timeout: # timeout reached.
+                            raise CustomException(status=400, payload={"F5": "policy merge timed out"})
 
-                    time.sleep(20)
-                except KeyError:
-                    raise CustomException(status=400, payload={"F5": f"policy merge failed"})
-        except Exception as e:
-            raise e
+                        time.sleep(20)
+                    except KeyError:
+                        raise CustomException(status=400, payload={"F5": "policy merge failed"})
+            except Exception as e:
+                raise e
+        else:
+            raise CustomException(status=400, payload={"F5": "refusing to merge a policy without filter"})
 
 
 

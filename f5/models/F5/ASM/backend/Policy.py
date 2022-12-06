@@ -118,8 +118,8 @@ class Policy:
 
 
     @staticmethod
-    def diffMergeFacade(assetId: int, diffReferenceId: str) -> None:
+    def diffMergeFacade(assetId: int, diffReferenceId: str, diffIds: list) -> None:
         try:
-            PolicyDiffManager.mergeDifferences(assetId, diffReferenceId)
+            PolicyDiffManager.mergeDifferences(assetId, diffReferenceId, diffIds)
         except Exception as e:
             raise e

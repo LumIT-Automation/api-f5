@@ -1065,7 +1065,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/2/asm/source-policy/K-78hGsC0JAvnuDbF1Vh2A/destination-policy/9n2I7YaXBn94jfKETtsidA/differences/",
+									"raw": "http://10.0.111.22/api/v1/f5/source-asset/2/destination-asset/2/asm/source-policy/K-78hGsC0JAvnuDbF1Vh2A/destination-policy/9n2I7YaXBn94jfKETtsidA/differences/",
 									"protocol": "http",
 									"host": [
 										"10",
@@ -1077,7 +1077,9 @@
 										"api",
 										"v1",
 										"f5",
+										"source-asset",
 										"2",
+										"destination-asset",
 										"2",
 										"asm",
 										"source-policy",
@@ -1113,7 +1115,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"data\": {\n        \"entity-type\": []\n    }\n}",
+									"raw": "{\n    \"data\": {\n        \"diff-ids\": [\n            \"u7B77tbAogbfzWGXMAoPUA\",\n            \"nDWVNH0Qtvj7vKH19wAHsQ\",\n            \"HEfwz_WVYuKycVdSw0OEqQ\",\n            \"ZPUHmJGDYPDZCN2sHpLNDA\",\n            \"ge7Q3QwXtTHW0SQrJqh1pw\",\n            \"SVmdc0OPU5BFvFEOCPhq3g\",\n            \"xCYk8KILSZ-tux3kTLGDhw\",\n            \"L94ARMVZzvfKMjXkX3txvQ\",\n            \"7zTz5Hw67EWgM81okKh5yQ\",\n            \"WQ_vV8Co0ycfTgy41pHiYg\",\n            \"FNNNrUIoRzxQJ0fsolz9jQ\",\n            \"FI3gbp-wgiTfJJVAMSfkrA\",\n            \"BiNzz0M3aBzPSXupPMRJMA\",\n            \"80nYFIm0xmrRGzAeqtvJ1g\",\n            \"BHXMUR6vXjqMZP6xGkemRA\"\n        ]\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1121,7 +1123,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/asm/policy-diff/bpUGwCScCiXyB-qCn0bLpw/merge/",
+									"raw": "http://10.0.111.22/api/v1/f5/2/asm/policy-diff/qKZm-xMW1s0o-zIf-BGvtw/merge/",
 									"protocol": "http",
 									"host": [
 										"10",
@@ -1136,7 +1138,7 @@
 										"2",
 										"asm",
 										"policy-diff",
-										"bpUGwCScCiXyB-qCn0bLpw",
+										"qKZm-xMW1s0o-zIf-BGvtw",
 										"merge",
 										""
 									]
