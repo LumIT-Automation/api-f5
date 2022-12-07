@@ -2,7 +2,7 @@
 
 import os
 import argparse
-import sqlite3
+from django.db import connection
 
 import django
 from django.conf import settings
@@ -44,6 +44,7 @@ else:
 ####################
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "api.settings")
 settings.DISABLE_AUTHENTICATION = True
+
 settings.DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -67,7 +68,25 @@ settings.REST_FRAMEWORK = {
         'user': '600/minute'
     }
 }
-
+LOGGING = None
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/tmp/django.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
 
 def loadAsset(ip: str, user: str, passwd: str):
     baseUrl = "https://" + ip + "/mgmt/"
@@ -111,25 +130,18 @@ def deleteAsset(assetId):
         print(e.args)
 
 
-# To reset the autoincrement number try this shell command:
-# echo "UPDATE sqlite_sequence SET seq=0 WHERE name='asset';" | sqlite3 f5.db
+# Reset also the autoincrement number.
 def purgeAssets():
-    try:
-        assetsList = listAsset()["data"]["items"]
-        for asset in assetsList:
-            deleteAsset(asset["id"])
+    c = connection.cursor()
 
-        # Todo: use django db connector
-        """
-        # Reset the autoincrement values for the table asset.
-        dbConn = sqlite3.connect("/var/www/api/f5.db")
-        cursor = dbConn.cursor()
-        cursor.execute("UPDATE sqlite_sequence SET seq=0 WHERE name='asset'")
-        """
-    except KeyError:
-        pass
+    try:
+        c.execute("DELETE FROM asset")
+        connection.commit()
+        c.execute("UPDATE sqlite_sequence SET seq=0 WHERE name='asset'")
     except Exception as e:
         print(e.args)
+    finally:
+        c.close()
 
 
 
@@ -200,4 +212,4 @@ print('#################')
 
 purgeAssets()
 print("Assets cleaned up")
-#print(listAsset())
+print(listAsset())
