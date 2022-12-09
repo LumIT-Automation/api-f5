@@ -190,53 +190,32 @@ class ASMPolicyManager:
 
 
 
+    @staticmethod
+    def mergePolicies(dstAssetId: int, diffReference: str, diffIds: list = None) -> dict:
+        diffIds = diffIds or []
+
+        try:
+            return Client().put(
+                path=f"/api/v1/f5/{dstAssetId}/asm/policy-diff/{diffReference}/merge/",
+                data={
+                    "data": {
+                        "diff-ids": diffIds,
+                    }
+                },
+                content_type="application/json"
+            ).json()
+
+        except Exception as e:
+            print(e.args)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-# def listPolicies(assetId):
-#     url = '/api/v1/f5/' + str(assetId) + '/asm/policies/'
-#     try:
-#         return Client().get(url).json()
-#     except Exception as e:
-#         print(e.args)
-
-
-
-
-
-
-
-
-
-
-def mergePolicy(dstAssetId: int, dstPolicyId: str, diffReference: str):
-    url = '/api/v1/f5/' + str(dstAssetId) + '/asm/policy/' + dstPolicyId + '/merge/'
-    try:
-        return Client().put(
-                path = url,
-                data = { "data": {
-                    "diff-reference": diffReference,
-                    "entity-type": []
-                }},
-                content_type = "application/json"
-        )
-
-    except Exception as e:
-        print(e.args)
-
-
-
+    @staticmethod
+    def listPolicies(assetId):
+        try:
+            return Client().get(f"/api/v1/f5/{assetId}/asm/policies/").json()
+        except Exception as e:
+            print(e.args)
 
 
 
@@ -253,6 +232,7 @@ try:
     Asset.loadAsset(ip=dstIpAsset, user=dstUser, passwd=dstPasswd, environment="dst")
     Util.log(Asset.listAssets(), "Assets loaded: ")
 
+    # Fetch policies' differences.
     Util.log(ASMPolicyManager.diffPolicies(srcAssetId=1, srcPolicyId="K-78hGsC0JAvnuDbF1Vh2A", dstAssetId=2, dstPolicyId="9n2I7YaXBn94jfKETtsidA"))
 except KeyError:
     pass
