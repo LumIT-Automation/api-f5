@@ -242,16 +242,16 @@ try:
         print("Diff type: " + diffEntityType + "\n\n")
 
         for el in diffList:
-            print("Entity name: " + el["entityName"] + "\n")
-            print("Diff type: " + el["diffType"] + "\n")
+            print("Entity name: " + el["entityName"])
+            print("Diff type: " + el["diffType"])
             if el["diffType"] == "conflict":
-                print("Source last update time " + str(el["sourceLastUpdateMicros"])+ "\n")
-                print("Destination last update time " + str(el["destinationLastUpdateMicros"]) + "\n")
+                print("Source last update time " + str(el["sourceLastUpdateMicros"]))
+                print("Destination last update time " + str(el["destinationLastUpdateMicros"]))
 
             a = ""
             while a != "y" and a != "n":
                 if not a:
-                    a = input("Merge diff for entity?(y/n), press \"d\" to print all the entity details\"\n")
+                    a = input("\nMerge diff for entity?(y/n), press \"d\" to print all the entity details\"\n")
                 elif a == "d":
                     print(str(json.dumps(el, indent=4)))
                     print("\n")
@@ -261,9 +261,9 @@ try:
                     a = ""
             if a == "y":
                 mergeElementsIds.append(el["id"])
-                print("Merge element \"" + el["entityName"] + "\"\n")
+                print("Merge element \"" + el["entityName"])
             elif a == "n":
-                print("Do NOT merge element \"" + el["entityName"] + "\"\n")
+                print("Do NOT merge element \"" + el["entityName"])
 
     print("Elements ids to be merged in destination asset: " + ' '.join(mergeElementsIds))
     # ASMPolicyManager.mergePolicies(dstAssetId=2, diffReference=diffData["id"], diffIds=mergeElementsIds)
