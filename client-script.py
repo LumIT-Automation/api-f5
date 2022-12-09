@@ -12,6 +12,8 @@ from django.db import connection
 from django.conf import settings
 from django.test import Client
 
+from f5.helpers.Log import Log
+
 
 
 ########################################################################################################################
@@ -168,10 +170,9 @@ class Asset:
 class Util:
     @staticmethod
     def log(data: object, msg: str = "") -> None:
-        # @todo: Log.log().
-
         try:
             print(msg, str(json.dumps(data, indent=4)))
+            Log.log(data, msg)
         except Exception:
             print(msg, str(data))
 
@@ -264,8 +265,9 @@ try:
             elif a == "n":
                 print("Do NOT merge element \"" + el["entityName"] + "\"\n")
 
-    print("Elements ids to be merged: " + ' '.join(mergeElementsIds))
-except KeyError:
+    print("Elements ids to be merged in destination asset: " + ' '.join(mergeElementsIds))
+    # ASMPolicyManager.mergePolicies(dstAssetId=2, diffReference=diffData["id"], diffIds=mergeElementsIds)
+except KeyError as k:
     pass
 except Exception as ex:
     Util.log(ex.args)
