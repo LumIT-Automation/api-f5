@@ -204,16 +204,6 @@ class Util:
 
 class ASMPolicyManager:
     @staticmethod
-    def getPolicyId(assetId: int, name: str) -> str:
-        from f5.models.F5.ASM.Policy import Policy as PolicyModel
-        try:
-            return PolicyModel.getIdByName(assetId, name)
-        except Exception as e:
-            print(e.args)
-
-
-
-    @staticmethod
     def diffPolicies(srcAssetId: int, dstAssetId: int, sPolicyId: str, dPolicyId: str) -> dict:
         try:
             return Client().get(
@@ -251,6 +241,23 @@ class ASMPolicyManager:
             return Client().get(f"/api/v1/f5/{assetId}/asm/policies/").json()
         except Exception as e:
             print(e.args)
+
+
+
+    @staticmethod
+    def getPolicyId(assetId: int, name: str) -> str:
+        id = ""
+
+        try:
+            id = list(filter(lambda j: j.get("name", "") == name, ASMPolicyManager.listPolicies(assetId)["data"]["items"]))[0]["id"]
+        except KeyError:
+            pass
+        except IndexError:
+            pass
+        except Exception as e:
+            print(e.args)
+
+        return id
 
 
 

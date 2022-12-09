@@ -60,23 +60,6 @@ class Policy:
 
 
     @staticmethod
-    def getIdByName(assetId: int, name: str) -> str:
-        id = ""
-
-        try:
-            id = list(filter(lambda j: j.get("name", "") == name, Policy.list(assetId)))[0]["id"]
-        except KeyError:
-            pass
-        except IndexError:
-            pass
-        except Exception as e:
-            raise e
-
-        return id
-
-
-
-    @staticmethod
     def externalPolicyImport(sourceAssetId: int, destAssetId: int, sourcePolicyId: str, cleanupPreviouslyImportedPolicy: bool = False) -> str:
         importedPolicyId = ""
 
