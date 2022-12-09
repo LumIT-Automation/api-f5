@@ -27,6 +27,7 @@ parser.add_argument('-u', '--src_user', help='Source asset username (default: ad
 parser.add_argument('-U', '--dst_user', help='Destination asset username (default: admin)', required=False)
 parser.add_argument('-p', '--src_passwd', help='Source asset password', required=False)
 parser.add_argument('-P', '--dst_passwd', help='Destination asset password', required=False)
+parser.add_argument('-n', '--policies_names', help='List of the policies to check for differencies', required=False, action='append')
 args = parser.parse_args()
 
 srcIpAsset = args.src_asset
@@ -50,7 +51,9 @@ if args.dst_passwd:
 else:
     dstPasswd = input("Insert password for the destination asset:\n")
 
-
+policies = list()
+if args.policies_names:
+    policies = args.policies_names
 
 ########################################################################################################################
 # Django init (Client)
@@ -180,6 +183,16 @@ class Util:
 
 class ASMPolicyManager:
     @staticmethod
+    def getPolicyIdByName(assetId: int, name: str) -> str:
+        from f5.models.F5.ASM.Policy import Policy as PolicyModel
+        try:
+            return PolicyModel.getIdByName(assetId, name)
+        except Exception as e:
+            print(e.args)
+
+
+
+    @staticmethod
     def diffPolicies(srcAssetId: int, dstAssetId: int, srcPolicyId: str, dstPolicyId: str) -> dict:
         try:
             return Client().get(
@@ -233,40 +246,48 @@ try:
     Asset.loadAsset(ip=dstIpAsset, user=dstUser, passwd=dstPasswd, environment="dst")
     Util.log(Asset.listAssets(), "Assets loaded: ")
 
-    # Fetch policies' differences.
-    diffData = ASMPolicyManager.diffPolicies(srcAssetId=1, srcPolicyId="K-78hGsC0JAvnuDbF1Vh2A", dstAssetId=2, dstPolicyId="9n2I7YaXBn94jfKETtsidA")["data"]
-    mergeElementsIds = list()
+    if policies:
+        for policy in policies:
+            srcPolicyId = ASMPolicyManager.getPolicyIdByName(1, policy)
+            dstPolicyId = ASMPolicyManager.getPolicyIdByName(2, policy)
+            print("Src policy id: " + srcPolicyId)
+            print("Dst policy id: " + dstPolicyId)
 
-    for diffEntityType, diffList in diffData["differences"].items():
-        print("#######################")
-        print("Diff type: " + diffEntityType + "\n\n")
+            if srcPolicyId and dstPolicyId:
+                # Fetch policies' differences.
+                diffData = ASMPolicyManager.diffPolicies(srcAssetId=1, srcPolicyId=srcPolicyId, dstAssetId=2, dstPolicyId=dstPolicyId)["data"]
+                mergeElementsIds = list()
 
-        for el in diffList:
-            print("Entity name: " + el["entityName"])
-            print("Diff type: " + el["diffType"])
-            if el["diffType"] == "conflict":
-                print("Source last update time " + str(el["sourceLastUpdateMicros"]))
-                print("Destination last update time " + str(el["destinationLastUpdateMicros"]))
+                for diffEntityType, diffList in diffData["differences"].items():
+                    print("#######################")
+                    print("Diff type: " + diffEntityType + "\n\n")
 
-            a = ""
-            while a != "y" and a != "n":
-                if not a:
-                    a = input("\nMerge diff for entity?(y/n), press \"d\" to print all the entity details\"\n")
-                elif a == "d":
-                    print(str(json.dumps(el, indent=4)))
-                    print("\n")
-                    a = ""
-                else:
-                    print("y for yes, n for no, d for details.")
-                    a = ""
-            if a == "y":
-                mergeElementsIds.append(el["id"])
-                print("Merge element \"" + el["entityName"])
-            elif a == "n":
-                print("Do NOT merge element \"" + el["entityName"])
+                    for el in diffList:
+                        print("Entity name: " + el["entityName"])
+                        print("Diff type: " + el["diffType"])
+                        if el["diffType"] == "conflict":
+                            print("Source last update time " + str(el["sourceLastUpdateMicros"]))
+                            print("Destination last update time " + str(el["destinationLastUpdateMicros"]))
 
-    print("Elements ids to be merged in destination asset: " + ' '.join(mergeElementsIds))
-    # ASMPolicyManager.mergePolicies(dstAssetId=2, diffReference=diffData["id"], diffIds=mergeElementsIds)
+                        a = ""
+                        while a != "y" and a != "n":
+                            if not a:
+                                a = input("\nMerge diff for entity?(y/n), press \"d\" to print all the entity details\"\n")
+                            elif a == "d":
+                                print(str(json.dumps(el, indent=4)))
+                                print("\n")
+                                a = ""
+                            else:
+                                print("y for yes, n for no, d for details.")
+                                a = ""
+                        if a == "y":
+                            mergeElementsIds.append(el["id"])
+                            print("Merge element \"" + el["entityName"])
+                        elif a == "n":
+                            print("Do NOT merge element \"" + el["entityName"])
+
+                print("Elements ids to be merged in destination asset: " + ' '.join(mergeElementsIds))
+                # ASMPolicyManager.mergePolicies(dstAssetId=2, diffReference=diffData["id"], diffIds=mergeElementsIds)
 except KeyError as k:
     pass
 except Exception as ex:
