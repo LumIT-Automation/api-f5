@@ -2,21 +2,29 @@
 
 import os
 import argparse
-from django.db import connection
+import json
+
+from urllib3.exceptions import InsecureRequestWarning
+from urllib3 import disable_warnings
 
 import django
+from django.db import connection
 from django.conf import settings
-from django.test import Client, override_settings
+from django.test import Client
 
 
-####################
+
+########################################################################################################################
+# Parser init
+########################################################################################################################
+
 parser = argparse.ArgumentParser()
-parser.add_argument('-a','--src_asset',help='Source asset of the policies (ip/hostname)',required=True)
-parser.add_argument('-A','--dst_asset',help='Destination asset of the policies (ip/hostname)',required=True)
-parser.add_argument('-u','--src_user',help='Source asset username (default: admin)',required=False)
-parser.add_argument('-U','--dst_user',help='Destination asset username (default: admin)',required=False)
-parser.add_argument('-p','--src_passwd',help='Source asset password',required=False)
-parser.add_argument('-P','--dst_passwd',help='Destination asset password',required=False)
+parser.add_argument('-a', '--src_asset', help='Source asset of the policies (ip/hostname)', required=True)
+parser.add_argument('-A', '--dst_asset', help='Destination asset of the policies (ip/hostname)', required=True)
+parser.add_argument('-u', '--src_user', help='Source asset username (default: admin)', required=False)
+parser.add_argument('-U', '--dst_user', help='Destination asset username (default: admin)', required=False)
+parser.add_argument('-p', '--src_passwd', help='Source asset password', required=False)
+parser.add_argument('-P', '--dst_passwd', help='Destination asset password', required=False)
 args = parser.parse_args()
 
 srcIpAsset = args.src_asset
@@ -41,7 +49,11 @@ else:
     dstPasswd = input("Insert password for the destination asset:\n")
 
 
-####################
+
+########################################################################################################################
+# Django init (Client)
+########################################################################################################################
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "api.settings")
 settings.DISABLE_AUTHENTICATION = True
 
@@ -88,16 +100,22 @@ settings.LOGGING = {
 }
 
 
-def loadAsset(ip: str, user: str, passwd: str, environment: str):
-    baseUrl = "https://" + ip + "/mgmt/"
-    try:
-        return Client().post(
-                path = '/api/v1/f5/assets/',
-                data = {
+
+########################################################################################################################
+# Client
+########################################################################################################################
+
+class Asset:
+    @staticmethod
+    def loadAsset(ip: str, user: str, passwd: str, environment: str) -> None:
+        try:
+            Client().post(
+                path="/api/v1/f5/assets/",
+                data={
                     "data": {
                         "address": ip,
                         "fqdn": ip,
-                        "baseurl": baseUrl,
+                        "baseurl": f"https://{ip}/mgmt/",
                         "tlsverify": 0,
                         "datacenter": "",
                         "environment": environment,
@@ -106,69 +124,99 @@ def loadAsset(ip: str, user: str, passwd: str, environment: str):
                         "password": passwd
                     }
                 },
-                content_type = "application/json"
-        )
-
-    except Exception as e:
-        print(e.args)
-
-
-
-def listAsset():
-    try:
-        return Client().get('/api/v1/f5/assets/').json()
-    except Exception as e:
-        print(e.args)
+                content_type="application/json"
+            )
+        except Exception as e:
+            print(e.args)
 
 
 
-def deleteAsset(assetId):
-    url = '/api/v1/f5/asset/' + str(assetId) + '/'
-    try:
-        return Client().delete(url)
-    except Exception as e:
-        print(e.args)
-
-
-# Reset also the autoincrement number.
-def purgeAssets():
-    c = connection.cursor()
-
-    try:
-        c.execute("DELETE FROM asset")
-        connection.commit()
-        c.execute("UPDATE sqlite_sequence SET seq=0 WHERE name='asset'")
-    except Exception as e:
-        print(e.args)
-    finally:
-        c.close()
+    @staticmethod
+    def listAssets():
+        try:
+            return Client().get("/api/v1/f5/assets/").json()
+        except Exception as e:
+            print(e.args)
 
 
 
-def listPolicies(assetId):
-    url = '/api/v1/f5/' + str(assetId) + '/asm/policies/'
-    try:
-        return Client().get(url).json()
-    except Exception as e:
-        print(e.args)
+    @staticmethod
+    def deleteAsset(assetId):
+        try:
+            return Client().delete(f"/api/v1/f5/asset/{assetId}/")
+        except Exception as e:
+            print(e.args)
 
 
 
-def getPolicy(assetId, policyId):
-    url = '/api/v1/f5/' + str(assetId) + '/asm/policy/' + policyId + '/'
-    try:
-        return Client().get(url).json()
-    except Exception as e:
-        print(e.args)
+    @staticmethod
+    def purgeAssets():
+        # Raw method for sqlite to reset the autoincrement index.
+        c = connection.cursor()
+
+        try:
+            c.execute("DELETE FROM asset")
+            connection.commit()
+            c.execute("UPDATE sqlite_sequence SET seq=0 WHERE name='asset'")
+        except Exception as e:
+            print(e.args)
+        finally:
+            c.close()
 
 
 
-def diffPolicy(srcAssetId: int, dstAssetId: int, srcPolicyId: str, dstPolicyId: str):
-    url = '/api/v1/f5/' + str(srcAssetId) + '/' + str(dstAssetId) + '/asm/source-policy/' + srcPolicyId + '/destination-policy/' + dstPolicyId + '/differences/'
-    try:
-        return Client().get(url).json()
-    except Exception as e:
-        print(e.args)
+class Util:
+    @staticmethod
+    def log(data: object, msg: str = "") -> None:
+        # @todo: Log.log().
+
+        try:
+            print(msg, str(json.dumps(data, indent=4)))
+        except Exception:
+            print(msg, str(data))
+
+
+
+class ASMPolicyManager:
+    @staticmethod
+    def diffPolicies(srcAssetId: int, dstAssetId: int, srcPolicyId: str, dstPolicyId: str) -> dict:
+        try:
+            return Client().get(
+                "/api/v1/f5/source-asset/" + str(srcAssetId) + "/destination-asset/" + str(
+                    dstAssetId) + "/asm/source-policy/" + srcPolicyId + "/destination-policy/" + dstPolicyId + "/differences/"
+            ).json()
+        except Exception as e:
+            print(e.args)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# def listPolicies(assetId):
+#     url = '/api/v1/f5/' + str(assetId) + '/asm/policies/'
+#     try:
+#         return Client().get(url).json()
+#     except Exception as e:
+#         print(e.args)
+
+
+
+
+
+
+
 
 
 
@@ -188,28 +236,27 @@ def mergePolicy(dstAssetId: int, dstPolicyId: str, diffReference: str):
         print(e.args)
 
 
-####################
-django.setup()
 
 
-loadAsset(ip=srcIpAsset, user=srcUser, passwd=srcPasswd, environment="src")
-loadAsset(ip=dstIpAsset, user=dstUser, passwd=dstPasswd, environment="dst")
-print("Assets loaded:")
-print(listAsset())
 
-print('#################')
-print('Policies on source asset:')
-#print(listPolicies(1))
-print('#################')
 
-print('POLICY on ASSET 2')
-#print(getPolicy(2, 'uIGB1pBIcH8WprjX8KBR0w'))
-print('#################')
+########################################################################################################################
+# Main
+########################################################################################################################
 
-print('MERGE POLICY on ASSET 2')
-#print(mergePolicy(srcAssetId=1, dstAssetId=2, srcPolicyId='K-78hGsC0JAvnuDbF1Vh2A',  dstPolicyId='9n2I7YaXBn94jfKETtsidA'))
-print('#################')
+try:
+    disable_warnings(InsecureRequestWarning)
+    django.setup()
 
-purgeAssets()
-print("Assets cleaned up")
-print(listAsset())
+    # Load user-inserted assets.
+    Asset.loadAsset(ip=srcIpAsset, user=srcUser, passwd=srcPasswd, environment="src")
+    Asset.loadAsset(ip=dstIpAsset, user=dstUser, passwd=dstPasswd, environment="dst")
+    Util.log(Asset.listAssets(), "Assets loaded: ")
+
+    Util.log(ASMPolicyManager.diffPolicies(srcAssetId=1, srcPolicyId="K-78hGsC0JAvnuDbF1Vh2A", dstAssetId=2, dstPolicyId="9n2I7YaXBn94jfKETtsidA"))
+except KeyError:
+    pass
+except Exception as ex:
+    Util.log(ex.args)
+finally:
+    Asset.purgeAssets()
