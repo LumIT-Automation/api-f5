@@ -234,6 +234,8 @@ try:
 
     # Fetch policies' differences.
     diffData = ASMPolicyManager.diffPolicies(srcAssetId=1, srcPolicyId="K-78hGsC0JAvnuDbF1Vh2A", dstAssetId=2, dstPolicyId="9n2I7YaXBn94jfKETtsidA")["data"]
+    mergeElementsIds = list()
+
     for diffEntityType, diffList in diffData["differences"].items():
         print("#######################")
         print("Diff type: " + diffEntityType + "\n\n")
@@ -241,12 +243,28 @@ try:
         for el in diffList:
             print("Entity name: " + el["entityName"] + "\n")
             print("Diff type: " + el["diffType"] + "\n")
-            a = input("Merge diff for entity?(y/n)\n")
-            if a == "y":
-                print(a + "\n")
-            else:
-                print("stoca\n")
+            if el["diffType"] == "conflict":
+                print("Source last update time " + str(el["sourceLastUpdateMicros"])+ "\n")
+                print("Destination last update time " + str(el["destinationLastUpdateMicros"]) + "\n")
 
+            a = ""
+            while a != "y" and a != "n":
+                if not a:
+                    a = input("Merge diff for entity?(y/n), press \"d\" to print all the entity details\"\n")
+                elif a == "d":
+                    print(str(json.dumps(el, indent=4)))
+                    print("\n")
+                    a = ""
+                else:
+                    print("y for yes, n for no, d for details.")
+                    a = ""
+            if a == "y":
+                mergeElementsIds.append(el["id"])
+                print("Merge element \"" + el["entityName"] + "\"\n")
+            elif a == "n":
+                print("Do NOT merge element \"" + el["entityName"] + "\"\n")
+
+    print("Elements ids to be merged: " + ' '.join(mergeElementsIds))
 except KeyError:
     pass
 except Exception as ex:
