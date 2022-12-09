@@ -3,6 +3,7 @@
 import os
 import argparse
 import json
+import datetime
 
 from urllib3.exceptions import InsecureRequestWarning
 from urllib3 import disable_warnings
@@ -21,39 +22,39 @@ from f5.helpers.Log import Log
 ########################################################################################################################
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-a', '--src_asset', help='Source asset of the policies (ip/hostname)', required=True)
-parser.add_argument('-A', '--dst_asset', help='Destination asset of the policies (ip/hostname)', required=True)
-parser.add_argument('-u', '--src_user', help='Source asset username (default: admin)', required=False)
-parser.add_argument('-U', '--dst_user', help='Destination asset username (default: admin)', required=False)
-parser.add_argument('-p', '--src_passwd', help='Source asset password', required=False)
-parser.add_argument('-P', '--dst_passwd', help='Destination asset password', required=False)
-parser.add_argument('-n', '--policies_names', help='List of the policies to check for differencies', required=False, action='append')
+
+parser.add_argument('-a', '--src_asset', help='Source F5 asset where the source policy is defined (IP/FQDN)', required=True)
+parser.add_argument('-A', '--dst_asset', help='Destination F5 asset where the destination policy is defined (IP/FQDN)', required=True)
+parser.add_argument('-l', '--src_policy', help='Source policy name', required=True)
+parser.add_argument('-L', '--dst_policy', help='Destination policy name', required=True)
+parser.add_argument('-u', '--src_user', help='Source F5 asset username', required=True)
+parser.add_argument('-U', '--dst_user', help='Destination F5 asset username', required=True)
+parser.add_argument('-p', '--src_passwd', help='Source F5 asset password', required=False)
+parser.add_argument('-P', '--dst_passwd', help='Destination F5 asset password', required=False)
+#parser.add_argument('-i', '--ignore_entity_types', help='List of entity types to ignore', required=False, action='append')
+
 args = parser.parse_args()
 
-srcIpAsset = args.src_asset
-dstIpAsset = args.dst_asset
+Input = {
+    "src": {
+        "asset": args.src_asset,
+        "user": args.src_user,
+        "password": args.src_passwd or input("Insert password for the source F5 asset:\n"),
+        "policy": args.src_policy,
+    },
+    "dst": {
+        "asset": args.dst_asset,
+        "user": args.dst_user,
+        "password": args.dst_passwd or input("Insert password for the destination F5 asset:\n"),
+        "policy": args.dst_policy,
+    }
+}
 
-if args.src_user:
-    srcUser = args.src_user
-else:
-    srcUser = 'admin'
-if args.dst_user:
-    dstUser = args.dst_user
-else:
-    dstUser = 'admin'
+# ignoreEntityTypes = list()
+# if args.ignore_entity_types:
+#     ignoreEntityTypes = args.ignore_entity_types
 
-if args.src_passwd:
-    srcPasswd = args.src_passwd
-else:
-    srcPasswd = input("Insert password for the source asset:\n")
-if args.dst_passwd:
-    dstPasswd = args.dst_passwd
-else:
-    dstPasswd = input("Insert password for the destination asset:\n")
 
-policies = list()
-if args.policies_names:
-    policies = args.policies_names
 
 ########################################################################################################################
 # Django init (Client)
@@ -92,7 +93,7 @@ settings.LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': '/tmp/django.log',
+            'filename': 'client.log',
         },
     },
     'loggers': {
@@ -174,16 +175,36 @@ class Util:
     @staticmethod
     def log(data: object, msg: str = "") -> None:
         try:
-            print(msg, str(json.dumps(data, indent=4)))
             Log.log(data, msg)
+            print(msg, str(json.dumps(data, indent=4)))
         except Exception:
             print(msg, str(data))
 
 
 
+    @staticmethod
+    def out(msg: str) -> None:
+        try:
+            Log.log(msg)
+            print(msg)
+        except Exception:
+            pass
+
+
+
+    @staticmethod
+    def toDate(epoch: str):
+        epoch = int(epoch)
+        if epoch > 10000000000:
+            epoch = int(epoch/1000000)
+
+        return datetime.datetime.fromtimestamp(epoch).strftime('%c')
+
+
+
 class ASMPolicyManager:
     @staticmethod
-    def getPolicyIdByName(assetId: int, name: str) -> str:
+    def getPolicyId(assetId: int, name: str) -> str:
         from f5.models.F5.ASM.Policy import Policy as PolicyModel
         try:
             return PolicyModel.getIdByName(assetId, name)
@@ -193,11 +214,11 @@ class ASMPolicyManager:
 
 
     @staticmethod
-    def diffPolicies(srcAssetId: int, dstAssetId: int, srcPolicyId: str, dstPolicyId: str) -> dict:
+    def diffPolicies(srcAssetId: int, dstAssetId: int, sPolicyId: str, dPolicyId: str) -> dict:
         try:
             return Client().get(
                 "/api/v1/f5/source-asset/" + str(srcAssetId) + "/destination-asset/" + str(
-                    dstAssetId) + "/asm/source-policy/" + srcPolicyId + "/destination-policy/" + dstPolicyId + "/differences/"
+                    dstAssetId) + "/asm/source-policy/" + sPolicyId + "/destination-policy/" + dPolicyId + "/differences/"
             ).json()
         except Exception as e:
             print(e.args)
@@ -238,57 +259,61 @@ class ASMPolicyManager:
 ########################################################################################################################
 
 try:
+    mergeElements = list()
+
     disable_warnings(InsecureRequestWarning)
     django.setup()
 
     # Load user-inserted assets.
-    Asset.loadAsset(ip=srcIpAsset, user=srcUser, passwd=srcPasswd, environment="src")
-    Asset.loadAsset(ip=dstIpAsset, user=dstUser, passwd=dstPasswd, environment="dst")
-    Util.log(Asset.listAssets(), "Assets loaded: ")
+    Asset.loadAsset(ip=Input["src"]["asset"], user=Input["src"]["user"], passwd=Input["src"]["password"], environment="src")
+    Asset.loadAsset(ip=Input["dst"]["asset"], user=Input["dst"]["user"], passwd=Input["dst"]["password"], environment="dst")
 
-    if policies:
-        for policy in policies:
-            srcPolicyId = ASMPolicyManager.getPolicyIdByName(1, policy)
-            dstPolicyId = ASMPolicyManager.getPolicyIdByName(2, policy)
-            print("Src policy id: " + srcPolicyId)
-            print("Dst policy id: " + dstPolicyId)
+    loadedAssets = Asset.listAssets()["data"]["items"]
+    if loadedAssets[0] and loadedAssets[1]:
+        # Get the id of the policies given by name.
+        srcPolicyId = ASMPolicyManager.getPolicyId(1, Input["src"]["policy"])
+        dstPolicyId = ASMPolicyManager.getPolicyId(2, Input["dst"]["policy"])
 
-            if srcPolicyId and dstPolicyId:
-                # Fetch policies' differences.
-                diffData = ASMPolicyManager.diffPolicies(srcAssetId=1, srcPolicyId=srcPolicyId, dstAssetId=2, dstPolicyId=dstPolicyId)["data"]
-                mergeElementsIds = list()
+        if srcPolicyId and dstPolicyId:
+            Util.out("Processing differences for SOURCE policy " + loadedAssets[0]["fqdn"] + "//" + Input["src"]["policy"] + " vs DESTINATION policy " + loadedAssets[1]["fqdn"] + "//" + Input["dst"]["policy"] + " on " + loadedAssets[1]["fqdn"] + ".")
+            Util.out("This could take a very (very) long while. Logs on \"client.log\" within installation folder. Please wait...")
 
-                for diffEntityType, diffList in diffData["differences"].items():
-                    print("#######################")
-                    print("Diff type: " + diffEntityType + "\n\n")
+            # Fetch policies' differences.
+            diffData = ASMPolicyManager.diffPolicies(srcAssetId=1, sPolicyId=srcPolicyId, dstAssetId=2, dPolicyId=dstPolicyId)["data"]
+            for diffEntityType, diffList in diffData["differences"].items():
+                for el in diffList:
+                    response = ""
 
-                    for el in diffList:
-                        print("Entity name: " + el["entityName"])
-                        print("Diff type: " + el["diffType"])
-                        if el["diffType"] == "conflict":
-                            print("Source last update time " + str(el["sourceLastUpdateMicros"]))
-                            print("Destination last update time " + str(el["destinationLastUpdateMicros"]))
+                    if el["diffType"] in ("conflict", "only-in-source"):
+                        Util.out("\n\n[ENTITY TYPE: " + diffEntityType + "] \"" + el["entityName"] + "\"")
+                        Util.out("  - difference type: " + el["diffType"])
+                        Util.out("  - source last update " + Util.toDate(el["sourceLastUpdateMicros"]))
+                        Util.out("  - destination last update " + Util.toDate(el["destinationLastUpdateMicros"])) # if conflict.
 
-                        a = ""
-                        while a != "y" and a != "n":
-                            if not a:
-                                a = input("\nMerge diff for entity?(y/n), press \"d\" to print all the entity details\"\n")
-                            elif a == "d":
-                                print(str(json.dumps(el, indent=4)))
-                                print("\n")
-                                a = ""
+                        while response not in ("y", "n"):
+                            if not response:
+                                response = input("  -> Merge to destination policy? [y/n], press \"d\" for details\n")
+                            elif response == "d":
+                                Util.log(el)
+                                response = ""
                             else:
-                                print("y for yes, n for no, d for details.")
-                                a = ""
-                        if a == "y":
-                            mergeElementsIds.append(el["id"])
-                            print("Merge element \"" + el["entityName"])
-                        elif a == "n":
-                            print("Do NOT merge element \"" + el["entityName"])
+                                Util.out("Type y for yes, n for no, d for details")
+                                response = ""
 
-                print("Elements ids to be merged in destination asset: " + ' '.join(mergeElementsIds))
-                # ASMPolicyManager.mergePolicies(dstAssetId=2, diffReference=diffData["id"], diffIds=mergeElementsIds)
-except KeyError as k:
+                        if response == "y":
+                            mergeElements.append(el["id"])
+                            Util.out("  -> Element will be merged at the end of the collection process, nothing done so far")
+
+                        if response == "n":
+                            Util.out("  -> Element won't be merged")
+
+            # Merge policy differences.
+            # ASMPolicyManager.mergePolicies(dstAssetId=2, diffReference=diffData["id"], diffIds=mergeElementsIds)
+        else:
+            Util.out("No policy found with given name, aborting.")
+    else:
+        Util.out("No asset loaded, aborting.")
+except KeyError:
     pass
 except Exception as ex:
     Util.log(ex.args)
