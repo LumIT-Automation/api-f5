@@ -148,7 +148,7 @@ class PolicyDiffManager(PolicyBase):
 
         if diffIds:
             # Merge only differences with id contained within diffIds.
-            # Only max 3 ids seem to work.
+            # Only a few ids seem to work [?].
             for diffId in diffIds:
                 itemFilter += f"id eq {diffId} or "
             itemFilter = itemFilter[:-4]
@@ -206,7 +206,7 @@ class PolicyDiffManager(PolicyBase):
                         if time.time() >= t0 + timeout: # timeout reached.
                             raise CustomException(status=400, payload={"F5": "policy merge timed out"})
 
-                        time.sleep(20)
+                        time.sleep(5)
                     except KeyError:
                         raise CustomException(status=400, payload={"F5": "policy merge failed"})
             except Exception as e:
