@@ -148,7 +148,9 @@ class PolicyDiffManager(PolicyBase):
 
         if diffIds:
             # Merge only differences with id contained within diffIds.
-            # Only a few ids seem to work [?].
+
+            # Only a few ids seem to work if relating to different entity-types,
+            # while many ids seem to be ok within one entity type [?].
             for diffId in diffIds:
                 itemFilter += f"id eq {diffId} or "
             itemFilter = itemFilter[:-4]
