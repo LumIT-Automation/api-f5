@@ -148,7 +148,7 @@ class PolicyDiffManager(PolicyBase):
 
         if diffIds:
             # Merge only differences with id contained within diffIds.
-            # Only a few ids seems to work.
+            # Only max 3 ids seem to work.
             for diffId in diffIds:
                 itemFilter += f"id eq {diffId} or "
             itemFilter = itemFilter[:-4]
@@ -173,7 +173,7 @@ class PolicyDiffManager(PolicyBase):
                         "addMissingEntitiesToSecond": True, # destination.
                         "handleCommonEntities": "accept-from-first",
                         "handleMissingEntities": "accept-from-first",
-                        "itemFilter": itemFilter # example: "id eq DIFF_ID1 or id qd DIFF_ID2 or ..."
+                        "itemFilter": itemFilter # example: "id eq DIFF_ID1 or id qd DIFF_ID2 or id qd DIFF_ID3"
                     })
                 )["payload"]
 

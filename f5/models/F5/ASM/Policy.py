@@ -112,11 +112,24 @@ class Policy:
                 differences = Backend.showDifferencesFacade(sourceAssetId, sourcePolicyId, destinationAssetId, diffReferenceId)
 
                 return {
-                    "sourceAssetId": sourceAssetId,
-                    "sourcePolicyId": sourcePolicyId,
-                    "importedPolicyId": importedPolicyId,
-                    "destinationAssetId": destinationAssetId,
-                    "destinationPolicyId": destinationPolicyId,
+                    "sourcePolicy": {
+                        "assetId": sourceAssetId,
+                        "id": sourcePolicyId,
+                        "name": Policy(assetId=sourceAssetId, id=sourcePolicyId).info(silent=True)["name"]
+                    },
+
+                    "importedPolicy": {
+                        "assetId": destinationAssetId,
+                        "id": importedPolicyId,
+                        "name": Policy(assetId=destinationAssetId, id=importedPolicyId).info(silent=True)["name"]
+                    },
+
+                    "destinationPolicy": {
+                        "assetId": destinationAssetId,
+                        "id": destinationPolicyId,
+                        "name": Policy(assetId=destinationAssetId, id=destinationPolicyId).info(silent=True)["name"]
+                    },
+
                     "diffReferenceId": diffReferenceId,
                     "differences": differences
                 }

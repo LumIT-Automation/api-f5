@@ -39,9 +39,7 @@ class F5ASMPoliciesDifferenceController(CustomController):
                     )
 
                     data = {
-                        "data": {
-                            "items": differences
-                        },
+                        "data": differences,
                         "href": request.get_full_path()
                     }
 
