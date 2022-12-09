@@ -233,7 +233,20 @@ try:
     Util.log(Asset.listAssets(), "Assets loaded: ")
 
     # Fetch policies' differences.
-    Util.log(ASMPolicyManager.diffPolicies(srcAssetId=1, srcPolicyId="K-78hGsC0JAvnuDbF1Vh2A", dstAssetId=2, dstPolicyId="9n2I7YaXBn94jfKETtsidA"))
+    diffData = ASMPolicyManager.diffPolicies(srcAssetId=1, srcPolicyId="K-78hGsC0JAvnuDbF1Vh2A", dstAssetId=2, dstPolicyId="9n2I7YaXBn94jfKETtsidA")["data"]
+    for diffEntityType, diffList in diffData["differences"].items():
+        print("#######################")
+        print("Diff type: " + diffEntityType + "\n\n")
+
+        for el in diffList:
+            print("Entity name: " + el["entityName"] + "\n")
+            print("Diff type: " + el["diffType"] + "\n")
+            a = input("Merge diff for entity?(y/n)\n")
+            if a == "y":
+                print(a + "\n")
+            else:
+                print("stoca\n")
+
 except KeyError:
     pass
 except Exception as ex:
