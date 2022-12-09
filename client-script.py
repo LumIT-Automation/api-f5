@@ -6,7 +6,7 @@ from django.db import connection
 
 import django
 from django.conf import settings
-from django.test import Client
+from django.test import Client, override_settings
 
 
 ####################
@@ -68,8 +68,7 @@ settings.REST_FRAMEWORK = {
         'user': '600/minute'
     }
 }
-LOGGING = None
-LOGGING = {
+settings.LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
     'handlers': {
@@ -88,7 +87,8 @@ LOGGING = {
     },
 }
 
-def loadAsset(ip: str, user: str, passwd: str):
+
+def loadAsset(ip: str, user: str, passwd: str, environment: str):
     baseUrl = "https://" + ip + "/mgmt/"
     try:
         return Client().post(
@@ -100,7 +100,7 @@ def loadAsset(ip: str, user: str, passwd: str):
                         "baseurl": baseUrl,
                         "tlsverify": 0,
                         "datacenter": "",
-                        "environment": "src",
+                        "environment": environment,
                         "position": "",
                         "username": user,
                         "password": passwd
@@ -192,8 +192,8 @@ def mergePolicy(dstAssetId: int, dstPolicyId: str, diffReference: str):
 django.setup()
 
 
-loadAsset(ip=srcIpAsset, user=srcUser, passwd=srcPasswd)
-loadAsset(ip=dstIpAsset, user=dstUser, passwd=dstPasswd)
+loadAsset(ip=srcIpAsset, user=srcUser, passwd=srcPasswd, environment="src")
+loadAsset(ip=dstIpAsset, user=dstUser, passwd=dstPasswd, environment="dst")
 print("Assets loaded:")
 print(listAsset())
 
