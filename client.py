@@ -310,22 +310,25 @@ try:
                         if response == "n":
                             Util.out("  -> Element won't be merged.")
 
-            # Handle user input.
-            response = ""
-            Util.log(mergeElements, "\n\nAttempting to merge the elements: ")
+            if mergeElements:
+                response = ""
+                Util.log(mergeElements, "\n\nAttempting to merge the elements: ")
 
-            while response not in ("y", "n"):
-                if not response:
-                    response = input("  -> Confirm merging the differences into the destination policy [y/n]?\n")
-                else:
-                    Util.out("Type y for yes, n for no.")
-                    response = ""
+                # Handle user input.
+                while response not in ("y", "n"):
+                    if not response:
+                        response = input("  -> Confirm merging the differences into the destination policy [y/n]?\n")
+                    else:
+                        Util.out("Type y for yes, n for no.")
+                        response = ""
 
-            if response == "y":
-                # Merge policy differences by entity type.
-                for mek, mev in mergeElements.items():
-                    Util.out(f"Processing {mek} {mev}...")
-                    ASMPolicyManager.mergePolicies(dstAssetId=2, diffReference=diffData["diffReferenceId"], diffIds=mergeElements[mek])
+                if response == "y":
+                    # Merge policy differences by entity type.
+                    for mek, mev in mergeElements.items():
+                        Util.out(f"Processing {mek} {mev}...")
+                        ASMPolicyManager.mergePolicies(dstAssetId=2, diffReference=diffData["diffReferenceId"], diffIds=mergeElements[mek])
+            else:
+                Util.out("No difference to merge, nothing done.")
         else:
             Util.out("No policy found with given name, aborting.")
     else:
