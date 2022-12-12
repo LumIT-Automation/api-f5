@@ -9,7 +9,6 @@ from urllib3.exceptions import InsecureRequestWarning
 from urllib3 import disable_warnings
 
 import django
-from django.db import connection
 from django.conf import settings
 from django.test import Client
 
@@ -157,17 +156,10 @@ class Asset:
 
     @staticmethod
     def purgeAssets():
-        # Raw method for sqlite to reset the autoincrement index.
-        c = connection.cursor()
-
         try:
-            c.execute("DELETE FROM asset")
-            connection.commit()
-            c.execute("UPDATE sqlite_sequence SET seq=0 WHERE name='asset'")
+            return Client().delete("/api/v1/f5/assets/")
         except Exception as e:
             print(e.args)
-        finally:
-            c.close()
 
 
 
@@ -299,7 +291,7 @@ try:
 
                         while response not in ("y", "n"):
                             if not response:
-                                response = input("  -> Merge to destination policy? [y/n], press \"d\" for details\n")
+                                response = input("  -> Merge to destination policy? [y/n; d for details]\n")
                             elif response == "d":
                                 Util.log(el)
                                 response = ""

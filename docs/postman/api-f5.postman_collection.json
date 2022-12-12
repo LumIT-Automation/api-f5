@@ -602,6 +602,40 @@
 							"response": []
 						},
 						{
+							"name": "assets",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/assets/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"assets",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "asset",
 							"request": {
 								"auth": {
@@ -1115,7 +1149,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"data\": {\n        \"diff-ids\": [\n            \"pghb-Mgw65yx2VYnffR-jw\",\n            \"k4l8e1fJa_0fBlkOYpcvYw\",\n            \"bds44IXkLGs3G6FMsVnfvg\"\n        ]\n    }\n}",
+									"raw": "{\n    \"data\": {\n        \"diff-ids\": [\n            \"L94ARMVZzvfKMjXkX3txvQ\",\n            \"SVmdc0OPU5BFvFEOCPhq3g\",\n            \"ge7Q3QwXtTHW0SQrJqh1pw\",\n            \"ZPUHmJGDYPDZCN2sHpLNDA\",\n            \"HEfwz_WVYuKycVdSw0OEqQ\",\n            \"nDWVNH0Qtvj7vKH19wAHsQ\",\n            \"u7B77tbAogbfzWGXMAoPUA\"\n        ]\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1123,7 +1157,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/asm/policy-diff/vGjIATTbj-_ep908Jrk4NQ/merge/",
+									"raw": "http://10.0.111.22/api/v1/f5/2/asm/policy-diff/mmk3MoR32ETsqdfocYca2w/merge/",
 									"protocol": "http",
 									"host": [
 										"10",
@@ -1138,7 +1172,7 @@
 										"2",
 										"asm",
 										"policy-diff",
-										"vGjIATTbj-_ep908Jrk4NQ",
+										"mmk3MoR32ETsqdfocYca2w",
 										"merge",
 										""
 									]

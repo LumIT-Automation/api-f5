@@ -56,6 +56,25 @@ class Partition:
 
 
     @staticmethod
+    def purgeAll() -> None:
+        from django.conf import settings
+        c = connection.cursor()
+
+        try:
+            if "sqlite3" in settings.DATABASES["default"]["ENGINE"]:
+                c.execute("DELETE FROM `partition`")
+                connection.commit()
+                c.execute("UPDATE sqlite_sequence SET seq=0 WHERE name='partition'")
+            else:
+                c.execute("SET FOREIGN_KEY_CHECKS = 0; TRUNCATE `partition`; SET FOREIGN_KEY_CHECKS = 1")
+        except Exception as e:
+            raise CustomException(status=400, payload={"database": e.__str__()})
+        finally:
+            c.close()
+
+
+
+    @staticmethod
     def add(assetId, partition) -> int:
         c = connection.cursor()
 
