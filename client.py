@@ -317,7 +317,7 @@ try:
                 # Handle user input.
                 while response not in ("y", "n"):
                     if not response:
-                        response = input("  -> Confirm merging the differences into the destination policy [y/n]?\n")
+                        response = input("  -> Confirm merging the selected differences into the destination policy [y/n]?\n")
                     else:
                         Util.out("Type y for yes, n for no.")
                         response = ""
@@ -328,7 +328,7 @@ try:
                         Util.out(f"Processing {mek} {mev}...")
                         ASMPolicyManager.mergePolicies(dstAssetId=2, diffReference=diffData["diffReferenceId"], diffIds=mergeElements[mek])
             else:
-                Util.out("No difference to merge, nothing done.")
+                Util.out("\n\nNo difference to merge, nothing done.")
         else:
             Util.out("No policy found with given name, aborting.")
     else:
