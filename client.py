@@ -137,7 +137,7 @@ class Asset:
 
 
     @staticmethod
-    def listAssets():
+    def listAssets() -> dict:
         try:
             return Client().get("/api/v1/f5/assets/").json()
         except Exception as e:
@@ -146,18 +146,9 @@ class Asset:
 
 
     @staticmethod
-    def deleteAsset(assetId):
+    def purgeAssets() -> None:
         try:
-            return Client().delete(f"/api/v1/f5/asset/{assetId}/")
-        except Exception as e:
-            print(e.args)
-
-
-
-    @staticmethod
-    def purgeAssets():
-        try:
-            return Client().delete("/api/v1/f5/assets/")
+            Client().delete("/api/v1/f5/assets/")
         except Exception as e:
             print(e.args)
 
@@ -185,12 +176,21 @@ class Util:
 
 
     @staticmethod
-    def toDate(epoch: str):
-        epoch = int(epoch)
-        if epoch > 10000000000:
-            epoch = int(epoch/1000000)
+    def toDate(epoch: str) -> str:
+        date = "UNKNOWN"
 
-        return datetime.datetime.fromtimestamp(epoch).strftime('%c')
+        try:
+            epoch = int(epoch)
+            if epoch:
+                if epoch > 10000000000:
+                    epoch = int(epoch / 1000000)
+                date = datetime.datetime.fromtimestamp(epoch).strftime('%c')
+            else:
+                date = ""
+        except Exception:
+            pass
+
+        return date
 
 
 
@@ -227,7 +227,7 @@ class ASMPolicyManager:
 
 
     @staticmethod
-    def listPolicies(assetId):
+    def listPolicies(assetId) -> dict:
         try:
             return Client().get(f"/api/v1/f5/{assetId}/asm/policies/").json()
         except Exception as e:
@@ -280,24 +280,25 @@ try:
             diffData = ASMPolicyManager.diffPolicies(srcAssetId=1, sPolicyId=srcPolicyId, dstAssetId=2, dPolicyId=dstPolicyId)["data"]
             for diffEntityType, diffList in diffData["differences"].items():
                 for el in diffList:
+                    # For each difference print on-screen output and ask the user.
                     if el["diffType"] in ("conflict", "only-in-source"):
                         Util.out("\n\n[ENTITY TYPE: " + diffEntityType + "] \"" + el["entityName"] + "\":")
                         Util.out("  - difference type: " + el["diffType"] + ";")
-                        if int(el["sourceLastUpdateMicros"]):
+                        if "sourceLastUpdateMicros" in el:
                             Util.out("  - source last update " + Util.toDate(el["sourceLastUpdateMicros"]) + ";")
-                        if int(el["destinationLastUpdateMicros"]):
+                        if "destinationLastUpdateMicros" in el:
                             Util.out("  - destination last update " + Util.toDate(el["destinationLastUpdateMicros"]) + ";") # if conflict.
 
                         # Handle user input.
                         response = ""
-                        while response not in ("y", "n"):
+                        while response not in ("y", "n", "s", "a"):
                             if not response:
-                                response = input("  -> Merge to destination policy [y/n; d for details]?\n")
+                                response = input("  -> Merge to destination policy [y/n; d for details; s for skipping the current entity type; a for merging all differences for this entity type]?\n")
                             elif response == "d":
                                 Util.log(el)
                                 response = ""
                             else:
-                                Util.out("Type y for yes, n for no, d for details.")
+                                Util.out("Type y for yes, n for no, d for details, s for skipping the current entity type, a for merging all differences for this entity type.")
                                 response = ""
 
                         if response == "y":
@@ -310,21 +311,34 @@ try:
                         if response == "n":
                             Util.out("  -> Element won't be merged.")
 
+                        if response == "s":
+                            break
+
+                        if response == "a":
+                            # Collect all ids for this entity type.
+                            if diffEntityType not in mergeElements:
+                                mergeElements[diffEntityType] = []
+
+                            for elm in diffData["differences"][diffEntityType]:
+                                mergeElements[diffEntityType].append(elm["id"])
+                            break
+
             if mergeElements:
                 response = ""
                 Util.log(mergeElements, "\n\nAttempting to merge the elements: ")
 
                 # Handle user input.
-                while response not in ("y", "n"):
+                while response not in ("Y", "N"):
                     if not response:
-                        response = input("  -> Confirm merging the selected differences into the destination policy [y/n]?\n")
+                        response = input("  -> Confirm merging the selected differences into the destination policy [Y/N]?\n")
                     else:
-                        Util.out("Type y for yes, n for no.")
+                        Util.out("Type Y for yes, N for no.")
                         response = ""
 
-                if response == "y":
+                if response == "Y":
                     # Merge policy differences by entity type.
                     for mek, mev in mergeElements.items():
+                        # CRAP ALERT. # @todo: split mergeElements[mek] into groups of max 5 elements.
                         Util.out(f"Processing {mek} {mev}...")
                         ASMPolicyManager.mergePolicies(dstAssetId=2, diffReference=diffData["diffReferenceId"], diffIds=mergeElements[mek])
             else:
