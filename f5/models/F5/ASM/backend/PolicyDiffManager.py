@@ -33,6 +33,10 @@ class PolicyDiffManager(PolicyBase):
                 tlsVerify=f5.tlsverify
             )
 
+            PolicyDiffManager._log(
+                f"[AssetID: {assetId}] Creating differences between {destinationPolicyId} and {importedPolicyId}..."
+            )
+
             taskInformation = api.post(
                 additionalHeaders={
                     "Content-Type": "application/json",
@@ -46,10 +50,6 @@ class PolicyDiffManager(PolicyBase):
                     }
                 })
             )["payload"]
-
-            PolicyDiffManager._log(
-                f"[AssetID: {assetId}] Creating differences between {destinationPolicyId} and {importedPolicyId}..."
-            )
 
             # Monitor export file creation (async tasks).
             t0 = time.time()
@@ -163,6 +163,10 @@ class PolicyDiffManager(PolicyBase):
                     tlsVerify=f5.tlsverify
                 )
 
+                PolicyDiffManager._log(
+                    f"[AssetID: {assetId}] Merging differences..."
+                )
+
                 taskInformation = api.post(
                     additionalHeaders={
                         "Content-Type": "application/json",
@@ -178,10 +182,6 @@ class PolicyDiffManager(PolicyBase):
                         "itemFilter": itemFilter # example: "id eq DIFF_ID1 or id qd DIFF_ID2 or id qd DIFF_ID3"
                     })
                 )["payload"]
-
-                PolicyDiffManager._log(
-                    f"[AssetID: {assetId}] Merging differences..."
-                )
 
                 # Monitor export file creation (async tasks).
                 t0 = time.time()

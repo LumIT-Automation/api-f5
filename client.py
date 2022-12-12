@@ -208,11 +208,11 @@ class ASMPolicyManager:
 
 
     @staticmethod
-    def mergePolicies(dstAssetId: int, diffReference: str, diffIds: list = None) -> dict:
+    def mergePolicies(dstAssetId: int, diffReference: str, diffIds: list = None) -> None:
         diffIds = diffIds or []
 
         try:
-            return Client().put(
+            Client().post(
                 path=f"/api/v1/f5/{dstAssetId}/asm/policy-diff/{diffReference}/merge/",
                 data={
                     "data": {
@@ -220,8 +220,7 @@ class ASMPolicyManager:
                     }
                 },
                 content_type="application/json"
-            ).json()
-
+            )
         except Exception as e:
             print(e.args)
 
@@ -258,7 +257,7 @@ class ASMPolicyManager:
 ########################################################################################################################
 
 try:
-    mergeElements = list()
+    mergeElements = dict()
 
     disable_warnings(InsecureRequestWarning)
     django.setup()
@@ -275,47 +274,62 @@ try:
 
         if srcPolicyId and dstPolicyId:
             Util.out("Processing differences for SOURCE policy " + loadedAssets[0]["fqdn"] + "//" + Input["src"]["policy"] + " vs DESTINATION policy " + loadedAssets[1]["fqdn"] + "//" + Input["dst"]["policy"] + " on " + loadedAssets[1]["fqdn"] + ".")
-            Util.out("This could take a very (very) long while. Logs on \"client.log\" within installation folder. Please wait...")
+            Util.out("This could take a very long while. Logs on \"client.log\" file within the installation folder. Please wait...")
 
             # Fetch policies' differences.
             diffData = ASMPolicyManager.diffPolicies(srcAssetId=1, sPolicyId=srcPolicyId, dstAssetId=2, dPolicyId=dstPolicyId)["data"]
             for diffEntityType, diffList in diffData["differences"].items():
                 for el in diffList:
-                    response = ""
-
                     if el["diffType"] in ("conflict", "only-in-source"):
-                        Util.out("\n\n[ENTITY TYPE: " + diffEntityType + "] \"" + el["entityName"] + "\"")
-                        Util.out("  - difference type: " + el["diffType"])
+                        Util.out("\n\n[ENTITY TYPE: " + diffEntityType + "] \"" + el["entityName"] + "\":")
+                        Util.out("  - difference type: " + el["diffType"] + ";")
                         if int(el["sourceLastUpdateMicros"]):
-                            Util.out("  - source last update " + Util.toDate(el["sourceLastUpdateMicros"]))
+                            Util.out("  - source last update " + Util.toDate(el["sourceLastUpdateMicros"]) + ";")
                         if int(el["destinationLastUpdateMicros"]):
-                            Util.out("  - destination last update " + Util.toDate(el["destinationLastUpdateMicros"])) # if conflict.
+                            Util.out("  - destination last update " + Util.toDate(el["destinationLastUpdateMicros"]) + ";") # if conflict.
 
+                        # Handle user input.
+                        response = ""
                         while response not in ("y", "n"):
                             if not response:
-                                response = input("  -> Merge to destination policy? [y/n; d for details]\n")
+                                response = input("  -> Merge to destination policy [y/n; d for details]?\n")
                             elif response == "d":
                                 Util.log(el)
                                 response = ""
                             else:
-                                Util.out("Type y for yes, n for no, d for details")
+                                Util.out("Type y for yes, n for no, d for details.")
                                 response = ""
 
                         if response == "y":
-                            mergeElements.append(el["id"])
-                            Util.out("  -> Element will be merged at the end of the collection process, nothing done so far")
+                            # Collect ids to merge subdivided by entity type.
+                            if diffEntityType not in mergeElements:
+                                mergeElements[diffEntityType] = []
+                            mergeElements[diffEntityType].append(el["id"])
+                            Util.out("  -> Element will be merged at the end of the collection process, nothing done so far.")
 
                         if response == "n":
-                            Util.out("  -> Element won't be merged")
+                            Util.out("  -> Element won't be merged.")
 
-            # Merge policy differences.
-            # ASMPolicyManager.mergePolicies(dstAssetId=2, diffReference=diffData["id"], diffIds=mergeElementsIds)
+            # Handle user input.
+            response = ""
+            Util.log(mergeElements, "\n\nAttempting to merge the elements: ")
+
+            while response not in ("y", "n"):
+                if not response:
+                    response = input("  -> Confirm merging the differences into the destination policy [y/n]?\n")
+                else:
+                    Util.out("Type y for yes, n for no.")
+                    response = ""
+
+            if response == "y":
+                # Merge policy differences by entity type.
+                for mek, mev in mergeElements.items():
+                    Util.out(f"Processing {mek} {mev}...")
+                    ASMPolicyManager.mergePolicies(dstAssetId=2, diffReference=diffData["diffReferenceId"], diffIds=mergeElements[mek])
         else:
             Util.out("No policy found with given name, aborting.")
     else:
         Util.out("No asset loaded, aborting.")
-except KeyError:
-    pass
 except Exception as ex:
     Util.log(ex.args)
 finally:

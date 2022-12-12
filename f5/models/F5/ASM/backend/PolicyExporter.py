@@ -31,6 +31,10 @@ class PolicyExporter(PolicyBase):
             )
 
             filename = str(datetime.now().strftime("%Y%m%d-%H%M%s")) + "-export.xml"
+            PolicyExporter._log(
+                f"[AssetID: {assetId}] Creating export file {filename} for policy {policyId}..."
+            )
+
             taskInformation = api.post(
                 additionalHeaders={
                     "Content-Type": "application/json",
@@ -41,10 +45,6 @@ class PolicyExporter(PolicyBase):
                         "link": "https://localhost/mgmt/tm/asm/policies/" + policyId
                     }})
             )["payload"]
-
-            PolicyExporter._log(
-                f"[AssetID: {assetId}] Creating export file {filename} for policy {policyId}..."
-            )
 
             # Monitor export file creation (async tasks).
             t0 = time.time()
@@ -107,10 +107,6 @@ class PolicyExporter(PolicyBase):
         segmentEnd = 0
         delta = 1000000
 
-        PolicyExporter._log(
-            f"[AssetID: {assetId}] Downloading data for export file {localExportFile}..."
-        )
-
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
@@ -118,6 +114,10 @@ class PolicyExporter(PolicyBase):
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify,
                 silent=True
+            )
+
+            PolicyExporter._log(
+                f"[AssetID: {assetId}] Downloading data for export file {localExportFile}..."
             )
 
             response = api.get(

@@ -78,6 +78,10 @@ class PolicyImporter(PolicyBase):
                 tlsVerify=f5.tlsverify
             )
 
+            PolicyImporter._log(
+                f"[AssetID: {assetId}] Importing policy from local import file {localImportFile} as policy name: {name}..."
+            )
+
             taskInformation = api.post(
                 additionalHeaders={
                     "Content-Type": "application/json",
@@ -87,10 +91,6 @@ class PolicyImporter(PolicyBase):
                     "name": name
                 })
             )["payload"]
-
-            PolicyImporter._log(
-                f"[AssetID: {assetId}] Importing policy from local import file {localImportFile} as policy name: {name}..."
-            )
 
             # Monitor export file creation (async tasks).
             t0 = time.time()
