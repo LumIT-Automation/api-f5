@@ -286,8 +286,10 @@ try:
                     if el["diffType"] in ("conflict", "only-in-source"):
                         Util.out("\n\n[ENTITY TYPE: " + diffEntityType + "] \"" + el["entityName"] + "\"")
                         Util.out("  - difference type: " + el["diffType"])
-                        Util.out("  - source last update " + Util.toDate(el["sourceLastUpdateMicros"]))
-                        Util.out("  - destination last update " + Util.toDate(el["destinationLastUpdateMicros"])) # if conflict.
+                        if int(el["sourceLastUpdateMicros"]):
+                            Util.out("  - source last update " + Util.toDate(el["sourceLastUpdateMicros"]))
+                        if int(el["destinationLastUpdateMicros"]):
+                            Util.out("  - destination last update " + Util.toDate(el["destinationLastUpdateMicros"])) # if conflict.
 
                         while response not in ("y", "n"):
                             if not response:
