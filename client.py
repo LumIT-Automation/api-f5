@@ -244,8 +244,6 @@ class Util:
         try:
             epoch = int(epoch)
             if epoch:
-                if epoch > 10000000000:
-                    epoch = int(epoch / 1000000)
                 date = datetime.datetime.fromtimestamp(epoch).strftime('%c')
             else:
                 date = ""

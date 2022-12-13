@@ -223,6 +223,21 @@ class PolicyDiffManager(PolicyBase):
     ####################################################################################################################
 
     @staticmethod
+    def __epochS(epoch: str) -> int:
+        epoch = int(epoch)
+
+        try:
+            if epoch:
+                if epoch > 10000000000:
+                    epoch = int(epoch / 1000000)
+        except Exception:
+            pass
+
+        return epoch
+
+
+
+    @staticmethod
     def __cleanupDifferences(differences: list) -> list:
         diffs = []
 
@@ -264,7 +279,7 @@ class PolicyDiffManager(PolicyBase):
                         "destinationToSource": el["canMergeSecondToFirst"],
                         "sourceToDestination": el["canMergeFirstToSecond"]
                     },
-                    "destinationLastUpdateMicros": el["secondLastUpdateMicros"],
+                    "destinationLastUpdateMicros": PolicyDiffManager.__epochS(el["secondLastUpdateMicros"]),
                 })
 
             return diffs
@@ -296,6 +311,7 @@ class PolicyDiffManager(PolicyBase):
 
     @staticmethod
     def __differencesAddSourceObjectDate(differences: dict, sourceAssetId: int, sourcePolicyId: str) -> dict:
+
         try:
             # @todo: create and use models.
             try:
@@ -314,33 +330,38 @@ class PolicyDiffManager(PolicyBase):
 
                         for el in v:
                             for elm in o:
+                                valid = False
+
                                 if k == "signatures":
                                     if elm["signatureReference"]["name"] == el["entityName"]:
-                                        el["sourceLastUpdateMicros"] = elm["lastUpdateMicros"]
+                                        valid = True
 
                                 elif k == "signature-sets":
                                     if elm["signatureSetReference"]["name"] == el["entityName"]:
-                                        el["sourceLastUpdateMicros"] = elm["lastUpdateMicros"]
+                                        valid = True
 
                                 elif k == "server-technologies":
                                     if elm["serverTechnologyReference"]["serverTechnologyName"] == el["entityName"]:
-                                        el["sourceLastUpdateMicros"] = elm["lastUpdateMicros"]
+                                        valid = True
 
                                 elif k == "whitelist-ips":
                                     if elm["ipAddress"]+"/"+elm["ipMask"] == el["entityName"]:
-                                        el["sourceLastUpdateMicros"] = elm["lastUpdateMicros"]
+                                        valid = True
 
                                 elif k == "urls":
                                     if "["+elm["protocol"].upper()+"] "+elm["name"] == el["entityName"]:
-                                        el["sourceLastUpdateMicros"] = elm["lastUpdateMicros"]
+                                        valid = True
 
                                 elif "blocking-settings" in k:
                                     if elm["description"] == el["entityName"]:
-                                        el["sourceLastUpdateMicros"] = elm["lastUpdateMicros"]
+                                        valid = True
 
                                 else:
                                     if elm["name"] == el["entityName"]:
-                                        el["sourceLastUpdateMicros"] = elm["lastUpdateMicros"]
+                                        valid = True
+
+                                if valid:
+                                    el["sourceLastUpdateMicros"] = PolicyDiffManager.__epochS(elm["lastUpdateMicros"])
                     except KeyError:
                         pass
             except Exception as e:
