@@ -379,7 +379,8 @@ try:
                                 mergeElements[diffEntityType] = []
 
                             for elm in diffData["differences"][diffEntityType]:
-                                mergeElements[diffEntityType].append(elm["id"])
+                                if elm["diffType"] in ("conflict", "only-in-source"):
+                                    mergeElements[diffEntityType].append(elm["id"])
                             break
 
             if mergeElements:
