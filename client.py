@@ -8,6 +8,10 @@ import datetime
 from urllib3.exceptions import InsecureRequestWarning
 from urllib3 import disable_warnings
 
+# Needed on Windows only.
+#from colorama import just_fix_windows_console
+#just_fix_windows_console()
+
 import django
 from django.conf import settings
 from django.test import Client
@@ -154,7 +158,52 @@ class Asset:
 
 
 
+########################################################################################################################
+# Output
+########################################################################################################################
+
 class Util:
+    Chars = {
+        "reset": '\033[0m',
+        "bold": '\033[01m',
+        "disable": '\033[02m',
+        "underline": '\033[04m',
+        "reverse": '\033[07m',
+        "strikethrough": '\033[09m',
+        "invisible": '\033[08m'
+    }
+
+    Fg = {
+        "black": '\033[30m',
+        "red": '\033[31m',
+        "green": '\033[32m',
+        "orange": '\033[33m',
+        "blue": '\033[34m',
+        "purple": '\033[35m',
+        "cyan": '\033[36m',
+        "lightgrey": '\033[37m',
+        "darkgrey": '\033[90m',
+        "lightred": '\033[91m',
+        "lightgreen": '\033[92m',
+        "yellow": '\033[93m',
+        "lightblue": '\033[94m',
+        "pink": '\033[95m',
+        "lightcyan": '\033[96m'
+    }
+
+    Bg = {
+        "black": '\033[40m',
+        "red": '\033[41m',
+        "green": '\033[42m',
+        "orange": '\033[43m',
+        "blue": '\033[44m',
+        "purple": '\033[45m',
+        "cyan": '\033[46m',
+        "lightgrey": '\033[47m'
+    }
+
+
+
     @staticmethod
     def log(data: object, msg: str = "") -> None:
         try:
@@ -166,10 +215,23 @@ class Util:
 
 
     @staticmethod
-    def out(msg: str) -> None:
+    def out(msg: str, fg: str = "", bg: str = "") -> None:
+        out = ""
+
         try:
             Log.log(msg)
-            print(msg)
+
+            if fg:
+                out += Util.Fg[fg]
+            if bg:
+                out += Util.Bg[bg]
+            if out:
+                out += msg + Util.Chars["reset"]
+            else:
+                out = msg
+
+            print(out)
+
         except Exception:
             pass
 
