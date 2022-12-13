@@ -279,7 +279,7 @@ class PolicyDiffManager(PolicyBase):
                         "destinationToSource": el["canMergeSecondToFirst"],
                         "sourceToDestination": el["canMergeFirstToSecond"]
                     },
-                    "destinationLastUpdateMicros": PolicyDiffManager.__epochS(el["secondLastUpdateMicros"]),
+                    "destinationLastUpdate": PolicyDiffManager.__epochS(el["secondLastUpdateMicros"]),
                 })
 
             return diffs
@@ -311,7 +311,6 @@ class PolicyDiffManager(PolicyBase):
 
     @staticmethod
     def __differencesAddSourceObjectDate(differences: dict, sourceAssetId: int, sourcePolicyId: str) -> dict:
-
         try:
             # @todo: create and use models.
             try:
@@ -361,7 +360,7 @@ class PolicyDiffManager(PolicyBase):
                                         valid = True
 
                                 if valid:
-                                    el["sourceLastUpdateMicros"] = PolicyDiffManager.__epochS(elm["lastUpdateMicros"])
+                                    el["sourceLastUpdate"] = PolicyDiffManager.__epochS(elm["lastUpdateMicros"])
                     except KeyError:
                         pass
             except Exception as e:

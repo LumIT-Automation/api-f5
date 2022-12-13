@@ -231,7 +231,6 @@ class Util:
                 out = msg
 
             print(out)
-
         except Exception:
             pass
 
@@ -344,10 +343,10 @@ try:
                     if el["diffType"] in ("conflict", "only-in-source"):
                         Util.out("\n\n[ENTITY TYPE: " + diffEntityType + "] \"" + el["entityName"] + "\":")
                         Util.out("  - difference type: " + el["diffType"] + ";")
-                        if "sourceLastUpdateMicros" in el:
-                            Util.out("  - source last update " + Util.toDate(el["sourceLastUpdateMicros"]) + ";")
-                        if "destinationLastUpdateMicros" in el:
-                            Util.out("  - destination last update " + Util.toDate(el["destinationLastUpdateMicros"]) + ";") # if conflict.
+                        if "sourceLastUpdate" in el and el["sourceLastUpdate"]:
+                            Util.out("  - source last update " + Util.toDate(el["sourceLastUpdate"]) + ";")
+                        if "destinationLastUpdate" in el and el["destinationLastUpdate"]:
+                            Util.out("  - destination last update " + Util.toDate(el["destinationLastUpdate"]) + ";") # if conflict.
 
                         # Handle user input.
                         response = ""
