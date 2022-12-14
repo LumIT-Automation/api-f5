@@ -350,6 +350,13 @@ try:
 
             # Fetch policies' differences.
             diffData = ASMPolicyManager.diffPolicies(srcAssetId=1, sPolicyId=srcPolicyId, dstAssetId=2, dPolicyId=dstPolicyId)["data"]
+
+            importedPolicy = diffData["importedPolicy"]
+            Util.out("\nImported policy on destination F5 asset (temp policy):")
+            Util.out(" - id " + importedPolicy["id"])
+            Util.out(" - name" + importedPolicy["name"])
+            Util.out(" - destination F5 message\n" + importedPolicy["import-message"])
+
             for diffEntityType, diffList in diffData["differences"].items():
                 for el in diffList:
                     # For each difference print on-screen output and ask the user.
