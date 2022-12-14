@@ -60,7 +60,7 @@ class Policy:
 
 
     @staticmethod
-    def externalPolicyImport(sourceAssetId: int, destAssetId: int, sourcePolicyId: str, cleanupPreviouslyImportedPolicy: bool = False) -> str:
+    def externalPolicyImport(sourceAssetId: int, destAssetId: int, sourcePolicyId: str, cleanupPreviouslyImportedPolicy: bool = False) -> dict:
         importedPolicyId = ""
 
         try:
@@ -98,14 +98,17 @@ class Policy:
             if matches:
                 importedPolicyId = str(matches.group(1)).strip()
 
-            return importedPolicyId
+            return {
+                "id": importedPolicyId,
+                "message": importedPolicy.get("message", {})
+            }
         except Exception as e:
             raise e
 
 
 
     @staticmethod
-    def differences(sourceAssetId: int, destinationAssetId: int, destinationPolicyId: str, sourcePolicyId: str, importedPolicyId: str) -> list:
+    def differences(sourceAssetId: int, destinationAssetId: int, destinationPolicyId: str, sourcePolicyId: str, importedPolicyId: str) -> dict:
         try:
             if destinationPolicyId and importedPolicyId:
                 diffReferenceId = Backend.createDiffFacade(destinationAssetId, destinationPolicyId, importedPolicyId)

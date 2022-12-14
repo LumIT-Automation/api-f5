@@ -29,14 +29,16 @@ class F5ASMPoliciesDifferenceController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    importedPolicyId = Policy.externalPolicyImport(sourceAssetId, destinationAssetId, sourcePolicyId, cleanupPreviouslyImportedPolicy=True)
+                    importedPolicy = Policy.externalPolicyImport(sourceAssetId, destinationAssetId, sourcePolicyId, cleanupPreviouslyImportedPolicy=True)
                     differences = Policy.differences(
                         destinationAssetId=destinationAssetId,
                         destinationPolicyId=destinationPolicyId,
                         sourceAssetId=sourceAssetId,
                         sourcePolicyId=sourcePolicyId,
-                        importedPolicyId=importedPolicyId
+                        importedPolicyId=importedPolicy["id"]
                     )
+
+                    differences["importedPolicy"]["import-message"] = importedPolicy["message"]
 
                     data = {
                         "data": differences,
