@@ -30,7 +30,7 @@ class PolicyExporter(PolicyBase):
                 tlsVerify=f5.tlsverify
             )
 
-            filename = str(datetime.now().strftime("%Y%m%d-%H%M%s")) + "-export.xml"
+            filename = str(datetime.now().strftime("%Y%m%d-%H%M%S")) + "-export.xml"
             PolicyExporter._log(
                 f"[AssetID: {assetId}] Creating export file {filename} for policy {policyId}..."
             )
@@ -149,7 +149,7 @@ class PolicyExporter(PolicyBase):
             if saveResponse:
                 try:
                     PolicyExporter._log(f"[AssetID: {assetId}] Saving response to file (*nix only)...")
-                    with open("/tmp/" + str(datetime.now().strftime("%Y%m%d-%H%M%s")) + "-response.xml", "w") as file:
+                    with open("/tmp/" + str(datetime.now().strftime("%Y%m%d-%H%M%S")) + "-response.xml", "w") as file:
                         file.write(fullResponse)
                 except Exception:
                     pass
