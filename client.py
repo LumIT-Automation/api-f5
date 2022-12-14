@@ -4,6 +4,7 @@ import os
 import argparse
 import json
 import datetime
+import logging
 
 from urllib3.exceptions import InsecureRequestWarning
 from urllib3 import disable_warnings
@@ -15,8 +16,6 @@ from urllib3 import disable_warnings
 import django
 from django.conf import settings
 from django.test import Client
-
-from f5.helpers.Log import Log
 
 
 
@@ -158,10 +157,6 @@ class Asset:
 
 
 
-########################################################################################################################
-# Output
-########################################################################################################################
-
 class Util:
     Chars = {
         "reset": '\033[0m',
@@ -205,9 +200,25 @@ class Util:
 
 
     @staticmethod
+    def baseLog(o: any, title: str = "") -> None:
+        log = logging.getLogger("django")
+        if title:
+            if title == "_":
+                for j in range(120):
+                    title = title + "_"
+            log.debug(title)
+
+        log.debug(o)
+
+        if title:
+            log.debug(title)
+
+
+
+    @staticmethod
     def log(data: object, msg: str = "") -> None:
         try:
-            Log.log(data, msg)
+            Util.baseLog(data, msg)
             print(msg, str(json.dumps(data, indent=4)))
         except Exception:
             print(msg, str(data))
@@ -219,7 +230,7 @@ class Util:
         out = ""
 
         try:
-            Log.log(msg)
+            Util.baseLog(msg)
 
             if fg:
                 out += Util.Fg[fg]
@@ -316,6 +327,8 @@ class ASMPolicyManager:
 ########################################################################################################################
 
 try:
+    # Not thread-safe nor concurrency-safe.
+
     mergeElements = dict()
 
     disable_warnings(InsecureRequestWarning)
@@ -401,6 +414,8 @@ try:
                         # CRAP ALERT. # @todo: split mergeElements[mek] into groups of max 5 elements.
                         Util.out(f"Processing {mek} {mev}...")
                         ASMPolicyManager.mergePolicies(dstAssetId=2, diffReference=diffData["diffReferenceId"], diffIds=mergeElements[mek])
+
+                    # @todo: apply-policy.
             else:
                 Util.out("\n\nNo difference to merge, nothing done.")
         else:
