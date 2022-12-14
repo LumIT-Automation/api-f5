@@ -268,7 +268,7 @@ class PolicyDiffManager(PolicyBase):
                 if "blocking-settings" in el["entityKind"]:
                     entityType += "/" + el["entityKind"].split(":")[4]
 
-                diffs.append({
+                o = {
                     "id": el["id"],
                     "entityType": entityType,
                     "entityKind": el["entityKind"],
@@ -278,10 +278,14 @@ class PolicyDiffManager(PolicyBase):
                     "canMerge": {
                         "destinationToSource": el["canMergeSecondToFirst"],
                         "sourceToDestination": el["canMergeFirstToSecond"]
-                    },
-                    "destinationLastUpdate": PolicyDiffManager.__epochS(el["secondLastUpdateMicros"]),
-                })
+                    }
+                }
 
+                lastUpdate = PolicyDiffManager.__epochS(el["secondLastUpdateMicros"])
+                if lastUpdate:
+                    o["destinationLastUpdate"] = lastUpdate
+
+                diffs.append(o)
             return diffs
         except KeyError:
             pass

@@ -1,10 +1,11 @@
 #!/usr/bin/python3
-
+import collections
 import os
 import argparse
 import json
 import datetime
 import logging
+import math
 
 from urllib3.exceptions import InsecureRequestWarning
 from urllib3 import disable_warnings
@@ -264,6 +265,13 @@ class Util:
 
 
 
+    @staticmethod
+    def chunks(lIn, nIn) -> collections:
+        for i in range(0, nIn):
+            yield lIn[i::nIn]
+
+
+
 class ASMPolicyManager:
     @staticmethod
     def diffPolicies(srcAssetId: int, dstAssetId: int, sPolicyId: str, dPolicyId: str) -> dict:
@@ -357,6 +365,7 @@ try:
             Util.out("- name: " + importedPolicy["name"])
             Util.out("- destination F5 message:\n" + importedPolicy["import-message"])
 
+            Util.out("\nDIFFERENCES follow.")
             for diffEntityType, diffList in diffData["differences"].items():
                 for el in diffList:
                     # For each difference print on-screen output and ask the user.
@@ -418,9 +427,13 @@ try:
                 if response == "Y":
                     # Merge policy differences by entity type.
                     for mek, mev in mergeElements.items():
-                        # CRAP ALERT. # @todo: split mergeElements[mek] into groups of max 5 elements.
-                        Util.out(f"Processing {mek} {mev}...")
-                        ASMPolicyManager.mergePolicies(dstAssetId=2, diffReference=diffData["diffReferenceId"], diffIds=mergeElements[mek])
+                        # @crap alert: split mergeElements[mek] into groups of max 5 elements, otherwise F5 merge API won't work.
+                        for j in Util.chunks(
+                                mergeElements[mek],
+                                math.ceil(len(mergeElements[mek])/5)
+                        ):
+                            Util.out(f"Processing {mek} {j}...")
+                            ASMPolicyManager.mergePolicies(dstAssetId=2, diffReference=diffData["diffReferenceId"], diffIds=j)
 
                     # @todo: apply-policy.
             else:

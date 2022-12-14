@@ -1,15 +1,24 @@
-Installation on Windows
-- install python 3.8+ and add it to system path
-- on a terminal:
-    pip install Django~=4.1
+CLIENT for WAF policy sync use case
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Installation on Linux
+- install python 3.8+ from repos
+- on a terminal emulator (as user):
     pip install djangorestframework~=3.14
-    pip install urllib3~=1.26
     pip install requests~=2.28
     pip install colorama
-- copy code folder where needed
+- copy the code folder where needed
+
+Installation on Windows
+- install python 3.8+ and add it to system path
+- on a terminal (as user):
+    pip install djangorestframework~=3.14
+    pip install requests~=2.28
+    pip install colorama
+- copy the code folder where needed
 - hope everything is fine, after all, it's Windows.
 
 Run
-- on a terminal:
-    cd path\to\installation
+- on a terminal (as user):
+    cd path/to/installation
     python client.py
