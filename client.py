@@ -353,9 +353,9 @@ try:
 
             importedPolicy = diffData["importedPolicy"]
             Util.out("\nImported policy on destination F5 asset (temp policy):")
-            Util.out(" - id " + importedPolicy["id"])
-            Util.out(" - name" + importedPolicy["name"])
-            Util.out(" - destination F5 message\n" + importedPolicy["import-message"])
+            Util.out("- id: " + importedPolicy["id"])
+            Util.out("- name: " + importedPolicy["name"])
+            Util.out("- destination F5 message:\n" + importedPolicy["import-message"])
 
             for diffEntityType, diffList in diffData["differences"].items():
                 for el in diffList:
