@@ -6,6 +6,7 @@ import json
 import datetime
 import logging
 import math
+import time
 
 from urllib3.exceptions import InsecureRequestWarning
 from urllib3 import disable_warnings
@@ -288,6 +289,8 @@ class ASMPolicyManager:
     @staticmethod
     def mergePolicies(dstAssetId: int, diffReference: str, diffIds: list = None) -> None:
         diffIds = diffIds or []
+
+        time.sleep(2)
 
         try:
             Client().post(
