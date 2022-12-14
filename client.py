@@ -346,7 +346,7 @@ try:
     django.setup()
 
     # Load user-inserted assets.
-    Asset.loadAsset(ip=Input["src"]["ass_et"], user=Input["src"]["user"], passwd=Input["src"]["password"], environment="src")
+    Asset.loadAsset(ip=Input["src"]["asset"], user=Input["src"]["user"], passwd=Input["src"]["password"], environment="src")
     Asset.loadAsset(ip=Input["dst"]["asset"], user=Input["dst"]["user"], passwd=Input["dst"]["password"], environment="dst")
 
     loadedAssets = Asset.listAssets()["data"]["items"]
