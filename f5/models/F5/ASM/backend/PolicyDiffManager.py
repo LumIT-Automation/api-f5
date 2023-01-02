@@ -124,10 +124,14 @@ class PolicyDiffManager(PolicyBase):
                     )
                 )
 
-                if int(response.get("pageIndex", 0)) == int(response.get("totalPages", 0)):
-                    break
+                totalPages = response.get("totalPages", 0)
+                if totalPages:
+                    if int(response.get("pageIndex", 0)) == int(totalPages):
+                        break
+                    else:
+                        page += 1
                 else:
-                    page += 1
+                    break
 
             completeDifferences = PolicyDiffManager.__differencesAddSourceObjectDate(
                 PolicyDiffManager.__differencesOrderByType(differences),
