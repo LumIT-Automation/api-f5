@@ -85,23 +85,25 @@ class Policy:
 
             # Load policy content for sourcePolicyId on sourceAssetId.
             sourcePolicyContent = Backend.downloadPolicyFileFacade(sourceAssetId, sourcePolicyId, cleanup=True)
+            if sourcePolicyContent:
+                # Import policy on destination asset.
+                importedPolicy = Backend.importPolicyFacade(
+                    assetId=destAssetId,
+                    policyContent=sourcePolicyContent,
+                    newPolicyName=destinationPolicyName,
+                    cleanup=True
+                )
 
-            # Import policy on destination asset.
-            importedPolicy = Backend.importPolicyFacade(
-                assetId=destAssetId,
-                policyContent=sourcePolicyContent,
-                newPolicyName=destinationPolicyName,
-                cleanup=True
-            )
+                matches = re.search(r"(?<=policies\/)(.*)(?=\?)", importedPolicy.get("policyReference", {}).get("link", ""))
+                if matches:
+                    importedPolicyId = str(matches.group(1)).strip()
 
-            matches = re.search(r"(?<=policies\/)(.*)(?=\?)", importedPolicy.get("policyReference", {}).get("link", ""))
-            if matches:
-                importedPolicyId = str(matches.group(1)).strip()
-
-            return {
-                "id": importedPolicyId,
-                "message": importedPolicy.get("message", {})
-            }
+                return {
+                    "id": importedPolicyId,
+                    "message": importedPolicy.get("message", {})
+                }
+            else:
+                raise CustomException(status=400, payload={"F5": f"empty source policy"})
         except Exception as e:
             raise e
 
