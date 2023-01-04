@@ -119,7 +119,7 @@ class Policy:
 
     @staticmethod
     def diffMergeFacade(assetId: int, importedPolicyId: str, destinationPolicyId: str, ignoreDiffs: dict) -> None:
-        # Merging differences selectively is not possible, for merge process is bugged (import-policy's itemFilter).
+        # Merging differences selectively is not possible, for merge process is bugged (import-policy's itemFilter not working).
         # -> delete non needed diffs from the imported policy;
         # -> repeat the diff process and merge non-selectively.
         try:
@@ -134,8 +134,8 @@ class Policy:
             )
 
             PolicyDiffManager.mergeDifferences(
-                assetId,
-                Policy.createDiffFacade(
+                assetId=assetId,
+                diffReferenceId=Policy.createDiffFacade(
                     assetId=assetId,
                     destinationPolicyId=destinationPolicyId,
                     importedPolicyId=importedPolicyId
