@@ -1099,7 +1099,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/source-asset/2/destination-asset/2/asm/source-policy/K-78hGsC0JAvnuDbF1Vh2A/destination-policy/9n2I7YaXBn94jfKETtsidA/differences/",
+									"raw": "http://10.0.111.22/api/v1/f5/source-asset/3/destination-asset/4/asm/source-policy/vdlgq-KAexbclPfzMgeLqQ/destination-policy/vdlgq-KAexbclPfzMgeLqQ/differences/",
 									"protocol": "http",
 									"host": [
 										"10",
@@ -1112,14 +1112,14 @@
 										"v1",
 										"f5",
 										"source-asset",
-										"2",
+										"3",
 										"destination-asset",
-										"2",
+										"4",
 										"asm",
 										"source-policy",
-										"K-78hGsC0JAvnuDbF1Vh2A",
+										"vdlgq-KAexbclPfzMgeLqQ",
 										"destination-policy",
-										"9n2I7YaXBn94jfKETtsidA",
+										"vdlgq-KAexbclPfzMgeLqQ",
 										"differences",
 										""
 									]
@@ -1149,7 +1149,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"data\": {\n        \"diff-ids\": [\n            \"L94ARMVZzvfKMjXkX3txvQ\",\n            \"SVmdc0OPU5BFvFEOCPhq3g\",\n            \"ge7Q3QwXtTHW0SQrJqh1pw\",\n            \"ZPUHmJGDYPDZCN2sHpLNDA\",\n            \"HEfwz_WVYuKycVdSw0OEqQ\",\n            \"nDWVNH0Qtvj7vKH19wAHsQ\",\n            \"u7B77tbAogbfzWGXMAoPUA\"\n        ]\n    }\n}",
+									"raw": "{\n    \"data\": {\n        \"imported-policy-id\": \"kMFwM97Cg0lgUopqXG1KNQ\",\n        \"diff-reference-id\": \"Bdi7jgD_ZgbBXlrCsB6pUA\",\n        \"ignore-diffs\": {\n            \"server-technologies\": [\n                {\n                    \"id\": \"OBpPgsVlYaxnUslXpMT2MA\",\n                    \"entityName\": \"Microsoft Windows\"\n                }\n            ],\n            \"signature-sets\": [\n                {\n                    \"id\": \"5RJuReKnfF5H6VJHEAIbJA\",\n                    \"entityName\": \"Microsoft Windows Signatures (High/Medium Accuracy)\"\n                }\n            ]\n        }\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1157,7 +1157,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/asm/policy-diff/mmk3MoR32ETsqdfocYca2w/merge/",
+									"raw": "http://10.0.111.22/api/v1/f5/4/asm/policy/vdlgq-KAexbclPfzMgeLqQ/merge/",
 									"protocol": "http",
 									"host": [
 										"10",
@@ -1169,10 +1169,10 @@
 										"api",
 										"v1",
 										"f5",
-										"2",
+										"4",
 										"asm",
-										"policy-diff",
-										"mmk3MoR32ETsqdfocYca2w",
+										"policy",
+										"vdlgq-KAexbclPfzMgeLqQ",
 										"merge",
 										""
 									]

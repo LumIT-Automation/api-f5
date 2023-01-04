@@ -80,7 +80,7 @@ class PolicyDiffManager(PolicyBase):
 
                         return diffReference
                     if taskStatus == "failure":
-                        raise CustomException(status=400, payload={"F5": "policy diff failed"})
+                        raise CustomException(status=400, payload={"F5": "policy diff failed: " + str(taskOutput.get("result", {}).get("message", "--"))})
 
                     if time.time() >= t0 + timeout: # timeout reached.
                         raise CustomException(status=400, payload={"F5": "policy diff timed out"})
@@ -146,79 +146,142 @@ class PolicyDiffManager(PolicyBase):
 
 
     @staticmethod
-    def mergeDifferences(assetId: int, diffReferenceId: str, diffIds: list) -> None:
-        itemFilter = ""
+    def mergeDifferences(assetId: int, diffReferenceId: str) -> None:
         timeout = 3600 # [second]
 
-        if diffIds:
-            # Merge only differences with id contained within diffIds.
+        try:
+            f5 = Asset(assetId)
+            api = ApiSupplicant(
+                endpoint=f5.baseurl + "tm/asm/tasks/policy-merge/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
+            )
 
-            # Only a few ids seem to work if relating to different entity-types,
-            # while many ids seem to be ok within one entity type [?].
-            for diffId in diffIds:
-                itemFilter += f"id eq {diffId} or "
-            itemFilter = itemFilter[:-4]
+            PolicyDiffManager._log(
+                f"[AssetID: {assetId}] Merging differences..."
+            )
 
+            taskInformation = api.post(
+                additionalHeaders={
+                    "Content-Type": "application/json",
+                },
+                data=json.dumps({
+                    "policyDiffReference": {
+                        "link": "/mgmt/tm/asm/policy-diffs/" + diffReferenceId,
+                    },
+                    "addMissingEntitiesToFirst": False,
+                    "addMissingEntitiesToSecond": True, # destination.
+                    "handleCommonEntities": "accept-from-first",
+                    "handleMissingEntities": "accept-from-first"
+                })
+            )["payload"]
+
+            # Monitor export file creation (async tasks).
+            t0 = time.time()
+
+            while True:
+                try:
+                    api = ApiSupplicant(
+                        endpoint=f5.baseurl + "tm/asm/tasks/policy-merge/" + taskInformation["id"] + "/",
+                        auth=(f5.username, f5.password),
+                        tlsVerify=f5.tlsverify
+                    )
+
+                    PolicyDiffManager._log(
+                        f"[AssetID: {assetId}] Waiting for task to complete..."
+                    )
+
+                    taskOutput = api.get()["payload"]
+                    taskStatus = taskOutput["status"].lower()
+                    if taskStatus == "completed":
+                        break
+                    if taskStatus == "failure":
+                        raise CustomException(status=400, payload={"F5": "policy merge failed"})
+
+                    if time.time() >= t0 + timeout: # timeout reached.
+                        raise CustomException(status=400, payload={"F5": "policy merge timed out"})
+
+                    time.sleep(5)
+                except KeyError:
+                    raise CustomException(status=400, payload={"F5": "policy merge failed"})
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
+    def getObjectsIdsFromDiffIds(assetId: int, policyId: str, ignoreDiffs: dict) -> dict:
+        elements = dict()
+
+        try:
+            # @todo: create and use models.
             try:
                 f5 = Asset(assetId)
-                api = ApiSupplicant(
-                    endpoint=f5.baseurl + "tm/asm/tasks/policy-merge/",
-                    auth=(f5.username, f5.password),
-                    tlsVerify=f5.tlsverify
-                )
 
                 PolicyDiffManager._log(
-                    f"[AssetID: {assetId}] Merging differences..."
+                    f"[AssetID: {assetId}] Getting policy's object ids..."
                 )
 
-                taskInformation = api.post(
-                    additionalHeaders={
-                        "Content-Type": "application/json",
-                    },
-                    data=json.dumps({
-                        "policyDiffReference": {
-                            "link": "/mgmt/tm/asm/policy-diffs/" + diffReferenceId,
-                        },
-                        "addMissingEntitiesToFirst": False,
-                        "addMissingEntitiesToSecond": True, # destination.
-                        "handleCommonEntities": "accept-from-first",
-                        "handleMissingEntities": "accept-from-first",
-                        "itemFilter": itemFilter # example: "id eq DIFF_ID1 or id qd DIFF_ID2 or id qd DIFF_ID3"
-                    })
-                )["payload"]
+                for k, v in ignoreDiffs.items():
+                    api = ApiSupplicant(
+                        endpoint=f5.baseurl + "tm/asm/policies/" + policyId + "/" + k + "/", # no pagination needed.
+                        auth=(f5.username, f5.password),
+                        tlsVerify=f5.tlsverify,
+                        silent=True
+                    )
 
-                # Monitor export file creation (async tasks).
-                t0 = time.time()
-
-                while True:
                     try:
-                        api = ApiSupplicant(
-                            endpoint=f5.baseurl + "tm/asm/tasks/policy-merge/" + taskInformation["id"] + "/",
-                            auth=(f5.username, f5.password),
-                            tlsVerify=f5.tlsverify
-                        )
+                        o = api.get()["payload"]["items"]
 
-                        PolicyDiffManager._log(
-                            f"[AssetID: {assetId}] Waiting for task to complete..."
-                        )
+                        for el in v:
+                            for elm in o:
+                                valid = False
 
-                        taskOutput = api.get()["payload"]
-                        taskStatus = taskOutput["status"].lower()
-                        if taskStatus == "completed":
-                            break
-                        if taskStatus == "failure":
-                            raise CustomException(status=400, payload={"F5": "policy merge failed"})
+                                if k == "signatures":
+                                    if elm["signatureReference"]["name"] == el["entityName"]:
+                                        valid = True
 
-                        if time.time() >= t0 + timeout: # timeout reached.
-                            raise CustomException(status=400, payload={"F5": "policy merge timed out"})
+                                elif k == "signature-sets":
+                                    if elm["signatureSetReference"]["name"] == el["entityName"]:
+                                        valid = True
 
-                        time.sleep(5)
+                                elif k == "server-technologies":
+                                    if elm["serverTechnologyReference"]["serverTechnologyName"] == el["entityName"]:
+                                        valid = True
+
+                                elif k == "whitelist-ips":
+                                    if elm["ipAddress"]+"/"+elm["ipMask"] == el["entityName"]:
+                                        valid = True
+
+                                elif k == "urls":
+                                    if "["+elm["protocol"].upper()+"] "+elm["name"] == el["entityName"]:
+                                        valid = True
+
+                                elif "blocking-settings" in k:
+                                    if elm["description"] == el["entityName"]:
+                                        valid = True
+
+                                else:
+                                    if elm["name"] == el["entityName"]:
+                                        valid = True
+
+                                if valid:
+                                    if k not in elements:
+                                        elements[k] = list()
+
+                                    elements[k].append(elm["id"])
                     except KeyError:
-                        raise CustomException(status=400, payload={"F5": "policy merge failed"})
+                        pass
             except Exception as e:
                 raise e
-        else:
-            raise CustomException(status=400, payload={"F5": "refusing to merge a whole policy"})
+
+            PolicyDiffManager._log(
+                f"[AssetID: {assetId}] Objects IDS: {elements}"
+            )
+
+            return elements
+        except Exception as e:
+            raise e
 
 
 
@@ -323,7 +386,6 @@ class PolicyDiffManager(PolicyBase):
             # @todo: create and use models.
             try:
                 f5 = Asset(sourceAssetId)
-
                 for k, v in differences.items():
                     api = ApiSupplicant(
                         endpoint=f5.baseurl + "tm/asm/policies/" + sourcePolicyId + "/" + k + "/", # no pagination needed.

@@ -13,7 +13,7 @@ from f5.helpers.Log import Log
 
 class F5ASMPoliciesMergeController(CustomController):
     @staticmethod
-    def post(request: Request, assetId: int, policyDifferenceId: str) -> Response:
+    def post(request: Request, assetId: int, destinationPolicyId: str) -> Response:
         response = None
         user = CustomController.loggedUser(request)
 
@@ -29,11 +29,17 @@ class F5ASMPoliciesMergeController(CustomController):
                     #data = serializer.validated_data
                     data = request.data["data"]
 
-                    lock = Lock("asm-policy-diff", locals(), policyDifferenceId)
+                    lock = Lock("asm-policy-diff", locals(), destinationPolicyId)
                     if lock.isUnlocked():
                         lock.lock()
 
-                        Policy.mergeDifferences(assetId, policyDifferenceId, data)
+                        Policy.mergeDifferences(
+                            assetId=assetId,
+                            importedPolicyId=data["imported-policy-id"],
+                            destinationPolicyId=destinationPolicyId,
+                            policyDifferenceId=data["diff-reference-id"],
+                            ignoreDiffs=data["ignore-diffs"],
+                        )
 
                         httpStatus = status.HTTP_201_CREATED
                         lock.release()
@@ -51,7 +57,7 @@ class F5ASMPoliciesMergeController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("asm-policy-diff", locals(), policyDifferenceId).release()
+            Lock("asm-policy-diff", locals(), destinationPolicyId).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
