@@ -37,7 +37,6 @@ class F5ASMPoliciesMergeController(CustomController):
                             assetId=assetId,
                             importedPolicyId=data["imported-policy-id"],
                             destinationPolicyId=destinationPolicyId,
-                            policyDifferenceId=data["diff-reference-id"],
                             ignoreDiffs=data["ignore-diffs"],
                         )
 
