@@ -9,7 +9,7 @@ class Log:
         log = logging.getLogger("django")
         if title:
             if title == "_":
-                for j in range(80):
+                for j in range(120):
                     title = title + "_"
             log.debug(title)
 

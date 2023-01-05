@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "59fda16b-ca3d-4754-aed1-6c3492e154d5",
+		"_postman_id": "ed12d235-c4ba-486c-80d8-9562dc6fa3d0",
 		"name": "api-f5",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -602,6 +602,40 @@
 							"response": []
 						},
 						{
+							"name": "assets",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/assets/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"assets",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "asset",
 							"request": {
 								"auth": {
@@ -905,6 +939,241 @@
 										"f5",
 										"configuration",
 										"global",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "ASM",
+					"item": [
+						{
+							"name": "policies",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "edfb456005712c3e68d97b525e247981",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/2/asm/policies/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"2",
+										"asm",
+										"policies",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "policy",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "edfb456005712c3e68d97b525e247981",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/2/asm/policy/uIGB1pBIcH8WprjX8KBR0w/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"2",
+										"asm",
+										"policy",
+										"uIGB1pBIcH8WprjX8KBR0w",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "policy",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "edfb456005712c3e68d97b525e247981",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/2/asm/policy/_gzCjGA0oBICVI6Lkznebw/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"2",
+										"asm",
+										"policy",
+										"_gzCjGA0oBICVI6Lkznebw",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "policies' differences",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "edfb456005712c3e68d97b525e247981",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/source-asset/3/destination-asset/4/asm/source-policy/vdlgq-KAexbclPfzMgeLqQ/destination-policy/vdlgq-KAexbclPfzMgeLqQ/differences/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"source-asset",
+										"3",
+										"destination-asset",
+										"4",
+										"asm",
+										"source-policy",
+										"vdlgq-KAexbclPfzMgeLqQ",
+										"destination-policy",
+										"vdlgq-KAexbclPfzMgeLqQ",
+										"differences",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "policy merge",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "edfb456005712c3e68d97b525e247981",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"importedPolicyId\": \"kMFwM97Cg0lgUopqXG1KNQ\",\n        \"ignoreDiffs\": {\n            \"server-technologies\": [\n                {\n                    \"id\": \"YYe7oD4_A2CkI5y1h1nXLA\",\n                    \"entityName\": \"XML\"\n                },\n                {\n                    \"id\": \"C3sZKGywhtF9SkzvylBOLw\",\n                    \"entityName\": \"IBM DB2\"\n                }\n            ],\n            \"signature-sets\": [\n                {\n                    \"id\": \"POrOjQ3-8ZcTpyI8E_5AgQ\",\n                    \"entityName\": \"Apache Tomcat Signatures (High/Medium Accuracy)\"\n                }\n            ]\n        }\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/4/asm/policy/vdlgq-KAexbclPfzMgeLqQ/merge/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"4",
+										"asm",
+										"policy",
+										"vdlgq-KAexbclPfzMgeLqQ",
+										"merge",
 										""
 									]
 								}

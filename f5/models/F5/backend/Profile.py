@@ -24,7 +24,7 @@ class Profile:
                 tlsVerify=f5.tlsverify
             )
 
-            for m in api.get()["items"]:
+            for m in api.get()["payload"]["items"]:
                 matches = re.search(r"profile\/(.*)\?", m["reference"]["link"])
                 if matches:
                     profileType = str(matches.group(1)).strip()
@@ -47,7 +47,7 @@ class Profile:
                 silent=silent
             )
 
-            return api.get()
+            return api.get()["payload"]
         except Exception as e:
             raise e
 
@@ -100,7 +100,7 @@ class Profile:
                 tlsVerify=f5.tlsverify
             )
 
-            return api.get()["items"]
+            return api.get()["payload"]["items"]
         except Exception as e:
             raise e
 

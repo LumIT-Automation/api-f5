@@ -85,6 +85,25 @@ class Asset:
 
 
     @staticmethod
+    def purgeAll() -> None:
+        from django.conf import settings
+        c = connection.cursor()
+
+        try:
+            if "sqlite3" in settings.DATABASES["default"]["ENGINE"]:
+                c.execute("DELETE FROM asset")
+                connection.commit()
+                c.execute("UPDATE sqlite_sequence SET seq=0 WHERE name='asset'")
+            else:
+                c.execute("SET FOREIGN_KEY_CHECKS = 0; TRUNCATE `asset`; SET FOREIGN_KEY_CHECKS = 1")
+        except Exception as e:
+            raise CustomException(status=400, payload={"database": e.__str__()})
+        finally:
+            c.close()
+
+
+
+    @staticmethod
     def list() -> list:
         c = connection.cursor()
 

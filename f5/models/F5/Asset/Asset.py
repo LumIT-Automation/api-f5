@@ -68,6 +68,18 @@ class Asset:
 
 
 
+    @staticmethod
+    def purgeAll() -> None:
+        from f5.models.Permission.Partition import Partition
+
+        try:
+            Partition.purgeAll()
+            Repository.purgeAll()
+        except Exception as e:
+            raise e
+
+
+
     ####################################################################################################################
     # Private methods
     ####################################################################################################################

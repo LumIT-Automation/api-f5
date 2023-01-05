@@ -23,7 +23,7 @@ class Monitor:
                 silent=silent
             )
 
-            return api.get()
+            return api.get()["payload"]
         except Exception as e:
             raise e
 
@@ -78,7 +78,7 @@ class Monitor:
                 tlsVerify=f5.tlsverify
             )
 
-            for m in api.get()["items"]:
+            for m in api.get()["payload"]["items"]:
                 matches = re.search(r"monitor\/(.*)\?", m["reference"]["link"])
                 if matches:
                     monitorType = str(matches.group(1)).strip()
@@ -100,7 +100,7 @@ class Monitor:
                 tlsVerify=f5.tlsverify
             )
 
-            return api.get()["items"]
+            return api.get()["payload"]["items"]
         except Exception as e:
             raise e
 

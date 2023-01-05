@@ -21,7 +21,7 @@ class PoolMember:
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
-            return api.get()
+            return api.get()["payload"]
         except Exception as e:
             raise e
 
@@ -38,7 +38,7 @@ class PoolMember:
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
-            r = api.get()
+            r = api.get()["payload"]
 
             #{
             #    "kind": "tm:ltm:pool:members:membersstats",
@@ -122,7 +122,7 @@ class PoolMember:
                 tlsVerify=f5.tlsverify
             )
 
-            o = apiStats.get()
+            o = apiStats.get()["payload"]
             for k, v in o.get("entries", []).items():
                 entries = v["nestedStats"]["entries"]
                 membersStats.append({
@@ -136,7 +136,7 @@ class PoolMember:
                 tlsVerify=f5.tlsverify
             )
 
-            o = apiList.get()["items"]
+            o = apiList.get()["payload"]["items"]
             for el in o:
                 for m in membersStats:
                     if el["fullPath"] == m["fullPath"]:

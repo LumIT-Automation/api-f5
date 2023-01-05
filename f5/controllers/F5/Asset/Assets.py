@@ -86,3 +86,26 @@ class F5AssetsController(CustomController):
         return Response(response, status=httpStatus, headers={
             "Cache-Control": "no-cache"
         })
+
+
+
+    @staticmethod
+    def delete(request: Request) -> Response:
+        user = CustomController.loggedUser(request)
+
+        try:
+            if Permission.hasUserPermission(groups=user["groups"], action="asset_delete") or user["authDisabled"]:
+                Log.actionLog("Purge all assets", user)
+
+                Asset.purgeAll()
+
+                httpStatus = status.HTTP_200_OK
+            else:
+                httpStatus = status.HTTP_403_FORBIDDEN
+        except Exception as e:
+            data, httpStatus, headers = CustomController.exceptionHandler(e)
+            return Response(data, status=httpStatus, headers=headers)
+
+        return Response(None, status=httpStatus, headers={
+            "Cache-Control": "no-cache"
+        })
