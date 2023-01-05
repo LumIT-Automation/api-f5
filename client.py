@@ -388,7 +388,7 @@ try:
                             # Collect ids to merge subdivided by entity type.
                             if diffEntityType not in mergeElements:
                                 mergeElements[diffEntityType] = []
-                            mergeElements[diffEntityType].append(el["id"])
+                            mergeElements[diffEntityType].append((el["id"], el["entityName"]))
                             Util.out("  -> Element will be merged at the end of the collection process, nothing done so far.")
 
                         if response == "n":
@@ -404,7 +404,7 @@ try:
 
                             for elm in diffData["differences"][diffEntityType]:
                                 if elm["diffType"] in ("conflict", "only-in-source"):
-                                    mergeElements[diffEntityType].append(elm["id"])
+                                    mergeElements[diffEntityType].append((elm["id"], elm["entityName"]))
                             break
 
             if mergeElements:
@@ -420,12 +420,23 @@ try:
                         response = ""
 
                 if response == "Y":
-                    # @todo: get ignoreDiffs: ignored elements (all but mergeElements).
+                    # Get ignored differences: all diffData but mergeElements.
+                    ignoredDifferences = diffData["differences"].copy()
+
+                    for diffEntityType, diffList in ignoredDifferences.items():
+                        if diffEntityType in mergeElements:
+                            for elm in mergeElements[diffEntityType]: # tuple.
+                                jj = 0
+                                for j in diffList:
+                                    if j["id"] == elm[0]:
+                                        Util.out(j["id"])
+                                        del diffList[jj]
+                                    jj += 1
 
                     # Merge policies.
                     Util.out(f"Merging...")
                     Util.out(
-                        ASMPolicyManager.mergePolicies(dstAssetId=2, destinationPolicyId=dstPolicyId, importedPolicyId=importedPolicy["id"], ignoreDiffs={})
+                        ASMPolicyManager.mergePolicies(dstAssetId=2, destinationPolicyId=dstPolicyId, importedPolicyId=importedPolicy["id"], ignoreDiffs=ignoredDifferences)
                     )
 
                     # @todo: apply-policy.
@@ -436,6 +447,6 @@ try:
     else:
         Util.out("No asset loaded, aborting.")
 except Exception as ex:
-    raise ex # to the user.
+    raise ex
 finally:
     Asset.purgeAssets()
