@@ -450,6 +450,13 @@ try:
                     )
 
                     # @todo: apply-policy.
+
+                    # POST https://192.168.25.42/mgmt/tm/asm/tasks/apply-policy
+                    # {
+                    # "policyReference": {
+                    # "link": "https://localhost/mgmt/tm/asm/policies/vagoQLF6uOoBKvS8h3C19w"
+                    # }
+                    # }
                 else:
                     Util.out(f"Quitting, nothing done.")
             else:
