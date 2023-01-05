@@ -264,6 +264,24 @@ class Util:
 
 
 
+    @staticmethod
+    def getIgnoredDifferences(diff: dict, merge: dict) -> dict:
+        ignored = diff["differences"].copy()
+
+        # Get ignored differences: all diff data but merge elements.
+        for de, dl in ignored.items():
+            if de in merge:
+                for e in merge[de]: # tuple.
+                    jj = 0
+                    for j in dl:
+                        if j["id"] == e[0]:
+                            del dl[jj]
+                        jj += 1
+
+        return ignored
+
+
+
 class ASMPolicyManager:
     @staticmethod
     def diffPolicies(srcAssetId: int, dstAssetId: int, sPolicyId: str, dPolicyId: str) -> dict:
@@ -420,27 +438,22 @@ try:
                         response = ""
 
                 if response == "Y":
-                    # Get ignored differences: all diffData but mergeElements.
-                    ignoredDifferences = diffData["differences"].copy()
-
-                    for diffEntityType, diffList in ignoredDifferences.items():
-                        if diffEntityType in mergeElements:
-                            for elm in mergeElements[diffEntityType]: # tuple.
-                                jj = 0
-                                for j in diffList:
-                                    if j["id"] == elm[0]:
-                                        del diffList[jj]
-                                    jj += 1
-
                     # Merge policies.
-                    Util.out(f"Merging...")
+                    Util.out(f"\n\nMerging...")
                     Util.out(
-                        ASMPolicyManager.mergePolicies(dstAssetId=2, destinationPolicyId=dstPolicyId, importedPolicyId=importedPolicy["id"], ignoreDiffs=ignoredDifferences)
+                        ASMPolicyManager.mergePolicies(
+                            dstAssetId=2,
+                            destinationPolicyId=dstPolicyId,
+                            importedPolicyId=importedPolicy["id"],
+                            ignoreDiffs=Util.getIgnoredDifferences(diffData, mergeElements)
+                        )
                     )
 
                     # @todo: apply-policy.
+                else:
+                    Util.out(f"Quitting, nothing done.")
             else:
-                Util.out("\n\nNo difference to merge, nothing done.")
+                Util.out("No difference to merge, nothing done.")
         else:
             Util.out("No policy found with given name, aborting.")
     else:
