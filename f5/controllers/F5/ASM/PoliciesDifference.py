@@ -21,9 +21,8 @@ class F5ASMPoliciesDifferenceController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            #if Permission.hasUserPermission(groups=user["groups"], action="asm_policy_differences_get") or user["authDisabled"]:
-            if True:
-                Log.actionLog("Policy merge", user)
+            if Permission.hasUserPermission(groups=user["groups"], action="asm_policy_differences_get") or user["authDisabled"]:
+                Log.actionLog("Get ASM policies' difference", user)
 
                 lock = Lock("asm-policy", locals())
                 if lock.isUnlocked():

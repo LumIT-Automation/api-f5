@@ -19,7 +19,7 @@ class PolicyBase:
             f5 = Asset(assetId)
 
             PolicyBase._log(
-                f"[AssetID: {assetId}] Deleting policy's ignored objects..."
+                f"[AssetID: {assetId}] Deleting ignored objects on imported policy..."
             )
 
             for k, v in ignoreObjects.items():

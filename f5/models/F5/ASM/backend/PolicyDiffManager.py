@@ -219,7 +219,7 @@ class PolicyDiffManager(PolicyBase):
                 f5 = Asset(assetId)
 
                 PolicyDiffManager._log(
-                    f"[AssetID: {assetId}] Getting policy's object ids..."
+                    f"[AssetID: {assetId}] Getting policy's object ids for ignored diffs..."
                 )
 
                 for k, v in ignoreDiffs.items():
