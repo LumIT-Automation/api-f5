@@ -1,3 +1,5 @@
+import json
+
 from typing import List
 
 from f5.models.F5.Asset.Asset import Asset
@@ -61,6 +63,49 @@ class Policy:
             )
 
             api.delete()
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
+    def apply(assetId: int, id: str, silent: bool = False) -> dict:
+        try:
+            f5 = Asset(assetId)
+            api = ApiSupplicant(
+                endpoint=f5.baseurl+"tm/asm/tasks/apply-policy",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify,
+                silent=silent
+            )
+
+            return api.post(
+                additionalHeaders={
+                    "Content-Type": "application/json",
+                },
+                data=json.dumps({
+                    "policyReference": {
+                        "link": "https://localhost/mgmt/tm/asm/policies/" + id
+                    }
+                })
+            )
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
+    def applyInfo(assetId: int, silent: bool = False) -> dict:
+        try:
+            f5 = Asset(assetId)
+            api = ApiSupplicant(
+                endpoint=f5.baseurl+"tm/asm/tasks/apply-policy",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify,
+                silent=silent
+            )
+
+            return api.get()
         except Exception as e:
             raise e
 
