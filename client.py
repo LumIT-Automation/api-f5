@@ -429,7 +429,6 @@ try:
                                 jj = 0
                                 for j in diffList:
                                     if j["id"] == elm[0]:
-                                        Util.out(j["id"])
                                         del diffList[jj]
                                     jj += 1
 
