@@ -1,13 +1,10 @@
 #!/usr/bin/python3
 
-import collections
 import os
 import argparse
 import json
 import datetime
 import logging
-import math
-import time
 
 from urllib3.exceptions import InsecureRequestWarning
 from urllib3 import disable_warnings
@@ -138,7 +135,7 @@ class Asset:
                 content_type="application/json"
             )
         except Exception as e:
-            print(e.args)
+            raise e
 
 
 
@@ -147,7 +144,7 @@ class Asset:
         try:
             return Client().get("/api/v1/f5/assets/").json()
         except Exception as e:
-            print(e.args)
+            raise e
 
 
 
@@ -156,7 +153,7 @@ class Asset:
         try:
             Client().delete("/api/v1/f5/assets/")
         except Exception as e:
-            print(e.args)
+            raise e
 
 
 
@@ -267,13 +264,6 @@ class Util:
 
 
 
-    @staticmethod
-    def chunks(lIn, nIn) -> collections:
-        for i in range(0, nIn):
-            yield lIn[i::nIn]
-
-
-
 class ASMPolicyManager:
     @staticmethod
     def diffPolicies(srcAssetId: int, dstAssetId: int, sPolicyId: str, dPolicyId: str) -> dict:
@@ -283,28 +273,29 @@ class ASMPolicyManager:
                     dstAssetId) + "/asm/source-policy/" + sPolicyId + "/destination-policy/" + dPolicyId + "/differences/"
             ).json()
         except Exception as e:
-            print(e.args)
+            raise e
 
 
 
     @staticmethod
-    def mergePolicies(dstAssetId: int, diffReference: str, diffIds: list = None) -> None:
-        diffIds = diffIds or []
-
-        time.sleep(2)
-
+    def mergePolicies(dstAssetId: int, destinationPolicyId: str, importedPolicyId: str, ignoreDiffs: dict) -> str:
         try:
-            Client().post(
-                path=f"/api/v1/f5/{dstAssetId}/asm/policy-diff/{diffReference}/merge/",
+            out = Client().post(
+                path=f"/api/v1/f5/{dstAssetId}/asm/policy/{destinationPolicyId}/merge/",
                 data={
                     "data": {
-                        "diff-ids": diffIds,
+                        "importedPolicyId": importedPolicyId,
+                        "ignoreDiffs": ignoreDiffs
                     }
                 },
                 content_type="application/json"
-            )
+            ).json()
+        except TypeError:
+            out = "" # no JSON returned.
         except Exception as e:
-            print(e.args)
+            raise e
+
+        return str(out)
 
 
 
@@ -313,7 +304,7 @@ class ASMPolicyManager:
         try:
             return Client().get(f"/api/v1/f5/{assetId}/asm/policies/").json()
         except Exception as e:
-            print(e.args)
+            raise e
 
 
 
@@ -429,15 +420,13 @@ try:
                         response = ""
 
                 if response == "Y":
-                    # Merge policy differences by entity type.
-                    for mek, mev in mergeElements.items():
-                        # @crap alert: split mergeElements[mek] into groups of max 5 elements, otherwise F5 merge API won't work.
-                        for j in Util.chunks(
-                                mergeElements[mek],
-                                math.ceil(len(mergeElements[mek])/5)
-                        ):
-                            Util.out(f"Processing {mek} {j}...")
-                            ASMPolicyManager.mergePolicies(dstAssetId=2, diffReference=diffData["diffReferenceId"], diffIds=j)
+                    # @todo: get ignoreDiffs: ignored elements (all but mergeElements).
+
+                    # Merge policies.
+                    Util.out(f"Merging...")
+                    Util.out(
+                        ASMPolicyManager.mergePolicies(dstAssetId=2, destinationPolicyId=dstPolicyId, importedPolicyId=importedPolicy["id"], ignoreDiffs={})
+                    )
 
                     # @todo: apply-policy.
             else:
