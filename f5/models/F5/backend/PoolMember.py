@@ -1,9 +1,10 @@
 import json
+from typing import List
 
 from f5.models.F5.Asset.Asset import Asset
 
 from f5.helpers.ApiSupplicant import ApiSupplicant
-
+from f5.helpers.Log import Log
 
 class PoolMember:
 
@@ -64,6 +65,8 @@ class PoolMember:
                     for k, v in r["entries"].items():
                         if "entries" in v["nestedStats"]:
                             o = v["nestedStats"]["entries"]
+                            o["parentState"] = o["status.enabledState"] # rename field as in list.
+                            del o["status.enabledState"]
 
         except Exception as e:
             raise e
@@ -109,14 +112,39 @@ class PoolMember:
 
     @staticmethod
     def list(assetId: int, partitionName: str, poolName: str) -> dict:
+        membersStats: List[dict] = []
+
         try:
             f5 = Asset(assetId)
-            api = ApiSupplicant(
+            apiStats = ApiSupplicant(
+                endpoint=f5.baseurl+"tm/ltm/pool/~"+partitionName+"~"+poolName+"/members/stats/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
+            )
+
+            o = apiStats.get()["payload"]
+            for k, v in o.get("entries", []).items():
+                entries = v["nestedStats"]["entries"]
+                membersStats.append({
+                    "fullPath": entries["nodeName"]["description"] + ':' + str(entries["port"]["value"]),
+                    "enabledState": entries["status.enabledState"]["description"]
+                })
+
+            apiList = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/pool/~"+partitionName+"~"+poolName+"/members/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
-            return api.get()["payload"]["items"]
+
+            o = apiList.get()["payload"]["items"]
+            for el in o:
+                for m in membersStats:
+                    if el["fullPath"] == m["fullPath"]:
+                        el["parentState"] = m["enabledState"]
+
+            return o
+        except KeyError:
+            pass
         except Exception as e:
             raise e
 

@@ -31,6 +31,7 @@ class PoolMember:
         self.session: str = ""
         self.state: str = ""
         self.fqdn: Fqdn
+        self.enabledState: str = ""
 
 
 

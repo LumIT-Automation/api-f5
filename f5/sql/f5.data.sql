@@ -96,8 +96,9 @@ INSERT INTO `privilege` (`id`, `privilege`, `privilege_type`, `description`) VAL
 (61, 'datagroup_delete', 'object', NULL),
 (62, 'datagroup_patch', 'object', NULL),
 (63, 'datagroup_get', 'object', NULL),
-(64, 'asm_policy_differences_get', 'global', NULL),
-(65, 'asm_policy_merge_post', 'asset', NULL);
+(64, 'full_visibility', 'global', NULL),
+(65, 'asm_policy_differences_get', 'global', NULL),
+(66, 'asm_policy_merge_post', 'asset', NULL);
 
 --
 -- Dump dei dati per la tabella `role`
@@ -175,6 +176,7 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (1, 63),
 (1, 64),
 (1, 65),
+(1, 66),
 (2, 3),
 (2, 6),
 (2, 7),
@@ -182,6 +184,7 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (2, 9),
 (2, 10),
 (2, 16),
+(2, 30),
 (2, 31),
 (2, 37),
 (2, 46),
