@@ -5,6 +5,7 @@ import argparse
 import json
 import datetime
 import logging
+from getpass import getpass
 
 from urllib3.exceptions import InsecureRequestWarning
 from urllib3 import disable_warnings
@@ -40,15 +41,15 @@ args = parser.parse_args()
 Input = {
     "src": {
         "asset": args.src_asset,
-        "user": args.src_user,
-        "password": args.src_passwd or input("Insert password for the source F5 asset:\n"),
         "policy": args.src_policy,
+        "user": args.src_user,
+        "password": args.src_passwd or getpass("Insert password for the source F5 asset:\n")
     },
     "dst": {
         "asset": args.dst_asset,
-        "user": args.dst_user,
-        "password": args.dst_passwd or input("Insert password for the destination F5 asset:\n"),
         "policy": args.dst_policy,
+        "user": args.dst_user,
+        "password": args.dst_passwd or getpass("Insert password for the destination F5 asset:\n")
     }
 }
 
@@ -321,18 +322,16 @@ class ASMPolicyManager:
     def applyPolicy(assetId: int, policyId:str):
         try:
             out = Client().post(
-                path=f"/api/v1/f5/{assetId}/asm/policy-apply/",
-                data={
-                    "data": {
-                        "policyId": policyId
-                    }
-                },
+                path=f"/api/v1/f5/{assetId}/asm/policy/{policyId}/apply/",
+                data={},
                 content_type="application/json"
             ).json()
         except TypeError:
-            out = ""  # no JSON returned.
+            out = "" # no JSON returned.
         except Exception as e:
             raise e
+
+        return out
 
 
 
@@ -468,9 +467,12 @@ try:
                         )
                     )
 
-                    Util.out(
-                        ASMPolicyManager.applyPolicy(assetId=2, policyId=dstPolicyId)
-                    )
+                    Util.out(f"\n\nApplying...")
+                    applyRes = ASMPolicyManager.applyPolicy(assetId=2, policyId=dstPolicyId)
+                    if "status" in applyRes and applyRes["status"] == 201:
+                        Util.out("Changes applied.", "lightgreen")
+                    else:
+                        Util.out("Changes not applied.", "red")
                 else:
                     Util.out(f"Quitting, nothing done.")
             else:
