@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "ed12d235-c4ba-486c-80d8-9562dc6fa3d0",
+		"_postman_id": "d6cc3c5b-9b05-43a6-ab82-dfb4c3876861",
 		"name": "api-f5",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -1013,7 +1013,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/asm/policy/uIGB1pBIcH8WprjX8KBR0w/",
+									"raw": "http://10.0.111.22/api/v1/f5/3/asm/policy/vdlgq-KAexbclPfzMgeLqQ/",
 									"protocol": "http",
 									"host": [
 										"10",
@@ -1025,10 +1025,54 @@
 										"api",
 										"v1",
 										"f5",
-										"2",
+										"3",
 										"asm",
 										"policy",
-										"uIGB1pBIcH8WprjX8KBR0w",
+										"vdlgq-KAexbclPfzMgeLqQ",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "policy apply",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "edfb456005712c3e68d97b525e247981",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/3/asm/policy/vdlgq-KAexbclPfzMgeLqQ/apply/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"3",
+										"asm",
+										"policy",
+										"vdlgq-KAexbclPfzMgeLqQ",
+										"apply",
 										""
 									]
 								}

@@ -318,6 +318,25 @@ class ASMPolicyManager:
 
 
     @staticmethod
+    def applyPolicy(assetId: int, policyId:str):
+        try:
+            out = Client().post(
+                path=f"/api/v1/f5/{assetId}/asm/policy-apply/",
+                data={
+                    "data": {
+                        "policyId": policyId
+                    }
+                },
+                content_type="application/json"
+            ).json()
+        except TypeError:
+            out = ""  # no JSON returned.
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
     def listPolicies(assetId) -> dict:
         try:
             return Client().get(f"/api/v1/f5/{assetId}/asm/policies/").json()
@@ -449,14 +468,9 @@ try:
                         )
                     )
 
-                    # @todo: apply-policy.
-
-                    # POST https://192.168.25.42/mgmt/tm/asm/tasks/apply-policy
-                    # {
-                    # "policyReference": {
-                    # "link": "https://localhost/mgmt/tm/asm/policies/vagoQLF6uOoBKvS8h3C19w"
-                    # }
-                    # }
+                    Util.out(
+                        ASMPolicyManager.applyPolicy(assetId=2, policyId=dstPolicyId)
+                    )
                 else:
                     Util.out(f"Quitting, nothing done.")
             else:

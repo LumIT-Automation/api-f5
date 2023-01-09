@@ -36,7 +36,7 @@ urlpatterns = [
     # ASM endpoints.
     path('<int:assetId>/asm/policies/', ASMPolicies.F5ASMMPoliciesController.as_view(), name='f5-asm-policies'),
     path('<int:assetId>/asm/policy/<str:policyId>/', ASMPolicy.F5PolicyController.as_view(), name='f5-asm-policy'),
-    path('<int:assetId>/asm/policy-apply/', ASMPolicyApply.F5PolicyApplyController.as_view(), name='f5-asm-policy'),
+    path('<int:assetId>/asm/policy/<str:policyId>/apply/', ASMPolicyApply.F5PolicyApplyController.as_view(), name='f5-asm-policy-apply'),
 
     path('source-asset/<int:sourceAssetId>/destination-asset/<int:destinationAssetId>/asm/source-policy/<str:sourcePolicyId>/destination-policy/<str:destinationPolicyId>/differences/', ASMPolicyDifference.F5ASMPoliciesDifferenceController.as_view(), name='f5-asm-policy-differences'),
     path('<int:assetId>/asm/policy/<str:destinationPolicyId>/merge/', ASMPolicyMerge.F5ASMPoliciesMergeController.as_view(), name='f5-asm-policy-merge'),
