@@ -15,15 +15,15 @@ from f5.helpers.Log import Log
 
 
 class F5PolicyApplyController(CustomController):
+    # Check the status of the apply jobs.
     @staticmethod
     def get(request: Request, assetId: int) -> Response:
         data = dict()
         etagCondition = { "responseEtag": "" }
-
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="policy_apply_get", assetId=assetId) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="asm_policy_apply_get", assetId=assetId) or user["authDisabled"]:
                 Log.actionLog("ASM Policy apply info", user)
 
                 lock = Lock("asm-policy", locals())
@@ -74,7 +74,6 @@ class F5PolicyApplyController(CustomController):
                 serializer = Serializer(data=request.data["data"])
                 if serializer.is_valid():
                     data = serializer.validated_data
-
                     lock = Lock("asm-policy-apply", locals(), data["policyId"])
                     if lock.isUnlocked():
                         lock.lock()
@@ -93,7 +92,6 @@ class F5PolicyApplyController(CustomController):
                             "error": str(serializer.errors)
                         }
                     }
-
                     Log.actionLog("User data incorrect: "+str(response), user)
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN

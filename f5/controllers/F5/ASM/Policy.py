@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from f5.models.F5.ASM.Policy import Policy
-#from f5.models.Permission.Permission import Permission
+from f5.models.Permission.Permission import Permission
 
 #from f5.serializers.F5.PoolMember import F5PoolMemberSerializer as Serializer
 
@@ -23,8 +23,7 @@ class F5PolicyController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            #if Permission.hasUserPermission(groups=user["groups"], action="poolMember_get", assetId=assetId) or user["authDisabled"]:
-            if True:
+            if Permission.hasUserPermission(groups=user["groups"], action="asm_policy_get", assetId=assetId) or user["authDisabled"]:
                 Log.actionLog("ASM policy information", user)
 
                 # Locking logic for pool member and pool.
@@ -80,8 +79,7 @@ class F5PolicyController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            #if Permission.hasUserPermission(groups=user["groups"], action="node_delete", assetId=assetId, partition=partitionName) or user["authDisabled"]:
-            if True:
+            if Permission.hasUserPermission(groups=user["groups"], action="asm_policy_delete", assetId=assetId) or user["authDisabled"]:
                 Log.actionLog("ASM policy deletion", user)
 
                 lock = Lock("asm-policy", locals(), policyId)

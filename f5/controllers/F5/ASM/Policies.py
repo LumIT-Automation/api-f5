@@ -24,8 +24,7 @@ class F5ASMMPoliciesController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            #if Permission.hasUserPermission(groups=user["groups"], action="policies_get", assetId=assetId) or user["authDisabled"]:
-            if True:
+            if Permission.hasUserPermission(groups=user["groups"], action="asm_policies_get", assetId=assetId) or user["authDisabled"]:
                 Log.actionLog("ASM Policies list", user)
 
                 lock = Lock("asm-policy", locals())
