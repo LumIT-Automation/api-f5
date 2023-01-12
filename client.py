@@ -491,8 +491,10 @@ try:
                     Util.out(
                         ASMPolicyManager.applyPolicy(assetId=2, policyId=dstPolicyId)
                     )
+
+                    Util.out("All done.", "green")
                 else:
-                    Util.out(f"Quitting, nothing done.", "red")
+                    Util.out("Quitting, nothing done.", "red")
             else:
                 Util.out("No difference to merge, nothing done.", "red")
         else:
