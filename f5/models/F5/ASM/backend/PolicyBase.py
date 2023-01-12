@@ -9,35 +9,6 @@ from f5.helpers.Log import Log
 class PolicyBase:
 
     ####################################################################################################################
-    # Public static methods
-    ####################################################################################################################
-
-    @staticmethod
-    def deletePolicyObjects(assetId: int, policyId: str, ignoreObjects: dict) -> None:
-        # @todo: create and use models.
-        try:
-            f5 = Asset(assetId)
-
-            PolicyBase._log(
-                f"[AssetID: {assetId}] Deleting ignored objects on imported policy..."
-            )
-
-            for k, v in ignoreObjects.items():
-                for o in v:
-                    api = ApiSupplicant(
-                        endpoint=f5.baseurl + "tm/asm/policies/" + policyId + "/" + k + "/" + o + "/",
-                        auth=(f5.username, f5.password),
-                        tlsVerify=f5.tlsverify,
-                        silent=True
-                    )
-
-                    api.delete()
-        except Exception as e:
-            raise e
-
-
-
-    ####################################################################################################################
     # Protected static methods
     ####################################################################################################################
 

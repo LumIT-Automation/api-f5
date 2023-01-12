@@ -133,6 +133,31 @@ class Policy(PolicyBase):
 
 
     @staticmethod
+    def deletePolicyObjects(assetId: int, policyId: str, ignoreObjects: dict) -> None:
+        # @todo: create and use models.
+        try:
+            f5 = Asset(assetId)
+
+            PolicyBase._log(
+                f"[AssetID: {assetId}] Deleting ignored objects on imported policy..."
+            )
+
+            for k, v in ignoreObjects.items():
+                for o in v:
+                    api = ApiSupplicant(
+                        endpoint=f5.baseurl + "tm/asm/policies/" + policyId + "/" + k + "/" + o + "/",
+                        auth=(f5.username, f5.password),
+                        tlsVerify=f5.tlsverify,
+                        silent=True
+                    )
+
+                    api.delete()
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
     def downloadPolicyFileFacade(assetId: int, policyId: str, cleanup: bool = False) -> str:
         try:
             return PolicyExporter.downloadPolicyData(
@@ -189,7 +214,7 @@ class Policy(PolicyBase):
         # -> delete non needed diffs from the imported policy;
         # -> repeat the diff process and merge non-selectively.
         try:
-            PolicyDiffManager.deletePolicyObjects(
+            Policy.deletePolicyObjects(
                 assetId=assetId,
                 policyId=importedPolicyId,
                 ignoreObjects=PolicyDiffManager.getObjectsIdsFromDiffIds(
