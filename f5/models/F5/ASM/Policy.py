@@ -42,11 +42,13 @@ class Policy:
 
 
 
-    def apply(self, silent: bool = False) -> dict:
+    def apply(self, silent: bool = False) -> None:
         try:
-            return Backend.apply(self.assetId, self.id, silent=silent)
+            Backend.apply(self.assetId, self.id, silent=silent)
         except Exception as e:
             raise e
+
+
 
     ####################################################################################################################
     # Public static methods
@@ -60,15 +62,6 @@ class Policy:
                 el["assetId"] = assetId
 
             return l
-        except Exception as e:
-            raise e
-
-
-
-    @staticmethod
-    def applyInfo(assetId: int) -> dict:
-        try:
-            return Backend.applyInfo(assetId)
         except Exception as e:
             raise e
 

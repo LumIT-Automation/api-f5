@@ -22,12 +22,11 @@ class F5PolicyApplyController(CustomController):
                 Log.actionLog("ASM policy apply", user)
                 Log.actionLog("User data: "+str(request.data), user)
 
-                lock = Lock("asm-policy-apply", locals(), policyId)
+                lock = Lock("asm-policy", locals(), policyId)
                 if lock.isUnlocked():
                     lock.lock()
 
-                    p = Policy(assetId=assetId, id=policyId)
-                    response = p.apply()
+                    Policy(assetId=assetId, id=policyId).apply()
 
                     httpStatus = status.HTTP_201_CREATED
                     lock.release()
@@ -37,7 +36,7 @@ class F5PolicyApplyController(CustomController):
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
             if "serializer" in locals():
-                Lock("asm-policy-merge", locals(), policyId).release()
+                Lock("asm-policy", locals(), policyId).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
@@ -45,4 +44,3 @@ class F5PolicyApplyController(CustomController):
         return Response(response, status=httpStatus, headers={
             "Cache-Control": "no-cache"
         })
-

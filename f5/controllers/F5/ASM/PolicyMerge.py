@@ -28,7 +28,7 @@ class F5ASMPoliciesMergeController(CustomController):
                 if serializer.is_valid():
                     data = serializer.validated_data
 
-                    lock = Lock("asm-policy-merge", locals(), destinationPolicyId)
+                    lock = Lock("asm-policy", locals(), destinationPolicyId)
                     if lock.isUnlocked():
                         lock.lock()
 
@@ -55,7 +55,7 @@ class F5ASMPoliciesMergeController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("asm-policy-merge", locals(), destinationPolicyId).release()
+            Lock("asm-policy", locals(), destinationPolicyId).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

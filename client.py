@@ -457,7 +457,7 @@ try:
 
                 if response == "Y":
                     # Merge policies.
-                    Util.out(f"\n\nMerging...")
+                    Util.out("\n\nMerging...")
                     Util.out(
                         ASMPolicyManager.mergePolicies(
                             dstAssetId=2,
@@ -467,12 +467,11 @@ try:
                         )
                     )
 
-                    Util.out(f"\n\nApplying...")
-                    applyRes = ASMPolicyManager.applyPolicy(assetId=2, policyId=dstPolicyId)
-                    if "status" in applyRes and applyRes["status"] == 201:
-                        Util.out("Changes applied.", "lightgreen")
-                    else:
-                        Util.out("Changes not applied.", "red")
+                    # Policy apply.
+                    Util.out("Applying...")
+                    Util.out(
+                        ASMPolicyManager.applyPolicy(assetId=2, policyId=dstPolicyId)
+                    )
                 else:
                     Util.out(f"Quitting, nothing done.")
             else:

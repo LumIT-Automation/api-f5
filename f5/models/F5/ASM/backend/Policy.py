@@ -1,18 +1,21 @@
 import json
+import time
 
 from typing import List
 
 from f5.models.F5.Asset.Asset import Asset
+from f5.models.F5.ASM.backend.PolicyBase import PolicyBase
 
 from f5.models.F5.ASM.backend.PolicyExporter import PolicyExporter
 from f5.models.F5.ASM.backend.PolicyImporter import PolicyImporter
 from f5.models.F5.ASM.backend.PolicyDiffManager import PolicyDiffManager
 
 from f5.helpers.ApiSupplicant import ApiSupplicant
+from f5.helpers.Exception import CustomException
 from f5.helpers.Log import Log
 
 
-class Policy:
+class Policy(PolicyBase):
 
     ####################################################################################################################
     # Public static methods
@@ -69,7 +72,9 @@ class Policy:
 
 
     @staticmethod
-    def apply(assetId: int, id: str, silent: bool = False) -> dict:
+    def apply(assetId: int, id: str, silent: bool = False) -> None:
+        timeout = 3600 # [second]
+
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
@@ -79,7 +84,11 @@ class Policy:
                 silent=silent
             )
 
-            return api.post(
+            Policy._log(
+                f"[AssetID: {assetId}] Applying policy..."
+            )
+
+            taskInformation = api.post(
                 additionalHeaders={
                     "Content-Type": "application/json",
                 },
@@ -88,24 +97,36 @@ class Policy:
                         "link": "https://localhost/mgmt/tm/asm/policies/" + id
                     }
                 })
-            )
-        except Exception as e:
-            raise e
+            )["payload"]
 
+            # Monitor async tasks.
+            t0 = time.time()
 
+            while True:
+                try:
+                    api = ApiSupplicant(
+                        endpoint=f5.baseurl + "tm/asm/tasks/apply-policy/" + taskInformation["id"] + "/",
+                        auth=(f5.username, f5.password),
+                        tlsVerify=f5.tlsverify
+                    )
 
-    @staticmethod
-    def applyInfo(assetId: int, silent: bool = False) -> dict:
-        try:
-            f5 = Asset(assetId)
-            api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/asm/tasks/apply-policy",
-                auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify,
-                silent=silent
-            )
+                    PolicyDiffManager._log(
+                        f"[AssetID: {assetId}] Waiting for task to complete..."
+                    )
 
-            return api.get()
+                    taskOutput = api.get()["payload"]
+                    taskStatus = taskOutput["status"].lower()
+                    if taskStatus == "completed":
+                        break
+                    if taskStatus == "failure":
+                        raise CustomException(status=400, payload={"F5": "policy apply failed"})
+
+                    if time.time() >= t0 + timeout: # timeout reached.
+                        raise CustomException(status=400, payload={"F5": "policy apply timed out"})
+
+                    time.sleep(5)
+                except KeyError:
+                    raise CustomException(status=400, payload={"F5": "policy apply failed"})
         except Exception as e:
             raise e
 
