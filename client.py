@@ -6,17 +6,15 @@ import json
 import datetime
 import logging
 from getpass import getpass
-
+from colorama import just_fix_windows_console
 from urllib3.exceptions import InsecureRequestWarning
 from urllib3 import disable_warnings
-
-# Needed on Windows only.
-#from colorama import just_fix_windows_console
-#just_fix_windows_console()
 
 import django
 from django.conf import settings
 from django.test import Client
+
+just_fix_windows_console() # needed on Windows only.
 
 
 
@@ -319,13 +317,17 @@ class ASMPolicyManager:
 
 
     @staticmethod
-    def applyPolicy(assetId: int, policyId:str):
+    def applyPolicy(assetId: int, policyId: str):
         try:
-            out = Client().post(
+            applyPolicyResponse = Client().post(
                 path=f"/api/v1/f5/{assetId}/asm/policy/{policyId}/apply/",
                 data={},
                 content_type="application/json"
-            ).json()
+            )
+            out = applyPolicyResponse.json()
+
+            if applyPolicyResponse.status_code != 200:
+                raise Exception(out)
         except TypeError:
             out = "" # no JSON returned.
         except Exception as e:
@@ -338,7 +340,13 @@ class ASMPolicyManager:
     @staticmethod
     def listPolicies(assetId) -> dict:
         try:
-            return Client().get(f"/api/v1/f5/{assetId}/asm/policies/").json()
+            policiesResponse = Client().get(f"/api/v1/f5/{assetId}/asm/policies/")
+            policiesPayload = policiesResponse.json()
+
+            if policiesResponse.status_code != 200:
+                raise Exception(policiesPayload)
+
+            return policiesPayload
         except Exception as e:
             raise e
 
@@ -346,18 +354,19 @@ class ASMPolicyManager:
 
     @staticmethod
     def getPolicyId(assetId: int, name: str) -> str:
-        id = ""
+        policyId = ""
 
         try:
-            id = list(filter(lambda j: j.get("name", "") == name, ASMPolicyManager.listPolicies(assetId)["data"]["items"]))[0]["id"]
+            policies = ASMPolicyManager.listPolicies(assetId)
+            policyId = list(filter(lambda j: j.get("name", "") == name, policies["data"]["items"]))[0]["id"]
         except KeyError:
             pass
         except IndexError:
             pass
         except Exception as e:
-            print(e.args)
+            raise e
 
-        return id
+        return policyId
 
 
 
@@ -473,14 +482,14 @@ try:
                         ASMPolicyManager.applyPolicy(assetId=2, policyId=dstPolicyId)
                     )
                 else:
-                    Util.out(f"Quitting, nothing done.")
+                    Util.out(f"Quitting, nothing done.", "red")
             else:
-                Util.out("No difference to merge, nothing done.")
+                Util.out("No difference to merge, nothing done.", "red")
         else:
-            Util.out("No policy found with given name, aborting.")
+            Util.out("No policy found with given name, aborting.", "red")
     else:
-        Util.out("No asset loaded, aborting.")
+        Util.out("No asset loaded, aborting.", "red")
 except Exception as ex:
-    raise ex
+    Util.out(ex.__str__(), "red")
 finally:
     Asset.purgeAssets()
