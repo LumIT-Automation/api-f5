@@ -285,10 +285,16 @@ class ASMPolicyManager:
     @staticmethod
     def diffPolicies(srcAssetId: int, dstAssetId: int, sPolicyId: str, dPolicyId: str) -> dict:
         try:
-            return Client().get(
+            diffPolicyResponse = Client().get(
                 "/api/v1/f5/source-asset/" + str(srcAssetId) + "/destination-asset/" + str(
                     dstAssetId) + "/asm/source-policy/" + sPolicyId + "/destination-policy/" + dPolicyId + "/differences/"
-            ).json()
+            )
+            diffPolicyPayload = diffPolicyResponse.json()
+
+            if diffPolicyResponse.status_code != 200:
+                raise Exception(diffPolicyPayload)
+
+            return diffPolicyPayload
         except Exception as e:
             raise e
 
@@ -297,7 +303,7 @@ class ASMPolicyManager:
     @staticmethod
     def mergePolicies(dstAssetId: int, destinationPolicyId: str, importedPolicyId: str, ignoreDiffs: dict) -> str:
         try:
-            out = Client().post(
+            mergePolicyResponse = Client().post(
                 path=f"/api/v1/f5/{dstAssetId}/asm/policy/{destinationPolicyId}/merge/",
                 data={
                     "data": {
@@ -306,13 +312,17 @@ class ASMPolicyManager:
                     }
                 },
                 content_type="application/json"
-            ).json()
+            )
+            out = mergePolicyResponse.json()
+
+            if mergePolicyResponse.status_code not in (200, 201):
+                raise Exception(out)
         except TypeError:
             out = "" # no JSON returned.
         except Exception as e:
             raise e
 
-        return str(out)
+        return out
 
 
 
@@ -326,7 +336,7 @@ class ASMPolicyManager:
             )
             out = applyPolicyResponse.json()
 
-            if applyPolicyResponse.status_code != 200:
+            if applyPolicyResponse.status_code not in (200, 201):
                 raise Exception(out)
         except TypeError:
             out = "" # no JSON returned.
