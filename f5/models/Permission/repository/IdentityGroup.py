@@ -56,7 +56,7 @@ class IdentityGroup:
         values.append(id)
 
         try:
-            c.execute("UPDATE identity_group SET " + sql[:-1] + " WHERE id = %s", values)
+            c.execute("UPDATE identity_group SET " + sql[:-1] + " WHERE id = %s", values) # user data are filtered by the serializer.
         except Exception as e:
             if e.__class__.__name__ == "IntegrityError" \
                     and e.args and e.args[0] and e.args[0] == 1062:
@@ -114,7 +114,7 @@ class IdentityGroup:
 
         try:
             with transaction.atomic():
-                c.execute("INSERT INTO identity_group "+keys+" VALUES ("+s[:-1]+")", values)
+                c.execute("INSERT INTO identity_group "+keys+" VALUES ("+s[:-1]+")", values) # user data are filtered by the serializer.
 
                 return c.lastrowid
         except Exception as e:

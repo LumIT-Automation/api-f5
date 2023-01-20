@@ -68,7 +68,7 @@ class History:
         keys = keys[:-1]+")"
 
         try:
-            c.execute("INSERT INTO log "+keys+" VALUES ("+s[:-1]+")", values)
+            c.execute("INSERT INTO log "+keys+" VALUES ("+s[:-1]+")", values) # user data are filtered by the serializer.
         except Exception as e:
             raise CustomException(status=400, payload={"database": e.__str__()})
         finally:

@@ -5,6 +5,7 @@ import argparse
 import json
 import datetime
 import logging
+import tempfile
 from getpass import getpass
 from colorama import just_fix_windows_console
 from urllib3.exceptions import InsecureRequestWarning
@@ -73,7 +74,7 @@ settings.DATABASES = {
 settings.CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '/tmp/django_cache',
+        'LOCATION': os.path.join(tempfile.mkdtemp(), "django_cache"),
     }
 }
 settings.REST_FRAMEWORK = {

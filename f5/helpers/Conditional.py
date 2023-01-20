@@ -24,7 +24,7 @@ class Conditional:
             ifNoneMatchRequest = self.request.headers['If-None-Match'].strip()
 
         # Calculate the ETag value for the response.
-        eTag = hashlib.md5(json.dumps(result).encode('utf-8')).hexdigest().strip()
+        eTag = hashlib.sha256(json.dumps(result).encode('utf-8')).hexdigest().strip()
 
         if ifNoneMatchRequest != eTag:
             state = "stale"
