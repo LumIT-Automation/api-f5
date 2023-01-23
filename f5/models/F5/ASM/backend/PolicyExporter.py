@@ -75,6 +75,10 @@ class PolicyExporter(PolicyBase):
                     raise CustomException(status=400, payload={"F5": "create export file failed"})
 
             # Move file internally to be able to download it.
+            PolicyExporter._log(
+                f"[AssetID: {assetId}] Moving export file internally to /shared/images/..."
+            )
+
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/util/bash",
                 auth=(f5.username, f5.password),
