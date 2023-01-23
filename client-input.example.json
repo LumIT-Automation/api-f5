@@ -1,0 +1,14 @@
+{
+    "source": {
+        "asset": "ADDRESS_OR_FQDN",
+        "user": "USERNAME",
+        "password": "PASSWORD",
+        "policy": "POLICY_NAME"
+    },
+      "destination": {
+        "asset": "ADDRESS_OR_FQDN",
+        "user": "USERNAME",
+        "password": "PASSWORD",
+        "policy": "POLICY_NAME"
+    }
+}

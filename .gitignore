@@ -5,3 +5,4 @@
 api/*.db
 f5/sql/f5.data-development.sql
 client.log
+client-input.json
