@@ -42,7 +42,6 @@ class F5AssetController(CustomController):
         try:
             if Permission.hasUserPermission(groups=user["groups"], action="asset_patch") or user["authDisabled"]:
                 Log.actionLog("Asset modification", user)
-                Log.actionLog("User data: "+str(request.data), user)
 
                 serializer = Serializer(data=request.data["data"], partial=True)
                 if serializer.is_valid():

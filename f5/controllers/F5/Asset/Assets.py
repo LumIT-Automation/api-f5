@@ -61,7 +61,6 @@ class F5AssetsController(CustomController):
         try:
             if Permission.hasUserPermission(groups=user["groups"], action="assets_post") or user["authDisabled"]:
                 Log.actionLog("Asset addition", user)
-                Log.actionLog("User data: "+str(request.data), user)
 
                 serializer = AssetSerializer(data=request.data["data"])
                 if serializer.is_valid():
