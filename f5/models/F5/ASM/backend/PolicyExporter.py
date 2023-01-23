@@ -91,7 +91,7 @@ class PolicyExporter(PolicyBase):
                 },
                 data=json.dumps({
                     "command": "run",
-                    "utilCmdArgs": " -c 'for f in $(ls /ts/var/rest/*" + filename + "); do mv -f $f /shared/images/" + filename + "; done'" # internally, <f5user>-filename is given.
+                    "utilCmdArgs": " -c 'for f in \"$(ls /ts/var/rest/*" + filename + ")\"; do mv -f \"$f\" /shared/images/" + filename + "; done'" # internally, <f5user>-filename is given.
                 })
             )
 
