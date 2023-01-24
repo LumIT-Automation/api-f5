@@ -94,7 +94,7 @@ class PolicyExporter(PolicyBase):
                 },
                 data=json.dumps({
                     "command": "run",
-                    "utilCmdArgs": " -c 'for f in \"$(ls /ts/var/rest/*" + filename + ")\"; do mv -f \"$f\" /shared/images/" + filename + "; done'" # internally, <f5user>-filename is given.
+                    "utilCmdArgs": " -c 'for f in \"$(ls /ts/var/rest/*" + filename + ")\"; do mv -f \"$f\" /shared/images/" + filename + "; done'" # internally, <f5user>~filename is given.
                 })
             )
 
@@ -178,9 +178,9 @@ class PolicyExporter(PolicyBase):
     ####################################################################################################################
 
     @staticmethod
-    def __listRemoteFiles(api: ApiSupplicant, assetId: int, folder: str):
+    def __listRemoteFiles(supplicant: ApiSupplicant, assetId: int, folder: str):
         try:
-            exportedFilesList = api.post(
+            exportedFilesList = supplicant.post(
                 additionalHeaders={
                     "Content-Type": "application/json",
                 },
