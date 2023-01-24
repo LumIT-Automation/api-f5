@@ -74,15 +74,18 @@ class PolicyExporter(PolicyBase):
                 except KeyError:
                     raise CustomException(status=400, payload={"F5": "create export file failed"})
 
-            # Move file internally to be able to download it.
-            PolicyExporter._log(
-                f"[AssetID: {assetId}] Moving export file internally to /shared/images/..."
-            )
-
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/util/bash",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
+            )
+
+            # List all exported files in remote /ts/var/rest/.
+            PolicyExporter.__listRemoteFiles(api, assetId, folder="/ts/var/rest/")
+
+            # Move file internally to be able to download it.
+            PolicyExporter._log(
+                f"[AssetID: {assetId}] Moving export file internally to /shared/images/..."
             )
 
             api.post(
@@ -98,6 +101,9 @@ class PolicyExporter(PolicyBase):
             PolicyExporter._log(
                 f"[AssetID: {assetId}] Export file /shared/images/{filename} created"
             )
+
+            # List all exported files in remote /shared/images/.
+            PolicyExporter.__listRemoteFiles(api, assetId, folder="/shared/images/")
 
             return filename
         except Exception as e:
@@ -164,3 +170,26 @@ class PolicyExporter(PolicyBase):
         finally:
             if cleanup:
                 PolicyExporter._cleanupLocalFile(assetId=assetId, task="export", filename=localExportFile)
+
+
+
+    ####################################################################################################################
+    # Private static methods
+    ####################################################################################################################
+
+    @staticmethod
+    def __listRemoteFiles(api: ApiSupplicant, assetId: int, folder: str):
+        try:
+            exportedFilesList = api.post(
+                additionalHeaders={
+                    "Content-Type": "application/json",
+                },
+                data=json.dumps({
+                    "command": "run",
+                    "utilCmdArgs": " -c 'ls " + folder + "'"
+                }))["payload"]["commandResult"].split("\n")
+
+            PolicyExporter._log(
+                f"[AssetID: {assetId}] Exported files in " + folder + ": " + str(list(filter(None, exportedFilesList))))
+        except Exception:
+            pass
