@@ -16,7 +16,7 @@ class Certificate:
 
     @staticmethod
     def delete(assetId: int, partitionName: str, resourceName: str, what):
-        if any(w in what for w in ("cert", "key")):
+        if what in ("cert", "key"):
             try:
                 f5 = Asset(assetId)
                 api = ApiSupplicant(
@@ -32,10 +32,10 @@ class Certificate:
 
 
     @staticmethod
-    def list(assetId: int, partitionName: str, what: str) -> dict:
+    def list(assetId: int, partitionName: str, what: str) -> list:
         o = dict()
 
-        if any(w in what for w in ("cert", "key")):
+        if what in ("cert", "key"):
             try:
                 f5 = Asset(assetId)
                 api = ApiSupplicant(
@@ -54,7 +54,7 @@ class Certificate:
 
     @staticmethod
     def install(assetId: int, partition: str, what: str, data: dict) -> None:
-        if any(w in what for w in ("cert", "key")):
+        if what in ("cert", "key"):
             try:
                 f5 = Asset(assetId)
                 # Decode base 64 data.

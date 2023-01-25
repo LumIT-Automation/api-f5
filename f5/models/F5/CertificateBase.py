@@ -1,3 +1,4 @@
+from typing import List
 from f5.models.F5.backend.Certificate import Certificate as Backend
 
 
@@ -30,7 +31,7 @@ class CertificateBase:
     ####################################################################################################################
 
     @staticmethod
-    def list(assetId: int, partitionName: str, o: str) -> dict:
+    def listObjects(assetId: int, partitionName: str, o: str) -> List[dict]:
         try:
             l = Backend.list(assetId, partitionName, o)
             for el in l:
@@ -45,7 +46,7 @@ class CertificateBase:
 
 
     @staticmethod
-    def install(assetId: int, partitionName: str, o: str, data: dict) -> None:
+    def installObject(assetId: int, partitionName: str, o: str, data: dict) -> None:
         try:
             Backend.install(assetId, partitionName, o, data)
         except Exception as e:

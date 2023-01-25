@@ -26,7 +26,7 @@ class Key(CertificateBase):
     @staticmethod
     def list(assetId: int, partitionName: str) -> List[dict]:
         try:
-            return CertificateBase.list(assetId, partitionName, "key")
+            return CertificateBase.listObjects(assetId, partitionName, "key")
         except Exception as e:
             raise e
 
@@ -35,6 +35,6 @@ class Key(CertificateBase):
     @staticmethod
     def install(assetId: int, partitionName: str, data: dict) -> None:
         try:
-            CertificateBase.install(assetId, partitionName, "key", data)
+            CertificateBase.installObject(assetId, partitionName, "key", data)
         except Exception as e:
             raise e
