@@ -75,11 +75,9 @@ class F5CertificateController(CustomController):
                 Log.actionLog("User data: "+str(request.data), user)
 
                 if "certificate" in request.get_full_path():
-                    #serializer = CertificateSerializer(data=request.data, partial=True)
-                    #if serializer.is_valid():
-                    if True:
-                        #data = serializer.validated_data["certificate"]
-                        data = request.data["certificate"]
+                    serializer = CertificateSerializer(data=request.data, partial=True)
+                    if serializer.is_valid():
+                        data = serializer.validated_data["certificate"]
 
                         lock = Lock("certificate", locals(), resourceName)
                         if lock.isUnlocked():
@@ -100,6 +98,32 @@ class F5CertificateController(CustomController):
                         }
 
                         Log.actionLog("User data incorrect: "+str(response), user)
+                elif "key" in request.get_full_path():
+                    serializer = KeySerializer(data=request.data, partial=True)
+                    if serializer.is_valid():
+                        data = serializer.validated_data["key"]
+
+                        lock = Lock("key", locals(), resourceName)
+                        if lock.isUnlocked():
+                            lock.lock()
+
+                            Key(assetId, partitionName, resourceName).update(data)
+
+                            httpStatus = status.HTTP_200_OK
+                            lock.release()
+                        else:
+                            httpStatus = status.HTTP_423_LOCKED
+                    else:
+                        httpStatus = status.HTTP_400_BAD_REQUEST
+                        response = {
+                            "F5": {
+                                "error": str(serializer.errors)
+                            }
+                        }
+
+                        Log.actionLog("User data incorrect: " + str(response), user)
+                else:
+                    httpStatus = status.HTTP_400_BAD_REQUEST
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:

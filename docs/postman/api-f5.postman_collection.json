@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "d6cc3c5b-9b05-43a6-ab82-dfb4c3876861",
+		"_postman_id": "970b07ac-dcfe-42d0-a959-c1c92b69a5b1",
 		"name": "api-f5",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -3689,6 +3689,105 @@
 					"response": []
 				},
 				{
+					"name": "certificates",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"certificate\": {\n        \"name\": \"mamma.crt\",\n        \"content_base64\": \"LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUZhekNDQTFPZ0F3SUJBZ0lVZjM2c1ppUmRhcTF5NnJ0cDROanFUSUk1ZTdjd0RRWUpLb1pJaHZjTkFRRUwKQlFBd1JURUxNQWtHQTFVRUJoTUNRVlV4RXpBUkJnTlZCQWdNQ2xOdmJXVXRVM1JoZEdVeElUQWZCZ05WQkFvTQpHRWx1ZEdWeWJtVjBJRmRwWkdkcGRITWdVSFI1SUV4MFpEQWVGdzB5TXpBeE1qVXhNREkyTURKYUZ3MHlOREF4Ck1qVXhNREkyTURKYU1FVXhDekFKQmdOVkJBWVRBa0ZWTVJNd0VRWURWUVFJREFwVGIyMWxMVk4wWVhSbE1TRXcKSHdZRFZRUUtEQmhKYm5SbGNtNWxkQ0JYYVdSbmFYUnpJRkIwZVNCTWRHUXdnZ0lpTUEwR0NTcUdTSWIzRFFFQgpBUVVBQTRJQ0R3QXdnZ0lLQW9JQ0FRRDgwWVlvM1pIcHZUK3BrMmxkVks5WlRETXI4dFB6ZjhjWUdGZm9rbEVQCmJtclF5Q1lrODdBK2ZRR2VGZ2M1VjVaUW5XM2E5azdDRUNaNENKdzdHZ2tPa2dTZE9zc0VVaU9heEhpWGh0VGUKVWN3NXp2dVlrb3VGRjBPUHAvcWxBVDlScUF2aVlWOGVHM2NwTWMvcG90Q2lMRlFzbnhsYTgxR0l3aTBGcHR0UQp4SzZMUE9VZkJZcm5OeW00YllIVlYrYVVaZXRxeitTV2pQeTkwbGpvRUhiUVFQRWU0RzZ6WHZuUUpCMzhmT0c5CnlHazQ4Z1FGOU5paEsyRGRTRHNuSHgyYkRGL3dmZXlKY0RldUVSOVNOSDRMc01NZDdwSWRxeU8xTkF6N0EzbGwKa016eXBGeDZxN1JIYWtlaTZkUVRoKzhuSjFoeGtrdkJZQkJhRlZlYU14MVc3VENDSDUwWVNwSDhEQy9TL2FHQQpTN0V6V2wxcHY4OVdJQkdVbnpoSWJWa3I4bWNDTUYrdkRPRStjZjJFeW4vck45ZnNxWkhldXFjSjlIcHBrZUNiCjE1WDlROHc5YW5jTWNhSWFiSDZ5bHZIdGtBc25UU0tuK2thcUcvcTlzWkJteVNpNVgzbjY4MEUzTXBRSFpuaVcKSU4zYXBTWE11VTlYY0ttSXBLLytjWGVHdkU1U2hpSi9EMHp1bkxzVkRsMUlTdENjMFRpbExCSEU0Mnl2S3JwMgpSSFJ1Mmt1QlNKVWZCMHVnU0dSeCtabDFQWGVvcWdCdUkwOWdBVGtob080VnNZSWkxN0JuV1YrbFY4bWlmNEZECmtYMzZlY3RET0VTQW5FOUFJV0ZuY0pmMkdnUmNVVXVFeWY0ZUFJWGFCcXY3a1VHYWZQbktyemxaNXZNWHZ0ajYKcFFJREFRQUJvMU13VVRBZEJnTlZIUTRFRmdRVWpZYllKMFZUVWswMzVUWHN0cUU2U1hJcnpOOHdId1lEVlIwagpCQmd3Rm9BVWpZYllKMFZUVWswMzVUWHN0cUU2U1hJcnpOOHdEd1lEVlIwVEFRSC9CQVV3QXdFQi96QU5CZ2txCmhraUc5dzBCQVFzRkFBT0NBZ0VBdDl5U2YwcE1SN21mVlFCaXNFNldQSEl4a0RGUENMZlBzR2tucGZMeGZBSmEKbWRHU1V4S0YxRHVyTS9zUCtmdHYzOWVBUkJ1OUV2NU80WUhtN0pUT2NXVklhK2ZxTmlhNXlNWnRsWEhqVXR4UQpPK1J2QkloYlN4MG9IVmpoOC9GVnpZSTRlSUxZQzhHOFh1bTVkeStMK0ZNN3Mra1dVREdaRE5BQ05IL2NnZzFZCkdMLzY2anpOeHN4QmJnK3ZRMUh0QzdwV3grWXloQjB4Yi9uOU1UaVk1ZUxmekFJN2t3aVFqdE05UG9XRzQrYlYKQW43WGpTaWVQdUlpVjFIai9LVjNRNG9wWk1tNHozOUZ5dVlRTHR2TWxlNmdGQzBFbm8ydXlpNlNleDR2RCtWZQphWVMydW1ndS9CTXRNc1I4M20zNFB6SXJQSWxBUDhSTmJZREdEa1pXSWhTUUQwMEJaU2VVNWhwSlJnb01WMlc3CkNiT2wwSEtoSTV6WWVUOVJaSDlHTkw5L0UwOGZUZmNYRnpSNnBpTjRTSjBOWjZMU0xrMThSd25zdmkwcUZma3AKZXZMYVdSRDVBaXBLYURPU2pxajg1WEEzT2srbGY3M01mM21iaE4wN3c3djMrRHh3RlFnaGRSNkNRZWdzbHBpdQpIVWxtMmZDWXdJUjZVZFVoSzlXbkgzcWI3TU1adEdmRUdDUDE4Wk1wYTNPSndlbEV5Smdva1VjT0JMdTh1L2xZClZ2ZnJLV2JtelVEYzIzeVNucVBKcHNTMFY5cVo2MEd5dTFQVm5zNmhnY0pPaDJwZThrZ1JqMjZzRGNYU1l5c0cKU29oZFl1eDVwMWFkTzBMclBZcVdkWXVBRVpFbGdKUG8rbGFTRVhyTzdVNXZjbzJEdy95eThHZm1oUlRkSUE0PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==\"\n    }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/certificates/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"2",
+								"Partition1",
+								"certificates",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "certificate",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"certificate\": {\n        \"content_base64\": \"LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUY5ekNDQTkrZ0F3SUJBZ0lVYTB0cVM4SmpIL2c5aWVNKzkySEVIWFlGN2k4d0RRWUpLb1pJaHZjTkFRRUwKQlFBd2dZb3hDekFKQmdOVkJBWVRBa2xVTVFzd0NRWURWUVFJREFKTlNURWJNQmtHQTFVRUJ3d1NVMFZUVkU4ZwpVMEZPSUVkSlQxWkJUazVKTVE0d0RBWURWUVFLREFWTVZVMUpWREVQTUEwR0ExVUVDd3dHWVMxMFpXRnRNUkV3CkR3WURWUVFEREFoRGIyNWpaWEowYnpFZE1Cc0dDU3FHU0liM0RRRUpBUllPWVhSbFlXMUFiSFZ0YVhRdWFYUXcKSGhjTk1qTXdNVEkxTVRBME5EUTBXaGNOTWpRd01USTFNVEEwTkRRMFdqQ0JpakVMTUFrR0ExVUVCaE1DU1ZReApDekFKQmdOVkJBZ01BazFKTVJzd0dRWURWUVFIREJKVFJWTlVUeUJUUVU0Z1IwbFBWa0ZPVGtreERqQU1CZ05WCkJBb01CVXhWVFVsVU1ROHdEUVlEVlFRTERBWmhMWFJsWVcweEVUQVBCZ05WQkFNTUNFTnZibU5sY25Sdk1SMHcKR3dZSktvWklodmNOQVFrQkZnNWhkR1ZoYlVCc2RXMXBkQzVwZERDQ0FpSXdEUVlKS29aSWh2Y05BUUVCQlFBRApnZ0lQQURDQ0Fnb0NnZ0lCQU9YallTY2l3Yk9KSU9RQ1B0b1p1Z29oVC9OaDJwNFdnUzlINzNaQ2N3aDltR2J3Cks5OFk4N1VwTTJrU1AwMnA5dmJTZHM3KytVVWo5Q1EwazB3RGE4TWV2M1U2bkw0bFVwKzJJOWE0c29OQ25XYlMKYnFJaWNXT1BLOWo2V3hjcGd4eDF1S1ZZK3czNU50ZXFGeWkyM1oxcnJ4cXdpVmFHMWRSTTJGRlZjZVVieFpyMApxcGdsc3VDU1lMblZOTGlZWS9ZNTQyTDZVQWFGWStoVFJGc1NFOXJ5Sm9UVmtFcmltTHJ0OFd3Q0tnemRTUjNkCnE1S2IyY1F3MGdQcDN0TzVKOFIyOUdXNkNZZHBPUVhNMXVzNVMrejJIbjhaTmJScmNtMFVWMTZyYjduOXlmK0gKOUJHcjJRcjk0VUlVUkczcU03WVIrSHJBQmtvMTh5S29xcDhQbzlGN0syOHNyRE9IV25jck96ODhyeFZPWUh2OQpUdG9oT0pHcElyU2tXVDVJSTRSWUJzQmVhd0RLRWpzTE13VDRMczhSUmVyZGxKYzZoOERjb2tjSHVqN2NuZVdYCmwzU3ZpK2xOb0FCTC9pT3ZVRzg4cEdlamdXazBWelpveEV6UTlSQWc5c2EzNHJ4OVoxSFR5VmNvUHh3aTFKQmgKMHpzTkFYQ1dZTGNDeDVDWjlLRDlqc2pGY1hLViswcFBuSG00UkdSUWRhMVdaMGNUQTFhWFBaM0Z3WDFoWkE3cQpqMFFtdE5FeHZVR0EyeGZ0L2FxMGxEeVpRMEYzWjJCbmNicnhiWUQ2TXlvdHVPdXhrMjZCamNETThjeGhuekFIClA4YWxhck5tQlJJMTlMeEhmb0FDVmlpSE9tZ0FyNXpBL3NzelVSZE9VVmtxN3YxaEhZbXhVMnU5ekhJOUFnTUIKQUFHalV6QlJNQjBHQTFVZERnUVdCQlJqeUYzcjIyTFZROGNMVFZlMW96TDJlV2ltQVRBZkJnTlZIU01FR0RBVwpnQlJqeUYzcjIyTFZROGNMVFZlMW96TDJlV2ltQVRBUEJnTlZIUk1CQWY4RUJUQURBUUgvTUEwR0NTcUdTSWIzCkRRRUJDd1VBQTRJQ0FRQ3hTTnp4MCtkOVZ2TFlaQUV1OUE2MzF2YjQ0NmxRZkJtdG1CamkwazJydUpQckF4M3EKY2hYc0txN0tETTRMZ281d0VlYkxpSHZyT1lWaThmUGhRc2dwWXJXVjk0WTB1TXg1UTBoTWtyeC9obUlPZEo1eQptb01KOTY2OHlHOHptNlE0d3JZZ3dObzVYT084T1FaSDlkZmUwNVZ6QkxrbTZ2UGo4RWJqNEt2dit4aGFyQ29OCkV6Yk5VUXhBWUtSVnlvR0djRlYrdDVCbm05WGZhNmtQY3dRMDl2U0oyeVlIZkp0RkJWSXhCUFZvYlJrbHVIZzYKVGVTKzVsc2I2VE1mdjhLS20rbXhkZDlSMUwvTkZ3dHd3Nm5jRmNnaDMzeWx1UlFicGd5Q2pnZHJtR0NpSEJidApya1Y2L000ZUJOaG1ZV0l1SHMzbTNUK0dVYzU5U2dIOWREV05zWUJvTEhDY1JIb3E3S0gvZVJSM3hkVTF4alVSCjB3MHhEcDB0SGdBVXhqTGlBOEtnbTVxOHdCZ0ErY0pud3ZhZ2paMHlHUW9WemdnV094c1I3VmE3RHR3VEJXZ1AKOENpb0VBZHBLdFljYVp4Snl3c2RwdGJuZXcxeEc3MXhWckM2Y0JGMS9iTk9SRjFwNVdlVTRCU0FYU3YxbnFILwp6WitjajBBR01tcWdSR3RzbHFQeGkxVHRGQ3djTHp1VERtOFBoMk03TkxTcE5mZnhGYWFFcWFKNlRPL0YxMnZaCmlSWm4xUlduc1FSUS9QL2xNaTJxaVI3bm9DeVVBR3d6RDI3RTY3L2lCekJmU1N6QWZKZ1hycXhwcFlmQVowQ1gKYjRtQXZWd2VXSTdEWWpLWkFDODA5ZndmRW1hdUFSWFAvczY1Y2JneGJCbHhVK3pWRGxiNGUrRHNjZz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K\"\n    }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/certificate/mamma.crt/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"2",
+								"Partition1",
+								"certificate",
+								"mamma.crt",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "certificate",
 					"request": {
 						"auth": {
@@ -3723,55 +3822,6 @@
 								"Partition1",
 								"certificate",
 								"mamma.crt",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "certificates",
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"certificate\": {\n        \"name\": \"mamma.crt\",\n        \"content_base64\": \"LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURyakNDQXBhZ0F3SUJBZ0lFRGNCRW16QU5CZ2txaGtpRzl3MEJBUXNGQURDQm1ERUxNQWtHQTFVRUJoTUMKVlZNeEN6QUpCZ05WQkFnVEFsZEJNUkF3RGdZRFZRUUhFd2RUWldGMGRHeGxNUkl3RUFZRFZRUUtFd2xOZVVOdgpiWEJoYm5reEN6QUpCZ05WQkFzVEFrbFVNUjR3SEFZRFZRUURFeFZzYjJOaGJHaHZjM1F1Ykc5allXeGtiMjFoCmFXNHhLVEFuQmdrcWhraUc5dzBCQ1FFV0duSnZiM1JBYkc5allXeG9iM04wTG14dlkyRnNaRzl0WVdsdU1CNFgKRFRFM01EUXlOREV5TXpFeU0xb1hEVEkzTURReU1qRXlNekV5TTFvd2daZ3hDekFKQmdOVkJBWVRBbFZUTVFzdwpDUVlEVlFRSUV3SlhRVEVRTUE0R0ExVUVCeE1IVTJWaGRIUnNaVEVTTUJBR0ExVUVDaE1KVFhsRGIyMXdZVzU1Ck1Rc3dDUVlEVlFRTEV3SkpWREVlTUJ3R0ExVUVBeE1WYkc5allXeG9iM04wTG14dlkyRnNaRzl0WVdsdU1Ta3cKSndZSktvWklodmNOQVFrQkZocHliMjkwUUd4dlkyRnNhRzl6ZEM1c2IyTmhiR1J2YldGcGJqQ0NBU0l3RFFZSgpLb1pJaHZjTkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFMOHNoazJ4eE5vdlFnZmVFdWZNcUpxUG4yVTJaVEVvCnpocElzajlCb1VjNW5MUnBNQWFMK3VHV2U3Z2lYTDF3RTVubThNbTh2YzJXc3hvNkY1cnRBaXlmOVJSaFRLenUKUFVKV0pWclZMVU5SeGg1NTRTQVRUelI2RTZVejBKcWhoT1kzaEViNSs4dGpHdStjOGRzenM5MUVIUTB0K1lrMwp0eG94TnZFdk9haXNiSm9GeEhrVzdGSW1xZVhCdDJZMEZjOGd2NnhKcll6bmxTdnNRZENnQzNrS1lnY1ZhZzVRCm8yYlZwb1RJOVVqajYvc050WTF0TTZJemdmNFRucExjNjZxVFJzbXVmRE1FTWRtRkdzSW5uUmM5OHdWTDFxeHcKRzZCSUZoaGpUdyt5MmszcXhJOFBNNWZxWjBwM1FaV014b2xRZnJCQXd2MjYxYzJYekMwYXFkRUNBd0VBQVRBTgpCZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFuc0ZER3hXVS9jdE5QMktlaUZUNlJzRHJvSmVHQThaMW0rOStKcExoCk1vd3pVTy9oelQ3T0V4K25pRi96U01PYk9idnZTNm1ySFBkV00ybXZUcUVLLzl2Smx4ZjdzbGJtU0JHQTR5Z2MKM2pRV1pUVUpwZWxKeFBqcUEwbTVrTDI4ZldKb0ZxeGVWZXoxNDN1YjFmQTA1VDBudXZzTWVyWjlIcDdVRHArcQpYOWNMbnc3RGxqTWZmMVgvNHd0NFZOdXBVeXhHc3E1cmdLdnU0ci84Sy92WktaTUI5QU5XTEVwUjFockpFT3o1CjIzb2YxZEs3LzVJNTdTMWxNRVJUNE1QZGhJSkFYVi84ZXNYTlk2bDRJU2pyUkh2dUJIUnVRYkV6UDFiTUQ2L00KVXZibktZZm0rOEhFOWluNllvWkhyTWZwS3hLa1hjaUt0R1Y2UjRCeDQ4NTgrdz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0=\"\n    }\n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/certificates/",
-							"protocol": "http",
-							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
-							],
-							"path": [
-								"api",
-								"v1",
-								"f5",
-								"2",
-								"Partition1",
-								"certificates",
 								""
 							]
 						}
@@ -3862,6 +3912,57 @@
 								"2",
 								"Partition1",
 								"keys",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "key",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"key\": {\n        \"content_base64\": \"LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV2Z0lCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktnd2dnU2tBZ0VBQW9JQkFRQy9MSVpOc2NUYUwwSUgKM2hMbnpLaWFqNTlsTm1VeEtNNGFTTEkvUWFGSE9aeTBhVEFHaS9yaGxudTRJbHk5Y0JPWjV2REp2TDNObHJNYQpPaGVhN1FJc24vVVVZVXlzN2oxQ1ZpVmExUzFEVWNZZWVlRWdFMDgwZWhPbE05Q2FvWVRtTjRSRytmdkxZeHJ2Cm5QSGJNN1BkUkIwTkxmbUpON2NhTVRieEx6bW9yR3lhQmNSNUZ1eFNKcW5sd2JkbU5CWFBJTCtzU2EyTTU1VXIKN0VIUW9BdDVDbUlIRldvT1VLTm0xYWFFeVBWSTQrdjdEYldOYlRPaU00SCtFNTZTM091cWswYkpybnd6QkRIWgpoUnJDSjUwWFBmTUZTOWFzY0J1Z1NCWVlZMDhQc3RwTjZzU1BEek9YNm1kS2QwR1ZqTWFKVUg2d1FNTDl1dFhOCmw4d3RHcW5SQWdNQkFBRUNnZ0VBVmRVWFRhM1pmTDZJRG9FNkNzSGNGMTBSaXo5RGFyRnY2K1FreDNyZmZ0dVMKakh2SHVNRERlT0o0Rk1HMDBzY052ZVV1eWR6SWVSUkd3S2xCYk9rcHQwQndLR0RSTExsZ1hyYlAyYnJwc2haMgpkYnR5Qk5VMmxCQ1ZYbkJub2UyUC9rOEJ3RjQvbTE4Wk9takVQQTg0RzhtWG81RzNQbEQ2RURQMWY0OGMrNm43Cml1VXRFMnJubDk3bVlsVG0vUThTM2ZrTmQzQ0VMb25nVGt1TVpxdC90aFRnWWlmTmRCSDRtREFGR20wNDhFejAKWWNDOGwrUUtKeGFzR2htTzgxWkVIQUtkSXVJcEZxUEdrNG9mSHdFdWhNUG1PNGVrY0hpTXhRZFJPRU9mN1FhUwpMVHpicUNtMldwc3pJTlZjeWpSVVd1dkttMXZDMDVoMjB2NHBISUk5V3dLQmdRRHRSZ1FUeSs2Wkplc25zQ0M1Ck5QZkFaWWlsSkdqemVhZG1ud3VENHl1NDBnMGllV1VYR003MTZITVRNTFV3c1BQZkZhZ2kydFpCTDZIbHIyeHEKY3RySDVpTEE5OWFmUjVhT1RHcFZteVVKYmVMUVRjc05VcnpjSkNydDVlS1dLRHBCTHViemI3am1pbEZKM1dBOAordC9xTU5BbFF6SFdkVmpPWjFLZ2kyRGZBd0tCZ1FET1F4ZHBHQ3VwVFgwNVAxQm9tZElWSzJmVXQwQXhoa24rCkljdjBrVVdkMzdKVXN2alVzcTlnNit1RTNFTnpZOEpNY2ZQTktwcVZXR0RWM1ppNHZUN3JoYlJleHdXYXpMTkMKdHdEUHcveFk1RlhwUUp4eS9hdFI2bU42bFZzeE1sZEptMmJldFNnQXAxSngvTjJkKy8vVmxubm9FL3lJenIwNgowN0tQMlNiaG13S0JnUUM3T0lQL0d1c3A3TUdnajFsQ3lvaXpSMnFLNUMvcjdoSW81MVl1dXhIRXcvbVpPakNLCkNRbEZBQ1hNL3FINXlhYWtZSEpMRG1JQkRaU3hwN25rUkx4Yy96cHRDU0pRakN4QUhBdkxnSis0MFB3bllUclgKU0hHOVFzeWM2c2Zmczk1RGtMNnJWM3lPYkpXM3N2WTlKN2VIRXYwcWFkcnBYYTYxTHRJRDIvYVVBUUtCZ0ZyUQpjV05GVUJ2MzBUVythYkhVWUFvUUZXUXoxdUMzUnFiTXpKYit5MDhLYWVNZTlhMzRpbjA3QW5SNTRuelFwSUN4Ci8yMEs0QXIzWVpOb1FOQytDaEQ2eW9LY1VCeHJHbFk2YXZJUFVYRDEvOWwyS0N2OUFreEx6Y2J3TWJtRWQ2Z2gKOHZZRmZ2cGlzVXNjMFpxNGxGaS9LeWVDZlVMaSs3QUYrMjJZWjZVWEFvR0JBS29YNkFxTEZSdmJEU0Zob1plcwp6eUZSRWd1b3ZQVDZVNXJTcXJnVXJ5UWJYNUI5K3BJdUd1Nk0rU254Y21sWGd5ZkwzaGo1SU1QNEw5Y2lyeU5ICkM0ZzkrODJpM09pZk50dUxsdGFTQ3ZwNWpPdzdmSTdNaU9pdUY0QWU2YmhvczR3dGkwZHJGQ05ZaVlqWFh0bnoKOVRrV0xEckxZN1NOcTNlUTh5dGpDSzhkCi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0=\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/key/mamma.key/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"2",
+								"Partition1",
+								"key",
+								"mamma.key",
 								""
 							]
 						}
