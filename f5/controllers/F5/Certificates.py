@@ -96,7 +96,9 @@ class F5CertificatesController(CustomController):
                 data = None
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            # (Lock released after timeout).
+            Lock("certificate", locals()).release()
+            Lock("key", locals()).release()
+
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
 
@@ -171,7 +173,13 @@ class F5CertificatesController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            # (Lock released after timeout).
+            if "serializer" in locals():
+                if "certificate" in locals()["serializer"].data:
+                    Lock("certificate", locals(), locals()["serializer"].data["certificate"]["name"]).release()
+
+                if "key" in locals()["serializer"].data:
+                    Lock("key", locals(), locals()["serializer"].data["key"]["name"]).release()
+
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
 
