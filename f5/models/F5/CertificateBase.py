@@ -18,9 +18,17 @@ class CertificateBase:
     # Public methods
     ####################################################################################################################
 
-    def delete(self):
+    def delete(self) -> None:
         try:
             Backend.delete(self.assetId, self.partition, self.name, self.o)
+        except Exception as e:
+            raise e
+
+
+
+    def modifyObject(self, data: dict) -> None:
+        try:
+            Backend.update(self.assetId, self.partition, self.name, self.o, data)
         except Exception as e:
             raise e
 

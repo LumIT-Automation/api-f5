@@ -15,7 +15,7 @@ class Certificate:
     ####################################################################################################################
 
     @staticmethod
-    def delete(assetId: int, partitionName: str, resourceName: str, what):
+    def delete(assetId: int, partitionName: str, resourceName: str, what: str):
         if what in ("cert", "key"):
             try:
                 f5 = Asset(assetId)
@@ -105,6 +105,61 @@ class Certificate:
 
                     if "from-local-file" not in r or r["from-local-file"] == "":
                         raise CustomException(status=400, payload={"message": "Install failed."})
+                else:
+                    raise CustomException(status=400, payload={"message": "Upload failed."})
+            except Exception as e:
+                raise e
+        else:
+            raise CustomException(status=400, payload={"message": "Action not specified."})
+
+
+
+    @staticmethod
+    def update(assetId: int, partition: str, resourceName: str, what: str, data: dict) -> None:
+        if what in ("cert", "key"):
+            try:
+                f5 = Asset(assetId)
+                # Decode base 64 data.
+                contentBase64 = data["content_base64"] # base 64 UTF-8.
+
+                content = base64.b64decode(contentBase64).decode('utf-8')
+                contentLen = len(content.encode('utf-8'))
+
+                # Upload.
+                # F5 needs a raw text payload (no JSON or *form data encoding) with the headers specified below.
+                Log.log("Uploading "+what+".")
+
+                api = ApiSupplicant(
+                    endpoint=f5.baseurl+"shared/file-transfer/uploads/"+str(resourceName),
+                    auth=(f5.username, f5.password),
+                    tlsVerify=f5.tlsverify
+                )
+                r = api.post(
+                    additionalHeaders={
+                        "Content-Range": "0-"+str(contentLen - 1)+"/"+str(contentLen),
+                        "Content-Length": str(contentLen),
+                        "Content-Type": "application/octet-stream; charset=utf-8",
+                    },
+                    data=content
+                )["payload"]
+
+                # Successfully uploaded.
+                if "remainingByteCount" in r and int(r["remainingByteCount"]) == 0 and "localFilePath" in r and r["localFilePath"]:
+                    Log.log("updating "+what+".")
+
+                    api = ApiSupplicant(
+                        endpoint=f5.baseurl+"tm/sys/file/ssl-cert/~"+partition+"~"+resourceName+"/",
+                        auth=(f5.username, f5.password),
+                        tlsVerify=f5.tlsverify
+                    )
+                    api.put(
+                        additionalHeaders={
+                            "Content-Type": "application/json" # (F5 dislikes the "charset" specification).
+                        },
+                        data=json.dumps({
+                            "source-path": "file:"+str(r["localFilePath"])
+                        })
+                    )
                 else:
                     raise CustomException(status=400, payload={"message": "Upload failed."})
             except Exception as e:
