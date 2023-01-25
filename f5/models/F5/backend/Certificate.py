@@ -56,7 +56,7 @@ class Certificate:
     def install(assetId: int, partition: str, what: str, data: dict) -> None:
         if what in ("cert", "key"):
             try:
-                r = Certificate.__uploadResourceFile(assetId, what, data["name"], base64.b64decode(
+                r = Certificate.__uploadResourceFile(assetId=assetId, resourceType=what, resourceName=data["name"], content=base64.b64decode(
                     data["content_base64"]).decode('utf-8')
                 )
 
@@ -67,7 +67,7 @@ class Certificate:
                     tlsVerify=f5.tlsverify
                 )
 
-                Log.log("installing "+what+"...")
+                Log.log("Installing "+what+"...")
                 r = api.post(
                     additionalHeaders={
                         "Content-Type": "application/json" # (F5 dislikes the "charset" specification).
@@ -93,7 +93,7 @@ class Certificate:
     def update(assetId: int, partition: str, resourceName: str, what: str, data: dict) -> None:
         if what in ("cert", "key"):
             try:
-                r = Certificate.__uploadResourceFile(assetId, what, resourceName, base64.b64decode(
+                r = Certificate.__uploadResourceFile(assetId=assetId, resourceType=what, resourceName=resourceName, content=base64.b64decode(
                     data["content_base64"]).decode('utf-8')
                 )
 
@@ -127,7 +127,7 @@ class Certificate:
 
     @staticmethod
     def __uploadResourceFile(assetId: int, resourceType: str, resourceName: str, content: str) -> dict:
-        Log.log("Uploading " + resourceType)
+        Log.log("Uploading "+resourceType+"...")
 
         try:
             f5 = Asset(assetId)
