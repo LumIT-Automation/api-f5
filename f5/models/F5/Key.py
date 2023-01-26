@@ -1,9 +1,9 @@
 from typing import List
 
-from f5.models.F5.CertificateBase import CertificateBase
+from f5.models.F5.CertificateKeyBase import CertificateKeyBase as KeyBase
 
 
-class Key(CertificateBase):
+class Key(KeyBase):
     def __init__(self, assetId: int, partitionName: str, name: str, *args, **kwargs):
         super().__init__(assetId, partitionName, "key", name, *args, **kwargs)
 
@@ -25,7 +25,7 @@ class Key(CertificateBase):
 
     def update(self, data: dict) -> None:
         try:
-            CertificateBase(self.assetId, self.partition, "key", self.name).modifyObject(data)
+            KeyBase(self.assetId, self.partition, "key", self.name).modifyObject(data)
         except Exception as e:
             raise e
 
@@ -38,7 +38,7 @@ class Key(CertificateBase):
     @staticmethod
     def list(assetId: int, partitionName: str) -> List[dict]:
         try:
-            return CertificateBase.listObjects(assetId, partitionName, "key")
+            return Key.listObjects(assetId, partitionName, "key")
         except Exception as e:
             raise e
 
@@ -47,6 +47,6 @@ class Key(CertificateBase):
     @staticmethod
     def install(assetId: int, partitionName: str, data: dict) -> None:
         try:
-            CertificateBase.installObject(assetId, partitionName, "key", data)
+            Key.installObject(assetId, partitionName, "key", data)
         except Exception as e:
             raise e

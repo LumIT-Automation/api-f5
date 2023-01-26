@@ -1,6 +1,6 @@
 from typing import List, Dict, Union
 
-from f5.models.F5.CertificateBase import CertificateBase
+from f5.models.F5.CertificateKeyBase import CertificateKeyBase as CertificateBase
 
 
 ApiRawValues: Dict[str, str] = {
@@ -57,7 +57,7 @@ class Certificate(CertificateBase):
     @staticmethod
     def list(assetId: int, partitionName: str) -> List[dict]:
         try:
-            return CertificateBase.listObjects(assetId, partitionName, "cert")
+            return Certificate.listObjects(assetId, partitionName, "cert")
         except Exception as e:
             raise e
 
@@ -66,6 +66,6 @@ class Certificate(CertificateBase):
     @staticmethod
     def install(assetId: int, partitionName: str, data: dict) -> None:
         try:
-            CertificateBase.installObject(assetId, partitionName, "cert", data)
+            Certificate.installObject(assetId, partitionName, "cert", data)
         except Exception as e:
             raise e

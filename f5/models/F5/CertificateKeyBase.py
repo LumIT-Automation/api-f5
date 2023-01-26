@@ -2,7 +2,7 @@ from typing import List
 from f5.models.F5.backend.Certificate import Certificate as Backend
 
 
-class CertificateBase:
+class CertificateKeyBase:
     def __init__(self, assetId: int, partitionName: str, o: str, name: str, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
