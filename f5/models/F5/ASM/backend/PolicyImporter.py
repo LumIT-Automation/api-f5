@@ -19,6 +19,12 @@ class PolicyImporter(PolicyBase):
     def uploadPolicyData(assetId: int, policyContent: str) -> str:
         filename = "import-policy-" + str(randrange(0, 9999)) + ".xml"
 
+        try:
+            # Downloaded XML is not UTF-8! @todo: guess encoding.
+            policyContent = bytes(policyContent, 'utf-8').decode('iso-8859-1')
+        except UnicodeEncodeError:
+            pass
+
         streamSize = len(policyContent)
         segmentStart = 0
         delta = 1000000
