@@ -387,10 +387,10 @@ else:
                 "password": iv.get("source", {}).get("password", ""),
             },
             "dst": {
-                "asset": iv.get("source", {}).get("asset", ""),
-                "policy": iv.get("source", {}).get("policy", ""),
-                "user": iv.get("source", {}).get("user", ""),
-                "password": iv.get("source", {}).get("password", ""),
+                "asset": iv.get("destination", {}).get("asset", ""),
+                "policy": iv.get("destination", {}).get("policy", ""),
+                "user": iv.get("destination", {}).get("user", ""),
+                "password": iv.get("destination", {}).get("password", ""),
             }
         }
 

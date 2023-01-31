@@ -21,7 +21,7 @@ class PolicyImporter(PolicyBase):
 
         streamSize = len(policyContent)
         segmentStart = 0
-        delta = 900000
+        delta = 1000000
         segmentEnd = delta if streamSize > delta else streamSize - 1
 
         PolicyImporter._log(
