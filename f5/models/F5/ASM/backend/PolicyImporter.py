@@ -21,11 +21,11 @@ class PolicyImporter(PolicyBase):
 
         streamSize = len(policyContent)
         segmentStart = 0
-        delta = 1000000
+        delta = 900000
         segmentEnd = delta if streamSize > delta else streamSize - 1
 
         PolicyImporter._log(
-            f"[AssetID: {assetId}] Uploading policy data..."
+            f"[AssetID: {assetId}] Uploading policy data (sized {streamSize})..."
         )
 
         try:

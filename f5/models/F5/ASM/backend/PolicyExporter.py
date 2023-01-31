@@ -140,6 +140,9 @@ class PolicyExporter(PolicyBase):
             if response["status"] == 206:
                 streamSize = int(response["headers"]["Content-Range"].split('/')[1]) # 1140143.
                 fullResponse += response["payload"]
+                PolicyExporter._log(
+                    f"[AssetID: {assetId}] Chunked content; stream size: {streamSize}..."
+                )
 
                 while segmentEnd < streamSize - 1:
                     segment = response["headers"]["Content-Range"].split('/')[0] # 0-1048575.
@@ -158,7 +161,7 @@ class PolicyExporter(PolicyBase):
 
             if saveResponse:
                 try:
-                    PolicyExporter._log(f"[AssetID: {assetId}] Saving response to file (*nix only)...")
+                    PolicyExporter._log(f"[AssetID: {assetId}] Saving response to file...")
                     with open(str(datetime.now().strftime("%Y%m%d-%H%M%S")) + "-response.xml", "w") as file:
                         file.write(fullResponse)
                 except Exception:
