@@ -457,12 +457,36 @@ try:
             Util.out("- name: " + importedPolicy["name"])
             Util.out("- destination F5 message:\n" + importedPolicy["import-message"])
 
+            # Give the diff entity type a modification label.
+            sourceEntityTypeIsAllNewer = dict()
+            destinationEntityTypeIsAllNewer = dict()
+            for diffEntityType, diffList in diffData["differences"].items():
+                sourceEntityTypeIsAllNewer[diffEntityType] = True
+                destinationEntityTypeIsAllNewer[diffEntityType] = True
+                for el in diffList:
+                    if el.get("sourceLastUpdate", 0) > el.get("destinationLastUpdate", 0):
+                        destinationEntityTypeIsAllNewer[diffEntityType] = False
+                    if el.get("sourceLastUpdate", 0) < el.get("destinationLastUpdate", 0):
+                        sourceEntityTypeIsAllNewer[diffEntityType] = False
+
             Util.out("\nDIFFERENCES follow.")
             for diffEntityType, diffList in diffData["differences"].items():
                 for el in diffList:
+                    entityTypeWarning = " "
+                    if sourceEntityTypeIsAllNewer[diffEntityType]:
+                        entityTypeWarning = "are more newly updated (or new) in source"
+                    elif destinationEntityTypeIsAllNewer[diffEntityType]:
+                        entityTypeWarning = "are more newly updated (or new) in destination"
+                    elif sourceEntityTypeIsAllNewer[diffEntityType] and destinationEntityTypeIsAllNewer[diffEntityType]:
+                        entityTypeWarning = "have the same modification timestamp"
+                    else:
+                        entityTypeWarning = ""
+
                     # For each difference print on-screen output and ask the user.
                     if el["diffType"] in ("conflict", "only-in-source"):
-                        Util.out("\n\n[ENTITY TYPE: " + diffEntityType + "] \"" + el["entityName"] + "\":")
+                        Util.out("\n\n[ENTITY TYPE: " + diffEntityType + "] \"" + el["entityName"] + "\":", "green")
+                        if entityTypeWarning:
+                            Util.out(f"[All {diffEntityType} objects {entityTypeWarning}]", "yellow")
                         Util.out("  - difference type: " + el["diffType"] + ";")
 
                         sourceWarning = destinationWarning = ""
