@@ -254,7 +254,8 @@ class PolicyDiffManager(PolicyBase):
                                         valid = True
 
                                 elif k == "urls":
-                                    if "["+elm["protocol"].upper()+"] "+elm["name"] == el["entityName"]:
+                                    if elm["name"] == el["entityName"] \
+                                            or "["+elm["protocol"].upper()+"] "+elm["name"] == el["entityName"]:
                                         valid = True
 
                                 elif "blocking-settings" in k:
@@ -418,7 +419,8 @@ class PolicyDiffManager(PolicyBase):
                                         valid = True
 
                                 elif k == "urls":
-                                    if "["+elm["protocol"].upper()+"] "+elm["name"] == el["entityName"]:
+                                    if elm["name"] == el["entityName"] \
+                                            or "["+elm["protocol"].upper()+"] "+elm["name"] == el["entityName"]:
                                         valid = True
 
                                 elif "blocking-settings" in k:
