@@ -464,10 +464,20 @@ try:
                     if el["diffType"] in ("conflict", "only-in-source"):
                         Util.out("\n\n[ENTITY TYPE: " + diffEntityType + "] \"" + el["entityName"] + "\":")
                         Util.out("  - difference type: " + el["diffType"] + ";")
+
+                        sourceWarning = destinationWarning = ""
+                        try:
+                            if el.get("sourceLastUpdate", 0) >= el.get("destinationLastUpdate", 0):
+                                sourceWarning = " [NEW]"
+                            else:
+                                destinationWarning = " [NEW]"
+                        except Exception:
+                            pass
+
                         if "sourceLastUpdate" in el and el["sourceLastUpdate"]:
-                            Util.out("  - source last update " + Util.toDate(el["sourceLastUpdate"]) + ";")
+                            Util.out("  - source last update " + Util.toDate(el["sourceLastUpdate"]) + sourceWarning + ";")
                         if "destinationLastUpdate" in el and el["destinationLastUpdate"]:
-                            Util.out("  - destination last update " + Util.toDate(el["destinationLastUpdate"]) + ";") # if conflict.
+                            Util.out("  - destination last update " + Util.toDate(el["destinationLastUpdate"]) + destinationWarning + ";") # if conflict.
 
                         # Handle user input.
                         response = ""
@@ -503,6 +513,10 @@ try:
                                 if elm["diffType"] in ("conflict", "only-in-source"):
                                     mergeElements[diffEntityType].append((elm["id"], elm["entityName"]))
                             break
+
+                    if el["diffType"] == "only-in-destination":
+                        # @todo.
+                        pass
 
             if mergeElements:
                 response = ""
