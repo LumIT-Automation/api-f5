@@ -413,7 +413,7 @@ except Exception:
 for k, v in Input.items():
     for jk, jv in v.items():
         if not jv:
-            Util.out(f"Value not provided: {k}/{jk}", "red")
+            Util.out(f"Value not provided: {k}/{jk}", "red", "lightgrey")
             raise Exception
 
 # ignoreEntityTypes = list()
@@ -469,7 +469,7 @@ try:
                     if el.get("sourceLastUpdate", 0) < el.get("destinationLastUpdate", 0):
                         sourceEntityTypeIsAllNewer[diffEntityType] = False
 
-            Util.out("\nDIFFERENCES follow.")
+            Util.out("\nDIFFERENCES follow")
             for diffEntityType, diffList in diffData["differences"].items():
                 for el in diffList:
                     entityTypeWarning = " "
@@ -483,7 +483,7 @@ try:
                         entityTypeWarning = ""
 
                     # For each difference print on-screen output and ask the user.
-                    if el["diffType"] in ("conflict", "only-in-source"):
+                    if el["diffType"] in ("conflict", "only-in-source", "only-in-destination"):
                         Util.out("\n\n[ENTITY TYPE: " + diffEntityType + "] \"" + el["entityName"] + "\":", "green")
                         if entityTypeWarning:
                             Util.out(f"[All {diffEntityType} objects {entityTypeWarning}]", "yellow")
@@ -501,18 +501,21 @@ try:
                         if "sourceLastUpdate" in el and el["sourceLastUpdate"]:
                             Util.out("  - source last update " + Util.toDate(el["sourceLastUpdate"]) + sourceWarning + ";")
                         if "destinationLastUpdate" in el and el["destinationLastUpdate"]:
-                            Util.out("  - destination last update " + Util.toDate(el["destinationLastUpdate"]) + destinationWarning + ";") # if conflict.
+                            Util.out("  - destination last update " + Util.toDate(el["destinationLastUpdate"]) + destinationWarning + ";")
 
                         # Handle user input.
                         response = ""
                         while response not in ("y", "n", "s", "a"):
                             if not response:
-                                response = input("  -> Merge to destination policy [y/n; d for details; s for skipping the current entity type; a for merging all differences for this entity type]?\n")
+                                if el["diffType"] in ("conflict", "only-in-source"):
+                                    response = input("  -> Merge to destination policy [y/n; d for details; s for skipping the current entity type; a for merging all differences for this entity type]?\n")
+                                else:
+                                    response = input("  -> Delete object into destination policy [y/n; d for details; s for skipping the current entity type; a for merging all differences for this entity type] [@todo: not implemented]?\n")
                             elif response == "d":
                                 Util.log(el)
                                 response = ""
                             else:
-                                Util.out("Type y for yes, n for no, d for details, s for skipping the current entity type, a for merging all differences for this entity type.")
+                                Util.out("Type y for yes, n for no, d for details, s for skipping the current entity type, a for merging all differences for this entity type")
                                 response = ""
 
                         if response == "y":
@@ -520,10 +523,10 @@ try:
                             if diffEntityType not in mergeElements:
                                 mergeElements[diffEntityType] = []
                             mergeElements[diffEntityType].append((el["id"], el["entityName"]))
-                            Util.out("  -> Element will be merged at the end of the collection process, nothing done so far.")
+                            Util.out("  -> Element will be merged at the end of the collection process, nothing done so far")
 
                         if response == "n":
-                            Util.out("  -> Element won't be merged.")
+                            Util.out("  -> Element won't be merged")
 
                         if response == "s":
                             break
@@ -536,11 +539,9 @@ try:
                             for elm in diffData["differences"][diffEntityType]:
                                 if elm["diffType"] in ("conflict", "only-in-source"):
                                     mergeElements[diffEntityType].append((elm["id"], elm["entityName"]))
-                            break
 
-                    if el["diffType"] == "only-in-destination":
-                        # @todo.
-                        pass
+                            # @todo: objects in destination but not in source.
+                            break
 
             if mergeElements:
                 response = ""
@@ -551,7 +552,7 @@ try:
                     if not response:
                         response = input("  -> Confirm merging the selected differences into the destination policy [Y/N]?\n")
                     else:
-                        Util.out("Type Y for yes, N for no.")
+                        Util.out("Type Y for yes, N for no")
                         response = ""
 
                 if response == "Y":
@@ -572,16 +573,16 @@ try:
                         ASMPolicyManager.applyPolicy(assetId=2, policyId=dstPolicyId)
                     )
 
-                    Util.out("All done.", "green")
+                    Util.out("All done", "green")
                 else:
-                    Util.out("Quitting, nothing done.", "red")
+                    Util.out("Quitting, nothing done", "red", "lightgrey")
             else:
-                Util.out("No difference to merge, nothing done.", "red")
+                Util.out("No difference to merge, nothing done", "red", "lightgrey")
         else:
-            Util.out("No policy found with given name, aborting.", "red")
+            Util.out("No policy found with given name, aborting", "red", "lightgrey")
     else:
-        Util.out("No asset loaded, aborting.", "red")
+        Util.out("No asset loaded, aborting", "red", "lightgrey")
 except Exception as ex:
-    Util.out(ex.__str__(), "red")
+    Util.out(ex.__str__(), "red", "lightgrey")
 finally:
     Asset.purgeAssets()
