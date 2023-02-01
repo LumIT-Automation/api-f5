@@ -346,37 +346,33 @@ class ASMPolicyManager:
 # Parser/config file init
 ########################################################################################################################
 
-if not os.path.exists("client-input.json"):
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument('-a', '--src_asset', help='Source F5 asset where the source policy is defined (IP/FQDN)', required=True)
-    parser.add_argument('-A', '--dst_asset', help='Destination F5 asset where the destination policy is defined (IP/FQDN)', required=True)
-    parser.add_argument('-l', '--src_policy', help='Source policy name', required=True)
-    parser.add_argument('-L', '--dst_policy', help='Destination policy name', required=True)
-    parser.add_argument('-u', '--src_user', help='Source F5 asset username', required=True)
-    parser.add_argument('-U', '--dst_user', help='Destination F5 asset username', required=True)
-    parser.add_argument('-p', '--src_passwd', help='Source F5 asset password', required=False)
-    parser.add_argument('-P', '--dst_passwd', help='Destination F5 asset password', required=False)
-    # parser.add_argument('-i', '--ignore_entity_types', help='List of entity types to ignore', required=False, action='append')
-
-    args = parser.parse_args()
-
-    Input = {
-        "src": {
-            "asset": args.src_asset,
-            "policy": args.src_policy,
-            "user": args.src_user,
-            "password": args.src_passwd or getpass("Insert password for the source F5 asset:\n")
-        },
-        "dst": {
-            "asset": args.dst_asset,
-            "policy": args.dst_policy,
-            "user": args.dst_user,
-            "password": args.dst_passwd or getpass("Insert password for the destination F5 asset:\n")
-        }
+Input = dict()
+for j in ("src", "dst"):
+    Input[j] = {
+        "asset": "",
+        "policy": "",
+        "user": "",
+        "password": "",
     }
-else:
-    with open("client-input.json", "r") as file:
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-c', '--cfg_file', help='Config file to read input from (non-available entries can be taken from cli input)', required=False)
+parser.add_argument('-a', '--src_asset', help='Source F5 asset where the source policy is defined (IP/FQDN)', required=False)
+parser.add_argument('-A', '--dst_asset', help='Destination F5 asset where the destination policy is defined (IP/FQDN)', required=False)
+parser.add_argument('-l', '--src_policy', help='Source policy name', required=False)
+parser.add_argument('-L', '--dst_policy', help='Destination policy name', required=False)
+parser.add_argument('-u', '--src_user', help='Source F5 asset username', required=False)
+parser.add_argument('-U', '--dst_user', help='Destination F5 asset username', required=False)
+parser.add_argument('-p', '--src_passwd', help='Source F5 asset password', required=False)
+parser.add_argument('-P', '--dst_passwd', help='Destination F5 asset password', required=False)
+# parser.add_argument('-i', '--ignore_entity_types', help='List of entity types to ignore', required=False, action='append')
+
+args = parser.parse_args()
+
+# Read available config file entries.
+configFile = args.cfg_file or "client-input.json"
+if os.path.exists(str(configFile)):
+    with open(configFile, "r") as file:
         iv = json.loads(file.read())
 
         Input = {
@@ -393,6 +389,32 @@ else:
                 "password": iv.get("destination", {}).get("password", ""),
             }
         }
+
+# Complete or override entries with user input ones.
+try:
+    Input = {
+        "src": {
+            "asset": args.src_asset or Input["src"]["asset"],
+            "policy": args.src_policy or Input["src"]["policy"],
+            "user": args.src_user or Input["src"]["user"],
+            "password": args.src_passwd or Input["src"]["password"] or getpass("Insert password for the source F5 asset:\n")
+        },
+        "dst": {
+            "asset": args.dst_asset or Input["dst"]["asset"],
+            "policy": args.dst_policy or Input["dst"]["policy"],
+            "user": args.dst_user or Input["dst"]["user"],
+            "password": args.dst_passwd  or Input["dst"]["password"] or getpass("Insert password for the destination F5 asset:\n")
+        }
+    }
+except Exception:
+    pass
+
+# Check input.
+for k, v in Input.items():
+    for jk, jv in v.items():
+        if not jv:
+            Util.out(f"Value not provided: {k}/{jk}", "red")
+            raise Exception
 
 # ignoreEntityTypes = list()
 # if args.ignore_entity_types:
@@ -411,12 +433,6 @@ try:
 
     disable_warnings(InsecureRequestWarning)
     django.setup()
-
-    # Double check input.
-    for k, v in Input.items():
-        for jk, jv in v.items():
-            if not jv:
-                raise Exception(f"Config file detected, but {jk} value not provided.")
 
     # Load user-inserted assets.
     Asset.loadAsset(ip=Input["src"]["asset"], user=Input["src"]["user"], passwd=Input["src"]["password"], environment="src")
