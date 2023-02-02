@@ -532,7 +532,7 @@ try:
                             if el["diffType"] == "only-in-destination":
                                 if diffEntityType not in deleteElements:
                                     deleteElements[diffEntityType] = []
-                                deleteElements[diffEntityType].append((el["id"], el["entityName"]))
+                                deleteElements[diffEntityType].append({"id": el["id"], "entityName": el["entityName"]})
                                 Util.out("  -> Element will be deleted at the end of the collection process, nothing done so far")
 
                         if response == "n":
@@ -552,7 +552,7 @@ try:
                                 if elm["diffType"] in ("conflict", "only-in-source"):
                                     mergeElements[diffEntityType].append((elm["id"], elm["entityName"]))
                                 if elm["diffType"] == "only-in-destination":
-                                    deleteElements[diffEntityType].append((elm["id"], elm["entityName"]))
+                                    deleteElements[diffEntityType].append({"id": elm["id"], "entityName": elm["entityName"]})
                             break
 
             if mergeElements or deleteElements:

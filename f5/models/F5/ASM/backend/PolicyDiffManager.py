@@ -210,7 +210,7 @@ class PolicyDiffManager(PolicyBase):
 
 
     @staticmethod
-    def getObjectsIdsFromDiffIds(assetId: int, policyId: str, ignoreDiffs: dict) -> dict:
+    def getObjectsIdsFromDiffIds(assetId: int, policyId: str, differences: dict) -> dict:
         elements = dict()
 
         try:
@@ -219,10 +219,10 @@ class PolicyDiffManager(PolicyBase):
                 f5 = Asset(assetId)
 
                 PolicyDiffManager._log(
-                    f"[AssetID: {assetId}] Getting policy's object ids for ignored diffs..."
+                    f"[AssetID: {assetId}] Getting policy's object ids for diffs..."
                 )
 
-                for k, v in ignoreDiffs.items():
+                for k, v in differences.items():
                     api = ApiSupplicant(
                         endpoint=f5.baseurl + "tm/asm/policies/" + policyId + "/" + k + "/", # no pagination needed.
                         auth=(f5.username, f5.password),
