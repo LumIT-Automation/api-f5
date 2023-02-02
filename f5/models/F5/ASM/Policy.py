@@ -154,13 +154,14 @@ class Policy:
 
 
     @staticmethod
-    def mergeDifferences(assetId: int, importedPolicyId: str, destinationPolicyId: str, ignoreDiffs: dict):
+    def mergeDifferences(assetId: int, importedPolicyId: str, destinationPolicyId: str, ignoreDiffs: dict, deleteDiffsOnDestination: dict):
         try:
             Backend.diffMergeFacade(
                 assetId=assetId,
                 importedPolicyId=importedPolicyId,
                 destinationPolicyId=destinationPolicyId,
-                ignoreDiffs=ignoreDiffs
+                ignoreDiffs=ignoreDiffs,
+                deleteDiffsOnDestination=deleteDiffsOnDestination
             )
         except Exception as e:
             raise e

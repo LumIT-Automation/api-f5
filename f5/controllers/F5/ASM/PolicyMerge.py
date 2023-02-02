@@ -37,6 +37,7 @@ class F5ASMPoliciesMergeController(CustomController):
                             importedPolicyId=data["importedPolicyId"],
                             destinationPolicyId=destinationPolicyId,
                             ignoreDiffs=data["ignoreDiffs"],
+                            deleteDiffsOnDestination=data["deleteDiffsOnDestination"],
                         )
 
                         httpStatus = status.HTTP_201_CREATED

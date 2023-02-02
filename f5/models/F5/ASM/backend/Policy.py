@@ -133,16 +133,16 @@ class Policy(PolicyBase):
 
 
     @staticmethod
-    def deletePolicyObjects(assetId: int, policyId: str, ignoreObjects: dict) -> None:
+    def deletePolicyObjects(assetId: int, policyId: str, o: dict) -> None:
         # @todo: create and use models.
         try:
             f5 = Asset(assetId)
 
             PolicyBase._log(
-                f"[AssetID: {assetId}] Deleting ignored objects on imported policy..."
+                f"[AssetID: {assetId}] Deleting objects on policy {policyId}..."
             )
 
-            for k, v in ignoreObjects.items():
+            for k, v in o.items():
                 for o in v:
                     api = ApiSupplicant(
                         endpoint=f5.baseurl + "tm/asm/policies/" + policyId + "/" + k + "/" + o + "/",
@@ -209,15 +209,16 @@ class Policy(PolicyBase):
 
 
     @staticmethod
-    def diffMergeFacade(assetId: int, importedPolicyId: str, destinationPolicyId: str, ignoreDiffs: dict) -> None:
+    def diffMergeFacade(assetId: int, importedPolicyId: str, destinationPolicyId: str, ignoreDiffs: dict, deleteDiffsOnDestination: dict) -> None:
         # Merging differences selectively is not possible, for merge process is bugged (import-policy's itemFilter not working).
         # -> delete non needed diffs from the imported policy;
-        # -> repeat the diff process and merge non-selectively.
+        # -> repeat the diff process and merge non-selectively;
+        # also: delete only-in-destination policy objects from destination policy on user consent.
         try:
             Policy.deletePolicyObjects(
                 assetId=assetId,
                 policyId=importedPolicyId,
-                ignoreObjects=PolicyDiffManager.getObjectsIdsFromDiffIds(
+                o=PolicyDiffManager.getObjectsIdsFromDiffIds(
                     assetId=assetId,
                     policyId=importedPolicyId,
                     ignoreDiffs=ignoreDiffs
@@ -232,5 +233,16 @@ class Policy(PolicyBase):
                     importedPolicyId=importedPolicyId
                 )
             )
+
+            # @todo.
+            # Policy.deletePolicyObjects(
+            #     assetId=assetId,
+            #     policyId=destinationPolicyId,
+            #     o=PolicyDiffManager.getObjectsIdsFromDiffIds(
+            #         assetId=assetId,
+            #         policyId=importedPolicyId,
+            #         ignoreDiffs=deleteDiffsOnDestination
+            #     )
+            # )
         except Exception as e:
             raise e

@@ -263,14 +263,15 @@ class ASMPolicyManager:
 
 
     @staticmethod
-    def mergePolicies(dstAssetId: int, destinationPolicyId: str, importedPolicyId: str, ignoreDiffs: dict) -> str:
+    def mergePolicies(dstAssetId: int, destinationPolicyId: str, importedPolicyId: str, ignoreDiffs: dict, deleteDiffsOnDestination: dict) -> str:
         try:
             mergePolicyResponse = Client().post(
                 path=f"/api/v1/f5/{dstAssetId}/asm/policy/{destinationPolicyId}/merge/",
                 data={
                     "data": {
                         "importedPolicyId": importedPolicyId,
-                        "ignoreDiffs": ignoreDiffs
+                        "ignoreDiffs": ignoreDiffs,
+                        "deleteDiffsOnDestination": deleteDiffsOnDestination
                     }
                 },
                 content_type="application/json"
@@ -430,6 +431,7 @@ try:
     # Not thread-safe nor concurrency-safe.
 
     mergeElements = dict()
+    deleteElements = dict()
 
     disable_warnings(InsecureRequestWarning)
     django.setup()
@@ -520,10 +522,18 @@ try:
 
                         if response == "y":
                             # Collect ids to merge subdivided by entity type.
-                            if diffEntityType not in mergeElements:
-                                mergeElements[diffEntityType] = []
-                            mergeElements[diffEntityType].append((el["id"], el["entityName"]))
-                            Util.out("  -> Element will be merged at the end of the collection process, nothing done so far")
+                            if el["diffType"] in ("conflict", "only-in-source"):
+                                if diffEntityType not in mergeElements:
+                                    mergeElements[diffEntityType] = []
+                                mergeElements[diffEntityType].append((el["id"], el["entityName"]))
+                                Util.out("  -> Element will be merged at the end of the collection process, nothing done so far")
+
+                            # Collect ids for objects to delete on destination subdivided by entity type.
+                            if el["diffType"] == "only-in-destination":
+                                if diffEntityType not in deleteElements:
+                                    deleteElements[diffEntityType] = []
+                                deleteElements[diffEntityType].append((el["id"], el["entityName"]))
+                                Util.out("  -> Element will be deleted at the end of the collection process, nothing done so far")
 
                         if response == "n":
                             Util.out("  -> Element won't be merged")
@@ -535,22 +545,25 @@ try:
                             # Collect all ids for this entity type.
                             if diffEntityType not in mergeElements:
                                 mergeElements[diffEntityType] = []
+                            if diffEntityType not in deleteElements:
+                                deleteElements[diffEntityType] = []
 
                             for elm in diffData["differences"][diffEntityType]:
                                 if elm["diffType"] in ("conflict", "only-in-source"):
                                     mergeElements[diffEntityType].append((elm["id"], elm["entityName"]))
-
-                            # @todo: objects in destination but not in source.
+                                if elm["diffType"] == "only-in-destination":
+                                    deleteElements[diffEntityType].append((elm["id"], elm["entityName"]))
                             break
 
-            if mergeElements:
+            if mergeElements or deleteElements:
                 response = ""
                 Util.log(mergeElements, "\n\nAttempting to merge the elements: ")
+                Util.log(deleteElements, "\n\nAttempting to delete the elements from the destination policy: ")
 
                 # Handle user input.
                 while response not in ("Y", "N"):
                     if not response:
-                        response = input("  -> Confirm merging the selected differences into the destination policy [Y/N]?\n")
+                        response = input("  -> Confirm merging/deleting the selected differences into the destination policy [Y/N]?\n")
                     else:
                         Util.out("Type Y for yes, N for no")
                         response = ""
@@ -563,7 +576,8 @@ try:
                             dstAssetId=2,
                             destinationPolicyId=dstPolicyId,
                             importedPolicyId=importedPolicy["id"],
-                            ignoreDiffs=Util.getIgnoredDifferences(diffData, mergeElements)
+                            ignoreDiffs=Util.getIgnoredDifferences(diffData, mergeElements),
+                            deleteDiffsOnDestination=deleteElements
                         )
                     )
 
