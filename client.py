@@ -543,15 +543,16 @@ try:
 
                         if response == "a":
                             # Collect all ids for this entity type.
-                            if diffEntityType not in mergeElements:
-                                mergeElements[diffEntityType] = []
-                            if diffEntityType not in deleteElements:
-                                deleteElements[diffEntityType] = []
-
                             for elm in diffData["differences"][diffEntityType]:
                                 if elm["diffType"] in ("conflict", "only-in-source"):
+                                    if diffEntityType not in mergeElements:
+                                        mergeElements[diffEntityType] = []
+
                                     mergeElements[diffEntityType].append((elm["id"], elm["entityName"]))
                                 if elm["diffType"] == "only-in-destination":
+                                    if diffEntityType not in deleteElements:
+                                        deleteElements[diffEntityType] = []
+
                                     deleteElements[diffEntityType].append({"id": elm["id"], "entityName": elm["entityName"]})
                             break
 

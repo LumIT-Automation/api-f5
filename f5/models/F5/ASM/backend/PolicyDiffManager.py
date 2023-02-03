@@ -223,56 +223,57 @@ class PolicyDiffManager(PolicyBase):
                 )
 
                 for k, v in differences.items():
-                    api = ApiSupplicant(
-                        endpoint=f5.baseurl + "tm/asm/policies/" + policyId + "/" + k + "/", # no pagination needed.
-                        auth=(f5.username, f5.password),
-                        tlsVerify=f5.tlsverify,
-                        silent=True
-                    )
+                    if v:
+                        api = ApiSupplicant(
+                            endpoint=f5.baseurl + "tm/asm/policies/" + policyId + "/" + k + "/", # no pagination needed.
+                            auth=(f5.username, f5.password),
+                            tlsVerify=f5.tlsverify,
+                            silent=True
+                        )
 
-                    try:
-                        o = api.get()["payload"]["items"]
+                        try:
+                            o = api.get()["payload"]["items"]
 
-                        for el in v:
-                            for elm in o:
-                                valid = False
+                            for el in v:
+                                for elm in o:
+                                    valid = False
 
-                                if k == "signatures":
-                                    if elm["signatureReference"]["name"] == el["entityName"]:
-                                        valid = True
+                                    if k == "signatures":
+                                        if elm["signatureReference"]["name"] == el["entityName"]:
+                                            valid = True
 
-                                elif k == "signature-sets":
-                                    if elm["signatureSetReference"]["name"] == el["entityName"]:
-                                        valid = True
+                                    elif k == "signature-sets":
+                                        if elm["signatureSetReference"]["name"] == el["entityName"]:
+                                            valid = True
 
-                                elif k == "server-technologies":
-                                    if elm["serverTechnologyReference"]["serverTechnologyName"] == el["entityName"]:
-                                        valid = True
+                                    elif k == "server-technologies":
+                                        if elm["serverTechnologyReference"]["serverTechnologyName"] == el["entityName"]:
+                                            valid = True
 
-                                elif k == "whitelist-ips":
-                                    if elm["ipAddress"]+"/"+elm["ipMask"] == el["entityName"]:
-                                        valid = True
+                                    elif k == "whitelist-ips":
+                                        if elm["ipAddress"]+"/"+elm["ipMask"] == el["entityName"]:
+                                            valid = True
 
-                                elif k == "urls":
-                                    if elm["name"] == el["entityName"] \
-                                            or "["+elm["protocol"].upper()+"] "+elm["name"] == el["entityName"]:
-                                        valid = True
+                                    elif k == "urls":
+                                        if elm["name"] == el["entityName"] \
+                                                or "["+elm["protocol"].upper()+"] "+elm["name"] == el["entityName"]:
+                                            valid = True
 
-                                elif "blocking-settings" in k:
-                                    if elm["description"] == el["entityName"]:
-                                        valid = True
+                                    elif "blocking-settings" in k:
+                                        if elm["description"] == el["entityName"]:
+                                            valid = True
 
-                                else:
-                                    if elm["name"] == el["entityName"]:
-                                        valid = True
+                                    else:
+                                        if elm["name"] == el["entityName"]:
+                                            valid = True
 
-                                if valid:
-                                    if k not in elements:
-                                        elements[k] = list()
+                                    if valid:
+                                        if k not in elements:
+                                            elements[k] = list()
 
-                                    elements[k].append(elm["id"])
-                    except KeyError:
-                        pass
+                                        elements[k].append(elm["id"])
+                        except KeyError:
+                            pass
             except Exception as e:
                 raise e
 
@@ -388,53 +389,54 @@ class PolicyDiffManager(PolicyBase):
             try:
                 f5 = Asset(sourceAssetId)
                 for k, v in differences.items():
-                    api = ApiSupplicant(
-                        endpoint=f5.baseurl + "tm/asm/policies/" + sourcePolicyId + "/" + k + "/", # no pagination needed.
-                        auth=(f5.username, f5.password),
-                        tlsVerify=f5.tlsverify,
-                        silent=True
-                    )
+                    if v:
+                        api = ApiSupplicant(
+                            endpoint=f5.baseurl + "tm/asm/policies/" + sourcePolicyId + "/" + k + "/", # no pagination needed.
+                            auth=(f5.username, f5.password),
+                            tlsVerify=f5.tlsverify,
+                            silent=True
+                        )
 
-                    try:
-                        o = api.get()["payload"]["items"]
+                        try:
+                            o = api.get()["payload"]["items"]
 
-                        for el in v:
-                            for elm in o:
-                                valid = False
+                            for el in v:
+                                for elm in o:
+                                    valid = False
 
-                                if k == "signatures":
-                                    if elm["signatureReference"]["name"] == el["entityName"]:
-                                        valid = True
+                                    if k == "signatures":
+                                        if elm["signatureReference"]["name"] == el["entityName"]:
+                                            valid = True
 
-                                elif k == "signature-sets":
-                                    if elm["signatureSetReference"]["name"] == el["entityName"]:
-                                        valid = True
+                                    elif k == "signature-sets":
+                                        if elm["signatureSetReference"]["name"] == el["entityName"]:
+                                            valid = True
 
-                                elif k == "server-technologies":
-                                    if elm["serverTechnologyReference"]["serverTechnologyName"] == el["entityName"]:
-                                        valid = True
+                                    elif k == "server-technologies":
+                                        if elm["serverTechnologyReference"]["serverTechnologyName"] == el["entityName"]:
+                                            valid = True
 
-                                elif k == "whitelist-ips":
-                                    if elm["ipAddress"]+"/"+elm["ipMask"] == el["entityName"]:
-                                        valid = True
+                                    elif k == "whitelist-ips":
+                                        if elm["ipAddress"]+"/"+elm["ipMask"] == el["entityName"]:
+                                            valid = True
 
-                                elif k == "urls":
-                                    if elm["name"] == el["entityName"] \
-                                            or "["+elm["protocol"].upper()+"] "+elm["name"] == el["entityName"]:
-                                        valid = True
+                                    elif k == "urls":
+                                        if elm["name"] == el["entityName"] \
+                                                or "["+elm["protocol"].upper()+"] "+elm["name"] == el["entityName"]:
+                                            valid = True
 
-                                elif "blocking-settings" in k:
-                                    if elm["description"] == el["entityName"]:
-                                        valid = True
+                                    elif "blocking-settings" in k:
+                                        if elm["description"] == el["entityName"]:
+                                            valid = True
 
-                                else:
-                                    if elm["name"] == el["entityName"]:
-                                        valid = True
+                                    else:
+                                        if elm["name"] == el["entityName"]:
+                                            valid = True
 
-                                if valid:
-                                    el["sourceLastUpdate"] = PolicyDiffManager.__epochS(elm["lastUpdateMicros"])
-                    except KeyError:
-                        pass
+                                    if valid:
+                                        el["sourceLastUpdate"] = PolicyDiffManager.__epochS(elm["lastUpdateMicros"])
+                        except KeyError:
+                            pass
             except Exception as e:
                 raise e
 
