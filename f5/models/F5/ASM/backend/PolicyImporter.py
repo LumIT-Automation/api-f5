@@ -16,14 +16,8 @@ class PolicyImporter(PolicyBase):
     ####################################################################################################################
 
     @staticmethod
-    def uploadPolicyData(assetId: int, policyContent: str) -> str:
+    def uploadPolicyData(assetId: int, policyContent: bytes) -> str:
         filename = "import-policy-" + str(randrange(0, 9999)) + ".xml"
-
-        try:
-            # Downloaded XML is not UTF-8! @todo: guess encoding.
-            policyContent = bytes(policyContent, 'utf-8').decode('iso-8859-1')
-        except UnicodeEncodeError:
-            pass
 
         streamSize = len(policyContent)
         segmentStart = 0
@@ -47,9 +41,8 @@ class PolicyImporter(PolicyBase):
             while True:
                 response = api.post(
                     additionalHeaders={
-                        "Content-Type": "application/xml",
-                        "Content-Range": str(segmentStart) + "-" + str(segmentEnd) + "/" + str(streamSize),
-                        "Charset": "utf-8"
+                        "Content-Type": "application/octet-stream",
+                        "Content-Range": str(segmentStart) + "-" + str(segmentEnd) + "/" + str(streamSize)
                     },
                     data=policyContent[segmentStart:segmentEnd + 1]
                 )["payload"]

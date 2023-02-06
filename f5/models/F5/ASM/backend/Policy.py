@@ -158,7 +158,7 @@ class Policy(PolicyBase):
 
 
     @staticmethod
-    def downloadPolicyFileFacade(assetId: int, policyId: str, cleanup: bool = False) -> str:
+    def downloadPolicyFileFacade(assetId: int, policyId: str, cleanup: bool = False) -> bytes:
         try:
             return PolicyExporter.downloadPolicyData(
                 assetId=assetId,
@@ -174,7 +174,7 @@ class Policy(PolicyBase):
 
 
     @staticmethod
-    def importPolicyFacade(assetId: int, policyContent: str, newPolicyName: str, cleanup: bool = False) -> dict:
+    def importPolicyFacade(assetId: int, policyContent: bytes, newPolicyName: str, cleanup: bool = False) -> dict:
         try:
             return PolicyImporter.importFromLocalFile(
                 assetId=assetId,

@@ -112,8 +112,8 @@ class PolicyExporter(PolicyBase):
 
 
     @staticmethod
-    def downloadPolicyData(assetId: int, localExportFile: str, cleanup: bool = False, saveResponse: bool = False) -> str:
-        fullResponse = ""
+    def downloadPolicyData(assetId: int, localExportFile: str, cleanup: bool = False, saveResponse: bool = False) -> bytes:
+        fullResponse = bytes()
         segmentEnd = 0
         delta = 1000000
 
@@ -131,7 +131,10 @@ class PolicyExporter(PolicyBase):
             )
 
             response = api.get(
-                raw=True
+                raw="binary",
+                additionalHeaders={
+                    "Content-Type": "application/octet-stream" # download as binary, for XML is malformed (not all UTF-8 data inside).
+                }
             )
 
             if response["status"] == 200:
@@ -151,10 +154,11 @@ class PolicyExporter(PolicyBase):
 
                     # Download file (chunks).
                     response = api.get(
+                        raw="binary",
                         additionalHeaders={
+                            "Content-Type": "application/octet-stream",
                             "Content-Range": str(segmentStart) + "-" + str(segmentEnd) + "/" + str(streamSize)
-                        },
-                        raw=True
+                        }
                     )
 
                     fullResponse += response["payload"]
@@ -162,7 +166,7 @@ class PolicyExporter(PolicyBase):
             if saveResponse:
                 try:
                     PolicyExporter._log(f"[AssetID: {assetId}] Saving response to file...")
-                    with open(str(datetime.now().strftime("%Y%m%d-%H%M%S")) + "-response.xml", "w") as file:
+                    with open(str(datetime.now().strftime("%Y%m%d-%H%M%S")) + "-response.xml", "wb") as file:
                         file.write(fullResponse)
                 except Exception:
                     pass

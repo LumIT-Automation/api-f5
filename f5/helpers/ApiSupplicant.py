@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, Union
 from base64 import b64encode
 import requests
 
@@ -29,7 +29,7 @@ class ApiSupplicant:
     # Public methods
     ####################################################################################################################
 
-    def get(self, raw: bool = False, additionalHeaders: dict = None) -> dict:
+    def get(self, raw: str = "", additionalHeaders: dict = None) -> dict:
         additionalHeaders = additionalHeaders or {}
 
         try:
@@ -43,7 +43,7 @@ class ApiSupplicant:
 
 
 
-    def post(self, data: str, additionalHeaders: dict = None) -> dict:
+    def post(self, data: Union[str, bytes], additionalHeaders: dict = None) -> dict:
         additionalHeaders = additionalHeaders or {}
 
         try:
@@ -58,7 +58,7 @@ class ApiSupplicant:
 
 
 
-    def put(self, data: str, additionalHeaders: dict = None) -> dict:
+    def put(self, data: Union[str, bytes], additionalHeaders: dict = None) -> dict:
         additionalHeaders = additionalHeaders or {}
 
         try:
@@ -72,7 +72,7 @@ class ApiSupplicant:
 
 
 
-    def patch(self, data: str, additionalHeaders: dict = None) -> dict:
+    def patch(self, data: Union[str, bytes], additionalHeaders: dict = None) -> dict:
         additionalHeaders = additionalHeaders or {}
 
         try:
@@ -102,7 +102,7 @@ class ApiSupplicant:
     # Private methods
     ####################################################################################################################
 
-    def __request(self, request: Callable, additionalHeaders: dict = None, params: dict = None, data: str = "", raw: bool = False) -> dict:
+    def __request(self, request: Callable, additionalHeaders: dict = None, params: dict = None, data: Union[str, bytes] = None, raw: str = "") -> dict:
         params = params or {}
         additionalHeaders = additionalHeaders or {}
 
@@ -133,13 +133,21 @@ class ApiSupplicant:
             self.responseStatus = response.status_code
             self.responseHeaders = response.headers
 
-            try:
-                if raw:
+            if raw == "text":
+                try:
                     self.responsePayload = response.text
-                else:
+                except Exception:
+                    self.responsePayload = ""
+            elif raw == "binary":
+                try:
+                    self.responsePayload = response.content
+                except Exception:
+                    self.responsePayload = bytes()
+            else:
+                try:
                     self.responsePayload = response.json()
-            except Exception:
-                self.responsePayload = {}
+                except Exception:
+                    self.responsePayload = {}
 
             if not self.silent:
                 for j in (("status", self.responseStatus), ("headers", self.responseHeaders), ("payload", self.responsePayload)):
