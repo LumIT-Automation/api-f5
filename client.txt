@@ -22,3 +22,6 @@ Run
 - on a terminal (as user):
     cd path/to/installation
     python client.py
+
+Notes
+- git update-index --skip-worktree f5.db
