@@ -87,7 +87,7 @@ class CustomController(APIView):
         data = dict()
         headers = { "Cache-Control": "no-cache" }
 
-        if e.__class__.__name__ in ("ConnectionError", "Timeout", "TooManyRedirects", "SSLError", "HTTPError"):
+        if e.__class__.__name__ in ("ConnectionError", "Timeout", "ConnectTimeout", "TooManyRedirects", "SSLError", "HTTPError"):
             httpStatus = status.HTTP_503_SERVICE_UNAVAILABLE
             data["error"] = {
                 "network": e.__str__()
