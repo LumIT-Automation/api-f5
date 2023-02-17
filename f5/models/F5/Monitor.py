@@ -51,6 +51,7 @@ class Monitor:
     def delete(self):
         try:
             Backend.delete(self.assetId, self.partition, self.type, self.name)
+            del self
         except Exception as e:
             raise e
 

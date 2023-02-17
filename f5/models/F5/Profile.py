@@ -114,6 +114,7 @@ class Profile:
     def delete(self):
         try:
             Backend.delete(self.assetId, self.type, self.partition, self.name)
+            del self
         except Exception as e:
             raise e
 

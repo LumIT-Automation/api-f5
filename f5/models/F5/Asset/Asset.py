@@ -36,6 +36,7 @@ class Asset:
     def delete(self) -> None:
         try:
             Repository.delete(self.id)
+            del self
         except Exception as e:
             raise e
 

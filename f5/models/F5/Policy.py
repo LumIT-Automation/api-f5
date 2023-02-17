@@ -46,6 +46,7 @@ class Policy:
     def delete(self):
         try:
             Backend.delete(self.assetId, self.partition, self.subPath, self.name)
+            del self
         except Exception as e:
             raise e
 

@@ -21,6 +21,7 @@ class CertificateKeyBase:
     def delete(self) -> None:
         try:
             Backend.delete(self.assetId, self.partition, self.name, self.o)
+            del self
         except Exception as e:
             raise e
 

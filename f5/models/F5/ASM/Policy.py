@@ -37,6 +37,7 @@ class Policy:
     def delete(self, silent: bool = False):
         try:
             Backend.delete(self.assetId, self.id, silent=silent)
+            del self
         except Exception as e:
             raise e
 

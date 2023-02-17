@@ -69,6 +69,7 @@ class PoolMember:
     def delete(self) -> None:
         try:
             Backend.delete(self.assetId, self.partition, self.poolName, self.name)
+            del self
         except Exception as e:
             raise e
 
