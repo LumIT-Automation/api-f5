@@ -2,6 +2,8 @@ from typing import List
 
 from f5.models.F5.backend.Irule import Irule as Backend
 
+from f5.helpers.Misc import Misc
+
 
 class Irule:
     def __init__(self, assetId: int, partitionName: str, iruleName: str, *args, **kwargs):
@@ -24,6 +26,9 @@ class Irule:
     def modify(self, data):
         try:
             Backend.modify(self.assetId, self.partition, self.name, data)
+
+            for k, v in Misc.toDict(data).items():
+                setattr(self, k, v)
         except Exception as e:
             raise e
 

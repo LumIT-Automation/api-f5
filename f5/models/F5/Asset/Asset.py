@@ -1,5 +1,7 @@
 from f5.models.F5.Asset.repository.Asset import Asset as Repository
 
+from f5.helpers.Misc import Misc
+
 
 class Asset:
     def __init__(self, assetId: int, *args, **kwargs):
@@ -28,6 +30,9 @@ class Asset:
     def modify(self, data: dict) -> None:
         try:
             Repository.modify(self.id, data)
+
+            for k, v in Misc.toDict(data).items():
+                setattr(self, k, v)
         except Exception as e:
             raise e
 

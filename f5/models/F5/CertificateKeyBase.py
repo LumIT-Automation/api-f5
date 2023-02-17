@@ -1,5 +1,8 @@
 from typing import List
+
 from f5.models.F5.backend.Certificate import Certificate as Backend
+
+from f5.helpers.Misc import Misc
 
 
 class CertificateKeyBase:
@@ -30,6 +33,9 @@ class CertificateKeyBase:
     def modifyObject(self, data: dict) -> None:
         try:
             Backend.update(self.assetId, self.partition, self.name, self.o, data)
+
+            for k, v in Misc.toDict(data).items():
+                setattr(self, k, v)
         except Exception as e:
             raise e
 

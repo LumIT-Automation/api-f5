@@ -2,6 +2,8 @@ from typing import Dict
 
 from f5.models.F5.backend.Datagroup import Datagroup as Backend
 
+from f5.helpers.Misc import Misc
+
 
 Records: Dict[str, str] = {
     "name": "",
@@ -30,6 +32,9 @@ class Datagroup:
     def modify(self, data):
         try:
             Backend.modify(self.assetId, self.partition, self.type, self.name, data)
+
+            for k, v in Misc.toDict(data).items():
+                setattr(self, k, v)
         except Exception as e:
             raise e
 

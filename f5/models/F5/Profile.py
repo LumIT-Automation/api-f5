@@ -2,6 +2,8 @@ from typing import Dict
 
 from f5.models.F5.backend.Profile import Profile as Backend
 
+from f5.helpers.Misc import Misc
+
 
 Link: Dict[str, str] = {
     "link": ""
@@ -106,6 +108,9 @@ class Profile:
     def modify(self, data):
         try:
             Backend.modify(self.assetId, self.type, self.partition, self.name, data)
+
+            for k, v in Misc.toDict(data).items():
+                setattr(self, k, v)
         except Exception as e:
             raise e
 

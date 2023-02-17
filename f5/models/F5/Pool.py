@@ -3,6 +3,8 @@ from typing import List, Dict, Union
 from f5.models.F5.PoolMember import PoolMember
 from f5.models.F5.backend.Pool import Pool as Backend
 
+from f5.helpers.Misc import Misc
+
 
 MembersReference: Dict[str, Union[str, bool]] = {
     "link": "",
@@ -60,6 +62,9 @@ class Pool:
     def modify(self, data):
         try:
             Backend.modify(self.assetId, self.partition, self.name, data)
+
+            for k, v in Misc.toDict(data).items():
+                setattr(self, k, v)
         except Exception as e:
             raise e
 

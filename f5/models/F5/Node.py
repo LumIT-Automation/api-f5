@@ -2,6 +2,8 @@ from typing import Dict, Union
 
 from f5.models.F5.backend.Node import Node as Backend
 
+from f5.helpers.Misc import Misc
+
 
 Fqdn: Dict[str, Union[str, int]] = {
     "addressFamily": "",
@@ -41,6 +43,9 @@ class Node:
     def modify(self, data):
         try:
             Backend.modify(self.assetId, self.partition, self.name, data)
+
+            for k, v in Misc.toDict(data).items():
+                setattr(self, k, v)
         except Exception as e:
             raise e
 

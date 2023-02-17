@@ -2,6 +2,8 @@ from typing import Dict
 
 from f5.models.F5.backend.PoolMember import PoolMember as Backend
 
+from f5.helpers.Misc import Misc
+
 
 Fqdn: Dict[str, str] = {
     "autopopulate": ""
@@ -61,6 +63,9 @@ class PoolMember:
     def modify(self, data: dict) -> None:
         try:
             Backend.modify(self.assetId, self.partition, self.poolName, self.name, data)
+
+            for k, v in Misc.toDict(data).items():
+                setattr(self, k, v)
         except Exception as e:
             raise e
 

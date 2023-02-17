@@ -2,6 +2,8 @@ from typing import List, Dict, Union
 
 from f5.models.F5.backend.Policy import Policy as Backend
 
+from f5.helpers.Misc import Misc
+
 
 Link: Dict[str, str] = {
     "link": ""
@@ -38,6 +40,9 @@ class Policy:
     def modify(self, data):
         try:
             Backend.modify(self.assetId, self.partition, self.subPath, self.name, data)
+
+            for k, v in Misc.toDict(data).items():
+                setattr(self, k, v)
         except Exception as e:
             raise e
 

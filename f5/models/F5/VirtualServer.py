@@ -2,6 +2,8 @@ from typing import List, Dict, Union
 
 from f5.models.F5.backend.VirtualServer import VirtualServer as Backend
 
+from f5.helpers.Misc import Misc
+
 
 SourceAddressTranslation: Dict[str, str] = {
     "type": "",
@@ -99,6 +101,9 @@ class VirtualServer:
     def modify(self, data):
         try:
             Backend.modify(self.assetId, self.partition, self.name, data)
+
+            for k, v in Misc.toDict(data).items():
+                setattr(self, k, v)
         except Exception as e:
             raise e
 

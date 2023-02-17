@@ -1,5 +1,7 @@
 from f5.models.F5.backend.Monitor import Monitor as Backend
 
+from f5.helpers.Misc import Misc
+
 
 class Monitor:
     def __init__(self, assetId: int, partitionName: str, monitorType: str, monitorName: str, *args, **kwargs):
@@ -43,6 +45,9 @@ class Monitor:
     def modify(self, data):
         try:
             Backend.modify(self.assetId, self.partition, self.type, self.name, data)
+
+            for k, v in Misc.toDict(data).items():
+                setattr(self, k, v)
         except Exception as e:
             raise e
 

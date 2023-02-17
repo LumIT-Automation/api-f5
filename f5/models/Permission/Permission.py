@@ -226,6 +226,8 @@ class Permission:
                 roleId=role.id,
                 partitionId=partition.id
             )
+
+            self.__load()
         except Exception as e:
             raise e
 

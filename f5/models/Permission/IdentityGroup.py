@@ -1,6 +1,8 @@
 from f5.models.Permission.repository.IdentityGroup import IdentityGroup as Repository
 from f5.models.Permission.repository.PermissionPrivilege import PermissionPrivilege as PermissionPrivilegeRepository
 
+from f5.helpers.Misc import Misc
+
 
 class IdentityGroup:
     def __init__(self, id: int = 0, identityGroupIdentifier: str = "", *args, **kwargs):
@@ -21,6 +23,9 @@ class IdentityGroup:
     def modify(self, data: dict) -> None:
         try:
             Repository.modify(self.id, data)
+
+            for k, v in Misc.toDict(data).items():
+                setattr(self, k, v)
         except Exception as e:
             raise e
 
