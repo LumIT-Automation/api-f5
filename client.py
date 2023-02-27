@@ -226,19 +226,23 @@ class Util:
 
     @staticmethod
     def getIgnoredDifferences(diff: dict, merge: dict) -> dict:
-        ignored = diff["differences"].copy()
+        toBeIgnored = diff["differences"].copy()
 
-        # Get ignored differences: all diff data but merge elements.
-        for de, dl in ignored.items():
+        # Get toBeIgnored differences: all diff data but merge elements.
+        for de, dl in toBeIgnored.items():
             if de in merge:
                 for e in merge[de]: # tuple.
                     jj = 0
-                    for j in dl:
-                        if j["id"] == e[0]:
+                    for vv in dl:
+                        if vv["diffType"] in ("conflict", "only-in-source"):
+                            if vv["id"] == e[0]:
+                                del dl[jj]
+                        if vv["diffType"] == "only-in-destination":
                             del dl[jj]
+
                         jj += 1
 
-        return ignored
+        return toBeIgnored
 
 
 
@@ -511,7 +515,7 @@ try:
                                 if el["diffType"] in ("conflict", "only-in-source"):
                                     response = input("  -> Merge to destination policy [y/n; d for details; s for skipping the current entity type; a for merging all differences for this entity type]?\n")
                                 else:
-                                    response = input("  -> Delete object into destination policy [y/n; d for details; s for skipping the current entity type; a for merging all differences for this entity type] [@todo: not implemented]?\n")
+                                    response = input("  -> Delete object into destination policy [y/n; d for details; s for skipping the current entity type; a for merging all differences for this entity type]?\n")
                             elif response == "d":
                                 Util.log(el)
                                 response = ""
