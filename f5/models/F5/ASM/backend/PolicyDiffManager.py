@@ -210,7 +210,7 @@ class PolicyDiffManager(PolicyBase):
 
 
     @staticmethod
-    def getObjectsIdsFromDiffIds(assetId: int, policyId: str, differences: dict) -> dict:
+    def getObjectsIdsFromDiffIds(assetId: int, policyId: str, differences: dict, policyType: str = "") -> dict:
         elements = dict()
 
         try:
@@ -219,7 +219,7 @@ class PolicyDiffManager(PolicyBase):
                 f5 = Asset(assetId)
 
                 PolicyDiffManager._log(
-                    f"[AssetID: {assetId}] Getting policy's object ids for diffs..."
+                    f"[AssetID: {assetId}] [{policyType}] Getting policy's object ids for diffs..."
                 )
 
                 for k, v in differences.items():
@@ -278,7 +278,7 @@ class PolicyDiffManager(PolicyBase):
                 raise e
 
             PolicyDiffManager._log(
-                f"[AssetID: {assetId}] Objects IDS: {elements}"
+                f"[AssetID: {assetId}] [{policyType}] Objects IDS: {elements}"
             )
 
             return elements

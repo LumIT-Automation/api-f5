@@ -220,7 +220,8 @@ class Policy(PolicyBase):
                 o=PolicyDiffManager.getObjectsIdsFromDiffIds(
                     assetId=assetId,
                     policyId=importedPolicyId,
-                    differences=ignoreDiffs
+                    differences=ignoreDiffs,
+                    policyType="imported"
                 )
             )
 
@@ -240,7 +241,8 @@ class Policy(PolicyBase):
                 o=PolicyDiffManager.getObjectsIdsFromDiffIds(
                     assetId=assetId,
                     policyId=destinationPolicyId,
-                    differences=deleteDiffsOnDestination
+                    differences=deleteDiffsOnDestination,
+                    policyType="destination"
                 )
             )
         except Exception as e:

@@ -556,9 +556,12 @@ try:
                             break
 
             if mergeElements or deleteElements:
+                ignoredElements = Util.getIgnoredDifferences(diffData, mergeElements)
+
                 response = ""
                 Util.log(mergeElements, "\n\nAttempting to merge the elements: ")
                 Util.log(deleteElements, "\n\nAttempting to delete the elements from the destination policy: ")
+                Util.log(ignoredElements, "\n\nIgnored elements: ")
 
                 # Handle user input.
                 while response not in ("Y", "N"):
@@ -576,7 +579,7 @@ try:
                             dstAssetId=2,
                             destinationPolicyId=dstPolicyId,
                             importedPolicyId=importedPolicy["id"],
-                            ignoreDiffs=Util.getIgnoredDifferences(diffData, mergeElements),
+                            ignoreDiffs=ignoredElements,
                             deleteDiffsOnDestination=deleteElements
                         )
                     )
