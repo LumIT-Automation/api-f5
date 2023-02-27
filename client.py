@@ -238,7 +238,7 @@ class Util:
                             if vv["id"] == e[0]:
                                 del dl[jj]
                         if vv["diffType"] == "only-in-destination":
-                            del dl[jj]
+                            del dl[jj] # do not count these entries as ignored ones.
 
                         jj += 1
 

@@ -262,6 +262,14 @@ class PolicyDiffManager(PolicyBase):
                                         if elm["description"] == el["entityName"]:
                                             valid = True
 
+                                    elif k == "parameters":
+                                        if "urlReference" in elm:
+                                            if elm["name"] + " on ["+elm["urlReference"]["protocol"].upper()+"] " + elm["urlReference"]["name"] == el["entityName"]:
+                                                valid = True
+                                        else:
+                                            if elm["name"] == el["entityName"]:
+                                                valid = True
+
                                     else:
                                         if elm["name"] == el["entityName"]:
                                             valid = True
@@ -415,17 +423,25 @@ class PolicyDiffManager(PolicyBase):
                                             valid = True
 
                                     elif k == "whitelist-ips":
-                                        if elm["ipAddress"]+"/"+elm["ipMask"] == el["entityName"]:
+                                        if elm["ipAddress"]+"/" + elm["ipMask"] == el["entityName"]:
                                             valid = True
 
                                     elif k == "urls":
                                         if elm["name"] == el["entityName"] \
-                                                or "["+elm["protocol"].upper()+"] "+elm["name"] == el["entityName"]:
+                                                or "["+elm["protocol"].upper()+"] " + elm["name"] == el["entityName"]:
                                             valid = True
 
                                     elif "blocking-settings" in k:
                                         if elm["description"] == el["entityName"]:
                                             valid = True
+
+                                    elif k == "parameters":
+                                        if "urlReference" in elm:
+                                            if elm["name"] + " on ["+elm["urlReference"]["protocol"].upper()+"] " + elm["urlReference"]["name"] == el["entityName"]:
+                                                valid = True
+                                        else:
+                                            if elm["name"] == el["entityName"]:
+                                                valid = True
 
                                     else:
                                         if elm["name"] == el["entityName"]:
