@@ -227,8 +227,7 @@ class PolicyDiffManager(PolicyBase):
                         api = ApiSupplicant(
                             endpoint=f5.baseurl + "tm/asm/policies/" + policyId + "/" + k + "/", # no pagination needed.
                             auth=(f5.username, f5.password),
-                            tlsVerify=f5.tlsverify,
-                            silent=True
+                            tlsVerify=f5.tlsverify
                         )
 
                         try:
