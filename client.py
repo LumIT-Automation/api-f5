@@ -167,12 +167,11 @@ class Util:
             if title == "_":
                 for j in range(120):
                     title = title + "_"
-            log.debug(title)
-
-        log.debug(o)
 
         if title:
             log.debug(title)
+
+        log.debug(o)
 
 
 
@@ -564,7 +563,7 @@ try:
                 # Handle user input.
                 while response not in ("Y", "N"):
                     if not response:
-                        response = input("  -> Confirm merging/deleting the selected differences into the destination policy [Y/N]?\n")
+                        response = input("\n\n  -> Confirm merging/deleting the selected differences into the destination policy [Y/N]?\n")
                     else:
                         Util.out("Type Y for yes, N for no")
                         response = ""
