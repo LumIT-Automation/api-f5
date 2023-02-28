@@ -1,0 +1,12 @@
+djangorestframework~=3.14
+requests~=2.28
+colorama
+Django
+urllib3
+tzdata
+sqlparse
+pytz
+idna
+charset_normalizer
+certifi
+asgiref
