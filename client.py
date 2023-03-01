@@ -225,6 +225,62 @@ class Util:
 
 
     @staticmethod
+    def entityTypeInformation(data: dict) -> dict:
+        entityTypeWarning = dict()
+
+        for eType, eList in data["differences"].items():
+            ns = 0
+            nd = 0
+            for l in eList:
+                try:
+                    if l["diffType"] == "only-in-source":
+                        ns += 1
+                    if l["diffType"] == "only-in-destination":
+                        nd += 1
+                    if l["diffType"] == "conflict":
+                        if l["sourceLastUpdate"] >= l["destinationLastUpdate"]:
+                            ns += 1
+                        if l["sourceLastUpdate"] <= l["destinationLastUpdate"]:
+                            nd += 1
+                except KeyError:
+                    pass
+
+            if ns == len(eList):
+                entityTypeWarning[eType] = f"All {eType} objects are more newly updated (or new) in source"
+            elif nd == len(eList):
+                entityTypeWarning[eType] = f"All {eType} objects are more newly updated (or new) in destination"
+            elif ns == len(eList) and nd == len(eList):
+                entityTypeWarning[eType] = f"All {eType} objects have the same modification timestamp"
+            else:
+                entityTypeWarning[eType] = ""
+
+        return entityTypeWarning
+
+
+
+    @staticmethod
+    def newerInformation(element: dict) -> tuple:
+        s = d = ""
+
+        try:
+            if element["diffType"] == "only-in-source":
+                s = " [NEW]"
+            elif element["diffType"] == "only-in-destination":
+                d = " [NEW]"
+            else:
+                if element["sourceLastUpdate"] > element["destinationLastUpdate"]:
+                    s = " [NEW]"
+                elif element["sourceLastUpdate"] < element["destinationLastUpdate"]:
+                    d = " [NEW]"
+                else:
+                    s = d = " [NEW]"
+        except KeyError:
+            pass
+
+        return s, d
+
+
+    @staticmethod
     def getIgnoredDifferences(diff: dict, merge: dict) -> dict:
         toBeIgnored = diff["differences"].copy()
 
@@ -463,46 +519,19 @@ try:
             Util.out("- destination F5 message:\n" + importedPolicy["import-message"])
 
             # Give the diff entity type a modification label.
-            sourceEntityTypeIsAllNewer = dict()
-            destinationEntityTypeIsAllNewer = dict()
-            for diffEntityType, diffList in diffData["differences"].items():
-                sourceEntityTypeIsAllNewer[diffEntityType] = True
-                destinationEntityTypeIsAllNewer[diffEntityType] = True
-                for el in diffList:
-                    if el.get("sourceLastUpdate", 0) > el.get("destinationLastUpdate", 0):
-                        destinationEntityTypeIsAllNewer[diffEntityType] = False
-                    if el.get("sourceLastUpdate", 0) < el.get("destinationLastUpdate", 0):
-                        sourceEntityTypeIsAllNewer[diffEntityType] = False
+            entityTypeInformation = Util.entityTypeInformation(diffData)
 
             Util.out("\nDIFFERENCES follow")
             for diffEntityType, diffList in diffData["differences"].items():
                 for el in diffList:
-                    entityTypeWarning = " "
-                    if sourceEntityTypeIsAllNewer[diffEntityType]:
-                        entityTypeWarning = "are more newly updated (or new) in source"
-                    elif destinationEntityTypeIsAllNewer[diffEntityType]:
-                        entityTypeWarning = "are more newly updated (or new) in destination"
-                    elif sourceEntityTypeIsAllNewer[diffEntityType] and destinationEntityTypeIsAllNewer[diffEntityType]:
-                        entityTypeWarning = "have the same modification timestamp"
-                    else:
-                        entityTypeWarning = ""
-
                     # For each difference print on-screen output and ask the user.
                     if el["diffType"] in ("conflict", "only-in-source", "only-in-destination"):
                         Util.out("\n\n[ENTITY TYPE: " + diffEntityType + "] \"" + el["entityName"] + "\":", "green")
-                        if entityTypeWarning:
-                            Util.out(f"[All {diffEntityType} objects {entityTypeWarning}]", "yellow")
+                        if entityTypeInformation[diffEntityType]:
+                            Util.out(entityTypeInformation[diffEntityType], "yellow")
                         Util.out("  - difference type: " + el["diffType"] + ";")
 
-                        sourceWarning = destinationWarning = ""
-                        try:
-                            if el.get("sourceLastUpdate", 0) >= el.get("destinationLastUpdate", 0):
-                                sourceWarning = " [NEW]"
-                            else:
-                                destinationWarning = " [NEW]"
-                        except Exception:
-                            pass
-
+                        sourceWarning, destinationWarning = Util.newerInformation(el)
                         if "sourceLastUpdate" in el and el["sourceLastUpdate"]:
                             Util.out("  - source last update " + Util.toDate(el["sourceLastUpdate"]) + sourceWarning + ";")
                         if "destinationLastUpdate" in el and el["destinationLastUpdate"]:

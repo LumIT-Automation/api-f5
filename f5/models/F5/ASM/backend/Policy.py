@@ -217,7 +217,7 @@ class Policy(PolicyBase):
             Policy.deletePolicyObjects(
                 assetId=assetId,
                 policyId=importedPolicyId,
-                o=PolicyDiffManager.getObjectsIdsFromDiffIds(
+                o=PolicyDiffManager.getObjectsIdsFromDiffNames(
                     assetId=assetId,
                     policyId=importedPolicyId,
                     differences=ignoreDiffs,
@@ -238,7 +238,7 @@ class Policy(PolicyBase):
             Policy.deletePolicyObjects(
                 assetId=assetId,
                 policyId=destinationPolicyId,
-                o=PolicyDiffManager.getObjectsIdsFromDiffIds(
+                o=PolicyDiffManager.getObjectsIdsFromDiffNames(
                     assetId=assetId,
                     policyId=destinationPolicyId,
                     differences=deleteDiffsOnDestination,

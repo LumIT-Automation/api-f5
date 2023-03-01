@@ -210,7 +210,7 @@ class PolicyDiffManager(PolicyBase):
 
 
     @staticmethod
-    def getObjectsIdsFromDiffIds(assetId: int, policyId: str, differences: dict, policyType: str = "") -> dict:
+    def getObjectsIdsFromDiffNames(assetId: int, policyId: str, differences: dict, policyType: str = "") -> dict:
         elements = dict()
 
         try:
