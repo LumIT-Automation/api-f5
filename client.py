@@ -6,6 +6,7 @@ import json
 import datetime
 import logging
 import tempfile
+from typing import List, Dict, Union
 from getpass import getpass
 from colorama import just_fix_windows_console
 from urllib3.exceptions import InsecureRequestWarning
@@ -103,7 +104,11 @@ class Asset:
     @staticmethod
     def listAssets() -> dict:
         try:
-            return Client().get("/api/v1/f5/assets/").json()
+            i = Client().get("/api/v1/f5/assets/").json()["data"]["items"]
+            return {
+                "pro": i[0],
+                "nopro": i[1]
+            }
         except Exception as e:
             raise e
 
@@ -406,27 +411,13 @@ class ASMPolicyManager:
 # Parser/config file init
 ########################################################################################################################
 
-Input = dict()
-for j in ("src", "dst"):
-    Input[j] = {
-        "asset": "",
-        "policy": "",
-        "user": "",
-        "password": "",
-    }
+Input = {
+    "assets": dict(),
+    "runs": list()
+}
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-c', '--cfg_file', help='Config file to read input from (non-available entries can be taken from cli input)', required=False)
-parser.add_argument('-a', '--src_asset', help='Source F5 asset where the source policy is defined (IP/FQDN)', required=False)
-parser.add_argument('-A', '--dst_asset', help='Destination F5 asset where the destination policy is defined (IP/FQDN)', required=False)
-parser.add_argument('-l', '--src_policy', help='Source policy name', required=False)
-parser.add_argument('-L', '--dst_policy', help='Destination policy name', required=False)
-parser.add_argument('-u', '--src_user', help='Source F5 asset username', required=False)
-parser.add_argument('-U', '--dst_user', help='Destination F5 asset username', required=False)
-parser.add_argument('-p', '--src_passwd', help='Source F5 asset password', required=False)
-parser.add_argument('-P', '--dst_passwd', help='Destination F5 asset password', required=False)
-# parser.add_argument('-i', '--ignore_entity_types', help='List of entity types to ignore', required=False, action='append')
-
+parser.add_argument('-c', '--cfg_file', help='Config file to read input from', required=False)
 args = parser.parse_args()
 
 # Read available config file entries.
@@ -435,50 +426,46 @@ if os.path.exists(str(configFile)):
     with open(configFile, "r") as file:
         iv = json.loads(file.read())
 
-        Input = {
-            "src": {
-                "asset": iv.get("source", {}).get("asset", ""),
-                "policy": iv.get("source", {}).get("policy", ""),
-                "user": iv.get("source", {}).get("user", ""),
-                "password": iv.get("source", {}).get("password", ""),
-            },
-            "dst": {
-                "asset": iv.get("destination", {}).get("asset", ""),
-                "policy": iv.get("destination", {}).get("policy", ""),
-                "user": iv.get("destination", {}).get("user", ""),
-                "password": iv.get("destination", {}).get("password", ""),
+        for environment in ("pro", "nopro"):
+            Input["assets"][environment] = {
+                "fqdn": iv.get("assets", {}).get(environment, {}).get("fqdn", ""),
+                "user": iv.get("assets", {}).get(environment, {}).get("user", ""),
+                "password": iv.get("assets", {}).get(environment, {}).get("password", "") or getpass("Insert password for the Pro F5 asset:\n"),
             }
-        }
 
-# Complete or override entries with user input ones.
-try:
-    Input = {
-        "src": {
-            "asset": args.src_asset or Input["src"]["asset"],
-            "policy": args.src_policy or Input["src"]["policy"],
-            "user": args.src_user or Input["src"]["user"],
-            "password": args.src_passwd or Input["src"]["password"] or getpass("Insert password for the source F5 asset:\n")
-        },
-        "dst": {
-            "asset": args.dst_asset or Input["dst"]["asset"],
-            "policy": args.dst_policy or Input["dst"]["policy"],
-            "user": args.dst_user or Input["dst"]["user"],
-            "password": args.dst_passwd  or Input["dst"]["password"] or getpass("Insert password for the destination F5 asset:\n")
-        }
-    }
-except Exception:
-    pass
+        for run in iv.get("runs", []):
+            Input["runs"].append({
+                "uuid": run.get("uuid", ""),
+                "policies": {
+                    "source": {
+                        "asset": run.get("policies", {}).get("source", {}).get("asset"),
+                        "name": run.get("policies", {}).get("source", {}).get("name"),
+                    },
+                    "destination": {
+                        "asset": run.get("policies", {}).get("destination", {}).get("asset"),
+                        "name": run.get("policies", {}).get("destination", {}).get("name"),
+                    }
+                },
+                "auto-skip": run.get("uuid", []),
+                "auto-merge": run.get("uuid", []),
+
+            })
 
 # Check input.
-for k, v in Input.items():
+for k, v in Input["assets"].items():
     for jk, jv in v.items():
         if not jv:
             Util.out(f"Value not provided: {k}/{jk}", "red", "lightgrey")
             raise Exception
 
-# ignoreEntityTypes = list()
-# if args.ignore_entity_types:
-#     ignoreEntityTypes = args.ignore_entity_types
+for v in Input["runs"]:
+    for _, jv in v["policies"].items():
+        for jjk, jjv in jv.items():
+            if not jjv:
+                Util.out(f"Value not provided in runs list: {jjk}", "red", "lightgrey")
+                raise Exception
+
+#@todo: check pro/nopro.
 
 
 
@@ -496,21 +483,27 @@ try:
     django.setup()
 
     # Load user-inserted assets.
-    Asset.loadAsset(ip=Input["src"]["asset"], user=Input["src"]["user"], passwd=Input["src"]["password"], environment="src")
-    Asset.loadAsset(ip=Input["dst"]["asset"], user=Input["dst"]["user"], passwd=Input["dst"]["password"], environment="dst")
+    Asset.loadAsset(ip=Input["assets"]["pro"]["fqdn"], user=Input["assets"]["pro"]["user"], passwd=Input["assets"]["pro"]["password"], environment="pro")
+    Asset.loadAsset(ip=Input["assets"]["nopro"]["fqdn"], user=Input["assets"]["nopro"]["user"], passwd=Input["assets"]["nopro"]["password"], environment="nopro")
 
-    loadedAssets = Asset.listAssets()["data"]["items"]
-    if loadedAssets[0] and loadedAssets[1]:
+    loadedAssets = Asset.listAssets()
+    if loadedAssets["pro"] and loadedAssets["nopro"]:
+        srcPolicy = Input["runs"][0]["policies"]["source"]["name"]
+        dstPolicy = Input["runs"][0]["policies"]["destination"]["name"]
+
+        srcAsset = loadedAssets[Input["runs"][0]["policies"]["source"]["asset"]]
+        dstAsset = loadedAssets[Input["runs"][0]["policies"]["destination"]["asset"]]
+
         # Get the id of the policies given by name.
-        srcPolicyId = ASMPolicyManager.getPolicyId(1, Input["src"]["policy"])
-        dstPolicyId = ASMPolicyManager.getPolicyId(2, Input["dst"]["policy"])
+        srcPolicyId = ASMPolicyManager.getPolicyId(srcAsset["id"], srcPolicy)
+        dstPolicyId = ASMPolicyManager.getPolicyId(dstAsset["id"], dstPolicy)
 
         if srcPolicyId and dstPolicyId:
-            Util.out("Processing differences for SOURCE policy " + loadedAssets[0]["fqdn"] + "//" + Input["src"]["policy"] + " vs DESTINATION policy " + loadedAssets[1]["fqdn"] + "//" + Input["dst"]["policy"] + " on " + loadedAssets[1]["fqdn"] + ".")
+            Util.out("Processing differences for SOURCE policy " + srcAsset["fqdn"] + "//" + srcPolicy + " vs DESTINATION policy " + dstAsset["fqdn"] + "//" + dstPolicy + " on " + dstAsset["fqdn"] + ".")
             Util.out("This could take a very long while. Logs on \"client.log\" file within the installation folder. Please wait...")
 
             # Fetch policies' differences.
-            diffData = ASMPolicyManager.diffPolicies(srcAssetId=1, sPolicyId=srcPolicyId, dstAssetId=2, dPolicyId=dstPolicyId)["data"]
+            diffData = ASMPolicyManager.diffPolicies(srcAssetId=srcAsset["id"], sPolicyId=srcPolicyId, dstAssetId=dstAsset["id"], dPolicyId=dstPolicyId)["data"]
 
             importedPolicy = diffData["importedPolicy"]
             Util.out("\nImported policy on destination F5 asset (temp policy):")
@@ -609,7 +602,7 @@ try:
                     Util.out("\n\nMerging...")
                     Util.out(
                         ASMPolicyManager.mergePolicies(
-                            dstAssetId=2,
+                            dstAssetId=dstAsset["id"],
                             destinationPolicyId=dstPolicyId,
                             importedPolicyId=importedPolicy["id"],
                             ignoreDiffs=ignoredElements,
@@ -620,7 +613,7 @@ try:
                     # Policy apply.
                     Util.out("Applying...")
                     Util.out(
-                        ASMPolicyManager.applyPolicy(assetId=2, policyId=dstPolicyId)
+                        ASMPolicyManager.applyPolicy(assetId=dstAsset["id"], policyId=dstPolicyId)
                     )
 
                     Util.out("All done", "green")

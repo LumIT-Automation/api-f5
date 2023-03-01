@@ -1,14 +1,36 @@
 {
-    "source": {
-        "asset": "ADDRESS_OR_FQDN",
-        "user": "USERNAME",
-        "password": "PASSWORD",
-        "policy": "POLICY_NAME"
+    "assets": {
+        "pro": {
+            "fqdn": "ADDRESS_OR_FQDN",
+            "user": "USERNAME",
+            "password": "PASSWORD"
+        },
+        "nopro": {
+            "fqdn": "ADDRESS_OR_FQDN",
+            "user": "USERNAME",
+            "password": "PASSWORD"
+        }
     },
-      "destination": {
-        "asset": "ADDRESS_OR_FQDN",
-        "user": "USERNAME",
-        "password": "PASSWORD",
-        "policy": "POLICY_NAME"
-    }
+    "runs": [
+        {
+            "uuid": "UNIQUE_NAME",
+            "policies": {
+                "source": {
+                    "asset": "pro",
+                    "name": "SOURCE_POLICY_NAME"
+                },
+                "destination": {
+                    "asset": "nopro",
+                    "name": "DESTINATION_POLICY_NAME"
+                }
+            },
+            "auto-skip": [
+                "sensitive-parameters",
+                "urls"
+            ],
+		    "auto-merge": [
+                "parameters"
+            ]
+        }
+    ]
 }
