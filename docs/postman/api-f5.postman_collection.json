@@ -1193,7 +1193,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"data\": {\n        \"importedPolicyId\": \"kMFwM97Cg0lgUopqXG1KNQ\",\n        \"ignoreDiffs\": {\n            \"server-technologies\": [\n                {\n                    \"id\": \"YYe7oD4_A2CkI5y1h1nXLA\",\n                    \"entityName\": \"XML\"\n                },\n                {\n                    \"id\": \"C3sZKGywhtF9SkzvylBOLw\",\n                    \"entityName\": \"IBM DB2\"\n                }\n            ],\n            \"signature-sets\": [\n                {\n                    \"id\": \"POrOjQ3-8ZcTpyI8E_5AgQ\",\n                    \"entityName\": \"Apache Tomcat Signatures (High/Medium Accuracy)\"\n                }\n            ]\n        },\n        \"deleteDiffsOnDestination\": []\n    }\n}",
+									"raw": "{\n    \"data\": {\n        \"diffReferenceId\": \"5Cb1ld_j-K_YipXux26XEw\",\n        \"mergeDiffsIds\": [\n            \"dx7USsSq374jfEoJRgtUlQ\",\n            \"ckVxJO0RJato6st03rxAvg\",\n            \"FMv-RLwd6dt9QGyLuiLyNA\",\n            \"6ULrL5Nd8D94pOcENlbsuA\",\n            \"0d-7sfmtBARnnHUZN05Cdw\"\n        ],\n        \"deleteDiffsOnDestination\": {}\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"

@@ -34,9 +34,9 @@ class F5ASMPoliciesMergeController(CustomController):
 
                         Policy.mergeDifferences(
                             assetId=assetId,
-                            importedPolicyId=data["importedPolicyId"],
                             destinationPolicyId=destinationPolicyId,
-                            ignoreDiffs=data["ignoreDiffs"],
+                            diffReferenceId=data["diffReferenceId"],
+                            mergeDiffsIds=data["mergeDiffsIds"],
                             deleteDiffsOnDestination=data["deleteDiffsOnDestination"],
                         )
 

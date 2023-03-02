@@ -7,7 +7,6 @@ import json
 import datetime
 import logging
 import tempfile
-from typing import List, Dict, Union
 from getpass import getpass
 from colorama import just_fix_windows_console
 from urllib3.exceptions import InsecureRequestWarning
@@ -286,6 +285,7 @@ class Util:
         return s, d
 
 
+
     @staticmethod
     def getIgnoredDifferences(diff: dict, merge: dict) -> dict:
         toBeIgnored = diff["differences"].copy()
@@ -328,14 +328,14 @@ class ASMPolicyManager:
 
 
     @staticmethod
-    def mergePolicies(dstAssetId: int, destinationPolicyId: str, importedPolicyId: str, ignoreDiffs: dict, deleteDiffsOnDestination: dict) -> str:
+    def mergePolicies(dstAssetId: int, destinationPolicyId: str, diffReferenceId: str, mergeDiffsIds: list, deleteDiffsOnDestination: dict) -> str:
         try:
             mergePolicyResponse = Client().post(
                 path=f"/api/v1/f5/{dstAssetId}/asm/policy/{destinationPolicyId}/merge/",
                 data={
                     "data": {
-                        "importedPolicyId": importedPolicyId,
-                        "ignoreDiffs": ignoreDiffs,
+                        "diffReferenceId": diffReferenceId,
+                        "mergeDiffsIds": mergeDiffsIds,
                         "deleteDiffsOnDestination": deleteDiffsOnDestination
                     }
                 },
@@ -619,12 +619,10 @@ try:
                                     break
 
                     if mergeElements or deleteElements:
-                        ignoredElements = Util.getIgnoredDifferences(diffData, mergeElements)
-
                         response = ""
                         Util.log(mergeElements, "\n\nAttempting to merge the elements: ")
                         Util.log(deleteElements, "\n\nAttempting to delete the elements from the destination policy: ")
-                        Util.log(ignoredElements, "\n\nIgnored elements: ")
+                        Util.log(Util.getIgnoredDifferences(diffData, mergeElements), "\n\nIgnored differences: ")
 
                         # Handle user input.
                         while response not in ("Y", "N"):
@@ -641,8 +639,8 @@ try:
                                 ASMPolicyManager.mergePolicies(
                                     dstAssetId=dstAsset["id"],
                                     destinationPolicyId=dstPolicyId,
-                                    importedPolicyId=importedPolicy["id"],
-                                    ignoreDiffs=ignoredElements,
+                                    diffReferenceId=diffData["diffReferenceId"],
+                                    mergeDiffsIds=[j[0] for j in sum([k for m, k in mergeElements.items()], [])], # plain list.
                                     deleteDiffsOnDestination=deleteElements
                                 )
                             )
