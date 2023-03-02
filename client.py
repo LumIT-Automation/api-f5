@@ -427,27 +427,30 @@ if os.path.exists(str(configFile)):
         iv = json.loads(file.read())
 
         for environment in ("pro", "nopro"):
+            assetsEnv = iv.get("assets", {}).get(environment, {})
             Input["assets"][environment] = {
-                "fqdn": iv.get("assets", {}).get(environment, {}).get("fqdn", ""),
-                "user": iv.get("assets", {}).get(environment, {}).get("user", ""),
-                "password": iv.get("assets", {}).get(environment, {}).get("password", "") or getpass("Insert password for the Pro F5 asset:\n"),
+                "fqdn": assetsEnv.get("fqdn", ""),
+                "user": assetsEnv.get("user", ""),
+                "password": assetsEnv.get("password", "") or getpass("Insert password for the Pro F5 asset:\n"),
             }
 
         for run in iv.get("runs", []):
+            policiesSource = run.get("policies", {}).get("source", {})
+            policiesDestination = run.get("policies", {}).get("destination", {})
             Input["runs"].append({
                 "uuid": run.get("uuid", ""),
                 "policies": {
                     "source": {
-                        "asset": run.get("policies", {}).get("source", {}).get("asset"),
-                        "name": run.get("policies", {}).get("source", {}).get("name"),
+                        "asset": policiesSource.get("asset"),
+                        "name": policiesSource.get("name"),
                     },
                     "destination": {
-                        "asset": run.get("policies", {}).get("destination", {}).get("asset"),
-                        "name": run.get("policies", {}).get("destination", {}).get("name"),
+                        "asset": policiesDestination.get("asset"),
+                        "name": policiesDestination.get("name"),
                     }
                 },
-                "auto-skip": run.get("uuid", []),
-                "auto-merge": run.get("uuid", []),
+                "auto-skip": run.get("auto-skip", []),
+                "auto-merge": run.get("auto-merge", []),
 
             })
 
@@ -461,11 +464,9 @@ for k, v in Input["assets"].items():
 for v in Input["runs"]:
     for _, jv in v["policies"].items():
         for jjk, jjv in jv.items():
-            if not jjv:
+            if not jjv or (jjk == "asset" and jjv not in ("pro", "nopro")):
                 Util.out(f"Value not provided in runs list: {jjk}", "red", "lightgrey")
                 raise Exception
-
-#@todo: check pro/nopro.
 
 
 
