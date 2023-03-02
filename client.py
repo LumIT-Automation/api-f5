@@ -411,11 +411,6 @@ class ASMPolicyManager:
 # Parser/config file init
 ########################################################################################################################
 
-Input = {
-    "assets": dict(),
-    "runs": list()
-}
-
 parser = argparse.ArgumentParser()
 parser.add_argument('-c', '--cfg_file', help='Config file to read input from', required=False)
 args = parser.parse_args()
@@ -425,6 +420,11 @@ configFile = args.cfg_file or "client-input.json"
 if os.path.exists(str(configFile)):
     with open(configFile, "r") as file:
         iv = json.loads(file.read())
+
+        Input = {
+            "assets": dict(),
+            "runs": list()
+        }
 
         for environment in ("pro", "nopro"):
             assetsEnv = iv.get("assets", {}).get(environment, {})
@@ -489,141 +489,149 @@ try:
 
     loadedAssets = Asset.listAssets()
     if loadedAssets["pro"] and loadedAssets["nopro"]:
-        srcPolicy = Input["runs"][0]["policies"]["source"]["name"]
-        dstPolicy = Input["runs"][0]["policies"]["destination"]["name"]
+        for run in Input["runs"]:
+            Util.out("\nRUNNING " + run["uuid"], "yellow")
 
-        srcAsset = loadedAssets[Input["runs"][0]["policies"]["source"]["asset"]]
-        dstAsset = loadedAssets[Input["runs"][0]["policies"]["destination"]["asset"]]
+            # Define current assets and policies for each run.
+            srcPolicyName = run["policies"]["source"]["name"]
+            dstPolicyName = run["policies"]["destination"]["name"]
 
-        # Get the id of the policies given by name.
-        srcPolicyId = ASMPolicyManager.getPolicyId(srcAsset["id"], srcPolicy)
-        dstPolicyId = ASMPolicyManager.getPolicyId(dstAsset["id"], dstPolicy)
+            srcAsset = loadedAssets[
+                run["policies"]["source"]["asset"] # pro/nopro.
+            ]
+            dstAsset = loadedAssets[
+                run["policies"]["destination"]["asset"]
+            ]
 
-        if srcPolicyId and dstPolicyId:
-            Util.out("Processing differences for SOURCE policy " + srcAsset["fqdn"] + "//" + srcPolicy + " vs DESTINATION policy " + dstAsset["fqdn"] + "//" + dstPolicy + " on " + dstAsset["fqdn"] + ".")
-            Util.out("This could take a very long while. Logs on \"client.log\" file within the installation folder. Please wait...")
+            # Get the id of the policies given by name.
+            srcPolicyId = ASMPolicyManager.getPolicyId(srcAsset["id"], srcPolicyName)
+            dstPolicyId = ASMPolicyManager.getPolicyId(dstAsset["id"], dstPolicyName)
 
-            # Fetch policies' differences.
-            diffData = ASMPolicyManager.diffPolicies(srcAssetId=srcAsset["id"], sPolicyId=srcPolicyId, dstAssetId=dstAsset["id"], dPolicyId=dstPolicyId)["data"]
+            if srcPolicyId and dstPolicyId:
+                Util.out("Processing differences for SOURCE policy " + srcAsset["fqdn"] + "//" + srcPolicyName + " vs DESTINATION policy " + dstAsset["fqdn"] + "//" + dstPolicyName + " on " + dstAsset["fqdn"] + ".")
+                Util.out("This could take a very long while. Logs on \"client.log\" file within the installation folder. Please wait...")
 
-            importedPolicy = diffData["importedPolicy"]
-            Util.out("\nImported policy on destination F5 asset (temp policy):")
-            Util.out("- id: " + importedPolicy["id"])
-            Util.out("- name: " + importedPolicy["name"])
-            Util.out("- destination F5 message:\n" + importedPolicy["import-message"])
+                # Fetch policies' differences.
+                diffData = ASMPolicyManager.diffPolicies(srcAssetId=srcAsset["id"], sPolicyId=srcPolicyId, dstAssetId=dstAsset["id"], dPolicyId=dstPolicyId)["data"]
 
-            # Give the diff entity type a modification label.
-            entityTypeInformation = Util.entityTypeInformation(diffData)
+                importedPolicy = diffData["importedPolicy"]
+                Util.out("\nImported policy on destination F5 asset (temp policy):")
+                Util.out("- id: " + importedPolicy["id"])
+                Util.out("- name: " + importedPolicy["name"])
+                Util.out("- destination F5 message:\n" + importedPolicy["import-message"])
 
-            Util.out("\nDIFFERENCES follow")
-            for diffEntityType, diffList in diffData["differences"].items():
-                for el in diffList:
-                    # For each difference print on-screen output and ask the user.
-                    if el["diffType"] in ("conflict", "only-in-source", "only-in-destination"):
-                        Util.out("\n\n[ENTITY TYPE: " + diffEntityType + "] \"" + el["entityName"] + "\":", "green")
-                        if entityTypeInformation[diffEntityType]:
-                            Util.out(entityTypeInformation[diffEntityType], "yellow")
-                        Util.out("  - difference type: " + el["diffType"] + ";")
+                # Give the diff entity type a modification label.
+                entityTypeInformation = Util.entityTypeInformation(diffData)
 
-                        sourceWarning, destinationWarning = Util.newerInformation(el)
-                        if "sourceLastUpdate" in el and el["sourceLastUpdate"]:
-                            Util.out("  - source last update " + Util.toDate(el["sourceLastUpdate"]) + sourceWarning + ";")
-                        if "destinationLastUpdate" in el and el["destinationLastUpdate"]:
-                            Util.out("  - destination last update " + Util.toDate(el["destinationLastUpdate"]) + destinationWarning + ";")
+                Util.out("\nDIFFERENCES follow")
+                for diffEntityType, diffList in diffData["differences"].items():
+                    for el in diffList:
+                        # For each difference print on-screen output and ask the user.
+                        if el["diffType"] in ("conflict", "only-in-source", "only-in-destination"):
+                            Util.out("\n\n[ENTITY TYPE: " + diffEntityType + "] \"" + el["entityName"] + "\":", "green")
+                            if entityTypeInformation[diffEntityType]:
+                                Util.out(entityTypeInformation[diffEntityType], "yellow")
+                            Util.out("  - difference type: " + el["diffType"] + ";")
 
-                        # Handle user input.
-                        response = ""
-                        while response not in ("y", "n", "s", "a"):
-                            if not response:
-                                if el["diffType"] in ("conflict", "only-in-source"):
-                                    response = input("  -> Merge to destination policy [y/n; d for details; s for skipping the current entity type; a for merging all differences for this entity type]?\n")
+                            sourceWarning, destinationWarning = Util.newerInformation(el)
+                            if "sourceLastUpdate" in el and el["sourceLastUpdate"]:
+                                Util.out("  - source last update " + Util.toDate(el["sourceLastUpdate"]) + sourceWarning + ";")
+                            if "destinationLastUpdate" in el and el["destinationLastUpdate"]:
+                                Util.out("  - destination last update " + Util.toDate(el["destinationLastUpdate"]) + destinationWarning + ";")
+
+                            # Handle user input.
+                            response = ""
+                            while response not in ("y", "n", "s", "a"):
+                                if not response:
+                                    if el["diffType"] in ("conflict", "only-in-source"):
+                                        response = input("  -> Merge to destination policy [y/n; d for details; s for skipping the current entity type; a for merging all differences for this entity type]?\n")
+                                    else:
+                                        response = input("  -> Delete object into destination policy [y/n; d for details; s for skipping the current entity type; a for merging all differences for this entity type]?\n")
+                                elif response == "d":
+                                    Util.log(el)
+                                    response = ""
                                 else:
-                                    response = input("  -> Delete object into destination policy [y/n; d for details; s for skipping the current entity type; a for merging all differences for this entity type]?\n")
-                            elif response == "d":
-                                Util.log(el)
-                                response = ""
-                            else:
-                                Util.out("Type y for yes, n for no, d for details, s for skipping the current entity type, a for merging all differences for this entity type")
-                                response = ""
+                                    Util.out("Type y for yes, n for no, d for details, s for skipping the current entity type, a for merging all differences for this entity type")
+                                    response = ""
 
-                        if response == "y":
-                            # Collect ids to merge subdivided by entity type.
-                            if el["diffType"] in ("conflict", "only-in-source"):
-                                if diffEntityType not in mergeElements:
-                                    mergeElements[diffEntityType] = []
-                                mergeElements[diffEntityType].append((el["id"], el["entityName"]))
-                                Util.out("  -> Element will be merged at the end of the collection process, nothing done so far")
-
-                            # Collect ids for objects to delete on destination subdivided by entity type.
-                            if el["diffType"] == "only-in-destination":
-                                if diffEntityType not in deleteElements:
-                                    deleteElements[diffEntityType] = []
-                                deleteElements[diffEntityType].append({"id": el["id"], "entityName": el["entityName"]})
-                                Util.out("  -> Element will be deleted at the end of the collection process, nothing done so far")
-
-                        if response == "n":
-                            Util.out("  -> Element won't be merged")
-
-                        if response == "s":
-                            break
-
-                        if response == "a":
-                            # Collect all ids for this entity type.
-                            for elm in diffData["differences"][diffEntityType]:
-                                if elm["diffType"] in ("conflict", "only-in-source"):
+                            if response == "y":
+                                # Collect ids to merge subdivided by entity type.
+                                if el["diffType"] in ("conflict", "only-in-source"):
                                     if diffEntityType not in mergeElements:
                                         mergeElements[diffEntityType] = []
+                                    mergeElements[diffEntityType].append((el["id"], el["entityName"]))
+                                    Util.out("  -> Element will be merged at the end of the collection process, nothing done so far")
 
-                                    mergeElements[diffEntityType].append((elm["id"], elm["entityName"]))
-                                if elm["diffType"] == "only-in-destination":
+                                # Collect ids for objects to delete on destination subdivided by entity type.
+                                if el["diffType"] == "only-in-destination":
                                     if diffEntityType not in deleteElements:
                                         deleteElements[diffEntityType] = []
+                                    deleteElements[diffEntityType].append({"id": el["id"], "entityName": el["entityName"]})
+                                    Util.out("  -> Element will be deleted at the end of the collection process, nothing done so far")
 
-                                    deleteElements[diffEntityType].append({"id": elm["id"], "entityName": elm["entityName"]})
-                            break
+                            if response == "n":
+                                Util.out("  -> Element won't be merged")
 
-            if mergeElements or deleteElements:
-                ignoredElements = Util.getIgnoredDifferences(diffData, mergeElements)
+                            if response == "s":
+                                break
 
-                response = ""
-                Util.log(mergeElements, "\n\nAttempting to merge the elements: ")
-                Util.log(deleteElements, "\n\nAttempting to delete the elements from the destination policy: ")
-                Util.log(ignoredElements, "\n\nIgnored elements: ")
+                            if response == "a":
+                                # Collect all ids for this entity type.
+                                for elm in diffData["differences"][diffEntityType]:
+                                    if elm["diffType"] in ("conflict", "only-in-source"):
+                                        if diffEntityType not in mergeElements:
+                                            mergeElements[diffEntityType] = []
 
-                # Handle user input.
-                while response not in ("Y", "N"):
-                    if not response:
-                        response = input("\n\n  -> Confirm merging/deleting the selected differences into the destination policy [Y/N]?\n")
-                    else:
-                        Util.out("Type Y for yes, N for no")
-                        response = ""
+                                        mergeElements[diffEntityType].append((elm["id"], elm["entityName"]))
+                                    if elm["diffType"] == "only-in-destination":
+                                        if diffEntityType not in deleteElements:
+                                            deleteElements[diffEntityType] = []
 
-                if response == "Y":
-                    # Merge policies.
-                    Util.out("\n\nMerging...")
-                    Util.out(
-                        ASMPolicyManager.mergePolicies(
-                            dstAssetId=dstAsset["id"],
-                            destinationPolicyId=dstPolicyId,
-                            importedPolicyId=importedPolicy["id"],
-                            ignoreDiffs=ignoredElements,
-                            deleteDiffsOnDestination=deleteElements
+                                        deleteElements[diffEntityType].append({"id": elm["id"], "entityName": elm["entityName"]})
+                                break
+
+                if mergeElements or deleteElements:
+                    ignoredElements = Util.getIgnoredDifferences(diffData, mergeElements)
+
+                    response = ""
+                    Util.log(mergeElements, "\n\nAttempting to merge the elements: ")
+                    Util.log(deleteElements, "\n\nAttempting to delete the elements from the destination policy: ")
+                    Util.log(ignoredElements, "\n\nIgnored elements: ")
+
+                    # Handle user input.
+                    while response not in ("Y", "N"):
+                        if not response:
+                            response = input("\n\n  -> Confirm merging/deleting the selected differences into the destination policy [Y/N]?\n")
+                        else:
+                            Util.out("Type Y for yes, N for no")
+                            response = ""
+
+                    if response == "Y":
+                        # Merge policies.
+                        Util.out("\n\nMerging...")
+                        Util.out(
+                            ASMPolicyManager.mergePolicies(
+                                dstAssetId=dstAsset["id"],
+                                destinationPolicyId=dstPolicyId,
+                                importedPolicyId=importedPolicy["id"],
+                                ignoreDiffs=ignoredElements,
+                                deleteDiffsOnDestination=deleteElements
+                            )
                         )
-                    )
 
-                    # Policy apply.
-                    Util.out("Applying...")
-                    Util.out(
-                        ASMPolicyManager.applyPolicy(assetId=dstAsset["id"], policyId=dstPolicyId)
-                    )
+                        # Policy apply.
+                        Util.out("Applying...")
+                        Util.out(
+                            ASMPolicyManager.applyPolicy(assetId=dstAsset["id"], policyId=dstPolicyId)
+                        )
 
-                    Util.out("All done", "green")
+                        Util.out("Done", "green")
+                    else:
+                        Util.out("Skipping, nothing done", "red", "lightgrey")
                 else:
-                    Util.out("Quitting, nothing done", "red", "lightgrey")
+                    Util.out("No difference to merge, nothing done", "red", "lightgrey")
             else:
-                Util.out("No difference to merge, nothing done", "red", "lightgrey")
-        else:
-            Util.out("No policy found with given name, aborting", "red", "lightgrey")
+                Util.out("No policy found with given name, skipping", "red", "lightgrey")
     else:
         Util.out("No asset loaded, aborting", "red", "lightgrey")
 except Exception as ex:
