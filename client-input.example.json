@@ -1,23 +1,12 @@
 {
     "assets": {
         "pro": {
-            "fqdns": [
-                {
-                    "fqdn1": "ADDRESS_OR_FQDN1"
-                },
-                {
-                    "fqdn2": "ADDRESS_OR_FQDN2"
-                }
-            ],
+            "fqdn": "ADDRESS_OR_FQDN1",
             "user": "USERNAME",
             "password": "PASSWORD"
         },
         "nopro": {
-            "fqdns": [
-                {
-                    "fqdn1": "ADDRESS_OR_FQDN1"
-                }
-            ],
+            "fqdn": "ADDRESS_OR_FQDN1",
             "user": "USERNAME",
             "password": "PASSWORD"
         }
@@ -28,7 +17,6 @@
             "policies": {
                 "source": {
                     "asset": "pro",
-                    "fqdn": "fqdn1",
                     "name": "SOURCE_POLICY_NAME"
                 },
                 "destination": {
