@@ -304,6 +304,13 @@ class Util:
 
                         jj += 1
 
+        for _, dl in toBeIgnored.items():
+            for jj, vv in enumerate(dl):
+                dl[jj] = {
+                    "id": vv["id"],
+                    "entityName": vv["entityName"]
+                }
+
         return toBeIgnored
 
 
@@ -640,7 +647,7 @@ try:
                                     dstAssetId=dstAsset["id"],
                                     destinationPolicyId=dstPolicyId,
                                     diffReferenceId=diffData["diffReferenceId"],
-                                    mergeDiffsIds=[j[0] for j in sum([k for m, k in mergeElements.items()], [])], # plain list.
+                                    mergeDiffsIds=[j[0] for j in sum([k for m, k in mergeElements.items()], [])], # plain list of ids.
                                     deleteDiffsOnDestination=deleteElements
                                 )
                             )
