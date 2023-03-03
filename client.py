@@ -527,7 +527,7 @@ try:
             for run in userRuns:
                 Util.out("\nRUNNING " + run["uuid"], "yellow")
 
-                # Define current assets and policies for each run.
+                # Define current assets (chosen from loaded ones), policies and auto-skip/merge for each run.
                 srcPolicyName = run["policies"]["source"]["name"]
                 dstPolicyName = run["policies"]["destination"]["name"]
 
@@ -538,8 +538,8 @@ try:
                     run["policies"]["destination"]["asset"]
                 ]
 
-                autoSkipEntityTypes = run["auto-skip"]
-                autoMergeEntityTypes = run["auto-merge"]
+                autoSkipET = run["auto-skip"]
+                autoMergeET = run["auto-merge"]
 
                 # Get the id of the policies given by name.
                 srcPolicyId = ASMPolicyManager.getPolicyId(srcAsset["id"], srcPolicyName)
@@ -562,14 +562,14 @@ try:
                     entityTypeInformation = Util.entityTypeInformation(diffData)
 
                     Util.out("\nDIFFERENCES follow")
-                    for diffEntityType, diffList in diffData["differences"].items():
-                        if diffEntityType not in autoSkipEntityTypes:
-                            for el in diffList:
+                    for diffET, diffLs in diffData["differences"].items():
+                        if diffET not in autoSkipET:
+                            for el in diffLs:
                                 # For each difference print on-screen output and ask the user.
-                                if el["diffType"] in ("conflict", "only-in-source", "only-in-destination"):
-                                    Util.out("\n\n[ENTITY TYPE: " + diffEntityType + "] \"" + el["entityName"] + "\":", "green")
-                                    if entityTypeInformation[diffEntityType]:
-                                        Util.out(entityTypeInformation[diffEntityType], "yellow")
+                                if el["diffType"]:
+                                    Util.out("\n\n[ENTITY TYPE: " + diffET + "] \"" + el["entityName"] + "\":", "green")
+                                    if entityTypeInformation[diffET]:
+                                        Util.out(entityTypeInformation[diffET], "yellow")
                                     Util.out("  - difference type: " + el["diffType"] + ";")
 
                                     sourceWarning, destinationWarning = Util.newerInformation(el)
@@ -579,7 +579,12 @@ try:
                                         Util.out("  - destination last update " + Util.toDate(el["destinationLastUpdate"]) + destinationWarning + ";")
 
                                     # Handle user input.
-                                    response = ""
+                                    if diffET in autoMergeET \
+                                            and (el["diffType"] == "only-in-source" or el["diffType"] == "only-in-destination" or (el["diffType"] == "conflict" and "NEW" in sourceWarning)):
+                                        response = "y" # precompile user response in case of auto-merging.
+                                    else:
+                                        response = ""
+
                                     while response not in ("y", "n", "s", "a"):
                                         if not response:
                                             if el["diffType"] in ("conflict", "only-in-source"):
@@ -596,16 +601,16 @@ try:
                                     if response == "y":
                                         # Collect ids to merge subdivided by entity type.
                                         if el["diffType"] in ("conflict", "only-in-source"):
-                                            if diffEntityType not in mergeElements:
-                                                mergeElements[diffEntityType] = []
-                                            mergeElements[diffEntityType].append((el["id"], el["entityName"]))
+                                            if diffET not in mergeElements:
+                                                mergeElements[diffET] = []
+                                            mergeElements[diffET].append((el["id"], el["entityName"]))
                                             Util.out("  -> Element will be merged at the end of the collection process, nothing done so far")
 
                                         # Collect ids for objects to delete on destination subdivided by entity type.
                                         if el["diffType"] == "only-in-destination":
-                                            if diffEntityType not in deleteElements:
-                                                deleteElements[diffEntityType] = []
-                                            deleteElements[diffEntityType].append({"id": el["id"], "entityName": el["entityName"]})
+                                            if diffET not in deleteElements:
+                                                deleteElements[diffET] = []
+                                            deleteElements[diffET].append({"id": el["id"], "entityName": el["entityName"]})
                                             Util.out("  -> Element will be deleted at the end of the collection process, nothing done so far")
 
                                     if response == "n":
@@ -616,25 +621,28 @@ try:
 
                                     if response == "a":
                                         # Collect all ids for this entity type.
-                                        for elm in diffData["differences"][diffEntityType]:
+                                        for elm in diffData["differences"][diffET]:
                                             if elm["diffType"] in ("conflict", "only-in-source"):
-                                                if diffEntityType not in mergeElements:
-                                                    mergeElements[diffEntityType] = []
+                                                if diffET not in mergeElements:
+                                                    mergeElements[diffET] = []
 
-                                                mergeElements[diffEntityType].append((elm["id"], elm["entityName"]))
+                                                mergeElements[diffET].append((elm["id"], elm["entityName"]))
                                             if elm["diffType"] == "only-in-destination":
-                                                if diffEntityType not in deleteElements:
-                                                    deleteElements[diffEntityType] = []
+                                                if diffET not in deleteElements:
+                                                    deleteElements[diffET] = []
 
-                                                deleteElements[diffEntityType].append({"id": elm["id"], "entityName": elm["entityName"]})
+                                                deleteElements[diffET].append({"id": elm["id"], "entityName": elm["entityName"]})
                                         break
 
                     if mergeElements or deleteElements:
                         response = ""
-                        Util.log(mergeElements, "\n\nAttempting to merge the elements: ")
+                        Util.log(mergeElements, "\n\nAttempting to merge the elements (including auto-merged): ")
                         Util.log(deleteElements, "\n\nAttempting to delete the elements from the destination policy: ")
-                        Util.log(autoSkipEntityTypes, "\n\nAutomatically skipped entity types: ")
-                        Util.log(Util.getIgnoredDifferences(diffData, mergeElements), "\n\nIgnored differences (includes auto-skipped): ")
+
+                        Util.log(autoMergeET, "\n\nAutomatically merged entity types: ")
+                        Util.log(autoSkipET, "\n\nAutomatically skipped entity types: ")
+
+                        Util.log(Util.getIgnoredDifferences(diffData, mergeElements), "\n\nIgnored differences (including auto-skipped): ")
 
                         # Handle user input.
                         while response not in ("Y", "N"):

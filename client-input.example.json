@@ -29,7 +29,7 @@
                 "urls"
             ],
 		    "auto-merge": [
-                "parameters"
+                "signature-sets"
             ]
         }
     ]
