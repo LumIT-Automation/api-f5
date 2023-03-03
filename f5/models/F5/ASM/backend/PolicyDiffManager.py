@@ -212,8 +212,6 @@ class PolicyDiffManager(PolicyBase):
                         raise CustomException(status=400, payload={"F5": "policy merge failed"})
             except Exception as e:
                 raise e
-        else:
-            raise CustomException(status=400, payload={"F5": "won't merge policies without filtering"})
 
 
 
