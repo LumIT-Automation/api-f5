@@ -636,11 +636,11 @@ try:
 
                     if mergeElements or deleteElements:
                         response = ""
-                        Util.log(mergeElements, "\n\nAttempting to merge the elements (including auto-merged): ")
-                        Util.log(deleteElements, "\n\nAttempting to delete the elements from the destination policy: ")
-
                         Util.log(autoMergeET, "\n\nAutomatically merged entity types: ")
                         Util.log(autoSkipET, "\n\nAutomatically skipped entity types: ")
+
+                        Util.log(mergeElements, "\n\nAttempting to merge the elements (including auto-merged): ")
+                        Util.log(deleteElements, "\n\nAttempting to delete the elements from the destination policy: ")
 
                         Util.log(Util.getIgnoredDifferences(diffData, mergeElements), "\n\nIgnored differences (including auto-skipped): ")
 
