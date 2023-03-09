@@ -412,7 +412,7 @@ class ASMPolicyManager:
     @staticmethod
     def deletePolicy(assetId: int, policyId: str) -> None:
         try:
-            deletePolicyResponse = Client().delete(path=f"/api/v1/f5/{assetId}/asm/policy/{policyId}/")
+            deletePolicyResponse = Client().delete(f"/api/v1/f5/{assetId}/asm/policy/{policyId}/")
 
             if deletePolicyResponse.status_code != 200:
                 raise Exception(deletePolicyResponse.json())
@@ -462,7 +462,7 @@ try:
             for environment in ("pro", "nopro"):
                 assetsEnv = iv.get("assets", {}).get(environment, {})
                 Input["assets"][environment] = {
-                    "fqdn": assetsEnv.get("fqdn", ""),
+                    "fqdns": assetsEnv.get("fqdns", ""),
                     "user": assetsEnv.get("user", ""),
                     "password": assetsEnv.get("password", "") or getpass(f"Insert password for the {environment.capitalize()} F5 asset:\n"),
                 }
@@ -475,16 +475,17 @@ try:
                     "policies": {
                         "source": {
                             "asset": policiesSource.get("asset"),
+                            "fqdn": policiesSource.get("fqdn"),
                             "name": policiesSource.get("name"),
                         },
                         "destination": {
                             "asset": policiesDestination.get("asset"),
+                            "fqdn": policiesDestination.get("fqdn"),
                             "name": policiesDestination.get("name"),
                         }
                     },
                     "auto-skip": run.get("auto-skip", []),
                     "auto-merge": run.get("auto-merge", []),
-
                 })
 
         # Check input.
@@ -493,6 +494,10 @@ try:
                 if not jv:
                     Util.out(f"Value not provided: {k}/{jk}", "red", "lightgrey")
                     raise Exception
+                if jk == "fqdns":
+                    if "fqdn1" not in jv or not jv["fqdn1"]:
+                        Util.out(f"Value not provided: {k}/{jk}", "red", "lightgrey")
+                        raise Exception
 
         uuids = list()
         for v in Input["runs"]:
@@ -526,48 +531,44 @@ try:
     disable_warnings(InsecureRequestWarning)
     django.setup()
 
-    # Load user-inserted assets.
-    Asset.loadAsset(ip=Input["assets"]["pro"]["fqdn"], user=Input["assets"]["pro"]["user"], passwd=Input["assets"]["pro"]["password"], environment="pro")
-    Asset.loadAsset(ip=Input["assets"]["nopro"]["fqdn"], user=Input["assets"]["nopro"]["user"], passwd=Input["assets"]["nopro"]["password"], environment="nopro")
+    Util.out("Configurations found: ")
 
-    loadedAssets = Asset.listAssets()
-    if loadedAssets["pro"] and loadedAssets["nopro"]:
-        response = ""
-        Util.out("Configurations found: ")
+    # Ask the user for which run to process amongst found runs.
+    for ir, iv in enumerate(Input["runs"]):
+        Util.out(str(ir+1) + " - " + str(iv["uuid"]))
 
-        # Ask the user for which run to process amongst found runs.
-        for ir, iv in enumerate(Input["runs"]):
-            Util.out(str(ir+1) + " - " + str(iv["uuid"]))
+    response = ""
+    while not response:
+        response = input("\nPlease select run(s) to process [type in the corresponding line numbers, e.g.: 1,2,5 or a for all]:\n")
 
-        while not response:
-            response = input("\nPlease select run(s) to process [type in the corresponding line numbers, e.g.: 1,2,5 or a for all]:\n")
+    if re.fullmatch(re.compile(r"^[\d,]+$"), response) or response == "a":
+        if response == "a":
+            userRuns = Input["runs"]
+        else:
+            userRuns = list()
+            for ur in response.split(","):
+                if ur and 1 <= int(ur) <= len(Input["runs"]):
+                    userRuns.append(Input["runs"][int(ur)-1])
 
-        if re.fullmatch(re.compile(r"^[\d,]+$"), response) or response == "a":
-            if response == "a":
-                userRuns = Input["runs"]
-            else:
-                userRuns = list()
-                for ur in response.split(","):
-                    if ur and 1 <= int(ur) <= len(Input["runs"]):
-                        userRuns.append(Input["runs"][int(ur)-1])
+        # Process all selected runs.
+        for run in userRuns:
+            mergeElements = dict()
+            deleteElements = dict()
 
-            # Process all selected runs.
-            for run in userRuns:
-                mergeElements = dict()
-                deleteElements = dict()
+            # Load user-inserted assets/fqdns.
+            Asset.loadAsset(ip=Input["assets"]["pro"]["fqdns"][run["policies"]["source"]["fqdn"]], user=Input["assets"]["pro"]["user"], passwd=Input["assets"]["pro"]["password"], environment="pro")
+            Asset.loadAsset(ip=Input["assets"]["nopro"]["fqdns"][run["policies"]["destination"]["fqdn"]], user=Input["assets"]["nopro"]["user"], passwd=Input["assets"]["nopro"]["password"], environment="nopro")
 
+            loadedAssets = Asset.listAssets()
+            if loadedAssets["pro"] and loadedAssets["nopro"]:
                 Util.out("\nRUNNING " + run["uuid"], "yellow")
 
                 # Define current assets (chosen from loaded ones), policies and auto-skip/merge for each run.
                 srcPolicyName = run["policies"]["source"]["name"]
                 dstPolicyName = run["policies"]["destination"]["name"]
 
-                srcAsset = loadedAssets[
-                    run["policies"]["source"]["asset"] # pro/nopro.
-                ]
-                dstAsset = loadedAssets[
-                    run["policies"]["destination"]["asset"]
-                ]
+                srcAsset = loadedAssets[run["policies"]["source"]["asset"]] # pro/nopro.
+                dstAsset = loadedAssets[run["policies"]["destination"]["asset"]]
 
                 autoSkipET = run["auto-skip"]
                 autoMergeET = run["auto-merge"]
@@ -709,13 +710,15 @@ try:
                         Util.out("No difference to merge, nothing done", "red", "lightgrey")
 
                     # Cleanup imported temporary policy.
-                    ASMPolicyManager.deletePolicy(assetId=dstAsset["id"], policyId=importedPolicy)
+                    ASMPolicyManager.deletePolicy(assetId=dstAsset["id"], policyId=importedPolicy["id"])
                 else:
                     Util.out("No policy found with given name, skipping", "red", "lightgrey")
-        else:
-            Util.out("Wrong input, aborting", "red", "lightgrey")
+            else:
+                Util.out("No asset loaded, skipping", "red", "lightgrey")
+
+            Asset.purgeAssets()
     else:
-        Util.out("No asset loaded, aborting", "red", "lightgrey")
+        Util.out("Wrong input, aborting", "red", "lightgrey")
 except Exception as ex:
     Util.out(ex.__str__(), "red", "lightgrey")
 finally:
