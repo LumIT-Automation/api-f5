@@ -9,6 +9,7 @@ import logging
 import sys
 import tempfile
 from getpass import getpass
+from pathlib import Path
 from colorama import just_fix_windows_console
 from urllib3.exceptions import InsecureRequestWarning
 from urllib3 import disable_warnings
@@ -25,6 +26,7 @@ just_fix_windows_console() # needed on Windows only.
 # Django init (Client)
 ########################################################################################################################
 
+sys.path.append(str(Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))).parent.parent))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "api.settings")
 settings.DISABLE_AUTHENTICATION = True
 
