@@ -599,7 +599,7 @@ try:
                             for el in diffLs:
                                 # For each difference print on-screen output and ask the user.
                                 if el["diffType"]:
-                                    Util.out("\n\n[ENTITY TYPE: " + diffET + "] \"" + el["entityName"] + "\":", "green")
+                                    Util.out("\n\n[" + run["uuid"] + "][ENTITY TYPE: " + diffET + "] \"" + el["entityName"] + "\":", "green")
                                     if entityTypeInformation[diffET]:
                                         Util.out(entityTypeInformation[diffET], "yellow")
                                     Util.out("  - difference type: " + el["diffType"] + ";")
