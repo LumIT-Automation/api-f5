@@ -288,22 +288,33 @@ class Util:
 
 
     @staticmethod
-    def getIgnoredDifferences(diff: dict, merge: dict) -> dict:
+    def getIgnoredDifferences(diff: dict, merge: dict, delete: dict) -> dict:
         toBeIgnored = diff["differences"].copy()
 
-        # Get toBeIgnored differences: all diff data but merge elements.
+        def __cleanupElement(elId: str, eType: str) -> None:
+            for jde, jdl in toBeIgnored.items():
+                if jde == eType:
+                    jco = 0
+                    for jvv in jdl:
+                        if jvv["id"] == elId:
+                            del jdl[jco]
+                        jco += 1
+
+        # Get all diff data but merge/delete elements.
         for de, dl in toBeIgnored.items():
             if de in merge:
                 for e in merge[de]: # tuple.
-                    jj = 0
                     for vv in dl:
                         if vv["diffType"] in ("conflict", "only-in-source"):
                             if vv["id"] == e[0]:
-                                del dl[jj]
-                        if vv["diffType"] == "only-in-destination":
-                            del dl[jj] # do not count these entries as ignored ones.
+                                __cleanupElement(vv["id"], de) # do not count these entries as ignored ones.
 
-                        jj += 1
+            if de in delete:
+                for e in delete[de]:
+                    for vv in dl:
+                        if vv["diffType"] == "only-in-destination":
+                            if vv["id"] == e["id"]:
+                                __cleanupElement(vv["id"], de)
 
         for _, dl in toBeIgnored.items():
             for jj, vv in enumerate(dl):
@@ -441,7 +452,7 @@ try:
                 Input["assets"][environment] = {
                     "fqdn": assetsEnv.get("fqdn", ""),
                     "user": assetsEnv.get("user", ""),
-                    "password": assetsEnv.get("password", "") or getpass("Insert password for the Pro F5 asset:\n"),
+                    "password": assetsEnv.get("password", "") or getpass(f"Insert password for the {environment.capitalize()} F5 asset:\n"),
                 }
 
             for run in iv.get("runs", []):
@@ -650,7 +661,7 @@ try:
                         Util.log(mergeElements, "\n\nAttempting to merge the elements (including auto-merged): ")
                         Util.log(deleteElements, "\n\nAttempting to delete the elements from the destination policy: ")
 
-                        Util.log(Util.getIgnoredDifferences(diffData, mergeElements), "\n\nIgnored differences (including auto-skipped): ")
+                        Util.log(Util.getIgnoredDifferences(diffData, mergeElements, deleteElements), "\n\nIgnored differences (including auto-skipped): ")
 
                         # Handle user input.
                         while response not in ("Y", "N"):
