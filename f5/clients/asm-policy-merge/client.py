@@ -29,6 +29,7 @@ just_fix_windows_console() # needed on Windows only.
 sys.path.append(str(Path(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))).parent.parent))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "api.settings")
 settings.DISABLE_AUTHENTICATION = True
+settings.DEBUG = False
 
 settings.DATABASES = {
     'default': {
