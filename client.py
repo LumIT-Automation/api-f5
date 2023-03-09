@@ -410,6 +410,18 @@ class ASMPolicyManager:
 
 
     @staticmethod
+    def deletePolicy(assetId: int, policyId: str) -> None:
+        try:
+            deletePolicyResponse = Client().delete(path=f"/api/v1/f5/{assetId}/asm/policy/{policyId}/")
+
+            if deletePolicyResponse.status_code != 200:
+                raise Exception(deletePolicyResponse.json())
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
     def getPolicyId(assetId: int, name: str) -> str:
         policyId = ""
 
@@ -695,6 +707,9 @@ try:
                             Util.out("Skipping, nothing done", "red", "lightgrey")
                     else:
                         Util.out("No difference to merge, nothing done", "red", "lightgrey")
+
+                    # Cleanup imported temporary policy.
+                    ASMPolicyManager.deletePolicy(assetId=dstAsset["id"], policyId=importedPolicy)
                 else:
                     Util.out("No policy found with given name, skipping", "red", "lightgrey")
         else:
