@@ -6,6 +6,7 @@ import argparse
 import json
 import datetime
 import logging
+import sys
 import tempfile
 from getpass import getpass
 from colorama import just_fix_windows_console
@@ -419,69 +420,76 @@ class ASMPolicyManager:
 # Parser/config file init
 ########################################################################################################################
 
-parser = argparse.ArgumentParser()
-parser.add_argument('-c', '--cfg_file', help='Config file to read input from', required=False)
-args = parser.parse_args()
+Input = {
+    "assets": dict(),
+    "runs": list()
+}
 
-# Read available config file entries.
-configFile = args.cfg_file or "client-input.json"
-if os.path.exists(str(configFile)):
-    with open(configFile, "r") as file:
-        iv = json.loads(file.read())
+try:
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-c', '--cfg_file', help='Config file to read input from', required=False)
+    args = parser.parse_args()
 
-        Input = {
-            "assets": dict(),
-            "runs": list()
-        }
+    # Read available config file entries.
+    configFile = args.cfg_file or "client-input.json"
+    if os.path.exists(str(configFile)):
+        with open(configFile, "r") as file:
+            iv = json.loads(file.read())
 
-        for environment in ("pro", "nopro"):
-            assetsEnv = iv.get("assets", {}).get(environment, {})
-            Input["assets"][environment] = {
-                "fqdn": assetsEnv.get("fqdn", ""),
-                "user": assetsEnv.get("user", ""),
-                "password": assetsEnv.get("password", "") or getpass("Insert password for the Pro F5 asset:\n"),
-            }
+            for environment in ("pro", "nopro"):
+                assetsEnv = iv.get("assets", {}).get(environment, {})
+                Input["assets"][environment] = {
+                    "fqdn": assetsEnv.get("fqdn", ""),
+                    "user": assetsEnv.get("user", ""),
+                    "password": assetsEnv.get("password", "") or getpass("Insert password for the Pro F5 asset:\n"),
+                }
 
-        for run in iv.get("runs", []):
-            policiesSource = run.get("policies", {}).get("source", {})
-            policiesDestination = run.get("policies", {}).get("destination", {})
-            Input["runs"].append({
-                "uuid": run.get("uuid", ""),
-                "policies": {
-                    "source": {
-                        "asset": policiesSource.get("asset"),
-                        "name": policiesSource.get("name"),
+            for run in iv.get("runs", []):
+                policiesSource = run.get("policies", {}).get("source", {})
+                policiesDestination = run.get("policies", {}).get("destination", {})
+                Input["runs"].append({
+                    "uuid": run.get("uuid", ""),
+                    "policies": {
+                        "source": {
+                            "asset": policiesSource.get("asset"),
+                            "name": policiesSource.get("name"),
+                        },
+                        "destination": {
+                            "asset": policiesDestination.get("asset"),
+                            "name": policiesDestination.get("name"),
+                        }
                     },
-                    "destination": {
-                        "asset": policiesDestination.get("asset"),
-                        "name": policiesDestination.get("name"),
-                    }
-                },
-                "auto-skip": run.get("auto-skip", []),
-                "auto-merge": run.get("auto-merge", []),
+                    "auto-skip": run.get("auto-skip", []),
+                    "auto-merge": run.get("auto-merge", []),
 
-            })
+                })
 
-# Check input.
-for k, v in Input["assets"].items():
-    for jk, jv in v.items():
-        if not jv:
-            Util.out(f"Value not provided: {k}/{jk}", "red", "lightgrey")
-            raise Exception
+        # Check input.
+        for k, v in Input["assets"].items():
+            for jk, jv in v.items():
+                if not jv:
+                    Util.out(f"Value not provided: {k}/{jk}", "red", "lightgrey")
+                    raise Exception
 
-uuids = list()
-for v in Input["runs"]:
-    if v["uuid"] not in uuids:
-        uuids.append(v["uuid"])
-    else:
-        Util.out("Duplicated uuid: " + v["uuid"], "red", "lightgrey")
-        raise Exception
-
-    for _, jv in v["policies"].items():
-        for jjk, jjv in jv.items():
-            if not jjv or (jjk == "asset" and jjv not in ("pro", "nopro")):
-                Util.out(f"Value not provided in runs list: {jjk}", "red", "lightgrey")
+        uuids = list()
+        for v in Input["runs"]:
+            if v["uuid"] not in uuids:
+                uuids.append(v["uuid"])
+            else:
+                Util.out("Duplicated uuid: " + v["uuid"], "red", "lightgrey")
                 raise Exception
+
+            for _, jv in v["policies"].items():
+                for jjk, jjv in jv.items():
+                    if not jjv or (jjk == "asset" and jjv not in ("pro", "nopro")):
+                        Util.out(f"Value not provided in runs list: {jjk}", "red", "lightgrey")
+                        raise Exception
+    else:
+        Util.out(f"Config file not provided", "red", "lightgrey")
+        raise Exception
+except Exception as ex:
+    Util.out(ex.__str__(), "red", "lightgrey")
+    sys.exit()
 
 
 
