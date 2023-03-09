@@ -307,7 +307,7 @@ class Util:
                     for vv in dl:
                         if vv["diffType"] in ("conflict", "only-in-source"):
                             if vv["id"] == e[0]:
-                                __cleanupElement(vv["id"], de) # do not count these entries as ignored ones.
+                                __cleanupElement(vv["id"], de) # remove entry from ignored ones.
 
             if de in delete:
                 for e in delete[de]:
@@ -511,9 +511,6 @@ except Exception as ex:
 try:
     # Not thread-safe nor concurrency-safe.
 
-    mergeElements = dict()
-    deleteElements = dict()
-
     disable_warnings(InsecureRequestWarning)
     django.setup()
 
@@ -531,7 +528,7 @@ try:
             Util.out(str(ir+1) + " - " + str(iv["uuid"]))
 
         while not response:
-                response = input("\nPlease select run(s) to process [type in the corresponding line numbers, e.g.: 1,2,5 or a for all]:\n")
+            response = input("\nPlease select run(s) to process [type in the corresponding line numbers, e.g.: 1,2,5 or a for all]:\n")
 
         if re.fullmatch(re.compile(r"^[\d,]+$"), response) or response == "a":
             if response == "a":
@@ -544,6 +541,9 @@ try:
 
             # Process all selected runs.
             for run in userRuns:
+                mergeElements = dict()
+                deleteElements = dict()
+
                 Util.out("\nRUNNING " + run["uuid"], "yellow")
 
                 # Define current assets (chosen from loaded ones), policies and auto-skip/merge for each run.
