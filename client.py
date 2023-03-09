@@ -556,8 +556,14 @@ try:
             deleteElements = dict()
 
             # Load user-inserted assets/fqdns.
-            Asset.loadAsset(ip=Input["assets"]["pro"]["fqdns"][run["policies"]["source"]["fqdn"]], user=Input["assets"]["pro"]["user"], passwd=Input["assets"]["pro"]["password"], environment="pro")
-            Asset.loadAsset(ip=Input["assets"]["nopro"]["fqdns"][run["policies"]["destination"]["fqdn"]], user=Input["assets"]["nopro"]["user"], passwd=Input["assets"]["nopro"]["password"], environment="nopro")
+            Asset.loadAsset(
+                ip=Input["assets"]["pro"]["fqdns"][run["policies"]["source"]["fqdn"]], user=Input["assets"]["pro"]["user"], passwd=Input["assets"]["pro"]["password"],
+                environment="pro"
+            )
+            Asset.loadAsset(
+                ip=Input["assets"]["nopro"]["fqdns"][run["policies"]["destination"]["fqdn"]], user=Input["assets"]["nopro"]["user"], passwd=Input["assets"]["nopro"]["password"],
+                environment="nopro"
+            )
 
             loadedAssets = Asset.listAssets()
             if loadedAssets["pro"] and loadedAssets["nopro"]:
@@ -593,13 +599,19 @@ try:
                     # Give the diff entity type a modification label.
                     entityTypeInformation = Util.entityTypeInformation(diffData)
 
+                    diffETIndex = 1
+                    diffETTot = len(diffData["differences"])
+
                     Util.out("\nDIFFERENCES follow")
                     for diffET, diffLs in diffData["differences"].items():
                         if diffET not in autoSkipET:
+                            diffETLsIndex = 1
+                            diffETLsTot = len(diffLs)
+
                             for el in diffLs:
                                 # For each difference print on-screen output and ask the user.
                                 if el["diffType"]:
-                                    Util.out("\n\n[" + run["uuid"] + "][ENTITY TYPE: " + diffET + "] \"" + el["entityName"] + "\":", "green")
+                                    Util.out("\n\n[" + run["uuid"] + "][" + str(diffETIndex) + "/" + str(diffETTot) + " ENTITY TYPE: " + diffET + "] " + str(diffETLsIndex) + "/" + str(diffETLsTot) + " \"" + el["entityName"] + "\":", "green")
                                     if entityTypeInformation[diffET]:
                                         Util.out(entityTypeInformation[diffET], "yellow")
                                     Util.out("  - difference type: " + el["diffType"] + ";")
@@ -665,6 +677,9 @@ try:
 
                                                 deleteElements[diffET].append({"id": elm["id"], "entityName": elm["entityName"]})
                                         break
+
+                                diffETLsIndex += 1
+                        diffETIndex += 1
 
                     if mergeElements or deleteElements:
                         response = ""
