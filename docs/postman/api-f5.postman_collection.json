@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "970b07ac-dcfe-42d0-a959-c1c92b69a5b1",
+		"_postman_id": "07ffc31a-158b-4233-8830-4f504920a199",
 		"name": "api-f5",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -861,6 +861,50 @@
 										"workflow",
 										"virtualservers",
 										"vs_SERVICENAME",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete node",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "edfb456005712c3e68d97b525e247981",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/workflow/node/NODOSO/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"2",
+										"Partition1",
+										"workflow",
+										"node",
+										"NODOSO",
 										""
 									]
 								}
