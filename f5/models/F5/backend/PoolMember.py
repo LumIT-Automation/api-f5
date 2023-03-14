@@ -123,7 +123,7 @@ class PoolMember:
             )
 
             o = apiStats.get()["payload"]
-            for k, v in o.get("entries", []).items():
+            for k, v in o.get("entries", {}).items():
                 entries = v["nestedStats"]["entries"]
                 membersStats.append({
                     "fullPath": entries["nodeName"]["description"] + ':' + str(entries["port"]["value"]),

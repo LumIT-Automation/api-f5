@@ -24,8 +24,7 @@ class DeleteNodeWorkflow:
     def delete(self) -> None:
         try:
             poolName = self.__findPoolName()
-            Log.log(poolName, 'PPPPPPPPPPPPP')
-            self.__removePoolMember(poolName)
+            self.__removePoolsMembership(poolName)
             self.__deleteNode()
 
         except Exception as e:
@@ -37,25 +36,29 @@ class DeleteNodeWorkflow:
     # Private methods
     ####################################################################################################################
 
-    def __findPoolName(self) -> str:
+    def __findPoolName(self) -> list:
+        membership = list()
+
         try:
             poolList = Pool.list(self.assetId, self.partitionName)
             for pool in poolList:
                 members = Pool(self.assetId, self.partitionName, pool["name"]).members()
-                if self.nodeName in [ member["name" ].split(":")[0] for member in members ]: # drop the port info from the name field to match self.nodeName.
-                    return pool["name"]
+                for member in members:
+                    if self.nodeName == member["name"].split(":")[0]:
+                        membership.append( (pool["name"], member["name"]) )
 
-            return ""
+            return membership
         except Exception as e:
             raise e
 
 
 
-    def __removePoolMember(self, poolName: str) -> None:
-        Log.actionLog("Node deletion workflow: attempting to remove node " + self.nodeName + " from pool " + poolName)
-
+    def __removePoolsMembership(self, membership: list) -> None:
         try:
-            PoolMember(self.assetId, poolName, self.partitionName, self.nodeName).delete()
+            for member in membership:
+                Log.actionLog("Node deletion workflow: attempting to remove node " + str(member[1]) + " from pool " + str(member[0]))
+                PoolMember(self.assetId, member[0], self.partitionName, member[1]).delete()
+
         except Exception as e:
             raise e
 
