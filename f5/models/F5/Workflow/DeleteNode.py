@@ -58,6 +58,7 @@ class DeleteNodeWorkflow:
             for member in membership:
                 Log.actionLog("Node deletion workflow: attempting to remove node " + str(member[1]) + " from pool " + str(member[0]))
                 PoolMember(self.assetId, member[0], self.partitionName, member[1]).delete()
+                self.__logDeletedObjects(member[0], "pool", "removing from pool", "removed")
 
         except Exception as e:
             raise e
@@ -81,18 +82,19 @@ class DeleteNodeWorkflow:
                 Log.log("[ERROR] Node deletion workflow: cannot delete node " + self.nodeName + ": " + e.__str__())
 
         Log.actionLog("Deleted node: " + self.nodeName)
+        self.__logDeletedObjects(self.nodeName, "node", "deletion", "deleted")
 
 
 
-    def __logDeletedObjects(self) -> None:
+    def __logDeletedObjects(self, object: str, object_type: str, action: str, status: str) -> None:
         try:
             History.add({
                 "username": self.username,
-                "action": "[WORKFLOW] " + self.nodeName + " deletion",
+                "action": "[WORKFLOW] " + self.nodeName + " " + action,
                 "asset_id": self.assetId,
-                "config_object_type": "node",
-                "config_object": "/"+self.partitionName+"/" +  self.nodeName,
-                "status": "deleted"
+                "config_object_type": object_type,
+                "config_object": "/"+self.partitionName+"/" +  object,
+                "status": status
             })
         except Exception:
             pass
