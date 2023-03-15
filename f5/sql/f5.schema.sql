@@ -53,6 +53,18 @@ CREATE TABLE `asset` (
 -- --------------------------------------------------------
 
 --
+-- Struttura della tabella `asset_dr`
+--
+
+CREATE TABLE `asset_dr` (
+  `pr_asset_id` int(11) NOT NULL,
+  `dr_asset_id` int(11) NOT NULL,
+  `enabled` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Struttura della tabella `group_role_partition`
 --
 
