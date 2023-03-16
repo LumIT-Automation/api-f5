@@ -22,6 +22,24 @@ class AssetAssetDr:
     ####################################################################################################################
 
     @staticmethod
+    def modify(primaryAssetId: int, drAssetId: int, enabled: bool) -> None:
+        c = connection.cursor()
+
+        try:
+            c.execute(
+                "UPDATE asset_assetdr SET enabled = % "
+                "WHERE pr_asset_id = " + primaryAssetId + " AND dr_asset_id = " + drAssetId, [
+                    enabled
+                ]
+            )
+        except Exception as e:
+            raise CustomException(status=400, payload={"database": e.__str__()})
+        finally:
+            c.close()
+
+
+
+    @staticmethod
     def delete(primaryAssetId: int, drAssetId: int) -> None:
         c = connection.cursor()
 
@@ -60,27 +78,13 @@ class AssetAssetDr:
 
 
     @staticmethod
-    def add(data: dict) -> int:
-        s = ""
-        keys = "("
-        values = []
-
+    def add(primaryAssetId: int, drAssetId: int, enabled: bool) -> None:
         c = connection.cursor()
 
-        # Build SQL query according to (validated) input fields.
-        for k, v in data.items():
-            s += "%s,"
-            keys += k+","
-            values.append(strip_tags(v)) # no HTML allowed.
-
-        keys = keys[:-1]+")"
-
         try:
-            with transaction.atomic():
-                c.execute("INSERT INTO asset_assetdr "+keys+" VALUES ("+s[:-1]+")", # user data are filtered by the serializer.
-                    values
-                )
-                return c.lastrowid
+            c.execute("INSERT INTO asset_assetdr (`pr_asset_id`, `dr_asset_id`, `enabled`) VALUES (%s, %s, %s)",
+                [primaryAssetId, drAssetId, int(enabled)]
+            )
         except Exception as e:
             if e.__class__.__name__ == "IntegrityError" \
                     and e.args and e.args[0] and e.args[0] == 1062:

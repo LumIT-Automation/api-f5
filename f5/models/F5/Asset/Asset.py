@@ -56,6 +56,33 @@ class Asset:
 
 
 
+    def drChange(self, drAssetId: int, enable: bool) -> None:
+        try:
+            AssetDrRepository.modify(primaryAssetId=self.id, drAssetId=drAssetId, enabled=enable)
+
+        except Exception as e:
+            raise e
+
+
+
+    def drRemove(self, drAssetId: int) -> None:
+        try:
+            AssetDrRepository.delete(primaryAssetId=self.id, drAssetId=drAssetId)
+
+        except Exception as e:
+            raise e
+
+
+
+    def drAdd(self, drAssetId: int, enabled: bool) -> None:
+        try:
+            AssetDrRepository.add(primaryAssetId=self.id, drAssetId=drAssetId, enabled=enabled)
+
+        except Exception as e:
+            raise e
+
+
+
     ####################################################################################################################
     # Public static methods
     ####################################################################################################################
