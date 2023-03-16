@@ -9,21 +9,14 @@ from f5.helpers.Log import Log
 class AssetDr:
     def __init__(self, wrappedMethod: callable, *args, **kwargs) -> None:
         self.wrappedMethod = wrappedMethod
-        self.prAssetId: int = 0
+        self.primaryAssetId: int = 0
         self.assets = list() # List of the dr asset ids.
 
 
-    def __get_dr_assets(self) -> list:
-        l = list()
-        try:
-            if self.prAssetId:
-                l = Asset(self.prAssetId).drListIds()
 
-            return l
-        except Exception as e:
-            raise e
-
-
+    ####################################################################################################################
+    # Public methods
+    ####################################################################################################################
 
     def __call__(self, request: Request, **kwargs):
         @functools.wraps(request)
@@ -36,13 +29,11 @@ class AssetDr:
             responses.append(result)
 
             if ENABLE_DR:
-                self.prAssetId = int(kwargs["assetId"])
-                self.assets = self.__get_dr_assets()
-
-                for assetId in self.assets:
+                self.primaryAssetId = int(kwargs["assetId"])
+                for assetId in self.__get_dr_assets():
                     try:
                         newPath = self.__get_new_path(request.path, assetId)
-                        req = AssetDr.__copyRequest__(request, newPath)
+                        req = AssetDr.__copyRequest(request, newPath)
                         kwargs["assetId"] = assetId
 
                         responses.append(self.wrappedMethod(req, **kwargs))
@@ -54,16 +45,32 @@ class AssetDr:
 
 
 
+    ####################################################################################################################
+    # Private methods
+    ####################################################################################################################
+
+    def __get_dr_assets(self) -> list:
+        l = list()
+        try:
+            if self.primaryAssetId:
+                l = Asset(self.primaryAssetId).drListIds()
+
+            return l
+        except Exception as e:
+            raise e
+
+
+
     def __get_new_path(self, path: str, assetId: int):
         try:
-            return path.replace("/f5/" + str(self.prAssetId) + "/", "/f5/" + str(assetId) + "/")
+            return path.replace("/f5/" + str(self.primaryAssetId) + "/", "/f5/" + str(assetId) + "/")
         except Exception as e:
             raise e
 
 
 
     @staticmethod
-    def __copyRequest__(request: Request, path) -> Request:
+    def __copyRequest(request: Request, path) -> Request:
         try:
             djangoHttpRequest = HttpRequest()
             djangoHttpRequest.query_params = request.query_params.copy()
