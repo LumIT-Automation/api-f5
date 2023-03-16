@@ -75,6 +75,7 @@ class F5NodesController(CustomController):
 
 
     @staticmethod
+    @AssetDr
     def post(request: Request, assetId: int, partitionName: str) -> Response:
         response = None
         user = CustomController.loggedUser(request)

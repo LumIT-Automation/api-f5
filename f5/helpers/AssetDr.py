@@ -8,6 +8,7 @@ from f5.helpers.Log import Log
 
 class AssetDr:
     def __init__(self, restCall, *args, **kwargs) -> None:
+        Log.log(restCall, 'RRRRRRRRRRRRRRRRRR')
         self.rest = restCall
         self.prAssetId: int = 0
         self.assets = list() # List of the dr asset ids.
@@ -25,11 +26,12 @@ class AssetDr:
 
 
 
-    def __call__(self, request: callable, **kwargs):
+    def __call__(self, request: Request, **kwargs):
         @functools.wraps(request)
         def wrapped():
             # Stack the responses.
             r = list()
+            Log.log(request, 'SSSSSSSSSSSSSSSSSSSS')
 
             self.prAssetId = int(kwargs["assetId"])
             self.assets = [self.prAssetId] # Todo: call primary asset here, do not enter in loop for primary.
@@ -61,21 +63,25 @@ class AssetDr:
     @staticmethod
     def __copyRequest__(request: Request, path) -> Request:
         try:
-            djangoHttpRequest = HttpRequest()
-            djangoHttpRequest.GET = request._request.GET.copy()
-            djangoHttpRequest.POST = request._request.POST.copy()
-            djangoHttpRequest.COOKIES = request._request.COOKIES
-            djangoHttpRequest.FILES = request._request.FILES
-            djangoHttpRequest.META = request._request.META
-            djangoHttpRequest.headers = request._request.headers
-            djangoHttpRequest.auth = request._request.auth
-            djangoHttpRequest.data = request._request.body
-            djangoHttpRequest.user = request._request.user
-            djangoHttpRequest.path = path
 
+            djangoHttpRequest = HttpRequest()
+            djangoHttpRequest.query_params = request.query_params.copy()
+            djangoHttpRequest.POST = request.POST.copy()
+            djangoHttpRequest.data = request.data
+            djangoHttpRequest.FILES = request.FILES
+            djangoHttpRequest.auth = request.auth
+            djangoHttpRequest.META = request.META
             req = Request(djangoHttpRequest)
             req.authenticators = request.authenticators
 
+            req.accepted_media_type = request.accepted_media_type
+            req.accepted_renderer = request.accepted_renderer
+            req.version = request.version
+            req.versioning_scheme = request.versioning_scheme
+
+            Log.log(dir(request), 'DDDDDDDDDDDDD')
+            Log.log(dir(djangoHttpRequest), 'JJJJJJJJJJJJJJJJ')
+            Log.log(dir(req), 'RRRRRRRRRRRRRR')
             return req
         except Exception as e:
             raise e
