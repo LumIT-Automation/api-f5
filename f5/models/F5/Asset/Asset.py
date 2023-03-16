@@ -1,4 +1,5 @@
 from f5.models.F5.Asset.repository.Asset import Asset as Repository
+from f5.models.F5.Asset.repository.AssetAssetDr import AssetAssetDr as AssetDrRepository
 
 from f5.helpers.Misc import Misc
 
@@ -47,9 +48,9 @@ class Asset:
 
 
 
-    def drListIds(self) -> list:
+    def drList(self) -> list:
         try:
-            return Repository.listDrAssets(self.id)
+            return AssetDrRepository.list(primaryAssetId=self.id)
         except Exception as e:
             raise e
 

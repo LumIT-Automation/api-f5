@@ -30,11 +30,11 @@ class AssetDr:
 
             if ENABLE_DR:
                 self.primaryAssetId = int(kwargs["assetId"])
-                for assetId in self.__get_dr_assets():
+                for asset in self.__get_dr_assets():
                     try:
-                        newPath = self.__get_new_path(request.path, assetId)
+                        newPath = self.__get_new_path(request.path, asset.get("id", 0))
                         req = AssetDr.__copyRequest(request, newPath)
-                        kwargs["assetId"] = assetId
+                        kwargs["assetId"] = asset.get("id", 0)
 
                         responses.append(self.wrappedMethod(req, **kwargs))
                     except Exception as e:
@@ -53,7 +53,7 @@ class AssetDr:
         l = list()
         try:
             if self.primaryAssetId:
-                l = Asset(self.primaryAssetId).drListIds()
+                l = Asset(self.primaryAssetId).drList()
 
             return l
         except Exception as e:

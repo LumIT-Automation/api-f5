@@ -124,24 +124,6 @@ class Asset:
 
 
     @staticmethod
-    def listDrAssets(prAssetId: int) -> list:
-        c = connection.cursor()
-
-        try:
-            c.execute("SELECT dr_asset_id FROM asset_dr WHERE pr_asset_id = %s AND enabled = 1", [prAssetId])
-            info = [ asset["dr_asset_id"] for asset in DBHelper.asDict(c) ]
-
-            return info
-        except IndexError:
-            raise CustomException(status=404, payload={"database": "non existent asset"})
-        except Exception as e:
-            raise CustomException(status=400, payload={"database": e.__str__()})
-        finally:
-            c.close()
-
-
-
-    @staticmethod
     def add(data: dict) -> int:
         s = ""
         keys = "("
