@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework_recursive.fields import RecursiveField
 
 
 class F5AssetSerializer(serializers.Serializer):
@@ -13,4 +14,4 @@ class F5AssetSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=64, required=False)
     password = serializers.CharField(max_length=64, required=False)
 
-    assetsDr = serializers.JSONField(required=False)
+    assetsDr = serializers.ListField(child=RecursiveField(), required=False)
