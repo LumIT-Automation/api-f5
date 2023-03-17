@@ -103,7 +103,8 @@ INSERT INTO `privilege` (`id`, `privilege`, `privilege_type`, `description`) VAL
 (68, 'asm_policy_differences_get', 'global', NULL),
 (69, 'asm_policy_merge_post', 'asset', NULL),
 (70, 'asm_policy_apply_post', 'asset', NULL),
-(71, 'workflow_node_delete', 'object', NULL);
+(71, 'workflow_node_delete', 'object', NULL),
+(72, 'asset_get', 'asset', NULL);
 
 --
 -- Dump dei dati per la tabella `role`
@@ -187,6 +188,7 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (1, 69),
 (1, 70),
 (1, 71),
+(1, 72),
 (2, 3),
 (2, 6),
 (2, 7),
@@ -201,6 +203,7 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (2, 57),
 (2, 59),
 (2, 71),
+(2, 72),
 (3, 3),
 (3, 6),
 (3, 8),
@@ -219,7 +222,9 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (3, 57),
 (3, 59),
 (3, 63),
-(4, 3);
+(3, 72),
+(4, 3),
+(4, 72);
 
 -- Dump dei dati per la tabella `identity_group`
 -- (Workflow system group)

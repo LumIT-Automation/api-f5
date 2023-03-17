@@ -12,3 +12,5 @@ class F5AssetSerializer(serializers.Serializer):
     position = serializers.CharField(max_length=255, required=True, allow_blank=True)
     username = serializers.CharField(max_length=64, required=False)
     password = serializers.CharField(max_length=64, required=False)
+
+    assetsDr = serializers.JSONField(required=False)

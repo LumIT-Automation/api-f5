@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "07ffc31a-158b-4233-8830-4f504920a199",
+		"_postman_id": "ae2876d8-e87b-406e-b282-0ab72d77d266",
 		"name": "api-f5",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -525,6 +525,41 @@
 					"name": "Assets",
 					"item": [
 						{
+							"name": "asset",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/asset/1/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"asset",
+										"1",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "assets",
 							"request": {
 								"auth": {
@@ -708,6 +743,42 @@
 										"f5",
 										"asset",
 										"4",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "asset assets dr",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/asset/1/addetsdr/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"asset",
+										"1",
+										"addetsdr",
 										""
 									]
 								}

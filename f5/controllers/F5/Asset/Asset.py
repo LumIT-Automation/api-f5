@@ -12,6 +12,37 @@ from f5.helpers.Log import Log
 
 class F5AssetController(CustomController):
     @staticmethod
+    def get(request: Request, assetId: int) -> Response:
+        user = CustomController.loggedUser(request)
+
+        try:
+            if Permission.hasUserPermission(groups=user["groups"], action="asset_get", assetId=assetId) or user["authDisabled"]:
+                Log.actionLog("Asset information", user)
+
+                data = {
+                    "data": CustomController.validate(
+                        Asset(assetId).repr(),
+                        Serializer,
+                        "value"
+                    ),
+                    "href": request.get_full_path()
+                }
+
+                httpStatus = status.HTTP_200_OK
+            else:
+                data = None
+                httpStatus = status.HTTP_403_FORBIDDEN
+        except Exception as e:
+            data, httpStatus, headers = CustomController.exceptionHandler(e)
+            return Response(data, status=httpStatus, headers=headers)
+
+        return Response(data, status=httpStatus, headers={
+            "Cache-Control": "no-cache"
+        })
+
+
+
+    @staticmethod
     def delete(request: Request, assetId: int) -> Response:
         user = CustomController.loggedUser(request)
 

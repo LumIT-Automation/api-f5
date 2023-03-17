@@ -33,6 +33,14 @@ class Asset:
     # Public methods
     ####################################################################################################################
 
+    def repr(self):
+        o = dict()
+        Misc.deepRepr(self, o)
+
+        return o
+
+
+
     def modify(self, data: dict) -> None:
         try:
             Repository.modify(self.id, data)
