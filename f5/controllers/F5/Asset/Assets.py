@@ -22,7 +22,7 @@ class F5AssetsController(CustomController):
             if Permission.hasUserPermission(groups=user["groups"], action="assets_get") or user["authDisabled"]:
                 Log.actionLog("Asset list", user)
 
-                itemData = Asset.list()
+                itemData = Asset.dataList()
                 for p in itemData:
                     # Filter assets' list basing on actual permissions.
                     if Permission.hasUserPermission(groups=user["groups"], action="assets_get", assetId=p["id"]) or user["authDisabled"]:

@@ -1,24 +1,29 @@
+from typing import List
+
 from f5.models.F5.Asset.repository.Asset import Asset as Repository
 from f5.models.F5.Asset.repository.AssetAssetDr import AssetAssetDr as AssetDrRepository
 
 from f5.helpers.Misc import Misc
+from f5.helpers.Log import Log
 
 
 class Asset:
     def __init__(self, assetId: int, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.id = int(assetId)
-        self.address = ""
-        self.fqdn = ""
-        self.baseurl = ""
-        self.tlsverify = ""
-        self.datacenter = ""
-        self.environment = ""
-        self.position = ""
+        self.id: int = int(assetId)
+        self.address: str = ""
+        self.fqdn: str = ""
+        self.baseurl: str = ""
+        self.tlsverify: str = ""
+        self.datacenter: str = ""
+        self.environment: str = ""
+        self.position: str = ""
 
-        self.username = ""
-        self.password = ""
+        self.username: str = ""
+        self.password: str = ""
+
+        self.assetsDr: List[Asset] = []
 
         self.__load()
 
@@ -88,7 +93,7 @@ class Asset:
     ####################################################################################################################
 
     @staticmethod
-    def list() -> list:
+    def dataList() -> list:
         try:
             return Repository.list()
         except Exception as e:
@@ -131,5 +136,11 @@ class Asset:
             data = Repository.get(self.id)
             for k, v in data.items():
                 setattr(self, k, v)
+
+            # Load related disaster recovery assets.
+            for dr in AssetDrRepository.list(primaryAssetId=self.id):
+                self.assetsDr.append(
+                    Asset(dr["id"])
+                )
         except Exception as e:
             raise e
