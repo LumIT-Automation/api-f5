@@ -10,16 +10,14 @@ from f5.serializers.F5.Node import F5NodeSerializer as NodeSerializer
 
 from f5.controllers.CustomController import CustomController
 
+from f5.helpers.AssetDr import AssetDr
 from f5.helpers.Lock import Lock
 from f5.helpers.Conditional import Conditional
 from f5.helpers.Log import Log
 
-from f5.helpers.AssetDr import AssetDr
-
 
 class F5NodesController(CustomController):
     @staticmethod
-    @AssetDr
     def get(request: Request, assetId: int, partitionName: str) -> Response:
         data = dict()
         etagCondition = { "responseEtag": "" }
