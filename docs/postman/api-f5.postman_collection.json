@@ -716,6 +716,51 @@
 							"response": []
 						},
 						{
+							"name": "asset's dr assets",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"assetDrId\": \"3\",\n        \"enabled\": true\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/asset/1/assetsdr/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"asset",
+										"1",
+										"assetsdr",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "asset's dr asset",
 							"request": {
 								"auth": {
@@ -731,7 +776,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"data\": \n    {\n        \"enabled\": true\n    }\n}",
+									"raw": "{\n    \"data\": {\n        \"enabled\": true\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"

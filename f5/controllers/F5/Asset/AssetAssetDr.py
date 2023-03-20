@@ -10,7 +10,7 @@ from f5.controllers.CustomController import CustomController
 from f5.helpers.Log import Log
 
 
-class F5AssetDrController(CustomController):
+class F5AssetAssetDrController(CustomController):
     @staticmethod
     def delete(request: Request, assetId: int, assetDrId: int) -> Response:
         user = CustomController.loggedUser(request)

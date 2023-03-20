@@ -91,7 +91,6 @@ class Asset:
     def drAdd(self, drAssetId: int, enabled: bool) -> None:
         try:
             AssetDrRepository.add(primaryAssetId=self.id, drAssetId=int(drAssetId), enabled=enabled)
-
         except Exception as e:
             raise e
 

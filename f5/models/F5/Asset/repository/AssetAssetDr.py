@@ -44,9 +44,7 @@ class AssetAssetDr:
         try:
             c.execute(
                 "UPDATE asset_assetdr SET enabled = %s "
-                "WHERE "
-                "    pr_asset_id = %s "
-                "    AND dr_asset_id = %s", [
+                "WHERE pr_asset_id = %s AND dr_asset_id = %s", [
                     int(enabled),
                     primaryAssetId,
                     drAssetId
@@ -89,9 +87,11 @@ class AssetAssetDr:
         c = connection.cursor()
 
         try:
-            c.execute("INSERT INTO asset_assetdr (`pr_asset_id`, `dr_asset_id`, `enabled`) VALUES (%s, %s, %s)",
-                [primaryAssetId, drAssetId, int(enabled)]
-            )
+            c.execute("INSERT INTO asset_assetdr (`pr_asset_id`, `dr_asset_id`, `enabled`) VALUES (%s, %s, %s)", [
+                primaryAssetId,
+                drAssetId,
+                int(enabled)
+            ])
         except Exception as e:
             if e.__class__.__name__ == "IntegrityError" \
                     and e.args and e.args[0] and e.args[0] == 1062:
