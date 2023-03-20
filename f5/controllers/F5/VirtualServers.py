@@ -10,6 +10,7 @@ from f5.serializers.F5.VirtualServer import F5VirtualServerSerializer as Virtual
 
 from f5.controllers.CustomController import CustomController
 
+from f5.helpers.AssetDr import AssetDr
 from f5.helpers.Lock import Lock
 from f5.helpers.Conditional import Conditional
 from f5.helpers.Log import Log
@@ -72,6 +73,7 @@ class F5VirtualServersController(CustomController):
 
 
     @staticmethod
+    @AssetDr
     def post(request: Request, assetId: int, partitionName: str) -> Response:
         response = None
         user = CustomController.loggedUser(request)

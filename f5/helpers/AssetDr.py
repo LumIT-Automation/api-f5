@@ -7,7 +7,7 @@ from django.conf import settings
 from f5.models.F5.Asset.Asset import Asset
 from f5.helpers.Log import Log
 
-if not settings.ENABLE_ASSET_DR:
+if not hasattr(settings, "ENABLE_ASSET_DR") or not settings.ENABLE_ASSET_DR:
     def AssetDr(func): # null decorator.
         return func
 else:
