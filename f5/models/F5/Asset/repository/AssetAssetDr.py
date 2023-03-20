@@ -43,9 +43,13 @@ class AssetAssetDr:
 
         try:
             c.execute(
-                "UPDATE asset_assetdr SET enabled = % "
-                "WHERE pr_asset_id = " + primaryAssetId + " AND dr_asset_id = " + drAssetId, [
-                    enabled
+                "UPDATE asset_assetdr SET enabled = %s "
+                "WHERE "
+                "    pr_asset_id = %s "
+                "    AND dr_asset_id = %s", [
+                    int(enabled),
+                    primaryAssetId,
+                    drAssetId
                 ]
             )
         except Exception as e:

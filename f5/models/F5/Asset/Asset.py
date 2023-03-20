@@ -72,10 +72,9 @@ class Asset:
 
 
 
-    def drChange(self, drAssetId: int, enable: bool) -> None:
+    def drModify(self, drAssetId: int, enabled: bool) -> None:
         try:
-            AssetDrRepository.modify(primaryAssetId=self.id, drAssetId=int(drAssetId), enabled=enable)
-
+            AssetDrRepository.modify(primaryAssetId=self.id, drAssetId=int(drAssetId), enabled=enabled)
         except Exception as e:
             raise e
 
