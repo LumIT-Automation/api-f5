@@ -748,42 +748,6 @@
 								}
 							},
 							"response": []
-						},
-						{
-							"name": "asset assets dr",
-							"request": {
-								"auth": {
-									"type": "noauth"
-								},
-								"method": "GET",
-								"header": [
-									{
-										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer {{jwttoken}}"
-									}
-								],
-								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/asset/1/addetsdr/",
-									"protocol": "http",
-									"host": [
-										"10",
-										"0",
-										"111",
-										"22"
-									],
-									"path": [
-										"api",
-										"v1",
-										"f5",
-										"asset",
-										"1",
-										"addetsdr",
-										""
-									]
-								}
-							},
-							"response": []
 						}
 					]
 				},

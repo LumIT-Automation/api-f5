@@ -60,12 +60,11 @@ class Asset:
 
 
 
-
     ####################################################################################################################
     # Public methods - disaster recovery relation
     ####################################################################################################################
 
-    def drList(self) -> list:
+    def drDataList(self) -> list:
         try:
             return AssetDrRepository.list(primaryAssetId=self.id)
         except Exception as e:
@@ -107,9 +106,13 @@ class Asset:
     @staticmethod
     def dataList() -> list:
         try:
-            return Repository.list()
+            l = Repository.list()
+            for asset in l:
+                asset["assetsDr"] = AssetDrRepository.list(primaryAssetId=asset["id"])
         except Exception as e:
             raise e
+
+        return l
 
 
 

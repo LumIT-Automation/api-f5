@@ -53,7 +53,7 @@ class AssetDr:
         l = list()
         try:
             if self.primaryAssetId:
-                l = Asset(self.primaryAssetId).drList()
+                l = Asset(self.primaryAssetId).drDataList()
 
             return l
         except Exception as e:

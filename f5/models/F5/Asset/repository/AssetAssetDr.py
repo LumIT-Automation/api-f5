@@ -58,7 +58,7 @@ class AssetAssetDr:
 
         try:
             c.execute(
-                "SELECT assetDR.id, assetDR.fqdn, assetDR.baseurl, assetDR.datacenter, assetDR.environment, assetDR.position "
+                "SELECT assetDR.id, assetDR.address, assetDR.fqdn, assetDR.baseurl, assetDR.tlsverify, assetDR.datacenter, assetDR.environment, assetDR.position "
                 "FROM asset AS assetPR "
                 "INNER JOIN asset_assetdr ON assetPR.id = asset_assetdr.pr_asset_id "
                 "INNER JOIN asset AS assetDR ON assetDR.id = asset_assetdr.dr_asset_id "
