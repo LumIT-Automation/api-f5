@@ -66,7 +66,7 @@ class Asset:
 
     def drDataList(self) -> list:
         try:
-            return AssetDrRepository.list(primaryAssetId=self.id)
+            return AssetDrRepository.list(primaryAssetId=int(self.id))
         except Exception as e:
             raise e
 
@@ -74,7 +74,7 @@ class Asset:
 
     def drChange(self, drAssetId: int, enable: bool) -> None:
         try:
-            AssetDrRepository.modify(primaryAssetId=self.id, drAssetId=drAssetId, enabled=enable)
+            AssetDrRepository.modify(primaryAssetId=self.id, drAssetId=int(drAssetId), enabled=enable)
 
         except Exception as e:
             raise e
@@ -83,8 +83,7 @@ class Asset:
 
     def drRemove(self, drAssetId: int) -> None:
         try:
-            AssetDrRepository.delete(primaryAssetId=self.id, drAssetId=drAssetId)
-
+            AssetDrRepository.delete(primaryAssetId=self.id, drAssetId=int(drAssetId))
         except Exception as e:
             raise e
 
@@ -92,7 +91,7 @@ class Asset:
 
     def drAdd(self, drAssetId: int, enabled: bool) -> None:
         try:
-            AssetDrRepository.add(primaryAssetId=self.id, drAssetId=drAssetId, enabled=enabled)
+            AssetDrRepository.add(primaryAssetId=self.id, drAssetId=int(drAssetId), enabled=enabled)
 
         except Exception as e:
             raise e

@@ -22,6 +22,22 @@ class AssetAssetDr:
     ####################################################################################################################
 
     @staticmethod
+    def delete(primaryAssetId: int, drAssetId: int) -> None:
+        c = connection.cursor()
+
+        try:
+            c.execute("DELETE FROM asset_assetdr WHERE pr_asset_id = %s AND dr_asset_id = %s", [
+                primaryAssetId,
+                drAssetId
+            ])
+        except Exception as e:
+            raise CustomException(status=400, payload={"database": e.__str__()})
+        finally:
+            c.close()
+
+
+
+    @staticmethod
     def modify(primaryAssetId: int, drAssetId: int, enabled: bool) -> None:
         c = connection.cursor()
 
@@ -32,19 +48,6 @@ class AssetAssetDr:
                     enabled
                 ]
             )
-        except Exception as e:
-            raise CustomException(status=400, payload={"database": e.__str__()})
-        finally:
-            c.close()
-
-
-
-    @staticmethod
-    def delete(primaryAssetId: int, drAssetId: int) -> None:
-        c = connection.cursor()
-
-        try:
-            c.execute("DELETE FROM asset_assetdr WHERE pr_asset_id = %s AND dr_asset_id = %s", [primaryAssetId, drAssetId])
         except Exception as e:
             raise CustomException(status=400, payload={"database": e.__str__()})
         finally:

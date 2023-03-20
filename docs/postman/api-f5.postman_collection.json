@@ -637,40 +637,6 @@
 							"response": []
 						},
 						{
-							"name": "assets",
-							"request": {
-								"auth": {
-									"type": "noauth"
-								},
-								"method": "DELETE",
-								"header": [
-									{
-										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer {{jwttoken}}"
-									}
-								],
-								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/assets/",
-									"protocol": "http",
-									"host": [
-										"10",
-										"0",
-										"111",
-										"22"
-									],
-									"path": [
-										"api",
-										"v1",
-										"f5",
-										"assets",
-										""
-									]
-								}
-							},
-							"response": []
-						},
-						{
 							"name": "asset",
 							"request": {
 								"auth": {
@@ -716,6 +682,41 @@
 						},
 						{
 							"name": "asset",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/asset/4/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"asset",
+										"4",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "asset's dr asset",
 							"request": {
 								"auth": {
 									"type": "noauth"
