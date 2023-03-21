@@ -1,9 +1,10 @@
-from typing import List
+from typing import List, Dict, Union
 
 from f5.models.F5.Asset.repository.Asset import Asset as Repository
 from f5.models.F5.Asset.repository.AssetAssetDr import AssetAssetDr as AssetDrRepository
 
 from f5.helpers.Misc import Misc
+from f5.helpers.Log import Log
 
 
 class Asset:
@@ -22,7 +23,7 @@ class Asset:
         self.username: str = ""
         self.password: str = ""
 
-        self.assetsDr: List[Asset] = []
+        self.assetsDr: List[Dict[str, Union[Asset, bool]]] = []
 
         self.__load()
 
@@ -33,10 +34,7 @@ class Asset:
     ####################################################################################################################
 
     def repr(self):
-        o = dict()
-        Misc.deepRepr(self, o)
-
-        return o
+        return Misc.deepRepr(self)
 
 
 
@@ -105,7 +103,13 @@ class Asset:
         try:
             l = Repository.list()
             for asset in l:
-                asset["assetsDr"] = AssetDrRepository.list(primaryAssetId=asset["id"])
+                asset["assetsDr"] = list()
+
+                for dr in AssetDrRepository.list(primaryAssetId=asset["id"]):
+                    asset["assetsDr"].append({
+                        "asset": dr,
+                        "enabled": dr["enabled"]
+                    })
         except Exception as e:
             raise e
 
@@ -151,8 +155,9 @@ class Asset:
 
             # Load related disaster recovery assets.
             for dr in AssetDrRepository.list(primaryAssetId=self.id):
-                self.assetsDr.append(
-                    Asset(dr["id"])
-                )
+                self.assetsDr.append({
+                    "asset": Asset(dr["id"]),
+                    "enabled": dr["enabled"]
+                })
         except Exception as e:
             raise e

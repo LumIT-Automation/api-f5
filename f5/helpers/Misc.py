@@ -1,5 +1,7 @@
 import collections
 
+from f5.helpers.Log import Log
+
 
 class Misc:
     @staticmethod
@@ -19,26 +21,31 @@ class Misc:
 
 
     @staticmethod
-    def deepRepr(o, r, fatherIsList: bool = False, fatherName: str = "") -> None: # r
+    def deepRepr(o) -> dict:
         try:
-            z = dict()
+            r = dict()
 
-            v = vars(o)
+            try:
+                v = vars(o)
+            except TypeError:
+                v = o
+
             if isinstance(v, dict):
                 for key, val in v.items():
-                    if isinstance(val, str) or isinstance(val, int):
-                        if fatherIsList:
-                            z[str(key)] = str(val)
-                        else:
-                            r[str(key)] = str(val)
+                    if isinstance(val, str) or isinstance(val, int) or isinstance(val, bool):
+                        r[key] = val
 
-                    if isinstance(val, list):
+                    elif isinstance(val, list):
                         for j in val:
-                            Misc.deepRepr(j, r, fatherIsList=True, fatherName=key)
+                            if key not in r:
+                                r[key] = list()
+                            r[key].append(Misc.deepRepr(j))
 
-            if fatherIsList and fatherName:
-                if fatherName not in r:
-                    r[fatherName] = list()
-                r[fatherName].append(z)
+                    else:
+                        if key not in r:
+                            r[key] = dict()
+                        r[key] = Misc.deepRepr(val)
         except Exception as e:
             raise e
+
+        return r

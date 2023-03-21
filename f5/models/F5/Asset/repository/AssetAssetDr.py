@@ -1,6 +1,4 @@
-from django.utils.html import strip_tags
 from django.db import connection
-from django.db import transaction
 
 from f5.helpers.Exception import CustomException
 from f5.helpers.Database import Database as DBHelper
@@ -11,9 +9,13 @@ class AssetAssetDr:
 
     # table: asset_assetdr
 
-    #    `pr_asset_id` int(11) NOT NULL,
-    #    `dr_asset_id` int(11) NOT NULL,
-    #    `enabled` tinyint(1) NOT NULL,
+    #  `pr_asset_id` int(11) NOT NULL,
+    #  `dr_asset_id` int(11) KEY NOT NULL,
+    #  `enabled` tinyint(1) NOT NULL,
+
+    #  PRIMARY KEY (`pr_asset_id`,`dr_asset_id`),
+    #  CONSTRAINT `k_dr_asset_id` FOREIGN KEY (`dr_asset_id`) REFERENCES `asset` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    #  CONSTRAINT `k_pr_asset_id` FOREIGN KEY (`pr_asset_id`) REFERENCES `asset` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 
 
@@ -63,11 +65,11 @@ class AssetAssetDr:
 
         try:
             c.execute(
-                "SELECT assetDR.id, assetDR.address, assetDR.fqdn, assetDR.baseurl, assetDR.tlsverify, assetDR.datacenter, assetDR.environment, assetDR.position "
+                "SELECT assetDR.id, assetDR.address, assetDR.fqdn, assetDR.baseurl, assetDR.tlsverify, assetDR.datacenter, assetDR.environment, assetDR.position, asset_assetdr.enabled "
                 "FROM asset AS assetPR "
                 "INNER JOIN asset_assetdr ON assetPR.id = asset_assetdr.pr_asset_id "
                 "INNER JOIN asset AS assetDR ON assetDR.id = asset_assetdr.dr_asset_id "
-                "WHERE pr_asset_id = %s AND asset_assetdr.enabled = 1", [
+                "WHERE pr_asset_id = %s", [
                     primaryAssetId
                 ]
             )
