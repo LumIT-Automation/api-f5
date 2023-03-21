@@ -40,8 +40,7 @@ else:
                             self.primaryAssetId = int(kwargs["assetId"])
                             for asset in self.__assetsDr():
                                 try:
-                                    newPath = self.__newPath(request.path, asset.get("id", 0))
-                                    req = AssetDr.__copyRequest(request, newPath)
+                                    req = AssetDr.__copyRequest(request)
                                     kwargs["assetId"] = asset.get("id", 0)
 
                                     responses.append(self.wrappedMethod(req, **kwargs))
@@ -72,18 +71,11 @@ else:
 
 
 
-        def __newPath(self, path: str, assetId: int):
-            try:
-                return path.replace("/f5/" + str(self.primaryAssetId) + "/", "/f5/" + str(assetId) + "/")
-            except Exception as e:
-                raise e
-
-
-
         @staticmethod
-        def __copyRequest(request: Request, path) -> Request:
+        def __copyRequest(request: Request) -> Request:
             try:
                 djangoHttpRequest = HttpRequest()
+                djangoHttpRequest.path = request.path[:]
                 djangoHttpRequest.query_params = request.query_params.copy()
                 for attr in ("POST", "data", "FILES", "auth", "META"):
                     setattr(djangoHttpRequest, attr, getattr(request, attr))
