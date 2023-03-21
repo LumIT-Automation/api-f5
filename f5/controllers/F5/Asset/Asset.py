@@ -25,7 +25,7 @@ class F5AssetController(CustomController):
 
                 data = {
                     "data": CustomController.validate(
-                        Asset(assetId, includeDr=includeDr).repr(),
+                        Asset(assetId, includeDr=includeDr, showPassword=False).repr(),
                         Serializer,
                         "value"
                     ),

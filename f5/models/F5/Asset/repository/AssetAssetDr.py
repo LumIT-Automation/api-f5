@@ -62,16 +62,21 @@ class AssetAssetDr:
 
 
     @staticmethod
-    def list(primaryAssetId: int, onlyEnabled: bool = False) -> list:
+    def list(primaryAssetId: int, showPassword: bool, showOnlyEnabled: bool = False) -> list:
         condition = ""
         c = connection.cursor()
 
-        if onlyEnabled:
+        if showOnlyEnabled:
             condition = " AND asset_assetdr.enabled = 1"
+
+        if showPassword:
+            select = "*"
+        else:
+            select = "assetDR.id, assetDR.address, assetDR.fqdn, assetDR.baseurl, assetDR.tlsverify, assetDR.datacenter, assetDR.environment, assetDR.position, asset_assetdr.enabled"
 
         try:
             c.execute(
-                "SELECT assetDR.id, assetDR.address, assetDR.fqdn, assetDR.baseurl, assetDR.tlsverify, assetDR.datacenter, assetDR.environment, assetDR.position, asset_assetdr.enabled "
+                "SELECT " + select + " "
                 "FROM asset AS assetPR "
                 "INNER JOIN asset_assetdr ON assetPR.id = asset_assetdr.pr_asset_id "
                 "INNER JOIN asset AS assetDR ON assetDR.id = asset_assetdr.dr_asset_id "

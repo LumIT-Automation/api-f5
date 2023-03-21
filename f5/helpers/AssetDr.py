@@ -63,7 +63,7 @@ else:
             l = list()
             try:
                 if self.primaryAssetId:
-                    l = Asset(self.primaryAssetId).drDataList()
+                    l = Asset(self.primaryAssetId).drDataList(onlyEnabled=True)
 
                 return l
             except Exception as e:

@@ -27,7 +27,7 @@ class F5AssetsController(CustomController):
                 if "includeDr" in request.GET:
                     includeDr = True
 
-                itemData = Asset.dataList(includeDr=includeDr)
+                itemData = Asset.dataList(includeDr=includeDr, showPassword=False)
                 for p in itemData:
                     # Filter assets' list basing on actual permissions.
                     if Permission.hasUserPermission(groups=user["groups"], action="assets_get", assetId=p["id"]) or user["authDisabled"]:

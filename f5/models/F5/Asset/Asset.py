@@ -8,7 +8,7 @@ from f5.helpers.Log import Log
 
 
 class Asset:
-    def __init__(self, assetId: int, includeDr: bool = True, *args, **kwargs):
+    def __init__(self, assetId: int, includeDr: bool = False, showPassword: bool = True, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.id: int = int(assetId)
@@ -25,7 +25,7 @@ class Asset:
 
         self.assetsDr: List[Dict[str, Union[Asset, bool]]] = []
 
-        self.__load(includeDr=includeDr)
+        self.__load(includeDr=includeDr, showPassword=showPassword)
 
 
 
@@ -62,9 +62,9 @@ class Asset:
     # Public methods - disaster recovery relation
     ####################################################################################################################
 
-    def drDataList(self, onlyEnabled: bool = True) -> list:
+    def drDataList(self, onlyEnabled: bool) -> list:
         try:
-            return AssetDrRepository.list(primaryAssetId=int(self.id), onlyEnabled=onlyEnabled)
+            return AssetDrRepository.list(primaryAssetId=int(self.id), showOnlyEnabled=onlyEnabled, showPassword=False)
         except Exception as e:
             raise e
 
@@ -99,14 +99,14 @@ class Asset:
     ####################################################################################################################
 
     @staticmethod
-    def dataList(includeDr: bool = True) -> list:
+    def dataList(includeDr: bool, showPassword: bool) -> list:
         try:
-            l = Repository.list()
+            l = Repository.list(showPassword=showPassword)
             if includeDr:
                 for asset in l:
                     asset["assetsDr"] = list()
 
-                    for dr in AssetDrRepository.list(primaryAssetId=asset["id"]):
+                    for dr in AssetDrRepository.list(primaryAssetId=asset["id"], showPassword=showPassword):
                         asset["assetsDr"].append({
                             "asset": dr,
                             "enabled": dr["enabled"]
@@ -148,18 +148,24 @@ class Asset:
     # Private methods
     ####################################################################################################################
 
-    def __load(self, includeDr: bool = True) -> None:
+    def __load(self, includeDr: bool, showPassword: bool) -> None:
         try:
-            data = Repository.get(self.id)
+            data = Repository.get(self.id, showPassword=showPassword)
             for k, v in data.items():
                 setattr(self, k, v)
 
+            if not showPassword:
+                del self.username
+                del self.password
+
             if includeDr:
                 # Load related disaster recovery assets.
-                for dr in AssetDrRepository.list(primaryAssetId=self.id):
+                for dr in AssetDrRepository.list(primaryAssetId=self.id, showPassword=showPassword):
                     self.assetsDr.append({
-                        "asset": Asset(dr["id"]),
+                        "asset": Asset(dr["id"], showPassword=showPassword),
                         "enabled": dr["enabled"]
                     })
+            else:
+                del self.assetsDr
         except Exception as e:
             raise e

@@ -15,5 +15,7 @@ class F5AssetSerializer(serializers.Serializer):
     datacenter = serializers.CharField(max_length=255, required=True, allow_blank=True)
     environment = serializers.CharField(max_length=255, required=True)
     position = serializers.CharField(max_length=255, required=True, allow_blank=True)
+    username = serializers.CharField(max_length=64, required=False)
+    password = serializers.CharField(max_length=64, required=False)
 
     assetsDr = F5AssetAssetDrInnerSerializer(many=True, required=False)
