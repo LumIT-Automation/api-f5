@@ -62,8 +62,12 @@ class AssetAssetDr:
 
 
     @staticmethod
-    def list(primaryAssetId: int) -> list:
+    def list(primaryAssetId: int, onlyEnabled: bool = False) -> list:
+        condition = ""
         c = connection.cursor()
+
+        if onlyEnabled:
+            condition = " AND asset_assetdr.enabled = 1"
 
         try:
             c.execute(
@@ -71,7 +75,7 @@ class AssetAssetDr:
                 "FROM asset AS assetPR "
                 "INNER JOIN asset_assetdr ON assetPR.id = asset_assetdr.pr_asset_id "
                 "INNER JOIN asset AS assetDR ON assetDR.id = asset_assetdr.dr_asset_id "
-                "WHERE pr_asset_id = %s", [
+                "WHERE pr_asset_id = %s" + condition, [
                     primaryAssetId
                 ]
             )

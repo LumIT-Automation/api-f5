@@ -62,9 +62,9 @@ class Asset:
     # Public methods - disaster recovery relation
     ####################################################################################################################
 
-    def drDataList(self) -> list:
+    def drDataList(self, onlyEnabled: bool = True) -> list:
         try:
-            return AssetDrRepository.list(primaryAssetId=int(self.id))
+            return AssetDrRepository.list(primaryAssetId=int(self.id), onlyEnabled=onlyEnabled)
         except Exception as e:
             raise e
 

@@ -38,9 +38,9 @@ else:
                     if result.status_code in (200, 201, 202, 204): # reply the action in dr only if it was successful.
                         if "dr" in request.query_params and request.query_params["dr"]: # reply action in dr only if dr=1 param was passed.
                             self.primaryAssetId = int(kwargs["assetId"])
-                            for asset in self.__get_dr_assets():
+                            for asset in self.__assetsDr():
                                 try:
-                                    newPath = self.__get_new_path(request.path, asset.get("id", 0))
+                                    newPath = self.__newPath(request.path, asset.get("id", 0))
                                     req = AssetDr.__copyRequest(request, newPath)
                                     kwargs["assetId"] = asset.get("id", 0)
 
@@ -60,7 +60,7 @@ else:
         # Private methods
         ####################################################################################################################
 
-        def __get_dr_assets(self) -> list:
+        def __assetsDr(self) -> list:
             l = list()
             try:
                 if self.primaryAssetId:
@@ -72,7 +72,7 @@ else:
 
 
 
-        def __get_new_path(self, path: str, assetId: int):
+        def __newPath(self, path: str, assetId: int):
             try:
                 return path.replace("/f5/" + str(self.primaryAssetId) + "/", "/f5/" + str(assetId) + "/")
             except Exception as e:
