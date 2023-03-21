@@ -15,7 +15,7 @@ class Asset:
         self.address: str = ""
         self.fqdn: str = ""
         self.baseurl: str = ""
-        self.tlsverify: str = ""
+        self.tlsverify: bool = True
         self.datacenter: str = ""
         self.environment: str = ""
         self.position: str = ""

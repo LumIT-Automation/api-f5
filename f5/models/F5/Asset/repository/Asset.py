@@ -46,7 +46,6 @@ class Asset:
 
 
 
-
     @staticmethod
     def modify(assetId: int, data: dict) -> None:
         assetId = int(assetId)
