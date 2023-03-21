@@ -32,7 +32,7 @@ class Misc:
 
             if isinstance(v, dict):
                 for key, val in v.items():
-                    if isinstance(val, str) or isinstance(val, int) or isinstance(val, bool):
+                    if isinstance(val, str) or isinstance(val, int) or isinstance(val, bool) or not val:
                         r[key] = val
 
                     elif isinstance(val, list):
