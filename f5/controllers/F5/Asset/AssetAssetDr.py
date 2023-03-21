@@ -4,57 +4,22 @@ from rest_framework import status
 
 from f5.models.F5.Asset.Asset import Asset
 from f5.models.Permission.Permission import Permission
-from f5.serializers.F5.Asset.Asset import F5AssetSerializer as Serializer
+from f5.serializers.F5.Asset.AssetDrAsset import F5AssetDrAssetSerializer as Serializer
 
 from f5.controllers.CustomController import CustomController
 from f5.helpers.Log import Log
 
 
-class F5AssetController(CustomController):
+class F5AssetAssetDrController(CustomController):
     @staticmethod
-    def get(request: Request, assetId: int) -> Response:
-        includeDr = False
-        user = CustomController.loggedUser(request)
-
-        try:
-            if Permission.hasUserPermission(groups=user["groups"], action="asset_get", assetId=assetId) or user["authDisabled"]:
-                Log.actionLog("Asset information", user)
-
-                if "includeDr" in request.GET:
-                    includeDr = True
-
-                data = {
-                    "data": CustomController.validate(
-                        Asset(assetId, includeDr=includeDr, showPassword=False).repr(),
-                        Serializer,
-                        "value"
-                    ),
-                    "href": request.get_full_path()
-                }
-
-                httpStatus = status.HTTP_200_OK
-            else:
-                data = None
-                httpStatus = status.HTTP_403_FORBIDDEN
-        except Exception as e:
-            data, httpStatus, headers = CustomController.exceptionHandler(e)
-            return Response(data, status=httpStatus, headers=headers)
-
-        return Response(data, status=httpStatus, headers={
-            "Cache-Control": "no-cache"
-        })
-
-
-
-    @staticmethod
-    def delete(request: Request, assetId: int) -> Response:
+    def delete(request: Request, assetId: int, assetDrId: int) -> Response:
         user = CustomController.loggedUser(request)
 
         try:
             if Permission.hasUserPermission(groups=user["groups"], action="asset_delete") or user["authDisabled"]:
-                Log.actionLog("Asset deletion", user)
+                Log.actionLog("Asset's disaster recovery related asset deletion", user)
 
-                Asset(assetId).delete()
+                Asset(assetId).drRemove(assetDrId)
 
                 httpStatus = status.HTTP_200_OK
             else:
@@ -70,19 +35,19 @@ class F5AssetController(CustomController):
 
 
     @staticmethod
-    def patch(request: Request, assetId: int) -> Response:
+    def patch(request: Request, assetId: int, assetDrId: int) -> Response:
         response = None
         user = CustomController.loggedUser(request)
 
         try:
             if Permission.hasUserPermission(groups=user["groups"], action="asset_patch") or user["authDisabled"]:
-                Log.actionLog("Asset modification", user)
+                Log.actionLog("Asset's disaster recovery related asset enable/disable", user)
 
                 serializer = Serializer(data=request.data["data"], partial=True)
                 if serializer.is_valid():
                     data = serializer.validated_data
 
-                    Asset(assetId).modify(data)
+                    Asset(assetId).drModify(drAssetId=assetDrId, enabled=bool(data["enabled"]))
 
                     httpStatus = status.HTTP_200_OK
                 else:
@@ -103,4 +68,3 @@ class F5AssetController(CustomController):
         return Response(response, status=httpStatus, headers={
             "Cache-Control": "no-cache"
         })
-

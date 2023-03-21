@@ -53,6 +53,18 @@ CREATE TABLE `asset` (
 -- --------------------------------------------------------
 
 --
+-- Struttura della tabella `assrt_assetdr`
+--
+
+CREATE TABLE `asset_assetdr` (
+  `pr_asset_id` int(11) NOT NULL,
+  `dr_asset_id` int(11) NOT NULL,
+  `enabled` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Struttura della tabella `group_role_partition`
 --
 
@@ -169,6 +181,11 @@ ALTER TABLE `configuration`
 ALTER TABLE `asset`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `address` (`address`);
+
+-- Indici per le tabelle `asset_assetdr`
+--
+ALTER TABLE `asset_assetdr`
+  ADD PRIMARY KEY (`pr_asset_id`,`dr_asset_id` );
 
 --
 -- Indici per le tabelle `group_role_partition`
@@ -291,6 +308,13 @@ ALTER TABLE `role`
 --
 -- Limiti per le tabelle scaricate
 --
+
+--
+-- Limiti per la tabella `asset_assetdr`
+--
+ALTER TABLE `asset_assetdr`
+  ADD CONSTRAINT `k_pr_asset_id` FOREIGN KEY (`pr_asset_id`) REFERENCES `asset` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `k_dr_asset_id` FOREIGN KEY (`dr_asset_id`) REFERENCES `asset` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `group_role_partition`

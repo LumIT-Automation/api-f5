@@ -1,31 +1,42 @@
+from typing import List, Dict, Union
+
 from f5.models.F5.Asset.repository.Asset import Asset as Repository
+from f5.models.F5.Asset.repository.AssetAssetDr import AssetAssetDr as AssetDrRepository
 
 from f5.helpers.Misc import Misc
+from f5.helpers.Log import Log
 
 
 class Asset:
-    def __init__(self, assetId: int, *args, **kwargs):
+    def __init__(self, assetId: int, includeDr: bool = False, showPassword: bool = True, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.id = int(assetId)
-        self.address = ""
-        self.fqdn = ""
-        self.baseurl = ""
-        self.tlsverify = ""
-        self.datacenter = ""
-        self.environment = ""
-        self.position = ""
+        self.id: int = int(assetId)
+        self.address: str = ""
+        self.fqdn: str = ""
+        self.baseurl: str = ""
+        self.tlsverify: bool = True
+        self.datacenter: str = ""
+        self.environment: str = ""
+        self.position: str = ""
 
-        self.username = ""
-        self.password = ""
+        self.username: str = ""
+        self.password: str = ""
 
-        self.__load()
+        self.assetsDr: List[Dict[str, Union[Asset, bool]]] = []
+
+        self.__load(includeDr=includeDr, showPassword=showPassword)
 
 
 
     ####################################################################################################################
     # Public methods
     ####################################################################################################################
+
+    def repr(self):
+        return Misc.deepRepr(self)
+
+
 
     def modify(self, data: dict) -> None:
         try:
@@ -48,15 +59,62 @@ class Asset:
 
 
     ####################################################################################################################
+    # Public methods - disaster recovery relation
+    ####################################################################################################################
+
+    def drDataList(self, onlyEnabled: bool) -> list:
+        try:
+            return AssetDrRepository.list(primaryAssetId=int(self.id), showOnlyEnabled=onlyEnabled, showPassword=False)
+        except Exception as e:
+            raise e
+
+
+
+    def drModify(self, drAssetId: int, enabled: bool) -> None:
+        try:
+            AssetDrRepository.modify(primaryAssetId=self.id, drAssetId=int(drAssetId), enabled=enabled)
+        except Exception as e:
+            raise e
+
+
+
+    def drRemove(self, drAssetId: int) -> None:
+        try:
+            AssetDrRepository.delete(primaryAssetId=self.id, drAssetId=int(drAssetId))
+        except Exception as e:
+            raise e
+
+
+
+    def drAdd(self, drAssetId: int, enabled: bool) -> None:
+        try:
+            AssetDrRepository.add(primaryAssetId=self.id, drAssetId=int(drAssetId), enabled=enabled) # circular path forbidden.
+        except Exception as e:
+            raise e
+
+
+
+    ####################################################################################################################
     # Public static methods
     ####################################################################################################################
 
     @staticmethod
-    def list() -> list:
+    def dataList(includeDr: bool, showPassword: bool) -> list:
         try:
-            return Repository.list()
+            l = Repository.list(showPassword=showPassword)
+            if includeDr:
+                for asset in l:
+                    asset["assetsDr"] = list()
+
+                    for dr in AssetDrRepository.list(primaryAssetId=asset["id"], showPassword=showPassword):
+                        asset["assetsDr"].append({
+                            "asset": dr,
+                            "enabled": dr["enabled"]
+                        })
         except Exception as e:
             raise e
+
+        return l
 
 
 
@@ -90,10 +148,24 @@ class Asset:
     # Private methods
     ####################################################################################################################
 
-    def __load(self) -> None:
+    def __load(self, includeDr: bool, showPassword: bool) -> None:
         try:
-            data = Repository.get(self.id)
+            data = Repository.get(self.id, showPassword=showPassword)
             for k, v in data.items():
                 setattr(self, k, v)
+
+            if not showPassword:
+                del self.username
+                del self.password
+
+            if includeDr:
+                # Load related disaster recovery assets.
+                for dr in AssetDrRepository.list(primaryAssetId=self.id, showPassword=showPassword):
+                    self.assetsDr.append({
+                        "asset": Asset(dr["id"], showPassword=showPassword),
+                        "enabled": dr["enabled"]
+                    })
+            else:
+                del self.assetsDr
         except Exception as e:
             raise e

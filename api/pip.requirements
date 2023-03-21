@@ -2,6 +2,7 @@ cryptography~=38.0.1
 Django~=4.1
 djangorestframework~=3.14.0
 djangorestframework-simplejwt~=5.2.1
+djangorestframework-recursive~=0.1.2
 django-redis~=5.2.0
 mysqlclient~=2.1.1
 PyJWT~=2.5.0

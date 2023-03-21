@@ -3,7 +3,7 @@ from django.urls import path
 from .controllers import Root
 from .controllers.F5 import Partitions, RouteDomains, Datagroup, Datagroups, Node, Nodes, Monitor, Monitors, Certificate, Certificates, Pools, Pool, SnatPool, SnatPools, PoolMembers, PoolMember, PoolMemberStats, Profile, Profiles, Irule, Irules, Policy, Policies, VirtualServer, VirtualServers
 from .controllers.F5.ASM import Policies as ASMPolicies, Policy as ASMPolicy, PoliciesDifference as ASMPolicyDifference, PolicyMerge as ASMPolicyMerge, PolicyApply as ASMPolicyApply
-from .controllers.F5.Asset import Asset, Assets
+from .controllers.F5.Asset import Asset, Assets, AssetAssetDr, AssetAssetsDr
 from .controllers.F5.Workflow import VirtualServersController as WorkflowVirtualServers, VirtualServerController as WorkflowVirtualServer, DeleteNodeController as WorkflowNode
 from .controllers.Permission import Authorizations, IdentityGroups, IdentityGroup, Roles, Permission, Permissions
 from .controllers.Configuration import Configuration
@@ -26,6 +26,10 @@ urlpatterns = [
     # Asset.
     path('assets/', Assets.F5AssetsController.as_view(), name='f5-assets'),
     path('asset/<int:assetId>/', Asset.F5AssetController.as_view(), name='f5-asset'),
+
+    # Asset/disaster recovery related assets.
+    path('asset/<int:assetId>/assetdr/<int:assetDrId>/', AssetAssetDr.F5AssetAssetDrController.as_view(), name='f5-asset-assetdr'),
+    path('asset/<int:assetId>/assetsdr/', AssetAssetsDr.F5AssetAssetsDrController.as_view(), name='f5-assets-assetdr'),
 
     # Partition.
     path('<int:assetId>/partitions/', Partitions.F5PartitionsController.as_view(), name='f5-partitions'),

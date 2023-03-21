@@ -9,12 +9,14 @@ from f5.serializers.F5.Monitor import F5MonitorSerializer as Serializer
 
 from f5.controllers.CustomController import CustomController
 
+from f5.helpers.AssetDr import AssetDr
 from f5.helpers.Lock import Lock
 from f5.helpers.Log import Log
 
 
 class F5MonitorController(CustomController):
     @staticmethod
+    @AssetDr
     def delete(request: Request, assetId: int, partitionName: str, monitorType: str, monitorName: str) -> Response:
         user = CustomController.loggedUser(request)
 
@@ -47,6 +49,7 @@ class F5MonitorController(CustomController):
 
 
     @staticmethod
+    @AssetDr
     def patch(request: Request, assetId: int, partitionName: str, monitorType: str, monitorName: str) -> Response:
         response = None
         user = CustomController.loggedUser(request)

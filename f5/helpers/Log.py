@@ -1,22 +1,27 @@
+import json
 import logging
 import traceback
 
 
 class Log:
     @staticmethod
-    def log(o: any, title: str = "") -> None:
-        # Sends input logs to the "f5" logger (settings).
+    def log(o: any, title: str = "", jsonFormat: bool = False) -> None:
+        # Sends input logs to the "checkpoint" logger (settings).
         log = logging.getLogger("django")
         if title:
             if title == "_":
-                for j in range(120):
+                for j in range(80):
                     title = title + "_"
             log.debug(title)
 
-        log.debug(o)
+        if jsonFormat:
+            log.debug(json.dumps(o))
+        else:
+            log.debug(o)
 
         if title:
             log.debug(title)
+
 
 
     @staticmethod

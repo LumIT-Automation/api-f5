@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "07ffc31a-158b-4233-8830-4f504920a199",
+		"_postman_id": "ae2876d8-e87b-406e-b282-0ab72d77d266",
 		"name": "api-f5",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -525,6 +525,47 @@
 					"name": "Assets",
 					"item": [
 						{
+							"name": "asset",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/asset/1/?includeDr",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"asset",
+										"1",
+										""
+									],
+									"query": [
+										{
+											"key": "includeDr",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
 							"name": "assets",
 							"request": {
 								"auth": {
@@ -539,7 +580,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/assets/",
+									"raw": "http://10.0.111.22/api/v1/f5/assets/?includeDr",
 									"protocol": "http",
 									"host": [
 										"10",
@@ -553,6 +594,12 @@
 										"f5",
 										"assets",
 										""
+									],
+									"query": [
+										{
+											"key": "includeDr",
+											"value": null
+										}
 									]
 								}
 							},
@@ -581,40 +628,6 @@
 										}
 									}
 								},
-								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/assets/",
-									"protocol": "http",
-									"host": [
-										"10",
-										"0",
-										"111",
-										"22"
-									],
-									"path": [
-										"api",
-										"v1",
-										"f5",
-										"assets",
-										""
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "assets",
-							"request": {
-								"auth": {
-									"type": "noauth"
-								},
-								"method": "DELETE",
-								"header": [
-									{
-										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer {{jwttoken}}"
-									}
-								],
 								"url": {
 									"raw": "http://10.0.111.22/api/v1/f5/assets/",
 									"protocol": "http",
@@ -708,6 +721,134 @@
 										"f5",
 										"asset",
 										"4",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "asset's dr assets",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"assetDrId\": 1,\n        \"enabled\": true\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/asset/2/assetsdr/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"asset",
+										"2",
+										"assetsdr",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "asset's dr asset",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"enabled\": false\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/asset/1/assetdr/3/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"asset",
+										"1",
+										"assetdr",
+										"3",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "asset's dr asset",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"url": {
+									"raw": "http://10.0.111.22/api/v1/f5/asset/1/assetdr/3/",
+									"protocol": "http",
+									"host": [
+										"10",
+										"0",
+										"111",
+										"22"
+									],
+									"path": [
+										"api",
+										"v1",
+										"f5",
+										"asset",
+										"1",
+										"assetdr",
+										"3",
 										""
 									]
 								}

@@ -9,12 +9,14 @@ from f5.serializers.F5.Workflow.VirtualServer import F5WorkflowVirtualServerSeri
 
 from f5.controllers.CustomController import CustomController
 
+from f5.helpers.AssetDr import AssetDr
 from f5.helpers.Lock import Lock
 from f5.helpers.Log import Log
 
 
 class F5WorkflowVirtualServersController(CustomController):
     @staticmethod
+    @AssetDr
     def post(request: Request, assetId: int, partitionName: str) -> Response:
         response = None
         user = CustomController.loggedUser(request)

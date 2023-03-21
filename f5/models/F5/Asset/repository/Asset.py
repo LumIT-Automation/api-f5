@@ -29,11 +29,16 @@ class Asset:
     ####################################################################################################################
 
     @staticmethod
-    def get(assetId: int) -> dict:
+    def get(assetId: int, showPassword: bool) -> dict:
         c = connection.cursor()
 
+        if showPassword:
+            select = "*"
+        else:
+            select = "id, address, fqdn, baseurl, tlsverify, datacenter, environment, position"
+
         try:
-            c.execute("SELECT * FROM asset WHERE id = %s", [assetId])
+            c.execute("SELECT " + select + " FROM asset WHERE id = %s", [assetId])
             info = DBHelper.asDict(c)[0]
 
             return info
@@ -105,14 +110,16 @@ class Asset:
 
 
     @staticmethod
-    def list() -> list:
+    def list(showPassword: bool) -> list:
         c = connection.cursor()
 
+        if showPassword:
+            select = "*"
+        else:
+            select = "id, address, fqdn, baseurl, tlsverify, datacenter, environment, position"
+
         try:
-            c.execute(
-                "SELECT id, address, fqdn, baseurl, tlsverify, datacenter, environment, position "
-                "FROM asset"
-            )
+            c.execute("SELECT " + select + " FROM asset")
 
             return DBHelper.asDict(c)
         except Exception as e:

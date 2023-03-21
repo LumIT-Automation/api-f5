@@ -16,13 +16,18 @@ class F5AssetsController(CustomController):
     @staticmethod
     def get(request: Request) -> Response:
         allowedData = list()
+        includeDr = False
+
         user = CustomController.loggedUser(request)
 
         try:
             if Permission.hasUserPermission(groups=user["groups"], action="assets_get") or user["authDisabled"]:
                 Log.actionLog("Asset list", user)
 
-                itemData = Asset.list()
+                if "includeDr" in request.GET:
+                    includeDr = True
+
+                itemData = Asset.dataList(includeDr=includeDr, showPassword=False)
                 for p in itemData:
                     # Filter assets' list basing on actual permissions.
                     if Permission.hasUserPermission(groups=user["groups"], action="assets_get", assetId=p["id"]) or user["authDisabled"]:

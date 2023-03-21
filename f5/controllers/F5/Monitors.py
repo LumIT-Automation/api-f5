@@ -14,6 +14,7 @@ from f5.serializers.F5.Monitor import F5MonitorSerializer as MonitorSerializer
 
 from f5.controllers.CustomController import CustomController
 
+from f5.helpers.AssetDr import AssetDr
 from f5.helpers.Lock import Lock
 from f5.helpers.Conditional import Conditional
 from f5.helpers.Log import Log
@@ -108,6 +109,7 @@ class F5MonitorsController(CustomController):
 
 
     @staticmethod
+    @AssetDr
     def post(request: Request, assetId: int, partitionName: str, monitorType: str) -> Response:
         response = None
         user = CustomController.loggedUser(request)
