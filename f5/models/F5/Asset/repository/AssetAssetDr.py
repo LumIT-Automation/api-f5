@@ -1,5 +1,7 @@
 from django.db import connection
 
+from django.db import transaction
+
 from f5.helpers.Exception import CustomException
 from f5.helpers.Database import Database as DBHelper
 from f5.helpers.Log import Log
@@ -89,19 +91,20 @@ class AssetAssetDr:
         c = connection.cursor()
 
         try:
-            c.execute("SELECT COUNT(*) as c FROM asset_assetdr WHERE `pr_asset_id` = %s AND `dr_asset_id` = %s", [
-                drAssetId,
-                primaryAssetId
-            ])
-
-            if not DBHelper.asDict(c)[0]["c"]:
-                c.execute("INSERT INTO asset_assetdr (`pr_asset_id`, `dr_asset_id`, `enabled`) VALUES (%s, %s, %s)", [
-                    primaryAssetId,
+            with transaction.atomic():
+                c.execute("SELECT COUNT(*) as c FROM asset_assetdr WHERE `pr_asset_id` = %s AND `dr_asset_id` = %s", [
                     drAssetId,
-                    int(enabled)
+                    primaryAssetId
                 ])
-            else:
-                raise CustomException(status=400, payload={"database": "forbidden values due to circular path"})
+
+                if not DBHelper.asDict(c)[0]["c"]:
+                    c.execute("INSERT INTO asset_assetdr (`pr_asset_id`, `dr_asset_id`, `enabled`) VALUES (%s, %s, %s)", [
+                        primaryAssetId,
+                        drAssetId,
+                        int(enabled)
+                    ])
+                else:
+                    raise CustomException(status=400, payload={"database": "forbidden values due to circular path"})
         except Exception as e:
             if e.__class__.__name__ == "IntegrityError":
                     if e.args and e.args[0] and e.args[0] == 1062:
