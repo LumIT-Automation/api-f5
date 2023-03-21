@@ -731,7 +731,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"data\": {\n        \"assetDrId\": \"3\",\n        \"enabled\": true\n    }\n}",
+									"raw": "{\n    \"data\": {\n        \"assetDrId\": 1,\n        \"enabled\": true\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -739,7 +739,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/asset/1/assetsdr/",
+									"raw": "http://10.0.111.22/api/v1/f5/asset/2/assetsdr/",
 									"protocol": "http",
 									"host": [
 										"10",
@@ -752,7 +752,7 @@
 										"v1",
 										"f5",
 										"asset",
-										"1",
+										"2",
 										"assetsdr",
 										""
 									]
@@ -776,7 +776,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"data\": {\n        \"enabled\": true\n    }\n}",
+									"raw": "{\n    \"data\": {\n        \"enabled\": false\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -784,7 +784,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/asset/1/assetdr/4/",
+									"raw": "http://10.0.111.22/api/v1/f5/asset/1/assetdr/3/",
 									"protocol": "http",
 									"host": [
 										"10",
@@ -799,7 +799,7 @@
 										"asset",
 										"1",
 										"assetdr",
-										"4",
+										"3",
 										""
 									]
 								}

@@ -1,11 +1,13 @@
 import functools
 
+from django.conf import settings
 from django.http import HttpRequest
 from rest_framework.request import Request
 
-from django.conf import settings
 from f5.models.F5.Asset.Asset import Asset
+
 from f5.helpers.Log import Log
+
 
 if not hasattr(settings, "ENABLE_ASSET_DR") or not settings.ENABLE_ASSET_DR:
     def AssetDr(func): # null decorator.
@@ -15,7 +17,7 @@ else:
         def __init__(self, wrappedMethod: callable, *args, **kwargs) -> None:
             self.wrappedMethod = wrappedMethod
             self.primaryAssetId: int = 0
-            self.assets = list() # List of the dr asset ids.
+            self.assets = list() # dr asset ids list.
 
 
 
@@ -33,7 +35,7 @@ else:
                     result = self.wrappedMethod(request, **kwargs)
                     responses.append(result)
 
-                    if result.status_code in [200, 201, 202, 204]: # reply the action in dr only if it was successfull.
+                    if result.status_code in (200, 201, 202, 204): # reply the action in dr only if it was successful.
                         if "dr" in request.query_params and request.query_params["dr"]: # reply action in dr only if dr=1 param was passed.
                             self.primaryAssetId = int(kwargs["assetId"])
                             for asset in self.__get_dr_assets():
