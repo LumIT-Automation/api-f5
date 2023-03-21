@@ -8,7 +8,7 @@ from f5.helpers.Log import Log
 
 
 class Asset:
-    def __init__(self, assetId: int, *args, **kwargs):
+    def __init__(self, assetId: int, includeDr: bool = True, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.id: int = int(assetId)
@@ -25,7 +25,7 @@ class Asset:
 
         self.assetsDr: List[Dict[str, Union[Asset, bool]]] = []
 
-        self.__load()
+        self.__load(includeDr=includeDr)
 
 
 
@@ -99,17 +99,18 @@ class Asset:
     ####################################################################################################################
 
     @staticmethod
-    def dataList() -> list:
+    def dataList(includeDr: bool = True) -> list:
         try:
             l = Repository.list()
-            for asset in l:
-                asset["assetsDr"] = list()
+            if includeDr:
+                for asset in l:
+                    asset["assetsDr"] = list()
 
-                for dr in AssetDrRepository.list(primaryAssetId=asset["id"]):
-                    asset["assetsDr"].append({
-                        "asset": dr,
-                        "enabled": dr["enabled"]
-                    })
+                    for dr in AssetDrRepository.list(primaryAssetId=asset["id"]):
+                        asset["assetsDr"].append({
+                            "asset": dr,
+                            "enabled": dr["enabled"]
+                        })
         except Exception as e:
             raise e
 
@@ -147,17 +148,18 @@ class Asset:
     # Private methods
     ####################################################################################################################
 
-    def __load(self) -> None:
+    def __load(self, includeDr: bool = True) -> None:
         try:
             data = Repository.get(self.id)
             for k, v in data.items():
                 setattr(self, k, v)
 
-            # Load related disaster recovery assets.
-            for dr in AssetDrRepository.list(primaryAssetId=self.id):
-                self.assetsDr.append({
-                    "asset": Asset(dr["id"]),
-                    "enabled": dr["enabled"]
-                })
+            if includeDr:
+                # Load related disaster recovery assets.
+                for dr in AssetDrRepository.list(primaryAssetId=self.id):
+                    self.assetsDr.append({
+                        "asset": Asset(dr["id"]),
+                        "enabled": dr["enabled"]
+                    })
         except Exception as e:
             raise e
