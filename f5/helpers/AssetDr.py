@@ -40,6 +40,7 @@ else:
                             self.primaryAssetId = int(kwargs["assetId"])
                             for asset in self.__assetsDr():
                                 try:
+                                    # Modify the request injecting the dr asset and re-run the decorated method.
                                     req = AssetDr.__copyRequest(request)
                                     kwargs["assetId"] = asset.get("id", 0)
 
@@ -61,6 +62,7 @@ else:
 
         def __assetsDr(self) -> list:
             l = list()
+
             try:
                 if self.primaryAssetId:
                     l = Asset(self.primaryAssetId).drDataList(onlyEnabled=True)
