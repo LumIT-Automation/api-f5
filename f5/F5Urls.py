@@ -7,7 +7,7 @@ from .controllers.F5.Asset import Asset, Assets, AssetAssetDr, AssetAssetsDr
 from .controllers.F5.Workflow import VirtualServersController as WorkflowVirtualServers, VirtualServerController as WorkflowVirtualServer, DeleteNodeController as WorkflowNode
 from .controllers.Permission import Authorizations, IdentityGroups, IdentityGroup, Roles, Permission, Permissions
 from .controllers.Configuration import Configuration
-from .controllers.History import History
+from .controllers.History import History, HistoryDr
 
 
 urlpatterns = [
@@ -106,4 +106,7 @@ urlpatterns = [
 
     # Log history.
     path('history/', History.HistoryLogsController.as_view(), name='f5-log-history'),
+
+    # Log history DR.
+    path('historyDr/', HistoryDr.HistoryDrLogsController.as_view(), name='f5-log-history-dr'),
 ]

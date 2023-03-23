@@ -34,6 +34,7 @@ else:
                     # Perform the request to the primary asset.
                     result = self.wrappedMethod(request, **kwargs)
                     responses.append(result)
+                    self.__historyPrimary(result)
 
                     if result.status_code in (200, 201, 202, 204): # reply the action in dr only if it was successful.
                         if "dr" in request.query_params and request.query_params["dr"]: # reply action in dr only if dr=1 param was passed.
@@ -43,7 +44,9 @@ else:
                                     req = AssetDr.__copyRequest(request)
                                     kwargs["assetId"] = asset.get("id", 0)
 
-                                    responses.append(self.wrappedMethod(req, **kwargs))
+                                    resultDr = self.wrappedMethod(req, **kwargs)
+                                    self.__historyDr(resultDr)
+                                    responses.append(resultDr)
                                 except Exception as e:
                                     raise e
 
@@ -71,6 +74,20 @@ else:
 
 
 
+        def __historyPrimary(self, response):
+            pass
+
+
+
+        def __historyDr(self, response):
+            pass
+
+
+
+        ####################################################################################################################
+        # Private static methods
+        ####################################################################################################################
+
         @staticmethod
         def __copyRequest(request: Request) -> Request:
             try:
@@ -87,3 +104,4 @@ else:
                 return req
             except Exception as e:
                 raise e
+
