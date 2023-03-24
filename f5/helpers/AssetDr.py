@@ -8,6 +8,8 @@ from rest_framework.response import Response
 
 from f5.models.F5.Asset.Asset import Asset
 from f5.models.History.HistoryDr import HistoryDr
+
+from f5.controllers.CustomController import CustomController
 from f5.helpers.Log import Log
 
 
@@ -47,7 +49,8 @@ else:
                                     req = AssetDr.__copyRequest(request)
                                     kwargs["assetId"] = asset.get("id", 0)
 
-                                    historyId = self.__historyPrepare(request=request, response=responsePr, drAssetId=kwargs["assetId"], drAssetFqdn=asset.get("fqdn", 0))
+                                    user = CustomController.loggedUser(request)["username"]
+                                    historyId = self.__historyPrepare(request=request, response=responsePr, drAssetId=kwargs["assetId"], drAssetFqdn=asset.get("fqdn", 0), user=user)
                                     responseDr = self.wrappedMethod(req, **kwargs)
                                     self.__historyDr(historyId=historyId, response=responseDr)
                                 except Exception as e:
@@ -78,7 +81,7 @@ else:
 
 
 
-        def __historyPrepare(self, request: Request, response: Response, drAssetId: int, drAssetFqdn: str) -> int:
+        def __historyPrepare(self, request: Request, response: Response, drAssetId: int, drAssetFqdn: str, user: str) -> int:
             try:
                 requestData = {
                         "path": request.path,
@@ -91,7 +94,7 @@ else:
                     "pr_asset_id":  int(self.primaryAssetId),
                     "dr_asset_id": drAssetId,
                     "dr_asset_fqdn": drAssetFqdn,
-                    "username": "",
+                    "username": user,
                     "request": json.dumps(requestData),
                     "pr_status": response.status_code,
                     "dr_status": "",
