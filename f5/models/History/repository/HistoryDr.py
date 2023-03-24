@@ -75,7 +75,7 @@ class HistoryDr:
             values.append(strip_tags(v)) # no HTML allowed.
 
         try:
-            c.execute("UPDATE asset SET "+sql[:-1]+" WHERE id = "+str(historyId), values) # user data are filtered by the serializer.
+            c.execute("UPDATE dr_log SET "+sql[:-1]+" WHERE id = "+str(historyId), values) # user data are filtered by the serializer.
         except Exception as e:
             if e.__class__.__name__ == "IntegrityError" \
                     and e.args and e.args[0] and e.args[0] == 1062:

@@ -80,7 +80,7 @@ else:
 
         def __historyPrepare(self, request: Request, response: Response, drAssetId: int, drAssetFqdn: str) -> int:
             try:
-                reqestData = {
+                requestData = {
                         "path": request.path,
                         "method": request.method,
                         "data": request.data,
@@ -92,15 +92,15 @@ else:
                     "dr_asset_id": drAssetId,
                     "dr_asset_fqdn": drAssetFqdn,
                     "username": "",
-                    "request": json.dumps(reqestData),
+                    "request": json.dumps(requestData),
                     "pr_status": response.status_code,
                     "dr_status": "",
                     "pr_response": json.dumps(response.data),
                     "dr_response": ""
                 })
 
-            except Exception as e:
-                raise e
+            except Exception:
+                pass
 
 
 

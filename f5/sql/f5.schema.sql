@@ -74,11 +74,11 @@ CREATE TABLE `dr_log` (
   `dr_asset_id` int(11) DEFAULT NULL,
   `dr_asset_fqdn` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
-  `request` varchar(8192) NOT NULL DEFAULT '{}' CHECK (json_valid(`request`)),
+  `request` varchar(8192) NOT NULL DEFAULT '{}',
   `pr_status` varchar(32) NOT NULL,
   `dr_status` varchar(32) NOT NULL,
-  `pr_response` varchar(4096) NOT NULL,
-  `dr_response` varchar(3072) NOT NULL,
+  `pr_response` varchar(4096) NOT NULL DEFAULT '{}',
+  `dr_response` varchar(3072) NOT NULL DEFAULT '{}',
   `pr_date` datetime NOT NULL DEFAULT current_timestamp(),
   `dr_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

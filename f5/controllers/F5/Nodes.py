@@ -18,7 +18,6 @@ from f5.helpers.Log import Log
 
 class F5NodesController(CustomController):
     @staticmethod
-    @AssetDr
     def get(request: Request, assetId: int, partitionName: str) -> Response:
         data = dict()
         etagCondition = { "responseEtag": "" }
