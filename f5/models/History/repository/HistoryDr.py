@@ -1,5 +1,6 @@
 from django.utils.html import strip_tags
 from django.db import connection
+from django.db import transaction
 
 from f5.helpers.Exception import CustomException
 from f5.helpers.Database import Database as DBHelper
@@ -62,14 +63,39 @@ class HistoryDr:
 
 
     @staticmethod
-    def add(data: dict) -> None:
+    def modify(historyId: int, data: dict) -> None:
+        sql = ""
+        values = []
+
+        c = connection.cursor()
+
+        # Build SQL query according to dict fields.
+        for k, v in data.items():
+            sql += k+"=%s,"
+            values.append(strip_tags(v)) # no HTML allowed.
+
+        try:
+            c.execute("UPDATE asset SET "+sql[:-1]+" WHERE id = "+str(historyId), values) # user data are filtered by the serializer.
+        except Exception as e:
+            if e.__class__.__name__ == "IntegrityError" \
+                    and e.args and e.args[0] and e.args[0] == 1062:
+                        raise CustomException(status=400, payload={"database": "duplicated values"})
+            else:
+                raise CustomException(status=400, payload={"database": e.__str__()})
+        finally:
+            c.close()
+
+
+
+    @staticmethod
+    def add(data: dict) -> int:
         s = ""
         keys = "("
         values = []
 
         c = connection.cursor()
 
-        # Build SQL query according to dict fields.
+        # Build SQL query according to input fields.
         for k, v in data.items():
             s += "%s,"
             keys += k+","
@@ -78,8 +104,16 @@ class HistoryDr:
         keys = keys[:-1]+")"
 
         try:
-            c.execute("INSERT INTO dr_log "+keys+" VALUES ("+s[:-1]+")", values) # user data are filtered by the serializer.
+            with transaction.atomic():
+                c.execute("INSERT INTO dr_log "+keys+" VALUES ("+s[:-1]+")",
+                    values
+                )
+                return c.lastrowid
         except Exception as e:
-            raise CustomException(status=400, payload={"database": e.__str__()})
+            if e.__class__.__name__ == "IntegrityError" \
+                    and e.args and e.args[0] and e.args[0] == 1062:
+                        raise CustomException(status=400, payload={"database": "duplicated values"})
+            else:
+                raise CustomException(status=400, payload={"database": e.__str__()})
         finally:
             c.close()

@@ -70,19 +70,17 @@ CREATE TABLE `asset_assetdr` (
 
 CREATE TABLE `dr_log` (
   `id` int(11) NOT NULL,
-  `pr_asset_id` int(11),
-  `dr_asset_id` int(11),
+  `pr_asset_id` int(11) DEFAULT NULL,
+  `dr_asset_id` int(11) DEFAULT NULL,
   `dr_asset_fqdn` varchar(255) NOT NULL,
   `username` varchar(255) NOT NULL,
-  `action` varchar(255) NOT NULL,
-  `config_object_type` varchar(255) NOT NULL,
-  `config_object` varchar(255) NOT NULL,
+  `request` varchar(8192) NOT NULL DEFAULT '{}' CHECK (json_valid(`request`)),
   `pr_status` varchar(32) NOT NULL,
   `dr_status` varchar(32) NOT NULL,
   `pr_response` varchar(4096) NOT NULL,
-  `dr_response` varchar(4096) NOT NULL,
+  `dr_response` varchar(3072) NOT NULL,
   `pr_date` datetime NOT NULL DEFAULT current_timestamp(),
-  `dr_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
+  `dr_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------

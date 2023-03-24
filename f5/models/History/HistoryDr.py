@@ -1,24 +1,25 @@
 from f5.models.History.repository.HistoryDr import HistoryDr as Repository
 
+from f5.helpers.Misc import Misc
+
 
 class HistoryDr:
     def __init__(self, id: int, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.id = id
-        self.username = ""
-        self.action = ""
-        self.pr_asset_id = 0
-        self.dr_asset_id = 0
-        self.dr_asset_fqdn = ""
-        self.config_object_type = ""
-        self.config_object = ""
-        self.pr_status = ""
-        self.dr_status = ""
-        self.pr_response = ""
-        self.dr_response =""
-        self.pr_date = ""
-        self.dr_date = ""
+        self.username: str = ""
+        self.action: str = ""
+        self.pr_asset_id: int = 0
+        self.dr_asset_id:int = 0
+        self.dr_asset_fqdn: str = ""
+        self.request: str = ""
+        self.pr_status: str = ""
+        self.dr_status: str = ""
+        self.pr_response: str = ""
+        self.dr_response: str = ""
+        self.pr_date: str = ""
+        self.dr_date: str = ""
 
 
 
@@ -35,9 +36,20 @@ class HistoryDr:
 
 
 
-    @staticmethod
-    def add(data: dict) -> None:
+    def modify(self, data: dict) -> None:
         try:
-            Repository.add(data)
+            Repository.modify(self.id, data)
+
+            for k, v in Misc.toDict(data).items():
+                setattr(self, k, v)
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
+    def add(data: dict) -> int:
+        try:
+            return Repository.add(data)
         except Exception as e:
             raise e
