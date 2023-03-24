@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "ae2876d8-e87b-406e-b282-0ab72d77d266",
+		"_postman_id": "6d19464a-e864-480c-aa3b-c07bff155be6",
 		"name": "api-f5",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -1102,7 +1102,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"data\": {\n        \"configuration\": \"[{\\\"key\\\": \\\"iruleHide\\\", \\\"value\\\": true }]\"\n    }\n}",
+									"raw": "{\n    \"data\": {\n        \"configuration\": [\n            {\n                \"key\": \"iruleHide\",\n                \"value\": true\n            }\n        ]\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -4197,6 +4197,40 @@
 				},
 				{
 					"name": "history",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/history/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"history",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "history Dr",
 					"request": {
 						"auth": {
 							"type": "noauth"

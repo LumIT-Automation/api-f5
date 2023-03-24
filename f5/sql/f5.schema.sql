@@ -53,13 +53,36 @@ CREATE TABLE `asset` (
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `assrt_assetdr`
+-- Struttura della tabella `assert_assetdr`
 --
 
 CREATE TABLE `asset_assetdr` (
   `pr_asset_id` int(11) NOT NULL,
   `dr_asset_id` int(11) NOT NULL,
   `enabled` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `dr_log`
+--
+
+CREATE TABLE `dr_log` (
+  `id` int(11) NOT NULL,
+  `pr_asset_id` int(11),
+  `dr_asset_id` int(11),
+  `dr_asset_fqdn` varchar(255) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `action` varchar(255) NOT NULL,
+  `config_object_type` varchar(255) NOT NULL,
+  `config_object` varchar(255) NOT NULL,
+  `pr_status` varchar(32) NOT NULL,
+  `dr_status` varchar(32) NOT NULL,
+  `pr_response` varchar(4096) NOT NULL,
+  `dr_response` varchar(4096) NOT NULL,
+  `pr_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `dr_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -187,6 +210,12 @@ ALTER TABLE `asset`
 ALTER TABLE `asset_assetdr`
   ADD PRIMARY KEY (`pr_asset_id`,`dr_asset_id` );
 
+-- Indici per le tabelle `dr_log`
+--
+ALTER TABLE `dr_log`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY (`pr_asset_id`,`dr_asset_id`);
+
 --
 -- Indici per le tabelle `group_role_partition`
 --
@@ -264,6 +293,12 @@ ALTER TABLE `asset`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT per la tabella `dr_log`
+--
+ALTER TABLE `dr_log`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT per la tabella `group_role_partition`
 --
 ALTER TABLE `group_role_partition`
@@ -315,6 +350,12 @@ ALTER TABLE `role`
 ALTER TABLE `asset_assetdr`
   ADD CONSTRAINT `k_pr_asset_id` FOREIGN KEY (`pr_asset_id`) REFERENCES `asset` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `k_dr_asset_id` FOREIGN KEY (`dr_asset_id`) REFERENCES `asset` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Limiti per la tabella `dr_log`
+--
+ALTER TABLE `dr_log`
+  ADD CONSTRAINT `k_assets_id` FOREIGN KEY (`pr_asset_id`, `dr_asset_id`) REFERENCES `asset_assetdr` (`pr_asset_id`, `dr_asset_id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `group_role_partition`

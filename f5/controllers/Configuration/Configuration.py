@@ -21,7 +21,7 @@ class ConfigurationController(CustomController):
 
             data = {
                 "data": CustomController.validate(
-                    Configuration.getByType(configType),
+                    Configuration(configType=configType).repr(),
                     Serializer,
                     "value"
                 ),
@@ -51,8 +51,7 @@ class ConfigurationController(CustomController):
 
                 serializer = Serializer(data=request.data["data"])
                 if serializer.is_valid():
-                    Configuration.rewriteByType(
-                        configType,
+                    Configuration(configType=configType).rewrite(
                         serializer.validated_data
                     )
 
