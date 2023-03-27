@@ -40,12 +40,12 @@ class HistoryDr:
         try:
             if allUsersHistory:
                 c.execute("SELECT id, pr_asset_id, dr_asset_id, dr_asset_fqdn, username, action_name, "
-                          "request, config_object, pr_status, dr_status, pr_response, dr_response, "
+                          "request, pr_status, dr_status, pr_response, dr_response, "
                           "cast(pr_date as char) as pr_date, cast(dr_date as char) as dr_date "
                           "FROM dr_log ORDER BY pr_date DESC")
             else:
                 c.execute("SELECT id, pr_asset_id, dr_asset_id, dr_asset_fqdn, username, action_name, "
-                          "request, config_object, pr_status, dr_status, pr_response, dr_response, "
+                          "request, pr_status, dr_status, pr_response, dr_response, "
                           "cast(pr_date as char) as pr_date, cast(dr_date as char) as dr_date "
                           "FROM dr_log WHERE username = %s ORDER BY pr_date DESC", [
                     username

@@ -108,5 +108,5 @@ urlpatterns = [
     path('history/', History.HistoryLogsController.as_view(), name='f5-log-history'),
 
     # Log history DR.
-    path('historyDr/', HistoryDr.HistoryDrLogsController.as_view(), name='f5-log-history-dr'),
+    path('historydr/', HistoryDr.HistoryDrLogsController.as_view(), name='f5-log-history-dr'),
 ]

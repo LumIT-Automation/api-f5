@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "6d19464a-e864-480c-aa3b-c07bff155be6",
+		"_postman_id": "f1475765-3cd3-43a5-8829-788d15f0694a",
 		"name": "api-f5",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -4230,7 +4230,7 @@
 					"response": []
 				},
 				{
-					"name": "history Dr",
+					"name": "history dr",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -4244,7 +4244,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/history/",
+							"raw": "http://10.0.111.22/api/v1/f5/historydr/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -4256,7 +4256,7 @@
 								"api",
 								"v1",
 								"f5",
-								"history",
+								"historydr",
 								""
 							]
 						}
