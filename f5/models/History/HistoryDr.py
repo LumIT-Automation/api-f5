@@ -8,12 +8,13 @@ class HistoryDr:
         super().__init__(*args, **kwargs)
 
         self.id = id
-        self.username: str = ""
-        self.action: str = ""
         self.pr_asset_id: int = 0
-        self.dr_asset_id:int = 0
+        self.dr_asset_id: int = 0
         self.dr_asset_fqdn: str = ""
+        self.username: str = ""
+        self.action_name: str = ""
         self.request: str = ""
+        self.config_object: str = ""
         self.pr_status: str = ""
         self.dr_status: str = ""
         self.pr_response: str = ""

@@ -3,6 +3,7 @@ import json
 
 from django.conf import settings
 from django.http import HttpRequest
+from django.urls import resolve
 from rest_framework.request import Request
 from rest_framework.response import Response
 
@@ -21,6 +22,7 @@ else:
         def __init__(self, wrappedMethod: callable, *args, **kwargs) -> None:
             self.wrappedMethod = wrappedMethod
             self.primaryAssetId: int = 0
+            self.actionName: str = "" # "name" property of the path (defined in urls.py).
             self.assets = list() # dr asset ids list.
 
 
@@ -32,16 +34,15 @@ else:
         def __call__(self, request: Request, **kwargs):
             @functools.wraps(request)
             def wrapped():
-
                 try:
                     self.primaryAssetId = int(kwargs["assetId"])
-
                     # Perform the request to the primary asset.
                     responsePr = self.wrappedMethod(request, **kwargs)
 
-
                     if responsePr.status_code in (200, 201, 202, 204): # reply the action in dr only if it was successful.
                         if "dr" in request.query_params and request.query_params["dr"]: # reply action in dr only if dr=1 param was passed.
+                            res = resolve(request.path)
+                            self.actionName = res.url_name + '_' + request.method.lower()
 
                             for asset in self.__assetsDr():
                                 try:
@@ -95,6 +96,7 @@ else:
                     "dr_asset_id": drAssetId,
                     "dr_asset_fqdn": drAssetFqdn,
                     "username": user,
+                    "action_name": self.actionName,
                     "request": json.dumps(requestData),
                     "pr_status": response.status_code,
                     "dr_status": "",
