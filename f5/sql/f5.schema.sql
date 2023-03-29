@@ -75,17 +75,26 @@ CREATE TABLE `dr_log` (
   `dr_asset_fqdn` varchar(255) NOT NULL DEFAULT "",
   `username` varchar(255) NOT NULL DEFAULT "",
   `action_name` varchar(64) NOT NULL DEFAULT "",
-  `request` varchar(8192) NOT NULL DEFAULT '{}',
+  `request` varchar(16384) NOT NULL DEFAULT '{}',
   `pr_status` varchar(15) NOT NULL DEFAULT "",
   `dr_status` varchar(15) NOT NULL DEFAULT "",
-  `pr_response` varchar(4096) NOT NULL DEFAULT '{}',
-  `dr_response` varchar(3072) NOT NULL DEFAULT '{}',
   `pr_date` datetime NOT NULL DEFAULT current_timestamp(),
   `dr_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
+--
+-- Struttura della tabella `dr_log_data`
+--
+
+CREATE TABLE `dr_log_data` (
+  `dr_log_id` int(11) NOT NULL,
+  `pr_response` text NOT NULL DEFAULT '{}',
+  `dr_response` text NOT NULL DEFAULT '{}'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
 --
 -- Struttura della tabella `group_role_partition`
 --
@@ -355,6 +364,12 @@ ALTER TABLE `asset_assetdr`
 --
 ALTER TABLE `dr_log`
   ADD CONSTRAINT `k_assets_id` FOREIGN KEY (`pr_asset_id`, `dr_asset_id`) REFERENCES `asset_assetdr` (`pr_asset_id`, `dr_asset_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Limiti per la tabella `dr_log_data`
+--
+ALTER TABLE `dr_log_data`
+  ADD CONSTRAINT `k_dr_log_id` FOREIGN KEY (`dr_log_id`) REFERENCES `dr_log` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `group_role_partition`

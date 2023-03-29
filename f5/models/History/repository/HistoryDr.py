@@ -26,6 +26,11 @@ class HistoryDr:
     #  `pr_date` datetime NOT NULL DEFAULT current_timestamp(),
     #  `dr_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00 ON UPDATE current_timestamp()
 
+    # Table: dr_log_data
+
+    #   `dr_log_id` int(11) NOT NULL,
+    #   `pr_response` text NOT NULL DEFAULT '{}',
+    #   `dr_response` text NOT NULL DEFAULT '{}',
 
 
     ####################################################################################################################
@@ -42,12 +47,16 @@ class HistoryDr:
                 c.execute("SELECT id, pr_asset_id, dr_asset_id, dr_asset_fqdn, username, action_name, "
                           "request, pr_status, dr_status, pr_response, dr_response, "
                           "cast(pr_date as char) as pr_date, cast(dr_date as char) as dr_date "
-                          "FROM dr_log ORDER BY pr_date DESC")
+                          "FROM dr_log "
+                          "INNER JOIN dr_log_data on dr_log_data.dr_log_id = dr_log.id "
+                          "ORDER BY pr_date DESC")
             else:
                 c.execute("SELECT id, pr_asset_id, dr_asset_id, dr_asset_fqdn, username, action_name, "
                           "request, pr_status, dr_status, pr_response, dr_response, "
                           "cast(pr_date as char) as pr_date, cast(dr_date as char) as dr_date "
-                          "FROM dr_log WHERE username = %s ORDER BY pr_date DESC", [
+                          "FROM dr_log "
+                          "INNER JOIN dr_log_data on dr_log_data.dr_log_id = dr_log.id "
+                          "WHERE username = %s ORDER BY pr_date DESC", [
                     username
                 ])
 
@@ -74,7 +83,9 @@ class HistoryDr:
             values.append(strip_tags(v)) # no HTML allowed.
 
         try:
-            c.execute("UPDATE dr_log SET "+sql[:-1]+" WHERE id = "+str(historyId), values) # user data are filtered by the serializer.
+            c.execute("UPDATE dr_log INNER JOIN dr_log_data "
+                      "ON dr_log.id = dr_log_data.dr_log_id "
+                      "SET "+sql[:-1]+" WHERE id = "+str(historyId), values) # user data are filtered by the serializer.
         except Exception as e:
             if e.__class__.__name__ == "IntegrityError" \
                     and e.args and e.args[0] and e.args[0] == 1062:
@@ -88,26 +99,36 @@ class HistoryDr:
 
     @staticmethod
     def add(data: dict) -> int:
-        s = ""
-        keys = "("
-        values = []
+        s = ["", "%s,"]
+        keys = [ "(", "(dr_log_id," ]
+        Values = [ [], [] ]
 
         c = connection.cursor()
 
         # Build SQL query according to input fields.
         for k, v in data.items():
-            s += "%s,"
-            keys += k+","
-            values.append(strip_tags(v)) # no HTML allowed.
+            i = 0
+            if "response" in k:
+                i = 1
+            s[i] += "%s,"
+            keys[i] += k + ","
+            Values[i].append(strip_tags(v)) # no HTML allowed.
 
-        keys = keys[:-1]+")"
+        for j in [0, 1]:
+            keys[j] = keys[j][:-1]+")"
 
         try:
             with transaction.atomic():
-                c.execute("INSERT INTO dr_log "+keys+" VALUES ("+s[:-1]+")",
-                    values
+                c.execute("INSERT INTO dr_log "+keys[0]+" VALUES ("+s[0][:-1]+")",
+                    Values[0]
                 )
-                return c.lastrowid
+                rowId = c.lastrowid
+                Values[1].insert(0, rowId)
+                c.execute("INSERT INTO dr_log_data "+keys[1]+" VALUES ("+s[1][:-1]+")",
+                    Values[1]
+                )
+
+                return rowId
         except Exception as e:
             if e.__class__.__name__ == "IntegrityError" \
                     and e.args and e.args[0] and e.args[0] == 1062:
