@@ -9,7 +9,6 @@ from f5.serializers.F5.Node import F5NodeSerializer as Serializer
 
 from f5.controllers.CustomController import CustomController
 
-from f5.helpers.AssetDr import AssetDr
 from f5.helpers.Lock import Lock
 from f5.helpers.Log import Log
 

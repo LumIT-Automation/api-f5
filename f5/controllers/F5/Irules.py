@@ -10,7 +10,6 @@ from f5.serializers.F5.Irule import F5IruleSerializer as IruleSerializer
 
 from f5.controllers.CustomController import CustomController
 
-from f5.helpers.AssetDr import AssetDr
 from f5.helpers.Lock import Lock
 from f5.helpers.Conditional import Conditional
 from f5.helpers.Log import Log

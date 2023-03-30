@@ -1,3 +1,4 @@
+import uuid
 import functools
 import json
 
@@ -35,7 +36,9 @@ else:
             @functools.wraps(request)
             def wrapped():
                 try:
+                    uid = uuid.uuid4().hex
                     self.primaryAssetId = int(kwargs["assetId"])
+
                     # Perform the request to the primary asset.
                     responsePr = self.wrappedMethod(request, **kwargs)
 
@@ -51,9 +54,9 @@ else:
                                     kwargs["assetId"] = asset.get("id", 0)
 
                                     user = CustomController.loggedUser(request)["username"]
-                                    historyId = self.__historyPrepare(request=request, response=responsePr, drAssetId=kwargs["assetId"], drAssetFqdn=asset.get("fqdn", 0), user=user)
+                                    #historyId = self.__historyPrepare(request=request, response=responsePr, drAssetId=kwargs["assetId"], drAssetFqdn=asset.get("fqdn", 0), user=user)
                                     responseDr = self.wrappedMethod(req, **kwargs)
-                                    self.__historyDr(historyId=historyId, response=responseDr)
+                                    #self.__historyDr(historyId=historyId, response=responseDr)
                                 except Exception as e:
                                     raise e
 
@@ -121,7 +124,6 @@ else:
 
 
 
-
         ####################################################################################################################
         # Private static methods
         ####################################################################################################################
@@ -142,4 +144,3 @@ else:
                 return req
             except Exception as e:
                 raise e
-

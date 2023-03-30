@@ -67,6 +67,7 @@ class VirtualServersWorkflow:
             self.__cleanCreatedObjects()
             raise CustomException(status=400, payload={"F5": "Wrong input."})
         except Exception as e:
+            self.__logFailed()
             raise e
 
 
@@ -626,3 +627,18 @@ class VirtualServersWorkflow:
                         })
             except Exception:
                 pass
+
+
+
+    def __logFailed(self) -> None:
+        try:
+            History.add({
+                "username": self.username,
+                "action": "[WORKFLOW] "+self.data["virtualServer"]["name"]+" creation ("+self.data["virtualServer"]["type"]+", SNAT:"+self.data["virtualServer"]["snat"]+")",
+                "asset_id": self.assetId,
+                "config_object_type": "virtualServer",
+                "config_object": "/"+self.partitionName+"/"+self.data["virtualServer"]["name"],
+                "status": "failed"
+                })
+        except Exception:
+            pass
