@@ -7,7 +7,7 @@ from f5.models.F5.Workflow.VirtualServer import VirtualServerWorkflow
 
 from f5.controllers.CustomController import CustomController
 
-from f5.helpers.AssetDr import AssetDr
+from f5.helpers.decorators.AssetDr import AssetDr
 from f5.helpers.Lock import Lock
 from f5.helpers.Log import Log
 
@@ -16,6 +16,7 @@ class F5WorkflowVirtualServerController(CustomController):
     @staticmethod
     @AssetDr
     def delete(request: Request, assetId: int, partitionName: str, virtualServerName: str) -> Response:
+        replicaUuid = request.GET.get("__concertoDrReplicaFlow", "")
         user = CustomController.loggedUser(request)
 
         try:
@@ -26,7 +27,7 @@ class F5WorkflowVirtualServerController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    VirtualServerWorkflow(assetId, partitionName, virtualServerName, user).delete()
+                    VirtualServerWorkflow(assetId, partitionName, virtualServerName, user, replicaUuid).delete()
 
                     httpStatus = status.HTTP_200_OK
                     lock.release()

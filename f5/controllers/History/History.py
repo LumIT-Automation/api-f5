@@ -27,7 +27,7 @@ class HistoryLogsController(CustomController):
             data = {
                 "data": {
                     "items": CustomController.validate(
-                        History.list(user["username"], allUsersHistory),
+                        History.dataList(user["username"], allUsersHistory),
                         Serializer,
                         "list"
                     )

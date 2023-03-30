@@ -132,7 +132,8 @@ CREATE TABLE `log` (
   `config_object_type` varchar(255) NOT NULL,
   `config_object` varchar(255) NOT NULL,
   `status` varchar(32) NOT NULL,
-  `date` datetime NOT NULL DEFAULT current_timestamp()
+  `date` datetime NOT NULL DEFAULT current_timestamp(),
+  `dr_replica_flow` varchar(255) DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------

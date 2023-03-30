@@ -882,7 +882,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"data\": {\n        \"virtualServer\": {\n            \"name\": \"vs_SERVICENAME\",\n            \"type\": \"L4\",\n            \"snat\": \"snat\",\n            \"routeDomainId\": \"0\",\n            \"destination\": \"11.11.11.61:80\",\n            \"mask\": \"255.255.255.255\",\n            \"source\": \"0.0.0.0/0\"\n        },\n        \"profiles\": [\n            {\n                \"name\": \"PROFILENAME_FAST122\",\n                \"type\": \"fastl4\",\n                \"idleTimeout\": 300\n            }\n        ],\n        \"pool\": {\n            \"name\": \"POOLNAME_ROUNDROBIN122\",\n            \"loadBalancingMode\": \"round-robin\",\n            \"nodes\": [\n                {\n                    \"name\": \"NODE_1\",\n                    \"address\": \"111.111.115.100\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"NODE_2\",\n                    \"address\": \"111.111.115.101\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"NODE_3\",\n                    \"address\": \"111.111.115.102\",\n                    \"port\": 80\n                }\n            ]\n        },\n        \"irules\": [\n            {\n                \"name\": \"IRULE_VS\",\n                \"code\": \"when CLIENT_ACCEPTED {}\"\n            }\n        ],\n        \"snatPool\": {\n            \"name\": \"SNATPOOL_NAME125\",\n            \"members\": [\n                \"121.111.115.120\"\n            ]\n        },\n        \"monitor\": {\n            \"name\": \"MONITORNAME_HTTP122\",\n            \"type\": \"http\",\n            \"send\": \"/\",\n            \"recv\": \"OK\"\n        }\n    }\n}",
+									"raw": "{\n    \"data\": {\n        \"virtualServer\": {\n            \"name\": \"vs_SERVICENAME\",\n            \"type\": \"L4\",\n            \"snat\": \"snat\",\n            \"routeDomainId\": \"0\",\n            \"destination\": \"11.11.11.61:80\",\n            \"mask\": \"255.255.255.255\",\n            \"source\": \"0.0.0.0/0\"\n        },\n        \"profiles\": [\n            {\n                \"name\": \"PROFILENAME_FAST122\",\n                \"type\": \"fastl4\",\n                \"idleTimeout\": 300\n            }\n        ],\n        \"pool\": {\n            \"name\": \"POOLNAME_ROUNDROBIN122\",\n            \"loadBalancingMode\": \"round-robin\",\n            \"nodes\": [\n                {\n                    \"name\": \"NODE_1\",\n                    \"address\": \"111.111.115.100\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"NODE_2\",\n                    \"address\": \"111.111.115.101\",\n                    \"port\": 80\n                },\n                {\n                    \"name\": \"NODE_3\",\n                    \"address\": \"111.111.115.102\",\n                    \"port\": 80\n                }\n            ]\n        },\n        \"irules\": [\n            {\n                \"name\": \"IRULE_VS\",\n                \"code\": \"when CLIENT_ACCEPTED {}\"\n            }\n        ],\n        \"snatPool\": {\n            \"name\": \"SNATPOOL_NAME126\",\n            \"members\": [\n                \"121.111.115.120\"\n            ]\n        },\n        \"monitor\": {\n            \"name\": \"MONITORNAME_HTTP123\",\n            \"type\": \"http\",\n            \"send\": \"/\",\n            \"recv\": \"OK\"\n        }\n    }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -890,7 +890,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/workflow/virtualservers/",
+									"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/workflow/virtualservers/?dr=1",
 									"protocol": "http",
 									"host": [
 										"10",
@@ -907,6 +907,12 @@
 										"workflow",
 										"virtualservers",
 										""
+									],
+									"query": [
+										{
+											"key": "dr",
+											"value": "1"
+										}
 									]
 								}
 							},
@@ -985,7 +991,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/workflow/virtualservers/vs_SERVICENAME/",
+									"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/workflow/virtualservers/vs_SERVICENAME/?dr=1",
 									"protocol": "http",
 									"host": [
 										"10",
@@ -1003,6 +1009,12 @@
 										"virtualservers",
 										"vs_SERVICENAME",
 										""
+									],
+									"query": [
+										{
+											"key": "dr",
+											"value": "1"
+										}
 									]
 								}
 							},

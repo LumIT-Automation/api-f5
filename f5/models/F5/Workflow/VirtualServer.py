@@ -15,7 +15,7 @@ from f5.helpers.Log import Log
 
 
 class VirtualServerWorkflow:
-    def __init__(self, assetId: int, partitionName: str, virtualServerName: str, user: dict):
+    def __init__(self, assetId: int, partitionName: str, virtualServerName: str, user: dict, replicaUuid: str):
         try:
             self.profiles = list()
             self.certificates = list()
@@ -47,9 +47,11 @@ class VirtualServerWorkflow:
             self.partitionName = partitionName
             self.virtualServerName = virtualServerName
             self.username = user["username"]
+            self.replicaUuid = replicaUuid  # for relating primary/dr operations, when appliable.
 
             self.__info()
         except Exception as e:
+            self.__logFailed()
             raise e
 
 
@@ -419,7 +421,8 @@ class VirtualServerWorkflow:
                             "asset_id": self.assetId,
                             "config_object_type": k,
                             "config_object": "/"+self.partitionName+"/"+v["name"],
-                            "status": "deleted"
+                            "status": "deleted",
+                            "dr_replica_flow": self.replicaUuid
                             })
 
                 if k in ("node", "profile", "irule", "certificate", "key"):
@@ -430,10 +433,27 @@ class VirtualServerWorkflow:
                             "asset_id": self.assetId,
                             "config_object_type": k,
                             "config_object": "/"+self.partitionName+"/"+n["name"],
-                            "status": "deleted"
+                            "status": "deleted",
+                            "dr_replica_flow": self.replicaUuid
                         })
             except Exception:
                 pass
+
+
+
+    def __logFailed(self) -> None:
+        try:
+            History.add({
+                "username": self.username,
+                "action": "[WORKFLOW] "+self.virtualServerName+" deletion",
+                "asset_id": self.assetId,
+                "config_object_type": "virtualServer",
+                "config_object": "/"+self.partitionName+"/"+self.virtualServerName,
+                "status": "deletion-failed",
+                "dr_replica_flow": self.replicaUuid
+            })
+        except Exception:
+            pass
 
 
 

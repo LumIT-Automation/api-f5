@@ -9,7 +9,7 @@ from f5.serializers.F5.Workflow.VirtualServer import F5WorkflowVirtualServerSeri
 
 from f5.controllers.CustomController import CustomController
 
-from f5.helpers.AssetDr import AssetDr
+from f5.helpers.decorators.AssetDr import AssetDr
 from f5.helpers.Lock import Lock
 from f5.helpers.Log import Log
 
@@ -19,6 +19,8 @@ class F5WorkflowVirtualServersController(CustomController):
     @AssetDr
     def post(request: Request, assetId: int, partitionName: str) -> Response:
         response = None
+        replicaUuid = request.GET.get("__concertoDrReplicaFlow", "")
+
         user = CustomController.loggedUser(request)
 
         try:
@@ -34,7 +36,7 @@ class F5WorkflowVirtualServersController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        VirtualServersWorkflow(assetId, partitionName, data, user).add()
+                        VirtualServersWorkflow(assetId, partitionName, data, user, replicaUuid).add()
 
                         httpStatus = status.HTTP_201_CREATED
                         lock.release()

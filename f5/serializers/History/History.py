@@ -10,5 +10,6 @@ class HistorySerializer(serializers.Serializer):
         config_object = serializers.CharField(max_length=255, required=True)
         status = serializers.CharField(max_length=255, required=True)
         date = serializers.CharField(max_length=255, required=True)
+        dr_replica_flow = serializers.CharField(max_length=255, required=False, allow_blank=True)
 
     items = HistoryItemsSerializer(many=True)

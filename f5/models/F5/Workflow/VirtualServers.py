@@ -16,11 +16,12 @@ from f5.helpers.Exception import CustomException
 
 
 class VirtualServersWorkflow:
-    def __init__(self, assetId: int, partitionName: str, data: dict, user: dict):
+    def __init__(self, assetId: int, partitionName: str, data: dict, user: dict, replicaUuid: str):
         self.assetId = assetId
         self.partitionName = partitionName
         self.data = data
         self.username = user["username"]
+        self.replicaUuid = replicaUuid # for relating primary/dr operations, when appliable.
         self.routeDomain = ""
 
         if "routeDomainId" in data["virtualServer"] and data["virtualServer"]["routeDomainId"]:
@@ -612,7 +613,8 @@ class VirtualServersWorkflow:
                             "asset_id": self.assetId,
                             "config_object_type": k,
                             "config_object": "/"+self.partitionName+"/"+v["name"],
-                            "status": "created"
+                            "status": "created",
+                            "dr_replica_flow": self.replicaUuid
                             })
 
                 if k in ("node", "poolMember", "irule", "profile", "key", "certificate"):
@@ -623,7 +625,8 @@ class VirtualServersWorkflow:
                             "asset_id": self.assetId,
                             "config_object_type": k,
                             "config_object": "/"+self.partitionName+"/"+n["name"],
-                            "status": "created"
+                            "status": "created",
+                            "dr_replica_flow": self.replicaUuid
                         })
             except Exception:
                 pass
@@ -638,7 +641,8 @@ class VirtualServersWorkflow:
                 "asset_id": self.assetId,
                 "config_object_type": "virtualServer",
                 "config_object": "/"+self.partitionName+"/"+self.data["virtualServer"]["name"],
-                "status": "failed"
+                "status": "creation-failed",
+                "dr_replica_flow": self.replicaUuid
                 })
         except Exception:
             pass

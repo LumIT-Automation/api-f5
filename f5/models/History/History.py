@@ -5,14 +5,15 @@ class History:
     def __init__(self, id: int, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.id = id
-        self.username = ""
-        self.action = ""
-        self.asset_id = 0
-        self.config_object_type = ""
-        self.config_object = ""
-        self.status = ""
-        self.date = ""
+        self.id: int = int(id)
+        self.username: str = ""
+        self.action: str = ""
+        self.asset_id: int = 0
+        self.config_object_type: str = ""
+        self.config_object: str = ""
+        self.status: str = ""
+        self.date: str = ""
+        self.dr_replica_flow: str = ""
 
 
 
@@ -21,7 +22,7 @@ class History:
     ####################################################################################################################
 
     @staticmethod
-    def list(username: str, allUsersHistory: bool) -> list:
+    def dataList(username: str, allUsersHistory: bool) -> list:
         try:
             return Repository.list(username, allUsersHistory)
         except Exception as e:
