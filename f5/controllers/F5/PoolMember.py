@@ -75,7 +75,6 @@ class F5PoolMemberController(CustomController):
 
 
     @staticmethod
-    @AssetDr
     def delete(request: Request, assetId: int, partitionName: str, poolName: str, poolMemberName: str) -> Response:
         user = CustomController.loggedUser(request)
 
@@ -113,7 +112,6 @@ class F5PoolMemberController(CustomController):
 
 
     @staticmethod
-    @AssetDr
     def patch(request: Request, assetId: int, partitionName: str, poolName: str, poolMemberName: str) -> Response:
         response = None
         user = CustomController.loggedUser(request)

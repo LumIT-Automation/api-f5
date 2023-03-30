@@ -14,7 +14,6 @@ from f5.helpers.Log import Log
 
 class F5WorkflowDeleteNodeController(CustomController):
     @staticmethod
-    @AssetDr
     def delete(request: Request, assetId: int, partitionName: str, nodeName: str) -> Response:
         user = CustomController.loggedUser(request)
 

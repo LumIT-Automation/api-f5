@@ -111,7 +111,6 @@ class F5CertificatesController(CustomController):
 
 
     @staticmethod
-    @AssetDr
     def post(request: Request, assetId: int, partitionName: str) -> Response:
         response = None
         user = CustomController.loggedUser(request)

@@ -92,7 +92,6 @@ class F5DatagroupsController(CustomController):
 
 
     @staticmethod
-    @AssetDr
     def post(request: Request, assetId: int, partitionName: str, datagroupType: str) -> Response:
         response = None
         user = CustomController.loggedUser(request)

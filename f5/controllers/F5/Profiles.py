@@ -94,7 +94,6 @@ class F5ProfilesController(CustomController):
 
 
     @staticmethod
-    @AssetDr
     def post(request: Request, assetId: int, partitionName: str, profileType: str) -> Response:
         response = None
         user = CustomController.loggedUser(request)

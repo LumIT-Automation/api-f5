@@ -109,7 +109,6 @@ class F5MonitorsController(CustomController):
 
 
     @staticmethod
-    @AssetDr
     def post(request: Request, assetId: int, partitionName: str, monitorType: str) -> Response:
         response = None
         user = CustomController.loggedUser(request)

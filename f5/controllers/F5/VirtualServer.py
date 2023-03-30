@@ -70,7 +70,6 @@ class F5VirtualServerController(CustomController):
 
 
     @staticmethod
-    @AssetDr
     def delete(request: Request, assetId: int, partitionName: str, virtualServerName: str) -> Response:
         user = CustomController.loggedUser(request)
 
@@ -103,7 +102,6 @@ class F5VirtualServerController(CustomController):
 
 
     @staticmethod
-    @AssetDr
     def patch(request: Request, assetId: int, partitionName: str, virtualServerName: str) -> Response:
         response = None
         user = CustomController.loggedUser(request)

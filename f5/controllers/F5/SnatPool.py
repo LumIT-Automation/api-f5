@@ -16,7 +16,6 @@ from f5.helpers.Log import Log
 
 class F5SnatPoolController(CustomController):
     @staticmethod
-    @AssetDr
     def delete(request: Request, assetId: int, partitionName: str, snatPoolName: str) -> Response:
         user = CustomController.loggedUser(request)
 
@@ -49,7 +48,6 @@ class F5SnatPoolController(CustomController):
 
 
     @staticmethod
-    @AssetDr
     def patch(request: Request, assetId: int, partitionName: str, snatPoolName: str) -> Response:
         response = None
         user = CustomController.loggedUser(request)

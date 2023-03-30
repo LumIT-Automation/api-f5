@@ -78,7 +78,6 @@ class F5PoolMembersController(CustomController):
 
 
     @staticmethod
-    @AssetDr
     def post(request: Request, assetId: int, partitionName: str, poolName: str) -> Response:
         response = None
         user = CustomController.loggedUser(request)
