@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "f1475765-3cd3-43a5-8829-788d15f0694a",
+		"_postman_id": "de472f04-06b0-4ac2-9fc2-f7417c108029",
 		"name": "api-f5",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -858,7 +858,7 @@
 					]
 				},
 				{
-					"name": "Workflow",
+					"name": "Use cases",
 					"item": [
 						{
 							"name": "virtualservers (L4, NOSNAT)",

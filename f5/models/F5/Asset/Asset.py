@@ -23,7 +23,7 @@ class Asset:
         self.username: str = ""
         self.password: str = ""
 
-        self.assetsDr: List[Dict[str, Union[Asset, bool]]] = []
+        self.assetsDr: List[Dict[str, Union[Asset, bool]]] = [] # composition with a relation parameter.
 
         self.__load(includeDr=includeDr, showPassword=showPassword)
 
