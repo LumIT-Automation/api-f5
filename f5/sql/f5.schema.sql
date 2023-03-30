@@ -63,38 +63,6 @@ CREATE TABLE `asset_assetdr` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
-
---
--- Struttura della tabella `dr_log`
---
-
-CREATE TABLE `dr_log` (
-  `id` int(11) NOT NULL,
-  `pr_asset_id` int(11) DEFAULT NULL,
-  `dr_asset_id` int(11) DEFAULT NULL,
-  `dr_asset_fqdn` varchar(255) NOT NULL DEFAULT "",
-  `username` varchar(255) NOT NULL DEFAULT "",
-  `action_name` varchar(64) NOT NULL DEFAULT "",
-  `request` varchar(16384) NOT NULL DEFAULT '{}',
-  `pr_status` varchar(15) NOT NULL DEFAULT "",
-  `dr_status` varchar(15) NOT NULL DEFAULT "",
-  `pr_date` datetime NOT NULL DEFAULT current_timestamp(),
-  `dr_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
--- Struttura della tabella `dr_log_data`
---
-
-CREATE TABLE `dr_log_data` (
-  `dr_log_id` int(11) NOT NULL,
-  `pr_response` text NOT NULL DEFAULT '{}',
-  `dr_response` text NOT NULL DEFAULT '{}'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
 --
 -- Struttura della tabella `group_role_partition`
 --
@@ -134,6 +102,21 @@ CREATE TABLE `log` (
   `status` varchar(32) NOT NULL,
   `date` datetime NOT NULL DEFAULT current_timestamp(),
   `dr_replica_flow` varchar(255) DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `log_request`
+--
+
+CREATE TABLE `log_request` (
+  `id` int(11) NOT NULL,
+  `asset_id` int(11) DEFAULT NULL,
+  `action` varchar(255) NOT NULL,
+  `response_status` int(11) NOT NULL,
+  `date` datetime NOT NULL DEFAULT current_timestamp(),
+  `username` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -219,12 +202,6 @@ ALTER TABLE `asset`
 ALTER TABLE `asset_assetdr`
   ADD PRIMARY KEY (`pr_asset_id`,`dr_asset_id` );
 
--- Indici per le tabelle `dr_log`
---
-ALTER TABLE `dr_log`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY (`pr_asset_id`,`dr_asset_id`);
-
 --
 -- Indici per le tabelle `group_role_partition`
 --
@@ -248,6 +225,13 @@ ALTER TABLE `identity_group`
 ALTER TABLE `log`
   ADD PRIMARY KEY (`id`),
   ADD KEY `username` (`username`);
+
+--
+-- Indici per le tabelle `log_request`
+--
+ALTER TABLE `log_request`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `log_request_asset_id` (`asset_id`);
 
 --
 -- Indici per le tabelle `migrations`
@@ -302,12 +286,6 @@ ALTER TABLE `asset`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT per la tabella `dr_log`
---
-ALTER TABLE `dr_log`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT per la tabella `group_role_partition`
 --
 ALTER TABLE `group_role_partition`
@@ -323,6 +301,12 @@ ALTER TABLE `identity_group`
 -- AUTO_INCREMENT per la tabella `log`
 --
 ALTER TABLE `log`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `log_request`
+--
+ALTER TABLE `log_request`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -361,18 +345,6 @@ ALTER TABLE `asset_assetdr`
   ADD CONSTRAINT `k_dr_asset_id` FOREIGN KEY (`dr_asset_id`) REFERENCES `asset` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Limiti per la tabella `dr_log`
---
-ALTER TABLE `dr_log`
-  ADD CONSTRAINT `k_assets_id` FOREIGN KEY (`pr_asset_id`, `dr_asset_id`) REFERENCES `asset_assetdr` (`pr_asset_id`, `dr_asset_id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
---
--- Limiti per la tabella `dr_log_data`
---
-ALTER TABLE `dr_log_data`
-  ADD CONSTRAINT `k_dr_log_id` FOREIGN KEY (`dr_log_id`) REFERENCES `dr_log` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
 -- Limiti per la tabella `group_role_partition`
 --
 ALTER TABLE `group_role_partition`
@@ -392,6 +364,13 @@ ALTER TABLE `partition`
 ALTER TABLE `role_privilege`
   ADD CONSTRAINT `rp_privilege` FOREIGN KEY (`id_privilege`) REFERENCES `privilege` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `rp_role` FOREIGN KEY (`id_role`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
+
+--
+-- Limiti per la tabella `log_request`
+--
+ALTER TABLE `log_request`
+  ADD CONSTRAINT `log_request_asset_id` FOREIGN KEY (`asset_id`) REFERENCES `asset` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -2,17 +2,17 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
 
-from f5.models.History.HistoryDr import HistoryDr
+from f5.models.History.ActionHistory import ActionHistory
 from f5.models.Permission.Permission import Permission
 
-from f5.serializers.History.HistoryDr import HistoryDrSerializer as Serializer
+from f5.serializers.History.ActionHistory import ActionHistorySerializer as Serializer
 
 from f5.controllers.CustomController import CustomController
 from f5.helpers.Conditional import Conditional
 from f5.helpers.Log import Log
 
 
-class HistoryDrLogsController(CustomController):
+class ActionHistoryLogsController(CustomController):
     @staticmethod
     def get(request: Request) -> Response:
         allUsersHistory = False
@@ -22,12 +22,12 @@ class HistoryDrLogsController(CustomController):
             if Permission.hasUserPermission(groups=user["groups"], action="historyDrComplete_get") or user["authDisabled"]:
                 allUsersHistory = True
 
-            Log.actionLog("History Dr log", user)
+            Log.actionLog("Action History", user)
 
             data = {
                 "data": {
                     "items": CustomController.validate(
-                        HistoryDr.list(user["username"], allUsersHistory),
+                        ActionHistory.dataList(user["username"], allUsersHistory),
                         Serializer,
                         "list"
                     )

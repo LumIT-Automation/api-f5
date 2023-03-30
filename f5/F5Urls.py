@@ -7,7 +7,7 @@ from .controllers.F5.Asset import Asset, Assets, AssetAssetDr, AssetAssetsDr
 from .controllers.F5.Workflow import VirtualServersController as WorkflowVirtualServers, VirtualServerController as WorkflowVirtualServer, DeleteNodeController as WorkflowNode
 from .controllers.Permission import Authorizations, IdentityGroups, IdentityGroup, Roles, Permission, Permissions
 from .controllers.Configuration import Configuration
-from .controllers.History import History, HistoryDr
+from .controllers.History import History, ActionHistory
 
 
 urlpatterns = [
@@ -104,9 +104,7 @@ urlpatterns = [
     # Node
     path('<int:assetId>/<str:partitionName>/workflow/node/<str:nodeName>/', WorkflowNode.F5WorkflowDeleteNodeController.as_view(), name='f5-workflow-node'),
 
-    # Log history.
+    # History.
     path('history/', History.HistoryLogsController.as_view(), name='f5-log-history'),
-
-    # Log history DR.
-    path('historydr/', HistoryDr.HistoryDrLogsController.as_view(), name='f5-log-history-dr'),
+    path('action-history/', ActionHistory.ActionHistoryLogsController.as_view(), name='f5-log-action-history'),
 ]

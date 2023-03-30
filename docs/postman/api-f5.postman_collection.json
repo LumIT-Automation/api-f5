@@ -4242,7 +4242,7 @@
 					"response": []
 				},
 				{
-					"name": "history dr",
+					"name": "action history",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -4256,7 +4256,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/historydr/",
+							"raw": "http://10.0.111.22/api/v1/f5/action-history/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -4268,7 +4268,7 @@
 								"api",
 								"v1",
 								"f5",
-								"historydr",
+								"action-history",
 								""
 							]
 						}
