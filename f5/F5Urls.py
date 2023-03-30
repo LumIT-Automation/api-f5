@@ -98,7 +98,7 @@ urlpatterns = [
 
     # Workflows.
     # Virtual server.
-    path('<int:assetId>/<str:partitionName>/workflow/virtualservers/<str:virtualServerName>/', WorkflowVirtualServer.F5WorkflowVirtualServerController.as_view(), name='f5-workflow-virtualserver'),
+    path('<int:assetId>/<str:partitionName>/workflow/virtualserver/<str:virtualServerName>/', WorkflowVirtualServer.F5WorkflowVirtualServerController.as_view(), name='f5-workflow-virtualserver'),
     path('<int:assetId>/<str:partitionName>/workflow/virtualservers/', WorkflowVirtualServers.F5WorkflowVirtualServersController.as_view(), name='f5-workflow-virtualservers'),
 
     # Node

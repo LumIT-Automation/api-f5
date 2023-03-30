@@ -991,7 +991,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/workflow/virtualservers/vs_SERVICENAME/?dr=1",
+									"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/workflow/virtualserver/vs_SERVICENAME/?dr=1",
 									"protocol": "http",
 									"host": [
 										"10",
@@ -1006,7 +1006,7 @@
 										"2",
 										"Partition1",
 										"workflow",
-										"virtualservers",
+										"virtualserver",
 										"vs_SERVICENAME",
 										""
 									],
