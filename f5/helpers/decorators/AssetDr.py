@@ -95,10 +95,13 @@ else:
             try:
                 djangoHttpRequest = HttpRequest()
                 djangoHttpRequest.path = request.path[:]
-                djangoHttpRequest.query_params = request.query_params.copy()
+                djangoHttpRequest.method = request.method
+                query_params = request.query_params.copy()
+                if "dr" in query_params:
+                    del query_params["dr"]
 
                 if additionalQueryParams:
-                    djangoHttpRequest.query_params.update(additionalQueryParams)
+                    query_params.update(additionalQueryParams)
 
                 for attr in ("POST", "data", "FILES", "auth", "META"):
                     setattr(djangoHttpRequest, attr, getattr(request, attr))
@@ -108,7 +111,7 @@ else:
                     setattr(req, attr, getattr(request, attr))
 
                 if additionalQueryParams:
-                    req.query_params.update(djangoHttpRequest.query_params)
+                    req.query_params.update(query_params)
 
                 return req
             except Exception as e:
