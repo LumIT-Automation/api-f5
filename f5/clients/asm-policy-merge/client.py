@@ -217,15 +217,16 @@ class Util:
 
 
     @staticmethod
-    def toDate(epoch: str) -> str:
-        date = "UNKNOWN"
+    def toDate(epoch: int) -> str:
+        date = "unknown"
 
         try:
-            epoch = int(epoch)
-            if epoch:
-                date = datetime.datetime.fromtimestamp(epoch).strftime('%c')
-            else:
-                date = ""
+            if epoch != -1:
+                epoch = int(epoch)
+                if epoch:
+                    date = str(datetime.datetime.fromtimestamp(epoch).strftime('%c'))
+                else:
+                    date = ""
         except Exception:
             pass
 
@@ -247,10 +248,11 @@ class Util:
                     if l["diffType"] == "only-in-destination":
                         nd += 1
                     if l["diffType"] == "conflict":
-                        if l["sourceLastUpdate"] >= l["destinationLastUpdate"]:
-                            ns += 1
-                        if l["sourceLastUpdate"] <= l["destinationLastUpdate"]:
-                            nd += 1
+                        if int(l["sourceLastUpdate"]) > 0 and int(l["destinationLastUpdate"]) > 0:
+                            if l["sourceLastUpdate"] >= l["destinationLastUpdate"]:
+                                ns += 1
+                            if l["sourceLastUpdate"] <= l["destinationLastUpdate"]:
+                                nd += 1
                 except KeyError:
                     pass
 
@@ -277,12 +279,13 @@ class Util:
             elif element["diffType"] == "only-in-destination":
                 d = " [NEW]"
             else:
-                if element["sourceLastUpdate"] > element["destinationLastUpdate"]:
-                    s = " [NEW]"
-                elif element["sourceLastUpdate"] < element["destinationLastUpdate"]:
-                    d = " [NEW]"
-                else:
-                    s = d = " [NEW]"
+                if int(element["sourceLastUpdate"]) > 0 and int(element["destinationLastUpdate"]) > 0:
+                    if element["sourceLastUpdate"] > element["destinationLastUpdate"]:
+                        s = " [NEW]"
+                    elif element["sourceLastUpdate"] < element["destinationLastUpdate"]:
+                        d = " [NEW]"
+                    else:
+                        s = d = " [NEW]"
         except KeyError:
             pass
 
@@ -628,10 +631,8 @@ try:
                                             Util.out(entityTypeInformation[diffET], "yellow")
                                         Util.out("  - difference type: " + el["diffType"] + ";")
 
-                                        if "sourceLastUpdate" in el and el["sourceLastUpdate"]:
-                                            Util.out("  - source last update " + Util.toDate(el["sourceLastUpdate"]) + sourceWarning + ";")
-                                        if "destinationLastUpdate" in el and el["destinationLastUpdate"]:
-                                            Util.out("  - destination last update " + Util.toDate(el["destinationLastUpdate"]) + destinationWarning + ";")
+                                        Util.out("  - source last update " + Util.toDate(el.get("sourceLastUpdate", -1)) + sourceWarning + ";")
+                                        Util.out("  - destination last update " + Util.toDate(el.get("destinationLastUpdate", -1)) + destinationWarning + ";")
 
                                     while response not in ("y", "n", "s", "a", "automerge"):
                                         if not response:
