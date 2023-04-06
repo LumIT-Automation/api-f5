@@ -570,7 +570,7 @@ try:
 
             loadedAssets = Asset.listAssets()
             if loadedAssets["pro"] and loadedAssets["nopro"]:
-                Util.out("\nRUNNING " + run["uuid"], "yellow")
+                Util.out("\nRUNNING " + run["uuid"], "yellow", "black")
 
                 # Define current assets (chosen from loaded ones), policies and auto-skip/merge for each run.
                 srcPolicyName = run["policies"]["source"]["name"]
@@ -597,7 +597,7 @@ try:
                     Util.out("\nImported policy on destination F5 asset (temp policy):")
                     Util.out("- id: " + importedPolicy["id"])
                     Util.out("- name: " + importedPolicy["name"])
-                    Util.out("- destination F5 message:\n" + importedPolicy["import-message"])
+                    Util.out("- destination F5 message: " + importedPolicy["import-message"])
 
                     # Give the diff entity type a modification label.
                     entityTypeInformation = Util.entityTypeInformation(diffData)
@@ -605,7 +605,7 @@ try:
                     diffETIndex = 1
                     diffETTot = len(diffData["differences"])
 
-                    Util.out("\nDIFFERENCES follow")
+                    Util.out("\nDIFFERENCES")
                     for diffET, diffLs in diffData["differences"].items():
                         if diffET not in autoSkipET:
                             diffETLsIndex = 1
@@ -614,25 +614,26 @@ try:
                             for el in diffLs:
                                 # For each difference print on-screen output and ask the user.
                                 if el["diffType"]:
-                                    Util.out("\n\n[" + run["uuid"] + "][" + str(diffETIndex) + "/" + str(diffETTot) + " ENTITY TYPE: " + diffET + "] " + str(diffETLsIndex) + "/" + str(diffETLsTot) + " \"" + el["entityName"] + "\":", "green")
-                                    if entityTypeInformation[diffET]:
-                                        Util.out(entityTypeInformation[diffET], "yellow")
-                                    Util.out("  - difference type: " + el["diffType"] + ";")
 
                                     sourceWarning, destinationWarning = Util.newerInformation(el)
-                                    if "sourceLastUpdate" in el and el["sourceLastUpdate"]:
-                                        Util.out("  - source last update " + Util.toDate(el["sourceLastUpdate"]) + sourceWarning + ";")
-                                    if "destinationLastUpdate" in el and el["destinationLastUpdate"]:
-                                        Util.out("  - destination last update " + Util.toDate(el["destinationLastUpdate"]) + destinationWarning + ";")
-
                                     # Handle user input.
                                     if diffET in autoMergeET \
                                             and (el["diffType"] == "only-in-source" or el["diffType"] == "only-in-destination" or (el["diffType"] == "conflict" and "NEW" in sourceWarning)):
-                                        response = "y" # precompile user response in case of auto-merging.
+                                        response = "automerge" # precompile user response in case of auto-merging.
+                                        Util.out("\n\n[" + run["uuid"] + "][" + str(diffETIndex) + "/" + str(diffETTot) + " ENTITY TYPE: " + diffET + "][" + str(diffETLsIndex) + "/" + str(diffETLsTot) + " \"" + el["entityName"] + "\": automerged", "yellow")
                                     else:
                                         response = ""
+                                        Util.out("\n\n[" + run["uuid"] + "][" + str(diffETIndex) + "/" + str(diffETTot) + " ENTITY TYPE: " + diffET + "][" + str(diffETLsIndex) + "/" + str(diffETLsTot) + " \"" + el["entityName"] + "\":", "yellow")
+                                        if entityTypeInformation[diffET]:
+                                            Util.out(entityTypeInformation[diffET], "yellow")
+                                        Util.out("  - difference type: " + el["diffType"] + ";")
 
-                                    while response not in ("y", "n", "s", "a"):
+                                        if "sourceLastUpdate" in el and el["sourceLastUpdate"]:
+                                            Util.out("  - source last update " + Util.toDate(el["sourceLastUpdate"]) + sourceWarning + ";")
+                                        if "destinationLastUpdate" in el and el["destinationLastUpdate"]:
+                                            Util.out("  - destination last update " + Util.toDate(el["destinationLastUpdate"]) + destinationWarning + ";")
+
+                                    while response not in ("y", "n", "s", "a", "automerge"):
                                         if not response:
                                             if el["diffType"] in ("conflict", "only-in-source"):
                                                 response = input("  -> Merge to destination policy [y/n; d for details; s for skipping the current entity type; a for merging all differences for this entity type]?\n")
@@ -645,20 +646,22 @@ try:
                                             Util.out("Type y for yes, n for no, d for details, s for skipping the current entity type, a for merging all differences for this entity type")
                                             response = ""
 
-                                    if response == "y":
+                                    if response == "y" or response == "automerge":
                                         # Collect ids to merge subdivided by entity type.
                                         if el["diffType"] in ("conflict", "only-in-source"):
                                             if diffET not in mergeElements:
                                                 mergeElements[diffET] = []
                                             mergeElements[diffET].append((el["id"], el["entityName"]))
-                                            Util.out("  -> Element will be merged at the end of the collection process, nothing done so far")
+                                            if response == "y":
+                                                Util.out("  -> Element will be merged")
 
                                         # Collect ids for objects to delete on destination subdivided by entity type.
                                         if el["diffType"] == "only-in-destination":
                                             if diffET not in deleteElements:
                                                 deleteElements[diffET] = []
                                             deleteElements[diffET].append({"id": el["id"], "entityName": el["entityName"]})
-                                            Util.out("  -> Element will be deleted at the end of the collection process, nothing done so far")
+                                            if response == "y":
+                                                Util.out("  -> Element will be deleted")
 
                                     if response == "n":
                                         Util.out("  -> Element won't be merged")
@@ -685,6 +688,7 @@ try:
                         diffETIndex += 1
 
                     if mergeElements or deleteElements:
+                        Util.out("\n\nSUMMARY")
                         response = ""
                         Util.log(autoMergeET, "\n\nAutomatically merged entity types: ")
                         Util.log(autoSkipET, "\n\nAutomatically skipped entity types: ")
@@ -721,11 +725,11 @@ try:
                                 ASMPolicyManager.applyPolicy(assetId=dstAsset["id"], policyId=dstPolicyId)
                             )
 
-                            Util.out("Done", "green")
+                            Util.out("Done", "green","black")
                         else:
                             Util.out("Skipping, nothing done", "red", "lightgrey")
                     else:
-                        Util.out("No difference to merge, nothing done", "red", "lightgrey")
+                        Util.out("No difference to merge, nothing done", "green","black")
 
                     # Cleanup imported temporary policy.
                     ASMPolicyManager.deletePolicy(assetId=dstAsset["id"], policyId=importedPolicy["id"])

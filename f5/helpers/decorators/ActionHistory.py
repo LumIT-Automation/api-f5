@@ -29,7 +29,7 @@ class HistoryLog:
                 # Perform the request to the primary asset.
                 response = self.wrappedMethod(request, **kwargs)
 
-                HistoryLog.__historyPrepare(
+                HistoryLog.__historyLog(
                     assetId=int(kwargs["assetId"]),
                     action=resolve(request.path).url_name + '_' + request.method.lower(),
                     response=response,
@@ -49,7 +49,7 @@ class HistoryLog:
     ####################################################################################################################
 
     @staticmethod
-    def __historyPrepare(assetId: int, action: str, response: Response, user: str) -> None:
+    def __historyLog(assetId: int, action: str, response: Response, user: str) -> None:
         try:
             ActionHistory.add({
                 "asset_id":  int(assetId),
