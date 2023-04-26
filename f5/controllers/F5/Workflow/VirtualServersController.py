@@ -9,17 +9,17 @@ from f5.serializers.F5.Workflow.VirtualServer import F5WorkflowVirtualServerSeri
 
 from f5.controllers.CustomController import CustomController
 
-from f5.helpers.decorators.AssetDr import AssetDr
+from f5.helpers.decorators.ReplicateVSCreation import ReplicateVirtualServerCreation
 from f5.helpers.Lock import Lock
 from f5.helpers.Log import Log
 
 
 class F5WorkflowVirtualServersController(CustomController):
     @staticmethod
-    @AssetDr
+    @ReplicateVirtualServerCreation
     def post(request: Request, assetId: int, partitionName: str) -> Response:
         response = None
-        replicaUuid = request.GET.get("__concertoDrReplicaFlow", "")
+        replicaUuid = request.GET.get("__replicaUuid", "") # an uuid in order to correlate actions on logs.
 
         user = CustomController.loggedUser(request)
 

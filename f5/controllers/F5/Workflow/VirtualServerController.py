@@ -7,16 +7,16 @@ from f5.models.F5.Workflow.VirtualServer import VirtualServerWorkflow
 
 from f5.controllers.CustomController import CustomController
 
-from f5.helpers.decorators.AssetDr import AssetDr
+from f5.helpers.decorators.ReplicateVSDeletion import ReplicateVirtualServerDeletion
 from f5.helpers.Lock import Lock
 from f5.helpers.Log import Log
 
 
 class F5WorkflowVirtualServerController(CustomController):
     @staticmethod
-    @AssetDr
+    @ReplicateVirtualServerDeletion
     def delete(request: Request, assetId: int, partitionName: str, virtualServerName: str) -> Response:
-        replicaUuid = request.GET.get("__concertoDrReplicaFlow", "")
+        replicaUuid = request.GET.get("__replicaUuid", "") # an uuid in order to correlate actions on logs.
         user = CustomController.loggedUser(request)
 
         try:

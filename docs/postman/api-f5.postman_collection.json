@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "de472f04-06b0-4ac2-9fc2-f7417c108029",
+		"_postman_id": "f4e9a982-47ef-4373-b81c-316c676da6cc",
 		"name": "api-f5",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -890,7 +890,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/workflow/virtualservers/?dr=1",
+									"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/workflow/virtualservers/?drReplica=1",
 									"protocol": "http",
 									"host": [
 										"10",
@@ -910,7 +910,7 @@
 									],
 									"query": [
 										{
-											"key": "dr",
+											"key": "drReplica",
 											"value": "1"
 										}
 									]
@@ -991,7 +991,7 @@
 									}
 								],
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/workflow/virtualserver/vs_SERVICENAME/?dr=1",
+									"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/workflow/virtualserver/vs_SERVICENAME/?drReplica=1",
 									"protocol": "http",
 									"host": [
 										"10",
@@ -1012,7 +1012,7 @@
 									],
 									"query": [
 										{
-											"key": "dr",
+											"key": "drReplica",
 											"value": "1"
 										}
 									]
