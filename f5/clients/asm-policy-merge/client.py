@@ -291,7 +291,19 @@ class Util:
 
         return s, d
 
-
+    @staticmethod
+    def getDifferenceDetails(el: dict) -> str:
+        diffDetails = ""
+        if "details" in el:
+            for item in el["details"]:
+                if "field" in item:
+                    diffDetails += str(item["field"]) +  " "
+        if not diffDetails:
+            return "-"
+        elif len(diffDetails) > 75:
+            return diffDetails[:73] + '..'
+        else:
+            return diffDetails
 
     @staticmethod
     def getIgnoredDifferences(diff: dict, merge: dict, delete: dict) -> dict:
@@ -324,9 +336,11 @@ class Util:
 
         for _, dl in toBeIgnored.items():
             for jj, vv in enumerate(dl):
+                detailsInfo = Util.getDifferenceDetails(vv)
+                entity = vv["entityName"]
                 dl[jj] = {
-                    "id": vv["id"],
-                    "entityName": vv["entityName"]
+                    "entity": entity, 
+                    "details" : detailsInfo
                 }
 
         return toBeIgnored
@@ -560,6 +574,8 @@ try:
         for run in userRuns:
             mergeElements = dict()
             deleteElements = dict()
+            mergeElementsToPrint = dict()
+            deleteElementsToPrint = dict()
 
             # Load user-inserted assets/fqdns.
             Asset.loadAsset(
@@ -619,6 +635,9 @@ try:
                                 if el["diffType"]:
 
                                     sourceWarning, destinationWarning = Util.newerInformation(el)
+
+                                    detailsInfo = Util.getDifferenceDetails(el)
+
                                     # Handle user input.
                                     if diffET in autoMergeET \
                                             and (el["diffType"] == "only-in-source" or el["diffType"] == "only-in-destination" or (el["diffType"] == "conflict" and "NEW" in sourceWarning)):
@@ -629,10 +648,11 @@ try:
                                         Util.out("\n\n[" + run["uuid"] + "][" + str(diffETIndex) + "/" + str(diffETTot) + " ENTITY TYPE: " + diffET + "][" + str(diffETLsIndex) + "/" + str(diffETLsTot) + " \"" + el["entityName"] + "\":", "yellow")
                                         if entityTypeInformation[diffET]:
                                             Util.out(entityTypeInformation[diffET], "yellow")
-                                        Util.out("  - difference type: " + el["diffType"] + ";")
+                                        Util.out("  - difference type: " + el["diffType"] )
 
-                                        Util.out("  - source last update " + Util.toDate(el.get("sourceLastUpdate", -1)) + sourceWarning + ";")
-                                        Util.out("  - destination last update " + Util.toDate(el.get("destinationLastUpdate", -1)) + destinationWarning + ";")
+                                        Util.out("  - source last update: " + Util.toDate(el.get("sourceLastUpdate", -1)) + sourceWarning)
+                                        Util.out("  - destination last update: " + Util.toDate(el.get("destinationLastUpdate", -1)) + destinationWarning)
+                                        Util.out("  - details:  " + detailsInfo)
 
                                     while response not in ("y", "n", "s", "a", "automerge"):
                                         if not response:
@@ -652,7 +672,10 @@ try:
                                         if el["diffType"] in ("conflict", "only-in-source"):
                                             if diffET not in mergeElements:
                                                 mergeElements[diffET] = []
+                                            if diffET not in mergeElementsToPrint:
+                                                    mergeElementsToPrint[diffET] = []
                                             mergeElements[diffET].append((el["id"], el["entityName"]))
+                                            mergeElementsToPrint[diffET].append({"entity": el["entityName"], "details": detailsInfo})
                                             if response == "y":
                                                 Util.out("  -> Element will be merged")
 
@@ -660,7 +683,10 @@ try:
                                         if el["diffType"] == "only-in-destination":
                                             if diffET not in deleteElements:
                                                 deleteElements[diffET] = []
+                                            if diffET not in deleteElementsToPrint:
+                                                    deleteElementsToPrint[diffET] = []
                                             deleteElements[diffET].append({"id": el["id"], "entityName": el["entityName"]})
+                                            deleteElementsToPrint[diffET].append({"entity": el["entityName"], "details": detailsInfo})
                                             if response == "y":
                                                 Util.out("  -> Element will be deleted")
 
@@ -676,13 +702,17 @@ try:
                                             if elm["diffType"] in ("conflict", "only-in-source"):
                                                 if diffET not in mergeElements:
                                                     mergeElements[diffET] = []
-
+                                                if diffET not in mergeElementsToPrint:
+                                                    mergeElementsToPrint[diffET] = []
                                                 mergeElements[diffET].append((elm["id"], elm["entityName"]))
+                                                mergeElementsToPrint[diffET].append({"entity": el["entityName"], "details": detailsInfo})
                                             if elm["diffType"] == "only-in-destination":
                                                 if diffET not in deleteElements:
                                                     deleteElements[diffET] = []
-
+                                                if diffET not in deleteElementsToPrint:
+                                                    deleteElementsToPrint[diffET] = []
                                                 deleteElements[diffET].append({"id": elm["id"], "entityName": elm["entityName"]})
+                                                deleteElementsToPrint[diffET].append({"entity": el["entityName"], "details": detailsInfo})
                                         break
 
                                 diffETLsIndex += 1
@@ -694,8 +724,8 @@ try:
                         Util.log(autoMergeET, "\n\nAutomatically merged entity types: ")
                         Util.log(autoSkipET, "\n\nAutomatically skipped entity types: ")
 
-                        Util.log(mergeElements, "\n\nAttempting to merge the elements (including auto-merged): ")
-                        Util.log(deleteElements, "\n\nAttempting to delete the elements from the destination policy: ")
+                        Util.log(mergeElementsToPrint, "\n\nAttempting to merge the elements (including auto-merged): ")
+                        Util.log(deleteElementsToPrint, "\n\nAttempting to delete the elements from the destination policy: ")
 
                         Util.log(Util.getIgnoredDifferences(diffData, mergeElements, deleteElements), "\n\nIgnored differences (including auto-skipped): ")
 
