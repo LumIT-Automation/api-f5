@@ -62,6 +62,7 @@ else:
                         if "drReplica" in request.query_params and request.query_params["drReplica"]: # reply action in dr only if drReplica=1/true param was passed.
                             for asset in self._listAssetsDr():
                                 try:
+                                    # @todo: locks.
                                     VirtualServersWorkflow(
                                         assetId=asset["id"],
                                         partitionName=self.primaryPartitionName,
