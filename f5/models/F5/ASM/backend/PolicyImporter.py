@@ -2,7 +2,7 @@ import json
 import time
 from random import randrange
 
-from f5.models.F5.Asset.Asset import Asset
+from f5.models.Asset.Asset import Asset
 from f5.models.F5.ASM.backend.PolicyBase import PolicyBase
 
 from f5.helpers.ApiSupplicant import ApiSupplicant

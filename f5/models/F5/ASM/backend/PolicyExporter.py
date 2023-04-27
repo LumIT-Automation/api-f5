@@ -2,7 +2,7 @@ import json
 import time
 from datetime import datetime
 
-from f5.models.F5.Asset.Asset import Asset
+from f5.models.Asset.Asset import Asset
 
 from f5.models.F5.ASM.backend.PolicyBase import PolicyBase
 

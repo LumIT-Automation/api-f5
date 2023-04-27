@@ -3,7 +3,7 @@ from typing import List
 from django.http import HttpRequest
 from rest_framework.request import Request
 
-from f5.models.F5.Asset.Asset import Asset
+from f5.models.Asset.Asset import Asset
 
 
 class ReplicateVirtualServerBase:

@@ -1,7 +1,7 @@
 import re
 import json
 
-from f5.models.F5.Asset.Asset import Asset
+from f5.models.Asset.Asset import Asset
 
 from f5.helpers.ApiSupplicant import ApiSupplicant
 
