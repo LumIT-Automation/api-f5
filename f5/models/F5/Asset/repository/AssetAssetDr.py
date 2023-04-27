@@ -9,15 +9,8 @@ from f5.helpers.Log import Log
 
 class AssetAssetDr:
 
-    # table: asset_assetdr
+    # Tables: asset_assetdr, asset
 
-    #  `pr_asset_id` int(11) NOT NULL,
-    #  `dr_asset_id` int(11) KEY NOT NULL,
-    #  `enabled` tinyint(1) NOT NULL,
-
-    #  PRIMARY KEY (`pr_asset_id`,`dr_asset_id`),
-    #  CONSTRAINT `k_dr_asset_id` FOREIGN KEY (`dr_asset_id`) REFERENCES `asset` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    #  CONSTRAINT `k_pr_asset_id` FOREIGN KEY (`pr_asset_id`) REFERENCES `asset` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 
 

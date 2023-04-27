@@ -10,16 +10,6 @@ class History:
 
     # Table: log
 
-    #   `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    #   `username` varchar(255) NOT NULL KEY,
-    #   `action` varchar(255) NOT NULL,
-    #   `asset_id` int(11) NOT NULL,
-    #   `config_object_type` varchar(255) NOT NULL,
-    #   `config_object` varchar(255) NOT NULL,
-    #   `status` varchar(32) NOT NULL,
-    #   `date` datetime NOT NULL DEFAULT current_timestamp(),
-    #   `dr_replica_flow` varchar(255) DEFAULT NULL
-
 
 
     ####################################################################################################################

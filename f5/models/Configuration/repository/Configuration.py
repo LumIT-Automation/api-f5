@@ -13,10 +13,6 @@ class Configuration:
 
     # Table: configuration
 
-    #   `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    #   `config_type` varchar(255) DEFAULT NULL,
-    #   `configuration` text DEFAULT NULL
-
 
 
     ####################################################################################################################

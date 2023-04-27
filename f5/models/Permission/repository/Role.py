@@ -10,10 +10,6 @@ class Role:
 
     # Table: role
 
-    #   `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    #   `role` varchar(64) NOT NULL UNIQUE KEY,
-    #   `description` varchar(255) DEFAULT NULL
-
 
 
     ####################################################################################################################

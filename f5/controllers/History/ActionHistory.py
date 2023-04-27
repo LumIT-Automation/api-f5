@@ -19,7 +19,7 @@ class ActionHistoryLogsController(CustomController):
         user = CustomController.loggedUser(request)
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="historyDrComplete_get") or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="actionHistoryComplete_get") or user["authDisabled"]:
                 allUsersHistory = True
 
             Log.actionLog("Action History", user)

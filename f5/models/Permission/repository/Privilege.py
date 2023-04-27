@@ -8,11 +8,6 @@ class Privilege:
 
     # Table: privilege
 
-    #   `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    #   `privilege` varchar(64) NOT NULL UNIQUE KEY,
-    #   `privilege_type` enum('object','asset','global') NOT NULL DEFAULT 'object',
-    #   `description` varchar(255) DEFAULT NULL
-
 
 
     ####################################################################################################################

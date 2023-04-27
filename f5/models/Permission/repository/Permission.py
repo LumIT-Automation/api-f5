@@ -8,18 +8,7 @@ class Permission:
 
     # IdentityGroupRolepartition
 
-    # Table: group_role_partition
-
-    #   `id` int(255) NOT NULL AUTO_INCREMENT,
-    #   `id_group` int(11) NOT NULL KEY,
-    #   `id_role` int(11) NOT NULL KEY,
-    #   `id_partition` int(11) NOT NULL KEY
-    #
-    #   PRIMARY KEY (`id_group`,`id_role`,`id_partition`)
-    #
-    #   CONSTRAINT `grp_group` FOREIGN KEY (`id_group`) REFERENCES `identity_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    #   CONSTRAINT `grp_partition` FOREIGN KEY (`id_partition`) REFERENCES `partition` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    #   CONSTRAINT `grp_role` FOREIGN KEY (`id_role`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+    # Tables: group_role_partition, identity_group, role, partition
 
 
 

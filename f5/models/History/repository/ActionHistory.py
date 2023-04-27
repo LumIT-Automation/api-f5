@@ -10,16 +10,6 @@ class ActionHistory:
 
     # Table: log_request
 
-    #    `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    #    `asset_id` int(11) DEFAULT NULL,
-    #    `action` varchar(255) NOT NULL,
-    #    `response_status` int(11) NOT NULL,
-    #    `date` datetime NOT NULL DEFAULT current_timestamp(),
-    #    `username` varchar(255) NOT NULL
-
-    #     KEY `log_request_asset_id` (`asset_id`);
-    #     ADD CONSTRAINT `log_request_asset_id` FOREIGN KEY (`asset_id`) REFERENCES `asset` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
 
 
     ####################################################################################################################
