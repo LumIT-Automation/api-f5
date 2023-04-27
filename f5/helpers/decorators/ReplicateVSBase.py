@@ -54,8 +54,8 @@ class ReplicateVirtualServerBase:
             djangoHttpRequest.path = request.path[:]
             djangoHttpRequest.method = request.method
             query_params = request.query_params.copy()
-            if "dr" in query_params:
-                del query_params["dr"]
+            if "drReplica" in query_params:
+                del query_params["drReplica"]
 
             if additionalQueryParams:
                 query_params.update(additionalQueryParams)

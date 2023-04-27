@@ -62,7 +62,7 @@ else:
                         if "drReplica" in request.query_params and request.query_params["drReplica"]: # reply action in dr only if drReplica=1/true param was passed.
                             for asset in self._listAssetsDr():
                                 try:
-                                    # @todo: locks.
+                                    Log.log("[Disaster Recovery replica] Trying replica...")
                                     VirtualServersWorkflow(
                                         assetId=asset["id"],
                                         partitionName=self.primaryPartitionName,
@@ -73,7 +73,7 @@ else:
                                 except Exception as e:
                                     raise e
                 except Exception as e:
-                    Log.log("[DR replica] error: " + str(e))
+                    Log.log("[Disaster Recovery replica] error: " + str(e))
 
                 return responsePrimary
 
