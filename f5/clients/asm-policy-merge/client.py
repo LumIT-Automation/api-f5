@@ -291,19 +291,23 @@ class Util:
 
         return s, d
 
+
+
     @staticmethod
     def getDifferenceDetails(el: dict) -> str:
         diffDetails = ""
         if "details" in el:
             for item in el["details"]:
                 if "field" in item:
-                    diffDetails += str(item["field"]) +  " "
+                    diffDetails += str(item["field"]) + " "
         if not diffDetails:
             return "-"
         elif len(diffDetails) > 75:
             return diffDetails[:73] + '..'
         else:
             return diffDetails
+
+
 
     @staticmethod
     def getIgnoredDifferences(diff: dict, merge: dict, delete: dict) -> dict:
@@ -336,11 +340,9 @@ class Util:
 
         for _, dl in toBeIgnored.items():
             for jj, vv in enumerate(dl):
-                detailsInfo = Util.getDifferenceDetails(vv)
-                entity = vv["entityName"]
                 dl[jj] = {
-                    "entity": entity, 
-                    "details" : detailsInfo
+                    "entity": vv["entityName"],
+                    "details": Util.getDifferenceDetails(vv)
                 }
 
         return toBeIgnored
