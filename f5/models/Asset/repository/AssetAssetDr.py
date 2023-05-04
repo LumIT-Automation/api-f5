@@ -113,6 +113,8 @@ class AssetAssetDr:
                         raise CustomException(status=400, payload={"database": "duplicated values"})
                     if e.args and e.args[0] and e.args[0] == 1452:
                         raise CustomException(status=400, payload={"database": "bad data"})
+            elif e.__class__.__name__ == "CustomException":
+                raise e
             else:
                 raise CustomException(status=400, payload={"database": e.__str__()})
         finally:
