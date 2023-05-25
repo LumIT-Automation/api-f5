@@ -15,7 +15,6 @@ from f5.helpers.Log import Log
 class PermissionRolesController(CustomController):
     @staticmethod
     def get(request: Request) -> Response:
-        data = dict()
         loadPrivilege = False
         etagCondition = {"responseEtag": ""}
 
@@ -34,7 +33,7 @@ class PermissionRolesController(CustomController):
                 data = {
                     "data": {
                         "items": CustomController.validate(
-                            Role.dataList(loadPrivilege=loadPrivilege),
+                            [r.repr() for r in Role.list(loadPrivilege=loadPrivilege)],
                             Serializer,
                             "list"
                         )

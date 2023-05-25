@@ -22,9 +22,9 @@ class Role:
 
         try:
             if id:
-                c.execute("SELECT * FROM role WHERE id = %s", [id])
+                c.execute("SELECT id, role, IFNULL(description, '') AS description FROM role WHERE id = %s", [id])
             if role:
-                c.execute("SELECT * FROM role WHERE role = %s", [role])
+                c.execute("SELECT id, role, IFNULL(description, '') AS description FROM role WHERE role = %s", [role])
 
             return DBHelper.asDict(c)[0]
         except IndexError:
@@ -41,7 +41,7 @@ class Role:
         c = connection.cursor()
 
         try:
-            c.execute("SELECT * FROM role")
+            c.execute("SELECT id, role, IFNULL(description, '') AS description FROM role")
 
             return DBHelper.asDict(c)
         except Exception as e:

@@ -19,7 +19,7 @@ class Privilege:
         c = connection.cursor()
 
         try:
-            c.execute("SELECT * FROM privilege WHERE id = %s", [id])
+            c.execute("SELECT id, privilege, privilege_type, IFNULL(description, '') AS description FROM privilege WHERE id = %s", [id])
 
             return DBHelper.asDict(c)[0]
         except IndexError:
@@ -36,7 +36,7 @@ class Privilege:
         c = connection.cursor()
 
         try:
-            c.execute("SELECT * FROM privilege")
+            c.execute("SELECT id, privilege, privilege_type, IFNULL(description, '') AS description FROM privilege")
 
             return DBHelper.asDict(c)
         except Exception as e:
