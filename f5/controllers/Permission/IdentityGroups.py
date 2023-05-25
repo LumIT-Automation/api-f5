@@ -16,26 +16,17 @@ from f5.helpers.Log import Log
 class PermissionIdentityGroupsController(CustomController):
     @staticmethod
     def get(request: Request) -> Response:
-        data = dict()
-        showPrivileges = False
         etagCondition = {"responseEtag": ""}
-
         user = CustomController.loggedUser(request)
 
         try:
             if Permission.hasUserPermission(groups=user["groups"], action="permission_identityGroups_get") or user["authDisabled"]:
                 Log.actionLog("Identity group list", user)
 
-                # If asked for, get related privileges.
-                if "related" in request.GET:
-                    rList = request.GET.getlist('related')
-                    if "privileges" in rList:
-                        showPrivileges = True
-
                 data = {
                     "data": {
                         "items": CustomController.validate(
-                            IdentityGroup.listWithPermissionsPrivileges(showPrivileges),
+                            [ig.repr() for ig in IdentityGroup.list()],
                             GroupsSerializer,
                             "list"
                         )
