@@ -16,7 +16,6 @@ from f5.helpers.Log import Log
 class PermissionsController(CustomController):
     @staticmethod
     def get(request: Request) -> Response:
-        data = dict()
         etagCondition = {"responseEtag": ""}
 
         user = CustomController.loggedUser(request)

@@ -92,7 +92,7 @@ class Permission:
 
             for el in l:
                 el["partition"] = {
-                    "asset_id": el["partition_asset"],
+                    "id_asset": el["partition_asset"],
                     "name": el["partition_name"]
                 }
 
