@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import List
 
 from f5.models.Permission.repository.Privilege import Privilege as Repository
@@ -30,7 +31,7 @@ class Privilege:
     ####################################################################################################################
 
     @staticmethod
-    def list() -> list:
+    def list() -> List[Privilege]:
         privileges = []
 
         try:
@@ -40,15 +41,6 @@ class Privilege:
                 )
 
             return privileges
-        except Exception as e:
-            raise e
-
-
-
-    @staticmethod
-    def dataList() -> List[dict]:
-        try:
-            return Repository.list()
         except Exception as e:
             raise e
 
