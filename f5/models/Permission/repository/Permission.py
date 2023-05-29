@@ -6,7 +6,7 @@ from f5.helpers.Database import Database as DBHelper
 
 class Permission:
 
-    # IdentityGroupRolepartition
+    # IdentityGroupRolePartition
 
     # Tables: group_role_partition, identity_group, role, partition
 
