@@ -1,6 +1,6 @@
 [Unit]
 Requires=network-online.target
-After=network-online.target
+After=automation-interface-dns-container.service
 
 [Service]
 Type=oneshot
