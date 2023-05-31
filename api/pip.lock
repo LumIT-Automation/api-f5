@@ -1,4 +1,4 @@
-asgiref==3.6.0
+asgiref==3.7.2
 async-timeout==4.0.2
 certifi==2023.5.7
 cffi==1.15.1
@@ -22,5 +22,6 @@ redis==4.3.6
 requests==2.28.2
 setuptools==44.1.1
 sqlparse==0.4.4
-urllib3==1.26.15
+typing_extensions==4.6.2
+urllib3==1.26.16
 xmltodict==0.13.0
