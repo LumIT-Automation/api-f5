@@ -26,4 +26,4 @@ Run
     python client.py
 
 Notes
-- git update-index --skip-worktree f5/clients/asm-policy-merge/f5.db
+- git update-index --skip-worktree f5/clients/asm-policy-merge/f5.sqlite3.db
