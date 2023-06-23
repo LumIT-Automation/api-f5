@@ -79,7 +79,7 @@ class AssetAssetDr:
 
             return DBHelper.asDict(c)
         except IndexError:
-            raise CustomException(status=404, payload={"database": "non existent asset"})
+            raise CustomException(status=404, payload={"database": "Non existent asset"})
         except Exception as e:
             raise CustomException(status=400, payload={"database": e.__str__()})
         finally:
@@ -105,13 +105,13 @@ class AssetAssetDr:
                         int(enabled)
                     ])
                 else:
-                    raise CustomException(status=400, payload={"database": "forbidden values due to circular path"})
+                    raise CustomException(status=400, payload={"database": "Forbidden values due to circular path"})
         except Exception as e:
             if e.__class__.__name__ == "IntegrityError":
                     if e.args and e.args[0] and e.args[0] == 1062:
-                        raise CustomException(status=400, payload={"database": "duplicated values"})
+                        raise CustomException(status=400, payload={"database": "Duplicated values"})
                     if e.args and e.args[0] and e.args[0] == 1452:
-                        raise CustomException(status=400, payload={"database": "bad data"})
+                        raise CustomException(status=400, payload={"database": "Bad data"})
             elif e.__class__.__name__ == "CustomException":
                 raise e
             else:

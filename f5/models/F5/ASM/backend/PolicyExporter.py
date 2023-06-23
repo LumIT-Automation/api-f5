@@ -65,14 +65,14 @@ class PolicyExporter(PolicyBase):
                     if taskStatus == "completed":
                         break
                     if taskStatus == "failed":
-                        raise CustomException(status=400, payload={"F5": "create export file failed"})
+                        raise CustomException(status=400, payload={"F5": "Create export file failed"})
 
                     if time.time() >= t0 + timeout: # timeout reached.
-                        raise CustomException(status=400, payload={"F5": "create export file timed out"})
+                        raise CustomException(status=400, payload={"F5": "Create export file timed out"})
 
                     time.sleep(10)
                 except KeyError:
-                    raise CustomException(status=400, payload={"F5": "create export file failed"})
+                    raise CustomException(status=400, payload={"F5": "Create export file failed"})
 
             api = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/util/bash",

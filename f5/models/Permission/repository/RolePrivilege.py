@@ -34,7 +34,7 @@ class RolePrivilege:
 
             return privilegesId
         except IndexError:
-            raise CustomException(status=404, payload={"database": "non existent role"})
+            raise CustomException(status=404, payload={"database": "Non existent role"})
         except Exception as e:
             raise CustomException(status=400, payload={"database": e.__str__()})
         finally:

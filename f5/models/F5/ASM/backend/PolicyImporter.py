@@ -57,7 +57,7 @@ class PolicyImporter(PolicyBase):
                     and int(response["remainingByteCount"]) == 0:
                 return filename
             else:
-                raise CustomException(status=400, payload={"F5": f"upload policy file error: " + str(response)})
+                raise CustomException(status=400, payload={"F5": "Upload policy file error: " + str(response)})
         except Exception as e:
             raise e
 
@@ -111,14 +111,14 @@ class PolicyImporter(PolicyBase):
                     if taskStatus == "completed":
                         return taskOutput.get("result", {})
                     if taskStatus == "failure":
-                        raise CustomException(status=400, payload={"F5": "import policy failed"})
+                        raise CustomException(status=400, payload={"F5": "Import policy failed"})
 
                     if time.time() >= t0 + timeout: # timeout reached.
-                        raise CustomException(status=400, payload={"F5": "import policy timed out"})
+                        raise CustomException(status=400, payload={"F5": "Import policy timed out"})
 
                     time.sleep(15)
                 except KeyError:
-                    raise CustomException(status=400, payload={"F5": "import policy failed"})
+                    raise CustomException(status=400, payload={"F5": "Import policy failed"})
         except Exception as e:
             raise e
         finally:

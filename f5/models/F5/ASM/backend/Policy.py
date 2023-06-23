@@ -118,14 +118,14 @@ class Policy(PolicyBase):
                     if taskStatus == "completed":
                         break
                     if taskStatus == "failure":
-                        raise CustomException(status=400, payload={"F5": "policy apply failed"})
+                        raise CustomException(status=400, payload={"F5": "Policy apply failed"})
 
                     if time.time() >= t0 + timeout: # timeout reached.
-                        raise CustomException(status=400, payload={"F5": "policy apply timed out"})
+                        raise CustomException(status=400, payload={"F5": "Policy apply timed out"})
 
                     time.sleep(5)
                 except KeyError:
-                    raise CustomException(status=400, payload={"F5": "policy apply failed"})
+                    raise CustomException(status=400, payload={"F5": "Policy apply failed"})
         except Exception as e:
             raise e
 

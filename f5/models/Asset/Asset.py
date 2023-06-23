@@ -92,7 +92,7 @@ class Asset:
                 AssetDrRepository.add(primaryAssetId=self.id, drAssetId=int(drAssetId), enabled=enabled) # circular path forbidden.
             else:
                 from f5.helpers.Exception import CustomException
-                raise CustomException(status=400, payload={"database": "cannot add asset as disaster recovery of itself"})
+                raise CustomException(status=400, payload={"database": "Cannot add asset as disaster recovery of itself"})
         except Exception as e:
             raise e
 

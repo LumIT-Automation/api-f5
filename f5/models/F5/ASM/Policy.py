@@ -111,7 +111,7 @@ class Policy:
                     "message": importedPolicy.get("message", {})
                 }
             else:
-                raise CustomException(status=400, payload={"F5": f"empty source policy"})
+                raise CustomException(status=400, payload={"F5": "Empty source policy"})
         except Exception as e:
             raise e
 
@@ -147,7 +147,7 @@ class Policy:
                     "differences": differences
                 }
             else:
-                raise CustomException(status=400, payload={"F5": f"no data to process"})
+                raise CustomException(status=400, payload={"F5": "No data to process"})
         except Exception as e:
             raise e
 

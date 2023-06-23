@@ -32,7 +32,7 @@ class Asset:
 
             return info
         except IndexError:
-            raise CustomException(status=404, payload={"database": "non existent asset"})
+            raise CustomException(status=404, payload={"database": "Non existent asset"})
         except Exception as e:
             raise CustomException(status=400, payload={"database": e.__str__()})
         finally:
@@ -65,7 +65,7 @@ class Asset:
         except Exception as e:
             if e.__class__.__name__ == "IntegrityError" \
                     and e.args and e.args[0] and e.args[0] == 1062:
-                        raise CustomException(status=400, payload={"database": "duplicated values"})
+                        raise CustomException(status=400, payload={"database": "Duplicated values"})
             else:
                 raise CustomException(status=400, payload={"database": e.__str__()})
         finally:
@@ -160,7 +160,7 @@ class Asset:
         except Exception as e:
             if e.__class__.__name__ == "IntegrityError" \
                     and e.args and e.args[0] and e.args[0] == 1062:
-                        raise CustomException(status=400, payload={"database": "duplicated values"})
+                        raise CustomException(status=400, payload={"database": "Duplicated values"})
             else:
                 raise CustomException(status=400, payload={"database": e.__str__()})
         finally:
