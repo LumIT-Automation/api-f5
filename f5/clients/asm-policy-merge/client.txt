@@ -22,7 +22,7 @@ Installation on Windows
 
 Run
 - on a terminal (as user):
-    cd path/to/installation
+    cd path/to/installation/api/f5/clients/asm-policy-merge/
     python client.py
 
 Notes

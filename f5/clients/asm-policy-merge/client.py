@@ -34,7 +34,7 @@ settings.DEBUG = False
 settings.DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'f5.db',
+        'NAME': 'f5.sqlite3.db',
     }
 }
 settings.CACHES = {
@@ -87,13 +87,10 @@ class Asset:
                 path="/api/v1/f5/assets/",
                 data={
                     "data": {
-                        "address": ip,
                         "fqdn": ip,
-                        "baseurl": f"https://{ip}/mgmt/",
-                        "tlsverify": 0,
-                        "datacenter": "",
+                        "path": "/mgmt/",
+                        "tlsverify": False,
                         "environment": environment,
-                        "position": "",
                         "username": user,
                         "password": passwd
                     }
@@ -758,11 +755,11 @@ try:
                                 ASMPolicyManager.applyPolicy(assetId=dstAsset["id"], policyId=dstPolicyId)
                             )
 
-                            Util.out("Done", "green","black")
+                            Util.out("Done", "green", "black")
                         else:
                             Util.out("Skipping, nothing done", "red", "lightgrey")
                     else:
-                        Util.out("No difference to merge, nothing done", "green","black")
+                        Util.out("No difference to merge, nothing done", "green", "black")
 
                     # Cleanup imported temporary policy.
                     ASMPolicyManager.deletePolicy(assetId=dstAsset["id"], policyId=importedPolicy["id"])

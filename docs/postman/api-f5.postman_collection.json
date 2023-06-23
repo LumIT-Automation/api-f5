@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "ed2bd09f-f6d0-4e75-810f-9aba5352f5d5",
+		"_postman_id": "91661f8c-48b5-4aa8-89c5-90cf0614e4c6",
 		"name": "api-f5",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -23,7 +23,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/asset/1/?includeDr",
+							"raw": "http://10.0.111.22/api/v1/f5/asset/1/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -38,6 +38,41 @@
 								"asset",
 								"1",
 								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "asset (include dr)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/asset/2/?includeDr",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"asset",
+								"2",
+								""
 							],
 							"query": [
 								{
@@ -51,6 +86,40 @@
 				},
 				{
 					"name": "assets",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/assets/",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"assets",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "assets (include dr)",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -105,7 +174,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"data\": \n    {\n        \"address\": \"192.168.112.113\",\n        \"fqdn\": \"f5labpri.lumitlab.internal\",\n        \"baseurl\": \"https://192.168.112.113/mgmt/\",\n        \"tlsverify\": 0,\n        \"datacenter\": \"Verona centro\",\n        \"environment\": \"Prod\",\n        \"position\": \"RACK 2\",\n        \"username\": \"ugo\",\n        \"password\": \"1001/bis\"\n    }\n}",
+							"raw": "{\n    \"data\": {\n        \"fqdn\": \"192.168.100.100\",\n        \"protocol\": \"https\",\n        \"port\": 443,\n        \"path\": \"/mgmt/\",\n        \"tlsverify\": true,\n        \"datacenter\": \"Verona\",\n        \"environment\": \"\",\n        \"position\": \"RACK 2\",\n        \"username\": \"username\",\n        \"password\": \"password\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -148,7 +217,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"data\": \n    {\n        \"address\": \"192.168.10.218\",\n        \"fqdn\": \"f5labpri.lumitlab.internal\",\n        \"baseurl\": \"https://192.168.10.218/mgmt/\",\n        \"datacenter\": \"Verona\",\n        \"environment\": \"Produzione\"\n    }\n}",
+							"raw": "{\n    \"data\": {\n        \"protocol\": \"http\",\n        \"port\": 80\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -156,7 +225,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/asset/4/",
+							"raw": "http://10.0.111.22/api/v1/f5/asset/1/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -169,7 +238,7 @@
 								"v1",
 								"f5",
 								"asset",
-								"4",
+								"1",
 								""
 							]
 						}

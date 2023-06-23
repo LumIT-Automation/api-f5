@@ -4,7 +4,6 @@ from django.db import transaction
 
 from f5.helpers.Exception import CustomException
 from f5.helpers.Database import Database as DBHelper
-from f5.helpers.Log import Log
 
 
 class AssetAssetDr:
@@ -65,7 +64,7 @@ class AssetAssetDr:
         if showPassword:
             select = "*"
         else:
-            select = "assetDR.id, assetDR.address, assetDR.fqdn, assetDR.baseurl, assetDR.tlsverify, assetDR.datacenter, assetDR.environment, assetDR.position, asset_assetdr.enabled"
+            select = "assetDR.id, assetDR.fqdn, assetDR.protocol, assetDR.port, assetDR.path, assetDR.tlsverify, assetDR.baseurl, assetDR.datacenter, assetDR.environment, assetDR.position, asset_assetdr.enabled"
 
         try:
             c.execute(

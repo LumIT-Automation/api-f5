@@ -1,0 +1,43 @@
+# Django project path.
+cd /var/www/api/docs/sqlite.db/
+
+# Load the mysql data into the sqlite3 database.
+bash mysql2sqlite.sh api | sqlite3 f5.db
+
+# Check that the tables exist.
+echo '.tables' | sqlite3 f5.db
+
+# Fix the AUTOINCREMENT at least for the tables `asset` and `partition`:
+sqlite3 f5.db
+
+DROP TABLE asset;
+DROP TABLE partition;
+
+CREATE TABLE IF NOT EXISTS "asset" (
+  "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+  `fqdn` varchar(255) NOT NULL,
+  `protocol` varchar(16) NOT NULL DEFAULT 'https',
+  `port` int(11) NOT NULL DEFAULT 443,
+  `path` varchar(255) NOT NULL DEFAULT '/',
+  `tlsverify` tinyint(4) NOT NULL DEFAULT 1,
+  `baseurl` varchar(255) NOT NULL DEFAULT '',
+  `datacenter` varchar(255) NULL,
+  `environment` varchar(255) NULL,
+  `position` varchar(255) NULL,
+  `username` varchar(64) NOT NULL DEFAULT '',
+  `password` varchar(64) NOT NULL DEFAULT ''
+);
+
+CREATE INDEX "asset_address" ON "asset" ("address");
+
+CREATE TABLE IF NOT EXISTS "partition" (
+  "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+  "id_asset" int(11) NOT NULL,
+  "partition" varchar(64) NOT NULL,
+  "description" varchar(255) DEFAULT NULL,
+  CONSTRAINT "p_asset" FOREIGN KEY ("id_asset") REFERENCES "asset" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+CREATE INDEX "partition_id_asset" ON "partition" ("id_asset","partition");
+CREATE INDEX "partition_p_asset" ON "partition" ("id_asset");
+
+# Replace old f5.db.
