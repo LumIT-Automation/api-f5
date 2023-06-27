@@ -15,7 +15,7 @@ class F5AssetSerializer(serializers.Serializer):
     tlsverify = serializers.BooleanField(required=False)
     baseurl = serializers.CharField(max_length=255, required=False)
     datacenter = serializers.CharField(max_length=255, required=False, allow_blank=True)
-    environment = serializers.CharField(max_length=255, required=False, allow_blank=True)
+    environment = serializers.CharField(max_length=255, required=True)
     position = serializers.CharField(max_length=255, required=False, allow_blank=True)
     username = serializers.CharField(max_length=64, required=False)
     password = serializers.CharField(max_length=64, required=False)

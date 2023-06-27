@@ -174,7 +174,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"data\": {\n        \"fqdn\": \"192.168.100.100\",\n        \"protocol\": \"https\",\n        \"port\": 443,\n        \"path\": \"/mgmt/\",\n        \"tlsverify\": true,\n        \"datacenter\": \"Verona\",\n        \"environment\": \"\",\n        \"position\": \"RACK 2\",\n        \"username\": \"username\",\n        \"password\": \"password\"\n    }\n}",
+							"raw": "{\n    \"data\": {\n        \"fqdn\": \"192.168.100.100\",\n        \"protocol\": \"https\",\n        \"port\": 443,\n        \"path\": \"/mgmt/\",\n        \"tlsverify\": true,\n        \"datacenter\": \"Verona\",\n        \"environment\": \"Test\",\n        \"position\": \"RACK 2\",\n        \"username\": \"username\",\n        \"password\": \"password\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"

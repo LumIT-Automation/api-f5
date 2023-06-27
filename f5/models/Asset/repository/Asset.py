@@ -20,7 +20,7 @@ class Asset:
     def get(assetId: int, showPassword: bool) -> dict:
         c = connection.cursor()
 
-        fields = "id, fqdn, protocol, port, path, tlsverify, baseurl, IFNULL (datacenter, '') AS datacenter, IFNULL (environment, '') AS environment, IFNULL (position, '') AS position"
+        fields = "id, fqdn, protocol, port, path, tlsverify, baseurl, IFNULL (datacenter, '') AS datacenter, environment, IFNULL (position, '') AS position"
         if showPassword:
             fields += ", IFNULL (username, '') AS username, IFNULL (password, '') AS password"
 
@@ -109,7 +109,7 @@ class Asset:
     def list(showPassword: bool) -> list:
         c = connection.cursor()
 
-        fields = "id, fqdn, protocol, port, path, tlsverify, baseurl, IFNULL (datacenter, '') AS datacenter, IFNULL (environment, '') AS environment, IFNULL (position, '') AS position"
+        fields = "id, fqdn, protocol, port, path, tlsverify, baseurl, IFNULL (datacenter, '') AS datacenter, environment, IFNULL (position, '') AS position"
         if showPassword:
             fields += ", IFNULL (username, '') AS username, IFNULL (password, '') AS password"
 
