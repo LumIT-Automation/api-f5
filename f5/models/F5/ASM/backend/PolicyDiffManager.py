@@ -79,14 +79,14 @@ class PolicyDiffManager(PolicyBase):
 
                         return diffReference
                     if taskStatus == "failure":
-                        raise CustomException(status=400, payload={"F5": "policy diff failed: " + str(taskOutput.get("result", {}).get("message", "--"))})
+                        raise CustomException(status=400, payload={"F5": "Policy diff failed: " + str(taskOutput.get("result", {}).get("message", "--"))})
 
                     if time.time() >= t0 + timeout: # timeout reached.
-                        raise CustomException(status=400, payload={"F5": "policy diff timed out"})
+                        raise CustomException(status=400, payload={"F5": "Policy diff timed out"})
 
                     time.sleep(20)
                 except KeyError:
-                    raise CustomException(status=400, payload={"F5": "policy diff failed"})
+                    raise CustomException(status=400, payload={"F5": "Policy diff failed"})
         except Exception as e:
             raise e
 
@@ -201,14 +201,14 @@ class PolicyDiffManager(PolicyBase):
                         if taskStatus == "completed":
                             break
                         if taskStatus == "failure":
-                            raise CustomException(status=400, payload={"F5": "policy merge failed"})
+                            raise CustomException(status=400, payload={"F5": "Policy merge failed"})
 
                         if time.time() >= t0 + timeout: # timeout reached.
-                            raise CustomException(status=400, payload={"F5": "policy merge timed out"})
+                            raise CustomException(status=400, payload={"F5": "Policy merge timed out"})
 
                         time.sleep(5)
                     except KeyError:
-                        raise CustomException(status=400, payload={"F5": "policy merge failed"})
+                        raise CustomException(status=400, payload={"F5": "Policy merge failed"})
             except Exception as e:
                 raise e
 

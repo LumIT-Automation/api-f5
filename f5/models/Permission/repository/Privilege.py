@@ -23,7 +23,7 @@ class Privilege:
 
             return DBHelper.asDict(c)[0]
         except IndexError:
-            raise CustomException(status=404, payload={"database": "non existent privilege"})
+            raise CustomException(status=404, payload={"database": "Non existent privilege"})
         except Exception as e:
             raise CustomException(status=400, payload={"database": e.__str__()})
         finally:

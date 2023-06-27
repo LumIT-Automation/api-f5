@@ -81,7 +81,7 @@ class Certificate:
                 )["payload"]
 
                 if "from-local-file" not in r or r["from-local-file"] == "":
-                    raise CustomException(status=400, payload={"message": "install failed."})
+                    raise CustomException(status=400, payload={"message": "Install failed."})
             except Exception as e:
                 raise e
         else:
@@ -153,4 +153,4 @@ class Certificate:
                 and "localFilePath" in r and r["localFilePath"]:
             return r
         else:
-            raise CustomException(status=400, payload={"message": "upload failed."})
+            raise CustomException(status=400, payload={"message": "Upload failed."})

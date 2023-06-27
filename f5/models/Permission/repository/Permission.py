@@ -25,7 +25,7 @@ class Permission:
 
             return DBHelper.asDict(c)[0]
         except IndexError:
-            raise CustomException(status=404, payload={"database": "non existent permission"})
+            raise CustomException(status=404, payload={"database": "Non existent permission"})
         except Exception as e:
             raise CustomException(status=400, payload={"database": e.__str__()})
         finally:
@@ -47,7 +47,7 @@ class Permission:
         except Exception as e:
             if e.__class__.__name__ == "IntegrityError" \
                     and e.args and e.args[0] and e.args[0] == 1062:
-                raise CustomException(status=400, payload={"database": "duplicated entry"})
+                raise CustomException(status=400, payload={"database": "Duplicated entry"})
             else:
                 raise CustomException(status=400, payload={"database": e.__str__()})
         finally:
@@ -120,7 +120,7 @@ class Permission:
         except Exception as e:
             if e.__class__.__name__ == "IntegrityError" \
                     and e.args and e.args[0] and e.args[0] == 1062:
-                raise CustomException(status=400, payload={"database": "duplicated entry"})
+                raise CustomException(status=400, payload={"database": "Duplicated entry"})
             else:
                 raise CustomException(status=400, payload={"database": e.__str__()})
         finally:

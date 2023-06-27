@@ -10,15 +10,16 @@ class Asset:
     def __init__(self, assetId: int, includeDr: bool = False, showPassword: bool = True, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.id: int = int(assetId)
-        self.address: str = ""
+        self.id = int(assetId)
         self.fqdn: str = ""
-        self.baseurl: str = ""
+        self.protocol: str = "https"
+        self.port: int = 443
+        self.path: str = "/"
         self.tlsverify: bool = True
+        self.baseurl: str = ""
         self.datacenter: str = ""
         self.environment: str = ""
         self.position: str = ""
-
         self.username: str = ""
         self.password: str = ""
 
@@ -91,7 +92,7 @@ class Asset:
                 AssetDrRepository.add(primaryAssetId=self.id, drAssetId=int(drAssetId), enabled=enabled) # circular path forbidden.
             else:
                 from f5.helpers.Exception import CustomException
-                raise CustomException(status=400, payload={"database": "cannot add asset as disaster recovery of itself"})
+                raise CustomException(status=400, payload={"database": "Cannot add asset as disaster recovery of itself"})
         except Exception as e:
             raise e
 

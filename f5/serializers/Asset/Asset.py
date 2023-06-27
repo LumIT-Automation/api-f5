@@ -8,12 +8,14 @@ class F5AssetSerializer(serializers.Serializer):
         enabled = serializers.BooleanField(required=False)
 
     id = serializers.IntegerField(required=False)
-    address = serializers.CharField(max_length=64, required=False, allow_blank=True)
-    fqdn = serializers.CharField(max_length=255, required=True, allow_blank=True) # @todo: only valid data.
-    baseurl = serializers.CharField(max_length=255, required=True) # @todo: only valid data.
-    tlsverify = serializers.IntegerField(required=True)
-    datacenter = serializers.CharField(max_length=255, required=True, allow_blank=True)
-    environment = serializers.CharField(max_length=255, required=True)
+    fqdn = serializers.CharField(max_length=255, required=True)
+    protocol = serializers.CharField(max_length=16, required=False)
+    port = serializers.IntegerField(required=False)
+    path = serializers.CharField(max_length=255, required=False)
+    tlsverify = serializers.BooleanField(required=False)
+    baseurl = serializers.CharField(max_length=255, required=False)
+    datacenter = serializers.CharField(max_length=255, required=False, allow_blank=True)
+    environment = serializers.CharField(max_length=255, required=False, allow_blank=True)
     position = serializers.CharField(max_length=255, required=False, allow_blank=True)
     username = serializers.CharField(max_length=64, required=False)
     password = serializers.CharField(max_length=64, required=False)
