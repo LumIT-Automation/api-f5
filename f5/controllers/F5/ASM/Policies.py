@@ -5,9 +5,6 @@ from rest_framework import status
 from f5.models.F5.ASM.Policy import Policy
 from f5.models.Permission.Permission import Permission
 
-#from f5.serializers.F5.Policies import F5PoliciesSerializer as PoliciesSerializer
-#from f5.serializers.F5.Policy import F5PolicySerializer as PolicySerializer
-
 from f5.controllers.CustomController import CustomController
 
 from f5.helpers.Lock import Lock
@@ -37,11 +34,13 @@ class F5ASMMPoliciesController(CustomController):
                         },
                         "href": request.get_full_path()
                     }
+
                     # "items": CustomController.validate(
                     #    Policy.list(assetId),
                     #    PoliciesSerializer,
                     #   "list"
                     # )
+
                     # Check the response's ETag validity (against client request).
                     conditional = Conditional(request)
                     etagCondition = conditional.responseEtagFreshnessAgainstRequest(data["data"])

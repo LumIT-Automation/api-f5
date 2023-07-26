@@ -5,8 +5,6 @@ from rest_framework import status
 from f5.models.F5.ASM.Policy import Policy
 from f5.models.Permission.Permission import Permission
 
-#from f5.serializers.F5.PoolMember import F5PoolMemberSerializer as Serializer
-
 from f5.controllers.CustomController import CustomController
 
 from f5.helpers.Lock import Lock
@@ -35,16 +33,15 @@ class F5PolicyController(CustomController):
                         "href": request.get_full_path()
                     }
 
-                    """
-                    data = {
-                        "data": CustomController.validate(
-                            Pool(assetId, poolName, partitionName).member(poolMemberName).info(),
-                            Serializer,
-                            "value"
-                        ),
-                        "href": request.get_full_path()
-                    }
-                    """
+                    # data = {
+                    #     "data": CustomController.validate(
+                    #         Policy(assetId=assetId, id=policyId).info(),
+                    #         Serializer,
+                    #         "value"
+                    #     ),
+                    #     "href": request.get_full_path()
+                    # }
+
                     # Check the response's ETag validity (against client request).
                     conditional = Conditional(request)
                     etagCondition = conditional.responseEtagFreshnessAgainstRequest(data["data"])

@@ -79,7 +79,6 @@ class CustomController(APIView):
 
 
 
-
     @staticmethod
     def exceptionHandler(e: Exception) -> tuple:
         Log.logException(e)
