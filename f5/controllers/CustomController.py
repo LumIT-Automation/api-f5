@@ -85,7 +85,9 @@ class CustomController(APIView):
         Log.logException(e)
 
         data = dict()
-        headers = { "Cache-Control": "no-cache" }
+        headers = {
+            "Cache-Control": "no-cache"
+        }
 
         if e.__class__.__name__ in ("ConnectionError", "Timeout", "ConnectTimeout", "TooManyRedirects", "SSLError", "HTTPError"):
             httpStatus = status.HTTP_503_SERVICE_UNAVAILABLE
@@ -94,7 +96,11 @@ class CustomController(APIView):
             }
         elif e.__class__.__name__ == "CustomException":
             httpStatus = e.status
-            data["error"] = e.payload
+
+            if httpStatus in (401, 403):
+                data = None
+            else:
+                data["error"] = e.payload
         elif e.__class__.__name__ == "ParseError":
             data = None
             httpStatus = status.HTTP_400_BAD_REQUEST # json parse.
