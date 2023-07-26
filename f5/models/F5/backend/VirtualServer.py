@@ -48,13 +48,13 @@ class VirtualServer:
     def profiles(assetId: int, partitionName: str, virtualServerName: str) -> List[dict]:
         try:
             f5 = Asset(assetId)
-            api = ApiSupplicant(
+            items = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/virtual/~"+partitionName+"~"+virtualServerName+"/profiles/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
-            )
+            ).get()["payload"]["items"]
 
-            return api.get()["payload"]["items"]
+            return items
         except Exception as e:
             raise e
 

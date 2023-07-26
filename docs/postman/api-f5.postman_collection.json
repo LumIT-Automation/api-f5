@@ -3737,7 +3737,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/virtualservers/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Common/virtualservers/",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -3750,9 +3750,57 @@
 								"v1",
 								"f5",
 								"2",
-								"Partition1",
+								"Common",
 								"virtualservers",
 								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "virtualservers (policies)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "edfb456005712c3e68d97b525e247981",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://10.0.111.22/api/v1/f5/2/Common/virtualservers/?related=policies,profiles",
+							"protocol": "http",
+							"host": [
+								"10",
+								"0",
+								"111",
+								"22"
+							],
+							"path": [
+								"api",
+								"v1",
+								"f5",
+								"2",
+								"Common",
+								"virtualservers",
+								""
+							],
+							"query": [
+								{
+									"key": "related",
+									"value": "policies,profiles"
+								}
 							]
 						}
 					},
@@ -3830,7 +3878,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/virtualserver/VIRTUALSERVER/",
+							"raw": "http://10.0.111.22/api/v1/f5/2/Common/virtualserver/vs_CONCERTO_TEST/?related=policies,profiles",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -3843,10 +3891,16 @@
 								"v1",
 								"f5",
 								"2",
-								"Partition1",
+								"Common",
 								"virtualserver",
-								"VIRTUALSERVER",
+								"vs_CONCERTO_TEST",
 								""
+							],
+							"query": [
+								{
+									"key": "related",
+									"value": "policies,profiles"
+								}
 							]
 						}
 					},

@@ -73,13 +73,22 @@ class VirtualServer:
     # Public methods
     ####################################################################################################################
 
-    def info(self, loadPolicies: bool = False):
+    def info(self, loadPolicies: bool = False, loadProfiles: bool = False):
         try:
             i = Backend.info(self.assetId, self.partition, self.name)
             i["assetId"] = self.assetId
 
             if loadPolicies:
-                i["policies"] = self.getPolicies()
+                try:
+                    i["policies"] = self.getPolicies()
+                except Exception:
+                    pass
+
+            if loadProfiles:
+                try:
+                    i["profiles"] = self.getProfiles()
+                except Exception:
+                    pass
 
             return i
         except Exception as e:
@@ -128,7 +137,7 @@ class VirtualServer:
     ####################################################################################################################
 
     @staticmethod
-    def list(assetId: int, partitionName: str, loadPolicies: bool = False) -> List[Dict]:
+    def list(assetId: int, partitionName: str, loadPolicies: bool = False, loadProfiles: bool = False) -> List[Dict]:
         try:
             l = Backend.list(assetId, partitionName)
             for el in l:
@@ -137,6 +146,12 @@ class VirtualServer:
                 if loadPolicies:
                     try:
                         el["policies"] = VirtualServer(assetId, partitionName, el.get("name", "")).getPolicies()
+                    except Exception:
+                        pass
+
+                if loadProfiles:
+                    try:
+                        el["profiles"] = VirtualServer(assetId, partitionName, el.get("name", "")).getProfiles()
                     except Exception:
                         pass
 

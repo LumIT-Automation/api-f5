@@ -19,6 +19,7 @@ class F5VirtualServerController(CustomController):
     def get(request: Request, assetId: int, partitionName: str, virtualServerName: str) -> Response:
         data = dict()
         loadPolicies = False
+        loadProfiles = False
         etagCondition = { "responseEtag": "" }
 
         user = CustomController.loggedUser(request)
@@ -28,9 +29,11 @@ class F5VirtualServerController(CustomController):
                 Log.actionLog("Virtual server information", user)
 
                 if "related" in request.GET:
-                    rList = request.GET.getlist('related')
+                    rList = request.GET.get("related")
                     if "policies" in rList:
                         loadPolicies = True
+                    if "profiles" in rList:
+                        loadProfiles = True
 
                 lock = Lock("virtualServer", locals(), virtualServerName)
                 if lock.isUnlocked():
@@ -38,7 +41,10 @@ class F5VirtualServerController(CustomController):
 
                     data = {
                         "data": CustomController.validate(
-                            VirtualServer(assetId, partitionName, virtualServerName).info(loadPolicies=loadPolicies),
+                            VirtualServer(assetId, partitionName, virtualServerName).info(
+                                loadPolicies=loadPolicies,
+                                loadProfiles=loadProfiles
+                            ),
                             Serializer,
                             "value"
                         ),
