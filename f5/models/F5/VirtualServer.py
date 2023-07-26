@@ -138,22 +138,30 @@ class VirtualServer:
 
     @staticmethod
     def list(assetId: int, partitionName: str, loadPolicies: bool = False, loadProfiles: bool = False) -> List[Dict]:
+        import threading
+
+        def loadData(a, p, n, o):
+            o["assetId"] = assetId
+
+            if loadPolicies:
+                try:
+                    o["policies"] = VirtualServer(a, p, n).getPolicies()
+                except Exception:
+                    pass
+
+            if loadProfiles:
+                try:
+                    o["profiles"] = VirtualServer(a, p, n).getProfiles()
+                except Exception:
+                    pass
+
         try:
             l = Backend.list(assetId, partitionName)
-            for el in l:
-                el["assetId"] = assetId
-
-                if loadPolicies:
-                    try:
-                        el["policies"] = VirtualServer(assetId, partitionName, el.get("name", "")).getPolicies()
-                    except Exception:
-                        pass
-
-                if loadProfiles:
-                    try:
-                        el["profiles"] = VirtualServer(assetId, partitionName, el.get("name", "")).getProfiles()
-                    except Exception:
-                        pass
+            workers = [threading.Thread(target=loadData, args=(assetId, partitionName, el.get("name", ""), el)) for el in l]
+            for w in workers:
+                w.start()
+            for w in workers:
+                w.join()
 
             return l
         except Exception as e:
