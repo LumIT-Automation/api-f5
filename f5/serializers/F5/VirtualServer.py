@@ -27,6 +27,9 @@ class F5VirtualServerSerializer(serializers.Serializer):
         link = serializers.CharField(max_length=255, required=False)
         isSubcollection = serializers.BooleanField(required=False)
 
+    class F5VirtualServersRulesReferenceSerializer(serializers.Serializer):
+        link = serializers.CharField(max_length=255, required=False)
+
     assetId = serializers.IntegerField(required=False)
     name = serializers.CharField(max_length=255, required=True)
     partition = serializers.CharField(max_length=255, required=False)
@@ -73,8 +76,11 @@ class F5VirtualServerSerializer(serializers.Serializer):
     )
     securityLogProfilesReference = F5VirtualServerSecurityLogProfilesReferenceSerializer(many=True, required=False)
     persist = F5VirtualServerPersistSerializer(many=True, required=False)
-    policies = F5PolicySerializer(many=True, required=False)
+    policiesReference = F5VirtualServerReferenceSerializer(required=False)
     profilesReference = F5VirtualServerReferenceSerializer(required=False)
+    rulesReference = F5VirtualServersRulesReferenceSerializer(many=True, required=False)
+
+    policies = F5PolicySerializer(many=True, required=False)
     profiles = serializers.CharField(max_length=255, required=False)
     rules = serializers.ListField(
         child=serializers.CharField(max_length=255, required=False),

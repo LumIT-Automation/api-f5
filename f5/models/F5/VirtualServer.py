@@ -60,9 +60,12 @@ class VirtualServer:
         self.translatePort: str = ""
         self.vlansDisabled: bool = False
         self.vsIndex: int = 0
-        self.policies: List[dict] = []
+        self.policiesReference: Reference = None
         self.profilesReference: Reference = None
         self.rules: list = []
+
+        self.policies: List[dict] = []
+        self.profiles: List[dict] = []
 
 
 
@@ -70,28 +73,15 @@ class VirtualServer:
     # Public methods
     ####################################################################################################################
 
-    def info(self):
+    def info(self, loadPolicies: bool = False):
         try:
             i = Backend.info(self.assetId, self.partition, self.name)
             i["assetId"] = self.assetId
 
+            if loadPolicies:
+                i["policies"] = self.getPolicies()
+
             return i
-        except Exception as e:
-            raise e
-
-
-
-    def policies(self) -> List[dict]:
-        try:
-            return Backend.policies(self.assetId, self.partition, self.name)
-        except Exception as e:
-            raise e
-
-
-
-    def profiles(self) -> List[dict]:
-        try:
-            return Backend.profiles(self.assetId, self.partition, self.name)
         except Exception as e:
             raise e
 
@@ -117,16 +107,38 @@ class VirtualServer:
 
 
 
+    def getPolicies(self) -> List[dict]:
+        try:
+            return Backend.policies(self.assetId, self.partition, self.name)
+        except Exception as e:
+            raise e
+
+
+
+    def getProfiles(self) -> List[dict]:
+        try:
+            return Backend.profiles(self.assetId, self.partition, self.name)
+        except Exception as e:
+            raise e
+
+
+
     ####################################################################################################################
     # Public static methods
     ####################################################################################################################
 
     @staticmethod
-    def list(assetId: int, partitionName: str) -> List[Dict]:
+    def list(assetId: int, partitionName: str, loadPolicies: bool = False) -> List[Dict]:
         try:
             l = Backend.list(assetId, partitionName)
             for el in l:
                 el["assetId"] = assetId
+
+                if loadPolicies:
+                    try:
+                        el["policies"] = VirtualServer(assetId, partitionName, el.get("name", "")).getPolicies()
+                    except Exception:
+                        pass
 
             return l
         except Exception as e:

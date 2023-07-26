@@ -18,6 +18,7 @@ class F5VirtualServerController(CustomController):
     @staticmethod
     def get(request: Request, assetId: int, partitionName: str, virtualServerName: str) -> Response:
         data = dict()
+        loadPolicies = False
         etagCondition = { "responseEtag": "" }
 
         user = CustomController.loggedUser(request)
@@ -26,13 +27,18 @@ class F5VirtualServerController(CustomController):
             if Permission.hasUserPermission(groups=user["groups"], action="virtualServer_get", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Virtual server information", user)
 
+                if "related" in request.GET:
+                    rList = request.GET.getlist('related')
+                    if "policies" in rList:
+                        loadPolicies = True
+
                 lock = Lock("virtualServer", locals(), virtualServerName)
                 if lock.isUnlocked():
                     lock.lock()
 
                     data = {
                         "data": CustomController.validate(
-                            VirtualServer(assetId, partitionName, virtualServerName).info(),
+                            VirtualServer(assetId, partitionName, virtualServerName).info(loadPolicies=loadPolicies),
                             Serializer,
                             "value"
                         ),
