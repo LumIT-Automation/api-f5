@@ -13,39 +13,40 @@ class VirtualServer:
     ####################################################################################################################
 
     @staticmethod
-    def info(assetId: int, partitionName: str, virtualServerName: str):
+    def info(assetId: int, partitionName: str, virtualServerName: str) -> dict:
         try:
             f5 = Asset(assetId)
-            api = ApiSupplicant(
+            info = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/virtual/~"+partitionName+"~"+virtualServerName+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
-            )
+            ).get()["payload"]
 
-            return api.get()["payload"]
+            info["policies"] = VirtualServer.policies(assetId, partitionName, virtualServerName)
+            return info
         except Exception as e:
             raise e
 
 
 
     @staticmethod
-    def policies(assetId: int, partitionName: str, virtualServerName: str):
+    def policies(assetId: int, partitionName: str, virtualServerName: str) -> list:
         try:
             f5 = Asset(assetId)
-            api = ApiSupplicant(
+            items = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/virtual/~"+partitionName+"~"+virtualServerName+"/policies/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
-            )
+            ).get()["payload"]["items"]
 
-            return api.get()["payload"]
+            return items
         except Exception as e:
             raise e
 
 
 
     @staticmethod
-    def profiles(assetId: int, partitionName: str, virtualServerName: str):
+    def profiles(assetId: int, partitionName: str, virtualServerName: str) -> list:
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
@@ -54,14 +55,14 @@ class VirtualServer:
                 tlsVerify=f5.tlsverify
             )
 
-            return api.get()["payload"]
+            return api.get()["payload"]["items"]
         except Exception as e:
             raise e
 
 
 
     @staticmethod
-    def modify(assetId: int, partitionName: str, virtualServerName: str, data: dict):
+    def modify(assetId: int, partitionName: str, virtualServerName: str, data: dict) -> None:
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
@@ -82,7 +83,7 @@ class VirtualServer:
 
 
     @staticmethod
-    def delete(assetId: int, partitionName: str, virtualServerName: str):
+    def delete(assetId: int, partitionName: str, virtualServerName: str) -> None:
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
@@ -101,13 +102,19 @@ class VirtualServer:
     def list(assetId: int, partitionName: str) -> List[dict]:
         try:
             f5 = Asset(assetId)
-            api = ApiSupplicant(
+            items = ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/virtual/?$filter=partition+eq+"+partitionName,
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
-            )
+            ).get()["payload"]["items"]
 
-            return api.get()["payload"]["items"]
+            for i in items:
+                try:
+                    i["policies"] = VirtualServer.policies(assetId, partitionName, i.get("name", ""))
+                except Exception:
+                    i["policies"] = []
+
+            return items
         except Exception as e:
             raise e
 

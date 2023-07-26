@@ -110,7 +110,7 @@ class VirtualServerWorkflow:
                 pass
 
             # Related profiles, certificates and keys.
-            profiles = vs.profiles()["items"]
+            profiles = vs.profiles()
             for profile in profiles:
                 try:
                     details = VirtualServerWorkflow.__getProfileDetails(self.assetId, self.partitionName, profile["name"])

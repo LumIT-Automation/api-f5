@@ -60,10 +60,9 @@ class VirtualServer:
         self.translatePort: str = ""
         self.vlansDisabled: bool = False
         self.vsIndex: int = 0
-        self.policiesReference: Reference = None
+        self.policies: List[dict] = []
         self.profilesReference: Reference = None
         self.rules: list = []
-        self.rulesReference: Reference = None
 
 
 
@@ -82,7 +81,7 @@ class VirtualServer:
 
 
 
-    def policies(self):
+    def policies(self) -> List[dict]:
         try:
             return Backend.policies(self.assetId, self.partition, self.name)
         except Exception as e:
@@ -90,7 +89,7 @@ class VirtualServer:
 
 
 
-    def profiles(self):
+    def profiles(self) -> List[dict]:
         try:
             return Backend.profiles(self.assetId, self.partition, self.name)
         except Exception as e:

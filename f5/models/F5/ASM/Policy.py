@@ -33,7 +33,7 @@ class Policy:
 
 
 
-    def delete(self, silent: bool = False):
+    def delete(self, silent: bool = False) -> None:
         try:
             Backend.delete(self.assetId, self.id, silent=silent)
             del self
@@ -154,7 +154,7 @@ class Policy:
 
 
     @staticmethod
-    def mergeDifferences(assetId: int, destinationPolicyId: str, diffReferenceId: str, mergeDiffsIds: list, deleteDiffsOnDestination: dict):
+    def mergeDifferences(assetId: int, destinationPolicyId: str, diffReferenceId: str, mergeDiffsIds: list, deleteDiffsOnDestination: dict) -> None:
         try:
             Backend.diffMergeFacade(
                 assetId=assetId,

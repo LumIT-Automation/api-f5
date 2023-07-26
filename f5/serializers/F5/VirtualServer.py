@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from f5.serializers.F5.Policy import F5PolicySerializer
+
 
 class F5VirtualServerSerializer(serializers.Serializer):
     class F5VirtualServerPoolReferenceSerializer(serializers.Serializer):
@@ -10,9 +12,6 @@ class F5VirtualServerSerializer(serializers.Serializer):
         pool = serializers.CharField(max_length=255, required=False)
 
     class F5VirtualServerSecurityLogProfilesReferenceSerializer(serializers.Serializer):
-        link = serializers.CharField(max_length=255, required=False)
-
-    class F5VirtualServersRulesReferenceSerializer(serializers.Serializer):
         link = serializers.CharField(max_length=255, required=False)
 
     class F5VirtualServerPersistSerializer(serializers.Serializer):
@@ -74,11 +73,10 @@ class F5VirtualServerSerializer(serializers.Serializer):
     )
     securityLogProfilesReference = F5VirtualServerSecurityLogProfilesReferenceSerializer(many=True, required=False)
     persist = F5VirtualServerPersistSerializer(many=True, required=False)
-    policiesReference = F5VirtualServerReferenceSerializer(required=False)
+    policies = F5PolicySerializer(many=True, required=False)
     profilesReference = F5VirtualServerReferenceSerializer(required=False)
     profiles = serializers.CharField(max_length=255, required=False)
     rules = serializers.ListField(
         child=serializers.CharField(max_length=255, required=False),
         required=False
     )
-    rulesReference = F5VirtualServersRulesReferenceSerializer(many=True, required=False)
