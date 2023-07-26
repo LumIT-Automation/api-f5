@@ -96,7 +96,7 @@ class VirtualServerWorkflow:
             vs = VirtualServer(self.assetId, self.partitionName, self.virtualServerName)
 
             # General info.
-            info = vs.info()
+            info = vs.info(loadProfiles=True)
             try:
                 self.poolName = info["pool"].split("/")[2]
 
@@ -110,7 +110,7 @@ class VirtualServerWorkflow:
                 pass
 
             # Related profiles, certificates and keys.
-            profiles = vs.getProfiles()
+            profiles = info.get("profiles", [])
             for profile in profiles:
                 try:
                     details = VirtualServerWorkflow.__getProfileDetails(self.assetId, self.partitionName, profile["name"])
