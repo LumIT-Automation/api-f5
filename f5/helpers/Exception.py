@@ -1,5 +1,7 @@
 class CustomException(Exception):
-    def __init__(self, status: int, payload: dict):
+    def __init__(self, status: int, payload: dict = None):
+        payload = payload or {}
+
         self.status = int(status)
         self.payload = payload
 

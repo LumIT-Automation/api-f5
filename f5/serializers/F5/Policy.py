@@ -10,7 +10,7 @@ class F5PolicySerializer(serializers.Serializer):
     name = serializers.CharField(max_length=255, required=True)
     partition = serializers.CharField(max_length=255, required=False)
     fullPath = serializers.CharField(max_length=255, required=False)
-    subPath = serializers.CharField(max_length=255, required=False)
+    subPath = serializers.CharField(max_length=255, required=False, allow_blank=True)
     generation = serializers.IntegerField(required=False)
     selfLink = serializers.CharField(max_length=255, required=False)
     status = serializers.CharField(max_length=255, required=False)

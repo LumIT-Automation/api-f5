@@ -2,6 +2,7 @@ from typing import List, Dict, Union
 
 from f5.models.F5.backend.Policy import Policy as Backend
 
+from f5.helpers.Exception import CustomException
 from f5.helpers.Misc import Misc
 
 
@@ -36,6 +37,17 @@ class Policy:
     ####################################################################################################################
     # Public methods
     ####################################################################################################################
+
+    def info(self) -> dict:
+        try:
+            i = Backend.info(self.assetId, self.partition, self.subPath, self.name)
+            i["assetId"] = self.assetId
+
+            return i
+        except Exception as e:
+            raise e
+
+
 
     def modify(self, data):
         try:

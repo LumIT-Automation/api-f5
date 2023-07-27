@@ -13,6 +13,27 @@ class Policy:
     ####################################################################################################################
 
     @staticmethod
+    def info(assetId: int, partitionName: str, policySubPath: str, policyName: str):
+        try:
+            f5 = Asset(assetId)
+            if policySubPath:
+                endpoint = f5.baseurl+"tm/ltm/policy/~"+partitionName+"~"+policySubPath+"~"+policyName+"/"
+            else:
+                endpoint = f5.baseurl+"tm/ltm/policy/~"+partitionName+"~"+policyName+"/"
+
+            api = ApiSupplicant(
+                endpoint=endpoint,
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
+            )
+
+            return api.get()["payload"]
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
     def modify(assetId: int, partitionName: str, policySubPath: str, policyName: str, data):
         try:
             f5 = Asset(assetId)
