@@ -34,7 +34,7 @@ class F5PoliciesController(CustomController):
                     data = {
                         "data": {
                             "items": CustomController.validate(
-                                Policy.dataList(assetId, partitionName),
+                                Policy.dataList(assetId, partitionName, loadRules=True),
                                 PoliciesSerializer,
                                 "list"
                             )

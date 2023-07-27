@@ -16,7 +16,7 @@ RulesReference: Dict[str, Union[str, bool]] = {
 }
 
 class Policy:
-    def __init__(self, assetId: int, partitionName: str, policySubPath: str, policyName: str, *args, **kwargs):
+    def __init__(self, assetId: int, partitionName: str, policySubPath: str, policyName: str, loadRules: bool = False, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.assetId: int = int(assetId)
@@ -32,7 +32,9 @@ class Policy:
         self.strategyReference: Link
         self.rulesReference: RulesReference
 
-        self.__load()
+        self.rules: List[dict] = []
+
+        self.__load(loadRules=loadRules)
 
 
 
@@ -70,11 +72,20 @@ class Policy:
     ####################################################################################################################
 
     @staticmethod
-    def dataList(assetId: int, partitionName: str) -> List[dict]:
+    def dataList(assetId: int, partitionName: str, policySubPath: str = "", loadRules: bool = False) -> List[dict]:
         try:
             l = Backend.list(assetId, partitionName)
             for el in l:
                 el["assetId"] = assetId
+
+                if loadRules:
+                    try:
+                        el["rules"] = Backend.getRules(assetId, partitionName, policySubPath, el["name"])
+                    except CustomException as e:
+                        if e.status == 404:
+                            el["rules"] = []
+                        else:
+                            raise e
 
             return l
         except Exception as e:
@@ -95,10 +106,13 @@ class Policy:
     # Private methods
     ####################################################################################################################
 
-    def __load(self) -> None:
+    def __load(self, loadRules: bool = False) -> None:
         try:
             data = Backend.info(self.assetId, self.partition, self.subPath, self.name)
             if data:
+                if loadRules:
+                    data["rules"] = Backend.getRules(self.assetId, self.partition, self.subPath, self.name)
+
                 for k, v in data.items():
                     setattr(self, k, v)
             else:

@@ -21,13 +21,11 @@ class Policy:
             else:
                 endpoint = f5.baseurl+"tm/ltm/policy/~"+partitionName+"~"+policyName+"/"
 
-            api = ApiSupplicant(
+            return ApiSupplicant(
                 endpoint=endpoint,
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
-            )
-
-            return api.get()["payload"]
+            ).get()["payload"]
         except Exception as e:
             raise e
 
@@ -112,5 +110,50 @@ class Policy:
                 },
                 data=json.dumps(data)
             )
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
+    def getRules(assetId: int, partitionName: str, policySubPath: str, policyName: str):
+        rules: List[dict] = []
+
+        try:
+            f5 = Asset(assetId)
+            if policySubPath:
+                endpoint = f5.baseurl+"tm/ltm/policy/~"+partitionName+"~"+policySubPath+"~"+policyName+"/rules/"
+            else:
+                endpoint = f5.baseurl+"tm/ltm/policy/~"+partitionName+"~"+policyName+"/rules/"
+
+            ruleItems = ApiSupplicant(
+                endpoint=endpoint,
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
+            ).get()["payload"]["items"]
+
+            for r in ruleItems:
+                if policySubPath:
+                    actionsEndpoint = f5.baseurl + "tm/ltm/policy/~" + partitionName + "~" + policySubPath + "~" + policyName + "/rules/" + r["name"] + "/actions/"
+                    conditionsEndpoint = f5.baseurl + "tm/ltm/policy/~" + partitionName + "~" + policySubPath + "~" + policyName + "/rules/" + r["name"] + "/conditions/"
+                else:
+                    actionsEndpoint = f5.baseurl + "tm/ltm/policy/~" + partitionName + "~" + policyName + "/rules/" + r["name"] + "/actions/"
+                    conditionsEndpoint = f5.baseurl + "tm/ltm/policy/~" + partitionName + "~" + policyName + "/rules/" + r["name"] + "/conditions/"
+
+                rules.append({
+                    "name": r["name"],
+                    "actions": ApiSupplicant(
+                        endpoint=actionsEndpoint,
+                        auth=(f5.username, f5.password),
+                        tlsVerify=f5.tlsverify
+                    ).get()["payload"]["items"],
+                    "conditions": ApiSupplicant(
+                        endpoint=conditionsEndpoint,
+                        auth=(f5.username, f5.password),
+                        tlsVerify=f5.tlsverify
+                    ).get()["payload"]["items"]
+                })
+
+            return rules
         except Exception as e:
             raise e

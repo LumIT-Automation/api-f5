@@ -18,3 +18,7 @@ class F5PolicySerializer(serializers.Serializer):
     strategy = serializers.CharField(max_length=255, required=False)
     strategyReference = F5PolicyReferenceSerializer(required=False)
     rulesReference = F5PolicyReferenceSerializer(required=False)
+    rules = serializers.ListField(
+        child=serializers.JSONField(required=False),
+        required=False
+    )
