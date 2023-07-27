@@ -73,19 +73,27 @@ class Policy:
 
     @staticmethod
     def dataList(assetId: int, partitionName: str, policySubPath: str = "", loadRules: bool = False) -> List[dict]:
+        import threading
+
+        def loadData(a, p, s, o):
+            o["assetId"] = assetId
+
+            if loadRules:
+                try:
+                    o["rules"] = Backend.getRules(a, p, s, o["name"])
+                except CustomException as ex:
+                    if ex.status == 404:
+                        o["rules"] = []
+                    else:
+                        raise ex
+
         try:
             l = Backend.list(assetId, partitionName)
-            for el in l:
-                el["assetId"] = assetId
-
-                if loadRules:
-                    try:
-                        el["rules"] = Backend.getRules(assetId, partitionName, policySubPath, el["name"])
-                    except CustomException as e:
-                        if e.status == 404:
-                            el["rules"] = []
-                        else:
-                            raise e
+            workers = [threading.Thread(target=loadData, args=(assetId, partitionName, policySubPath, el)) for el in l]
+            for w in workers:
+                w.start()
+            for w in workers:
+                w.join()
 
             return l
         except Exception as e:
