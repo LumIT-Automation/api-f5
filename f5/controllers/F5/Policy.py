@@ -32,7 +32,7 @@ class F5PolicyController(CustomController):
 
                     data = {
                         "data": CustomController.validate(
-                            Policy(assetId, partitionName, policySubPath, policyName).info(),
+                            Policy(assetId, partitionName, policySubPath, policyName).repr(),
                             Serializer,
                             "value"
                         ),

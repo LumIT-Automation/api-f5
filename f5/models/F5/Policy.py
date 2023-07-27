@@ -32,20 +32,16 @@ class Policy:
         self.strategyReference: Link
         self.rulesReference: RulesReference
 
+        self.__load()
+
 
 
     ####################################################################################################################
     # Public methods
     ####################################################################################################################
 
-    def info(self) -> dict:
-        try:
-            i = Backend.info(self.assetId, self.partition, self.subPath, self.name)
-            i["assetId"] = self.assetId
-
-            return i
-        except Exception as e:
-            raise e
+    def repr(self):
+        return Misc.deepRepr(self)
 
 
 
@@ -74,7 +70,7 @@ class Policy:
     ####################################################################################################################
 
     @staticmethod
-    def list(assetId: int, partitionName: str) -> List[dict]:
+    def dataList(assetId: int, partitionName: str) -> List[dict]:
         try:
             l = Backend.list(assetId, partitionName)
             for el in l:
@@ -90,5 +86,22 @@ class Policy:
     def add(assetId: int, data: dict) -> None:
         try:
             Backend.add(assetId, data)
+        except Exception as e:
+            raise e
+
+
+
+    ####################################################################################################################
+    # Private methods
+    ####################################################################################################################
+
+    def __load(self) -> None:
+        try:
+            data = Backend.info(self.assetId, self.partition, self.subPath, self.name)
+            if data:
+                for k, v in data.items():
+                    setattr(self, k, v)
+            else:
+                raise CustomException(status=404)
         except Exception as e:
             raise e
