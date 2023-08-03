@@ -5,8 +5,8 @@ from rest_framework import status
 from f5.models.F5.ltm.SnatPool import SnatPool
 from f5.models.Permission.Permission import Permission
 
-from f5.serializers.F5.SnatPools import F5SnatPoolsSerializer as SnatPoolsSerializer
-from f5.serializers.F5.SnatPool import F5SnatPoolSerializer as SnatPoolSerializer
+from f5.serializers.F5.ltm.SnatPools import F5SnatPoolsSerializer as SnatPoolsSerializer
+from f5.serializers.F5.ltm.SnatPool import F5SnatPoolSerializer as SnatPoolSerializer
 
 from f5.controllers.CustomController import CustomController
 

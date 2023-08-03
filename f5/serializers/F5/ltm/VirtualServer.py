@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from f5.serializers.F5.Policy import F5PolicySerializer
-from f5.serializers.F5.Profile import F5ProfileSerializer
+from f5.serializers.F5.ltm.Policy import F5PolicySerializer
+from f5.serializers.F5.ltm.Profile import F5ProfileSerializer
 
 
 class F5VirtualServerSerializer(serializers.Serializer):

@@ -6,8 +6,8 @@ from f5.models.F5.sys.Certificate import Certificate
 from f5.models.F5.sys.Key import Key
 from f5.models.Permission.Permission import Permission
 
-from f5.serializers.F5.Certificate import F5CertificateSerializer as CertificateSerializer
-from f5.serializers.F5.Key import F5KeySerializer as KeySerializer
+from f5.serializers.F5.sys.Certificate import F5CertificateSerializer as CertificateSerializer
+from f5.serializers.F5.sys.Key import F5KeySerializer as KeySerializer
 
 from f5.controllers.CustomController import CustomController
 

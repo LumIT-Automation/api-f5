@@ -5,7 +5,7 @@ from rest_framework import status
 from f5.models.F5.auth.Partition import Partition
 from f5.models.Permission.Permission import Permission
 
-from f5.serializers.F5.Partitions import F5PartitionsSerializer as Serializer
+from f5.serializers.F5.auth.Partitions import F5PartitionsSerializer as Serializer
 
 from f5.controllers.CustomController import CustomController
 

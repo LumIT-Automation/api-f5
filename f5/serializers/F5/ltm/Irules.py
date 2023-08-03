@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from f5.serializers.F5.Irule import F5IruleSerializer
+from f5.serializers.F5.ltm.Irule import F5IruleSerializer
 
 
 class F5IrulesSerializer(serializers.Serializer):

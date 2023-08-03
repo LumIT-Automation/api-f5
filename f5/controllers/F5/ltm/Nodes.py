@@ -5,8 +5,8 @@ from rest_framework import status
 from f5.models.F5.ltm.Node import Node
 from f5.models.Permission.Permission import Permission
 
-from f5.serializers.F5.Nodes import F5NodesSerializer as NodesSerializer
-from f5.serializers.F5.Node import F5NodeSerializer as NodeSerializer
+from f5.serializers.F5.ltm.Nodes import F5NodesSerializer as NodesSerializer
+from f5.serializers.F5.ltm.Node import F5NodeSerializer as NodeSerializer
 
 from f5.controllers.CustomController import CustomController
 

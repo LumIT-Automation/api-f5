@@ -5,7 +5,7 @@ from rest_framework import status
 from f5.models.F5.ltm.Datagroup import Datagroup
 from f5.models.Permission.Permission import Permission
 
-from f5.serializers.F5.Datagroups import F5DatagroupSerializer as Serializer
+from f5.serializers.F5.ltm.Datagroups import F5DatagroupSerializer as Serializer
 
 from f5.controllers.CustomController import CustomController
 

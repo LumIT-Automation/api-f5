@@ -5,8 +5,8 @@ from rest_framework import status
 from f5.models.F5.ltm.Policy import Policy
 from f5.models.Permission.Permission import Permission
 
-from f5.serializers.F5.Policies import F5PoliciesSerializer as PoliciesSerializer
-from f5.serializers.F5.Policy import F5PolicySerializer as PolicySerializer
+from f5.serializers.F5.ltm.Policies import F5PoliciesSerializer as PoliciesSerializer
+from f5.serializers.F5.ltm.Policy import F5PolicySerializer as PolicySerializer
 
 from f5.controllers.CustomController import CustomController
 

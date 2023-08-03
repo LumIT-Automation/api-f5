@@ -5,8 +5,8 @@ from rest_framework import status
 from f5.models.F5.ltm.VirtualServer import VirtualServer
 from f5.models.Permission.Permission import Permission
 
-from f5.serializers.F5.VirtualServers import F5VirtualServersSerializer as VirtualServersSerializer
-from f5.serializers.F5.VirtualServer import F5VirtualServerSerializer as VirtualServerSerializer
+from f5.serializers.F5.ltm.VirtualServers import F5VirtualServersSerializer as VirtualServersSerializer
+from f5.serializers.F5.ltm.VirtualServer import F5VirtualServerSerializer as VirtualServerSerializer
 
 from f5.controllers.CustomController import CustomController
 

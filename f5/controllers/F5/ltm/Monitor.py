@@ -5,7 +5,7 @@ from rest_framework import status
 from f5.models.F5.ltm.Monitor import Monitor
 from f5.models.Permission.Permission import Permission
 
-from f5.serializers.F5.Monitor import F5MonitorSerializer as Serializer
+from f5.serializers.F5.ltm.Monitor import F5MonitorSerializer as Serializer
 
 from f5.controllers.CustomController import CustomController
 
