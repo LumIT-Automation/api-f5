@@ -35,7 +35,7 @@ class F5PoolMemberController(CustomController):
 
                     data = {
                         "data": CustomController.validate(
-                            Pool(assetId, poolName, partitionName).member(poolMemberName).info(),
+                            Pool(assetId, poolName, partitionName).getMember(poolMemberName).info(),
                             Serializer,
                             "value"
                         ),
@@ -88,7 +88,7 @@ class F5PoolMemberController(CustomController):
                     lockp.lock()
                     lockpm.lock()
 
-                    Pool(assetId, poolName, partitionName).member(poolMemberName).delete()
+                    Pool(assetId, poolName, partitionName).getMember(poolMemberName).delete()
 
                     httpStatus = status.HTTP_200_OK
                     lockp.release()
@@ -130,7 +130,7 @@ class F5PoolMemberController(CustomController):
                         lockp.lock()
                         lockpm.lock()
 
-                        Pool(assetId, poolName, partitionName).member(poolMemberName).modify(data)
+                        Pool(assetId, poolName, partitionName).getMember(poolMemberName).modify(data)
 
                         httpStatus = status.HTTP_200_OK
                         lockp.release()

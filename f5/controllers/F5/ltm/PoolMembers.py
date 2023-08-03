@@ -37,7 +37,7 @@ class F5PoolMembersController(CustomController):
                     data = {
                         "data": {
                             "items": CustomController.validate(
-                                Pool(assetId, partitionName, poolName).members(),
+                                Pool(assetId, partitionName, poolName).getMembersData(),
                                 PoolMembersSerializer,
                                 "list"
                             )

@@ -148,7 +148,7 @@ class VirtualServerWorkflow:
                         pass
 
                 # Pool members of self.poolName -> nodes.
-                poolMembers = Pool(self.assetId, self.partitionName, self.poolName).members()
+                poolMembers = Pool(self.assetId, self.partitionName, self.poolName).getMembersData()
                 for pm in poolMembers:
                     self.nodes.append({
                         "name": Node.getNameFromAddress(

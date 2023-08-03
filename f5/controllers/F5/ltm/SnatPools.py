@@ -34,7 +34,7 @@ class F5SnatPoolsController(CustomController):
                     data = {
                         "data": {
                             "items": CustomController.validate(
-                                SnatPool.list(assetId, partitionName),
+                                SnatPool.dataList(assetId, partitionName),
                                 SnatPoolsSerializer,
                                 "list"
                             )

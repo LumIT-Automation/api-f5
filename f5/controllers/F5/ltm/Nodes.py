@@ -34,7 +34,7 @@ class F5NodesController(CustomController):
                     data = {
                         "data": {
                             "items": CustomController.validate(
-                                Node.list(assetId, partitionName),
+                                Node.dataList(assetId, partitionName),
                                 NodesSerializer,
                                 "list"
                             )

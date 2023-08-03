@@ -34,7 +34,7 @@ class F5IrulesController(CustomController):
                     data = {
                         "data": {
                             "items": CustomController.validate(
-                                Irule.list(assetId, partitionName),
+                                Irule.dataList(assetId, partitionName),
                                 IrulesSerializer,
                                 "list"
                             )

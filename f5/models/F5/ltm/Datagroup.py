@@ -63,7 +63,7 @@ class Datagroup:
 
 
     @staticmethod
-    def list(assetId: int, partitionName: str, datagroupType: str) -> dict:
+    def dataList(assetId: int, partitionName: str, datagroupType: str) -> dict:
         try:
             l = Backend.list(assetId, partitionName, datagroupType)
             for el in l:

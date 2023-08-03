@@ -548,7 +548,7 @@ class VirtualServersWorkflow:
                     try:
                         Log.log("Virtual server workflow: cleanup pool member "+poolMemberName)
 
-                        poolMember = Pool(self.assetId, poolName, self.partitionName).member(poolMemberName)
+                        poolMember = Pool(self.assetId, poolName, self.partitionName).getMember(poolMemberName)
                         poolMember.delete()
                     except Exception:
                         Log.actionLog("[ERROR] Virtual server workflow: failed to clean "+poolMemberName)

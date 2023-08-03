@@ -65,7 +65,7 @@ class Node:
     ####################################################################################################################
 
     @staticmethod
-    def list(assetId: int, partitionName: str, silent: bool = False) -> dict:
+    def dataList(assetId: int, partitionName: str, silent: bool = False) -> dict:
         try:
             l = Backend.list(assetId, partitionName, silent)
             for el in l:
@@ -91,7 +91,7 @@ class Node:
         name = ""
 
         try:
-            data = Node.list(assetId, partitionName, silent=silent)
+            data = Node.dataList(assetId, partitionName, silent=silent)
             for nel in data:
                 if nel["address"] == address:
                     name = nel["name"]

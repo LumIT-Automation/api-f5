@@ -37,7 +37,7 @@ class F5DatagroupsController(CustomController):
                     if datagroupType:
                         if datagroupType != "ANY":
                             # Datagroups list of that type.
-                            itemData["items"] = Datagroup.list(assetId, partitionName, datagroupType)
+                            itemData["items"] = Datagroup.dataList(assetId, partitionName, datagroupType)
                             data["data"] = DatagroupsSerializer(itemData).data
                         else:
                             # All datagroups, of any type.
@@ -46,7 +46,7 @@ class F5DatagroupsController(CustomController):
                             # The threading way.
                             # This requires a consistent throttle on remote appliance.
                             def datagroupsListOfType(dgType):
-                                itemData["items"] = Datagroup.list(assetId, partitionName, dgType)
+                                itemData["items"] = Datagroup.dataList(assetId, partitionName, dgType)
                                 data["data"][dgType] = DatagroupsSerializer(itemData).data
 
                             workers = [threading.Thread(target=datagroupsListOfType, args=(m,)) for m in datagroupType]

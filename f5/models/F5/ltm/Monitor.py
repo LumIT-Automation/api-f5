@@ -76,7 +76,7 @@ class Monitor:
 
 
     @staticmethod
-    def list(assetId: int, partitionName: str, monitorType: str) -> dict:
+    def dataList(assetId: int, partitionName: str, monitorType: str) -> dict:
         try:
             l = Backend.list(assetId, partitionName, monitorType)
             for el in l:

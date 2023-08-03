@@ -40,7 +40,7 @@ class F5MonitorsController(CustomController):
                         if monitorType != "ANY":
                             # Monitors' list of that type.
                             # F5 treats monitor type as a sub-object instead of a property. Odd.
-                            itemData["items"] = Monitor.list(assetId, partitionName, monitorType)
+                            itemData["items"] = Monitor.dataList(assetId, partitionName, monitorType)
                             data["data"] = MonitorsSerializer(itemData).data
                         else:
                             monitorTypes = Monitor.types(assetId, partitionName)
@@ -63,7 +63,7 @@ class F5MonitorsController(CustomController):
                             # The threading way.
                             # This requires a consistent throttle on remote appliance.
                             def monitorsListOfType(mType):
-                                itemData["items"] = Monitor.list(assetId, partitionName, mType)
+                                itemData["items"] = Monitor.dataList(assetId, partitionName, mType)
                                 data["data"][mType] = MonitorsSerializer(itemData).data
 
                             workers = [threading.Thread(target=monitorsListOfType, args=(m,)) for m in monitorTypes]

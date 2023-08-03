@@ -84,7 +84,7 @@ class PoolMember:
     ####################################################################################################################
 
     @staticmethod
-    def list(assetId: int, partitionName: str, poolName: str) -> dict:
+    def dataList(assetId: int, partitionName: str, poolName: str) -> dict:
         try:
             l = Backend.list(assetId, partitionName, poolName)
             for el in l:

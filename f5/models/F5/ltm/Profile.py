@@ -130,7 +130,7 @@ class Profile:
     ####################################################################################################################
 
     @staticmethod
-    def list(assetId: int, partitionName: str, profileType: str) -> dict:
+    def dataList(assetId: int, partitionName: str, profileType: str) -> dict:
         try:
             l = Backend.list(assetId, partitionName, profileType)
             for el in l:

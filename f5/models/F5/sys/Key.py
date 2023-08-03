@@ -36,7 +36,7 @@ class Key(KeyBase):
     ####################################################################################################################
 
     @staticmethod
-    def list(assetId: int, partitionName: str) -> List[dict]:
+    def dataList(assetId: int, partitionName: str) -> List[dict]:
         try:
             return Key.listObjects(assetId, partitionName, "key")
         except Exception as e:

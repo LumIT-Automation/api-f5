@@ -79,7 +79,7 @@ class Pool:
 
 
 
-    def member(self, poolMemberName: str) -> PoolMember:
+    def getMember(self, poolMemberName: str) -> PoolMember:
         try:
             return PoolMember(self.assetId, self.partition, self.name, poolMemberName)
         except Exception as e:
@@ -87,9 +87,9 @@ class Pool:
 
 
 
-    def members(self) -> dict:
+    def getMembersData(self) -> dict:
         try:
-            return PoolMember.list(self.assetId, self.partition, self.name) # return raw list.
+            return PoolMember.dataList(self.assetId, self.partition, self.name) # return raw list.
         except Exception as e:
             raise e
 
@@ -108,7 +108,7 @@ class Pool:
     ####################################################################################################################
 
     @staticmethod
-    def list(assetId: int, partitionName: str) -> List[dict]:
+    def dataList(assetId: int, partitionName: str) -> List[dict]:
         try:
             l = Backend.list(assetId, partitionName)
             for el in l:

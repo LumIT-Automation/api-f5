@@ -33,7 +33,7 @@ class F5RouteDomainsController(CustomController):
                     data = {
                         "data": {
                             "items": CustomController.validate(
-                                RouteDomain.list(assetId),
+                                RouteDomain.dataList(assetId),
                                 Serializer,
                                 "list"
                             )

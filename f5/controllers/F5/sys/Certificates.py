@@ -38,7 +38,7 @@ class F5CertificatesController(CustomController):
                         data = {
                             "data": {
                                 "items": CustomController.validate(
-                                    Certificate.list(assetId, partitionName),
+                                    Certificate.dataList(assetId, partitionName),
                                     CertificatesSerializer,
                                     "list"
                                 )
@@ -68,7 +68,7 @@ class F5CertificatesController(CustomController):
                         data = {
                             "data": {
                                 "items": CustomController.validate(
-                                    Key.list(assetId, partitionName),
+                                    Key.dataList(assetId, partitionName),
                                     KeysSerializer,
                                     "list"
                                 )

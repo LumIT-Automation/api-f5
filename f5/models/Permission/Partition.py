@@ -42,7 +42,7 @@ class Partition:
                 raise e
         else:
             # Check if assetId/partition is a valid F5 partition (at the time of the insert).
-            partitions = F5Partition.list(asset)
+            partitions = F5Partition.dataList(asset)
             for v in partitions:
                 if v["name"] == partition:
                     try:

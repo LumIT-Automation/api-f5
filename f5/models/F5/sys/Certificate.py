@@ -55,7 +55,7 @@ class Certificate(CertificateBase):
     ####################################################################################################################
 
     @staticmethod
-    def list(assetId: int, partitionName: str) -> List[dict]:
+    def dataList(assetId: int, partitionName: str) -> List[dict]:
         try:
             return Certificate.listObjects(assetId, partitionName, "cert")
         except Exception as e:

@@ -80,13 +80,13 @@ class VirtualServer:
 
             if loadPolicies:
                 try:
-                    i["policies"] = self.getPolicies()
+                    i["policies"] = self.getPoliciesSummary()
                 except Exception:
                     pass
 
             if loadProfiles:
                 try:
-                    i["profiles"] = self.getProfiles()
+                    i["profiles"] = self.getProfilesSummary()
                 except Exception:
                     pass
 
@@ -116,7 +116,7 @@ class VirtualServer:
 
 
 
-    def getPolicies(self) -> List[dict]:
+    def getPoliciesSummary(self) -> List[dict]:
         try:
             return Backend.policies(self.assetId, self.partition, self.name)
         except Exception as e:
@@ -124,7 +124,7 @@ class VirtualServer:
 
 
 
-    def getProfiles(self) -> List[dict]:
+    def getProfilesSummary(self) -> List[dict]:
         try:
             return Backend.profiles(self.assetId, self.partition, self.name)
         except Exception as e:
@@ -137,7 +137,7 @@ class VirtualServer:
     ####################################################################################################################
 
     @staticmethod
-    def list(assetId: int, partitionName: str, loadPolicies: bool = False, loadProfiles: bool = False) -> List[Dict]:
+    def dataList(assetId: int, partitionName: str, loadPolicies: bool = False, loadProfiles: bool = False) -> List[Dict]:
         import threading
 
         def loadData(a, p, n, o):
@@ -145,13 +145,13 @@ class VirtualServer:
 
             if loadPolicies:
                 try:
-                    o["policies"] = VirtualServer(a, p, n).getPolicies()
+                    o["policies"] = VirtualServer(a, p, n).getPoliciesSummary()
                 except Exception:
                     pass
 
             if loadProfiles:
                 try:
-                    o["profiles"] = VirtualServer(a, p, n).getProfiles()
+                    o["profiles"] = VirtualServer(a, p, n).getProfilesSummary()
                 except Exception:
                     pass
 

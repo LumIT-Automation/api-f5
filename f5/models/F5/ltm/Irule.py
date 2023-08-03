@@ -48,7 +48,7 @@ class Irule:
     ####################################################################################################################
 
     @staticmethod
-    def list(assetId: int, partitionName: str) -> List[dict]:
+    def dataList(assetId: int, partitionName: str) -> List[dict]:
         try:
             l = Backend.list(assetId, partitionName)
             for el in l:
