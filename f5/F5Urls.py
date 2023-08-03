@@ -1,10 +1,15 @@
 from django.urls import path
 
 from .controllers import Root
-from .controllers.F5 import Partitions, RouteDomains, Datagroup, Datagroups, Node, Nodes, Monitor, Monitors, Certificate, Certificates, Pools, Pool, SnatPool, SnatPools, PoolMembers, PoolMember, PoolMemberStats, Profile, Profiles, Irule, Irules, Policy, Policies, VirtualServer, VirtualServers
-from .controllers.F5.ASM import Policies as ASMPolicies, Policy as ASMPolicy, PoliciesDifference as ASMPolicyDifference, PolicyMerge as ASMPolicyMerge, PolicyApply as ASMPolicyApply
+from .controllers.F5.ltm import PoolMemberStats, Datagroup, VirtualServers, Irules, Monitors, SnatPool, Pool, Irule, \
+    PoolMember, Profile, Policy, Nodes, Datagroups, Monitor, PoolMembers, VirtualServer, Pools, SnatPools, Node, \
+    Profiles, Policies
+from .controllers.F5.auth import Partitions
+from .controllers.F5.net import RouteDomains
+from .controllers.F5.sys import Certificate, Certificates
+from .controllers.F5.asm import Policies as ASMPolicies, Policy as ASMPolicy, PoliciesDifference as ASMPolicyDifference, PolicyMerge as ASMPolicyMerge, PolicyApply as ASMPolicyApply
 from .controllers.Asset import AssetAssetDr, AssetAssetsDr, Asset, Assets
-from .controllers.F5.Workflow import VirtualServersController as WorkflowVirtualServers, VirtualServerController as WorkflowVirtualServer, DeleteNodeController as WorkflowNode
+from .controllers.F5.Usecases import VirtualServersController as WorkflowVirtualServers, VirtualServerController as WorkflowVirtualServer, DeleteNodeController as WorkflowNode
 from .controllers.Permission import Authorizations, IdentityGroups, IdentityGroup, Roles, Permission, Permissions
 from .controllers.Configuration import Configuration
 from .controllers.History import History, ActionHistory
