@@ -2,6 +2,7 @@ from typing import List, Dict, Union
 
 from f5.models.F5.ltm.backend.VirtualServer import VirtualServer as Backend
 
+from f5.helpers.Exception import CustomException
 from f5.helpers.Misc import Misc
 
 
@@ -20,7 +21,7 @@ Reference: Dict[str, Union[str, bool]] = {
 }
 
 class VirtualServer:
-    def __init__(self, assetId: int, partitionName: str, virtualServerName: str, *args, **kwargs):
+    def __init__(self, assetId: int, partitionName: str, virtualServerName: str, loadPolicies: bool = False, loadProfiles: bool = False, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.assetId = int(assetId)
@@ -67,32 +68,16 @@ class VirtualServer:
         self.policies: List[dict] = []
         self.profiles: List[dict] = []
 
+        self.__load(loadPolicies=loadPolicies, loadProfiles=loadProfiles)
+
 
 
     ####################################################################################################################
     # Public methods
     ####################################################################################################################
 
-    def info(self, loadPolicies: bool = False, loadProfiles: bool = False):
-        try:
-            i = Backend.info(self.assetId, self.partition, self.name)
-            i["assetId"] = self.assetId
-
-            if loadPolicies:
-                try:
-                    i["policies"] = self.getPoliciesSummary()
-                except Exception:
-                    pass
-
-            if loadProfiles:
-                try:
-                    i["profiles"] = self.getProfilesSummary()
-                except Exception:
-                    pass
-
-            return i
-        except Exception as e:
-            raise e
+    def repr(self):
+        return Misc.deepRepr(self)
 
 
 
@@ -148,7 +133,6 @@ class VirtualServer:
                     o["policies"] = VirtualServer(a, p, n).getPoliciesSummary()
                 except Exception:
                     pass
-
             if loadProfiles:
                 try:
                     o["profiles"] = VirtualServer(a, p, n).getProfilesSummary()
@@ -173,5 +157,33 @@ class VirtualServer:
     def add(assetId: int, data: dict) -> None:
         try:
             Backend.add(assetId, data)
+        except Exception as e:
+            raise e
+
+
+
+    ####################################################################################################################
+    # Private methods
+    ####################################################################################################################
+
+    def __load(self, loadPolicies: bool = False, loadProfiles: bool = False) -> None:
+        try:
+            data = Backend.info(self.assetId, self.partition, self.name)
+            if data:
+                if loadPolicies:
+                    try:
+                        data["policies"] = self.getPoliciesSummary()
+                    except Exception:
+                        pass
+                if loadProfiles:
+                    try:
+                        data["profiles"] = self.getProfilesSummary()
+                    except Exception:
+                        pass
+
+                for k, v in data.items():
+                    setattr(self, k, v)
+            else:
+                raise CustomException(status=404)
         except Exception as e:
             raise e

@@ -41,10 +41,7 @@ class F5VirtualServerController(CustomController):
 
                     data = {
                         "data": CustomController.validate(
-                            VirtualServer(assetId, partitionName, virtualServerName).info(
-                                loadPolicies=loadPolicies,
-                                loadProfiles=loadProfiles
-                            ),
+                            VirtualServer(assetId, partitionName, virtualServerName, loadPolicies=loadPolicies, loadProfiles=loadProfiles).repr(),
                             Serializer,
                             "value"
                         ),

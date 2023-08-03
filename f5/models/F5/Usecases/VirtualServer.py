@@ -93,10 +93,10 @@ class VirtualServerWorkflow:
 
     def __info(self) -> None:
         try:
-            vs = VirtualServer(self.assetId, self.partitionName, self.virtualServerName)
+            vs = VirtualServer(self.assetId, self.partitionName, self.virtualServerName, loadProfiles=True)
 
             # General info.
-            info = vs.info(loadProfiles=True)
+            info = vs.repr()
             try:
                 self.poolName = info["pool"].split("/")[2]
 
