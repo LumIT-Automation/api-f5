@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from f5.models.Permission.Permission import Permission
-from f5.models.F5.Workflow.DeleteNode import DeleteNodeWorkflow
+from f5.models.F5.Usecases.DeleteNode import DeleteNodeWorkflow
 
 from f5.controllers.CustomController import CustomController
 
