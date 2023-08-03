@@ -1,6 +1,6 @@
 from typing import List, Dict
 
-from f5.models.F5.backend.RouteDomain import RouteDomain as Backend
+from f5.models.F5.net.backend.RouteDomain import RouteDomain as Backend
 
 
 VlansReference: Dict[str, str] = {

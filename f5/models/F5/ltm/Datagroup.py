@@ -1,6 +1,6 @@
 from typing import Dict
 
-from f5.models.F5.backend.Datagroup import Datagroup as Backend
+from f5.models.F5.ltm.backend.Datagroup import Datagroup as Backend
 
 from f5.helpers.Misc import Misc
 

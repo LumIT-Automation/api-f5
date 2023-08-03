@@ -1,19 +1,21 @@
 from typing import List
 
-from f5.models.F5.backend.Certificate import Certificate as Backend
+from f5.models.F5.ltm.backend.Irule import Irule as Backend
 
 from f5.helpers.Misc import Misc
 
 
-class CertificateKeyBase:
-    def __init__(self, assetId: int, partitionName: str, o: str, name: str, *args, **kwargs):
+class Irule:
+    def __init__(self, assetId: int, partitionName: str, iruleName: str, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.assetId = int(assetId)
         self.partition = partitionName
-        self.name = name
-
-        self.o = o
+        self.name = iruleName
+        self.fullPath: str = ""
+        self.generation: int = 0
+        self.selfLink: str = ""
+        self.apiAnonymous: str = ""
 
 
 
@@ -21,21 +23,21 @@ class CertificateKeyBase:
     # Public methods
     ####################################################################################################################
 
-    def delete(self) -> None:
+    def modify(self, data):
         try:
-            Backend.delete(self.assetId, self.partition, self.name, self.o)
-            del self
+            Backend.modify(self.assetId, self.partition, self.name, data)
+
+            for k, v in Misc.toDict(data).items():
+                setattr(self, k, v)
         except Exception as e:
             raise e
 
 
 
-    def modifyObject(self, data: dict) -> None:
+    def delete(self):
         try:
-            Backend.update(self.assetId, self.partition, self.name, self.o, data)
-
-            for k, v in Misc.toDict(data).items():
-                setattr(self, k, v)
+            Backend.delete(self.assetId, self.partition, self.name)
+            del self
         except Exception as e:
             raise e
 
@@ -46,13 +48,11 @@ class CertificateKeyBase:
     ####################################################################################################################
 
     @staticmethod
-    def listObjects(assetId: int, partitionName: str, o: str) -> List[dict]:
+    def list(assetId: int, partitionName: str) -> List[dict]:
         try:
-            l = Backend.list(assetId, partitionName, o)
+            l = Backend.list(assetId, partitionName)
             for el in l:
                 el["assetId"] = assetId
-                el["partition"] = partitionName
-                el["content_base64"] = "[undisclosed]"
 
             return l
         except Exception as e:
@@ -61,8 +61,8 @@ class CertificateKeyBase:
 
 
     @staticmethod
-    def installObject(assetId: int, partitionName: str, o: str, data: dict) -> None:
+    def add(assetId: int, data: dict) -> None:
         try:
-            Backend.install(assetId, partitionName, o, data)
+            Backend.add(assetId, data)
         except Exception as e:
             raise e

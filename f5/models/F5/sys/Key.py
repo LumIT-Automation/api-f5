@@ -1,23 +1,11 @@
-from typing import List, Dict, Union
+from typing import List
 
-from f5.models.F5.CertificateKeyBase import CertificateKeyBase as CertificateBase
+from f5.models.F5.sys.CertificateKeyBase import CertificateKeyBase as KeyBase
 
 
-ApiRawValues: Dict[str, str] = {
-    "certificateKeySize": "",
-    "expiration": "",
-    "issuer": "",
-    "publicKeyType": ""
-}
-
-CertValidatorsReference: Dict[str, Union[str, bool]] = {
-    "link": "",
-    "isSubcollection": False
-}
-
-class Certificate(CertificateBase):
+class Key(KeyBase):
     def __init__(self, assetId: int, partitionName: str, name: str, *args, **kwargs):
-        super().__init__(assetId, partitionName, "cert", name, *args, **kwargs)
+        super().__init__(assetId, partitionName, "key", name, *args, **kwargs)
 
         self.assetId: int = int(assetId)
         self.partition: str = partitionName
@@ -25,16 +13,9 @@ class Certificate(CertificateBase):
         self.fullPath: str = ""
         self.generation: int = 0
         self.selfLink: str = ""
-        self.apiRawValues: ApiRawValues = None
-        self.city: str = ""
-        self.commonName: str = ""
-        self.country: str = ""
-        self.emailAddress: str = ""
-        self.fingerprint: str = ""
-        self.organization: str = ""
-        self.ou: str = ""
-        self.state: str = ""
-        self.certValidatorsReference: CertValidatorsReference = None
+        self.keySize: int = 0
+        self.keyType: str = ""
+        self.securityType: str = ""
 
 
 
@@ -44,7 +25,7 @@ class Certificate(CertificateBase):
 
     def update(self, data: dict) -> None:
         try:
-            CertificateBase(self.assetId, self.partition, "cert", self.name).modifyObject(data)
+            KeyBase(self.assetId, self.partition, "key", self.name).modifyObject(data)
         except Exception as e:
             raise e
 
@@ -57,7 +38,7 @@ class Certificate(CertificateBase):
     @staticmethod
     def list(assetId: int, partitionName: str) -> List[dict]:
         try:
-            return Certificate.listObjects(assetId, partitionName, "cert")
+            return Key.listObjects(assetId, partitionName, "key")
         except Exception as e:
             raise e
 
@@ -66,6 +47,6 @@ class Certificate(CertificateBase):
     @staticmethod
     def install(assetId: int, partitionName: str, data: dict) -> None:
         try:
-            Certificate.installObject(assetId, partitionName, "cert", data)
+            Key.installObject(assetId, partitionName, "key", data)
         except Exception as e:
             raise e

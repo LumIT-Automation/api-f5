@@ -2,8 +2,8 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
 
-from f5.models.F5.Certificate import Certificate
-from f5.models.F5.Key import Key
+from f5.models.F5.sys.Certificate import Certificate
+from f5.models.F5.sys.Key import Key
 from f5.models.Permission.Permission import Permission
 
 from f5.serializers.F5.Certificate import F5CertificateSerializer as CertificateSerializer

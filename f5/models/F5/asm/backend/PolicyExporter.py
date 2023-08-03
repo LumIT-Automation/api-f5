@@ -4,7 +4,7 @@ from datetime import datetime
 
 from f5.models.Asset.Asset import Asset
 
-from f5.models.F5.ASM.backend.PolicyBase import PolicyBase
+from f5.models.F5.asm.backend.PolicyBase import PolicyBase
 
 from f5.helpers.ApiSupplicant import ApiSupplicant
 from f5.helpers.Exception import CustomException

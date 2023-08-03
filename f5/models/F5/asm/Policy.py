@@ -3,7 +3,7 @@ import re
 from typing import List
 
 from f5.models.Asset.Asset import Asset
-from f5.models.F5.ASM.backend.Policy import Policy as Backend
+from f5.models.F5.asm.backend.Policy import Policy as Backend
 
 from f5.helpers.Exception import CustomException
 

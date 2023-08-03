@@ -1,4 +1,4 @@
-from f5.models.F5.backend.Partition import Partition as Backend
+from f5.models.F5.auth.backend.Partition import Partition as Backend
 
 
 class Partition:

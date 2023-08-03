@@ -1,7 +1,7 @@
 from typing import List, Dict, Union
 
-from f5.models.F5.PoolMember import PoolMember
-from f5.models.F5.backend.Pool import Pool as Backend
+from f5.models.F5.ltm.PoolMember import PoolMember
+from f5.models.F5.ltm.backend.Pool import Pool as Backend
 
 from f5.helpers.Misc import Misc
 

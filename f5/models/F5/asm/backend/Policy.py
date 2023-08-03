@@ -4,11 +4,11 @@ import time
 from typing import List
 
 from f5.models.Asset.Asset import Asset
-from f5.models.F5.ASM.backend.PolicyBase import PolicyBase
+from f5.models.F5.asm.backend.PolicyBase import PolicyBase
 
-from f5.models.F5.ASM.backend.PolicyExporter import PolicyExporter
-from f5.models.F5.ASM.backend.PolicyImporter import PolicyImporter
-from f5.models.F5.ASM.backend.PolicyDiffManager import PolicyDiffManager
+from f5.models.F5.asm.backend.PolicyExporter import PolicyExporter
+from f5.models.F5.asm.backend.PolicyImporter import PolicyImporter
+from f5.models.F5.asm.backend.PolicyDiffManager import PolicyDiffManager
 
 from f5.helpers.ApiSupplicant import ApiSupplicant
 from f5.helpers.Exception import CustomException

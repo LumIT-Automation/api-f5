@@ -1,6 +1,6 @@
 from typing import Dict
 
-from f5.models.F5.backend.Profile import Profile as Backend
+from f5.models.F5.ltm.backend.Profile import Profile as Backend
 
 from f5.helpers.Misc import Misc
 

@@ -1,24 +1,22 @@
-from typing import Dict, Union
+from typing import Dict
 
-from f5.models.F5.backend.Node import Node as Backend
+from f5.models.F5.ltm.backend.PoolMember import PoolMember as Backend
 
 from f5.helpers.Misc import Misc
 
 
-Fqdn: Dict[str, Union[str, int]] = {
-    "addressFamily": "",
-    "autopopulate": "",
-    "interval": "",
-    "downInterval": 0
+Fqdn: Dict[str, str] = {
+    "autopopulate": ""
 }
 
-class Node:
-    def __init__(self, assetId: int, partitionName: str, nodeName: str, *args, **kwargs):
+class PoolMember:
+    def __init__(self, assetId: int, poolName: str, partition: str, name: str, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.assetId = int(assetId)
-        self.partition: str = partitionName
-        self.name: str = nodeName
+        self.assetId: int = int(assetId)
+        self.partition: str = partition
+        self.poolName: str = poolName
+        self.name: str = name
         self.fullPath: str = ""
         self.generation: int = 0
         self.selfLink: str = ""
@@ -26,13 +24,16 @@ class Node:
         self.connectionLimit: int = 0
         self.dynamicRatio: int = 0
         self.ephemeral: bool
-        self.fqdn = Fqdn
+        self.inheritProfile: str = ""
         self.logging: str = ""
         self.monitor: str = ""
+        self.priorityGroup: int = 0
         self.rateLimit: str = ""
         self.ratio: int = 0
         self.session: str = ""
         self.state: str = ""
+        self.fqdn: Fqdn
+        self.enabledState: str = ""
 
 
 
@@ -40,9 +41,28 @@ class Node:
     # Public methods
     ####################################################################################################################
 
-    def modify(self, data):
+    def info(self) -> dict:
         try:
-            Backend.modify(self.assetId, self.partition, self.name, data)
+            i = Backend.info(self.assetId, self.partition, self.poolName, self.name)
+            i["assetId"] = self.assetId
+
+            return i
+        except Exception as e:
+            raise e
+
+
+
+    def stats(self) -> dict:
+        try:
+            return Backend.stats(self.assetId, self.partition, self.poolName, self.name)
+        except Exception as e:
+            raise e
+
+
+
+    def modify(self, data: dict) -> None:
+        try:
+            Backend.modify(self.assetId, self.partition, self.poolName, self.name, data)
 
             for k, v in Misc.toDict(data).items():
                 setattr(self, k, v)
@@ -51,13 +71,12 @@ class Node:
 
 
 
-    def delete(self):
+    def delete(self) -> None:
         try:
-            Backend.delete(self.assetId, self.partition, self.name)
+            Backend.delete(self.assetId, self.partition, self.poolName, self.name)
             del self
         except Exception as e:
             raise e
-
 
 
     ####################################################################################################################
@@ -65,9 +84,9 @@ class Node:
     ####################################################################################################################
 
     @staticmethod
-    def list(assetId: int, partitionName: str, silent: bool = False) -> dict:
+    def list(assetId: int, partitionName: str, poolName: str) -> dict:
         try:
-            l = Backend.list(assetId, partitionName, silent)
+            l = Backend.list(assetId, partitionName, poolName)
             for el in l:
                 el["assetId"] = assetId
 
@@ -78,24 +97,8 @@ class Node:
 
 
     @staticmethod
-    def add(assetId: int, data: dict) -> None:
+    def add(assetId: int, partitionName: str, poolName: str, data: dict) -> None:
         try:
-            Backend.add(assetId, data)
-        except Exception as e:
-            raise e
-
-
-
-    @staticmethod
-    def getNameFromAddress(assetId: int, partitionName: str, address: str, silent: bool = False) -> str:
-        name = ""
-
-        try:
-            data = Node.list(assetId, partitionName, silent=silent)
-            for nel in data:
-                if nel["address"] == address:
-                    name = nel["name"]
-
-            return name
+            Backend.add(assetId, partitionName, poolName, data)
         except Exception as e:
             raise e

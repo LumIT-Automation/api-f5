@@ -1,6 +1,6 @@
 from typing import List, Dict, Union
 
-from f5.models.F5.backend.Policy import Policy as Backend
+from f5.models.F5.ltm.backend.Policy import Policy as Backend
 
 from f5.helpers.Exception import CustomException
 from f5.helpers.Misc import Misc

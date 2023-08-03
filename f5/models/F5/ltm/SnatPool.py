@@ -1,6 +1,6 @@
 from typing import List, Dict
 
-from f5.models.F5.backend.SnatPool import SnatPool as Backend
+from f5.models.F5.ltm.backend.SnatPool import SnatPool as Backend
 
 from f5.helpers.Misc import Misc
 

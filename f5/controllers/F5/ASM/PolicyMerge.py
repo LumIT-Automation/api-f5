@@ -2,7 +2,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
 
-from f5.models.F5.ASM.Policy import Policy
+from f5.models.F5.asm.Policy import Policy
 from f5.models.Permission.Permission import Permission
 
 from f5.controllers.CustomController import CustomController

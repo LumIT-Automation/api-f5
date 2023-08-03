@@ -1,6 +1,6 @@
 from typing import List, Dict, Union
 
-from f5.models.F5.backend.VirtualServer import VirtualServer as Backend
+from f5.models.F5.ltm.backend.VirtualServer import VirtualServer as Backend
 
 from f5.helpers.Misc import Misc
 

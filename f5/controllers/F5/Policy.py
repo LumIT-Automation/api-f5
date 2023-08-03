@@ -2,7 +2,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
 
-from f5.models.F5.Policy import Policy
+from f5.models.F5.ltm.Policy import Policy
 from f5.models.Permission.Permission import Permission
 
 from f5.serializers.F5.Policy import F5PolicySerializer as Serializer

@@ -1,14 +1,14 @@
 import threading
 
-from f5.models.F5.Node import Node
-from f5.models.F5.Monitor import Monitor
-from f5.models.F5.Irule import Irule
-from f5.models.F5.Pool import Pool
-from f5.models.F5.SnatPool import SnatPool
-from f5.models.F5.Profile import Profile
-from f5.models.F5.Certificate import Certificate
-from f5.models.F5.Key import Key
-from f5.models.F5.VirtualServer import VirtualServer
+from f5.models.F5.ltm.Node import Node
+from f5.models.F5.ltm.Monitor import Monitor
+from f5.models.F5.ltm.Irule import Irule
+from f5.models.F5.ltm.Pool import Pool
+from f5.models.F5.ltm.SnatPool import SnatPool
+from f5.models.F5.ltm.Profile import Profile
+from f5.models.F5.sys.Certificate import Certificate
+from f5.models.F5.sys.Key import Key
+from f5.models.F5.ltm.VirtualServer import VirtualServer
 from f5.models.History.History import History
 
 from f5.helpers.Log import Log

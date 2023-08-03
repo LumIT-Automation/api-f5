@@ -1,4 +1,4 @@
-from f5.models.F5.backend.Monitor import Monitor as Backend
+from f5.models.F5.ltm.backend.Monitor import Monitor as Backend
 
 from f5.helpers.Misc import Misc
 
