@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import List, Dict, Union
 
 from f5.models.F5.ltm.Policy import Policy
@@ -126,20 +127,16 @@ class VirtualServer:
     ####################################################################################################################
 
     @staticmethod
-    def dataList(assetId: int, partitionName: str, loadPolicies: bool = False, loadProfiles: bool = False) -> List[Dict]:
+    def list(assetId: int, partitionName: str, loadPolicies: bool = False, loadProfiles: bool = False) -> List[VirtualServer]:
         import threading
+        l = []
 
-        def loadData(a, p, n, o):
-            o["assetId"] = assetId
-
-            if loadPolicies:
-                o["policies"] = Backend.policies(a, p, n)
-            if loadProfiles:
-                o["profiles"] = Backend.profiles(a, p, n)
+        def loadVs(a, p, n, lpo, lpr, o):
+            o.append(VirtualServer(a, p, n, lpo, lpr)) # append VirtualServer object.
 
         try:
-            l = Backend.list(assetId, partitionName)
-            workers = [threading.Thread(target=loadData, args=(assetId, partitionName, el.get("name", ""), el)) for el in l]
+            summary = Backend.list(assetId, partitionName)
+            workers = [threading.Thread(target=loadVs, args=(assetId, partitionName, el.get("name", ""), loadPolicies, loadProfiles, l)) for el in summary]
             for w in workers:
                 w.start()
             for w in workers:
@@ -181,7 +178,7 @@ class VirtualServer:
                     del self.policies
 
                 if loadProfiles:
-                    data["profiles"] = self.getProfilesSummary()
+                    data["profiles"] = self.getProfilesSummary() # @todo.
                 else:
                     del self.profiles
 
