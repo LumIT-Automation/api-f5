@@ -1,9 +1,12 @@
 from typing import List, Dict, Union
 
+from f5.models.F5.ltm.Policy import Policy
+from f5.models.F5.ltm.Profile import Profile
 from f5.models.F5.ltm.backend.VirtualServer import VirtualServer as Backend
 
 from f5.helpers.Exception import CustomException
 from f5.helpers.Misc import Misc
+from f5.helpers.Log import Log
 
 
 SourceAddressTranslation: Dict[str, str] = {
@@ -65,8 +68,9 @@ class VirtualServer:
         self.profilesReference: Reference = None
         self.rules: list = []
 
-        self.policies: List[dict] = []
-        self.profiles: List[dict] = []
+        # Compositions.
+        self.policies: List[Policy] = []
+        self.profiles: List[Profile] = []
 
         self.__load(loadPolicies=loadPolicies, loadProfiles=loadProfiles)
 
@@ -164,13 +168,24 @@ class VirtualServer:
         try:
             data = Backend.info(self.assetId, self.partition, self.name)
             if data:
-                if loadPolicies:
-                    data["policies"] = self.getPoliciesSummary()
-                if loadProfiles:
-                    data["profiles"] = self.getProfilesSummary()
-
                 for k, v in data.items():
                     setattr(self, k, v)
+
+                if loadPolicies:
+                    for p in self.getPoliciesSummary():
+                        # Append LTM Policy object.
+                        self.policies.append(
+                            Policy(self.assetId, p.get("partition", ""), p.get("subPath", ""), p.get("name", ""), loadRules=True)
+                        )
+                else:
+                    del self.policies
+
+                if loadProfiles:
+                    data["profiles"] = self.getProfilesSummary()
+                else:
+                    del self.profiles
+
+
             else:
                 raise CustomException(status=404)
         except Exception as e:

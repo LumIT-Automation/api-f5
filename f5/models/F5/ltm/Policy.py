@@ -15,6 +15,13 @@ RulesReference: Dict[str, Union[str, bool]] = {
     "isSubcollection": False
 }
 
+PolicyRuleData: Dict[str, Union[str, list]] = {
+    "name": "",
+    "actions": [],
+    "conditions": []
+}
+
+
 class Policy:
     def __init__(self, assetId: int, partitionName: str, policySubPath: str, policyName: str, loadRules: bool = False, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -32,7 +39,7 @@ class Policy:
         self.strategyReference: Link
         self.rulesReference: RulesReference
 
-        self.rules: List[dict] = []
+        self.rules: List[PolicyRuleData] = []
 
         self.__load(loadRules=loadRules)
 
@@ -126,11 +133,13 @@ class Policy:
         try:
             data = Backend.info(self.assetId, self.partition, self.subPath, self.name)
             if data:
-                if loadRules:
-                    data["rules"] = self.getRulesData()
-
                 for k, v in data.items():
                     setattr(self, k, v)
+
+                if loadRules:
+                    self.rules = self.getRulesData()
+                else:
+                    del self.rules
             else:
                 raise CustomException(status=404)
         except Exception as e:
