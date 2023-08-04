@@ -116,7 +116,7 @@ class Policy:
 
 
     @staticmethod
-    def getRules(assetId: int, partitionName: str, policySubPath: str, policyName: str):
+    def rules(assetId: int, partitionName: str, policySubPath: str, policyName: str):
         rules: List[dict] = []
 
         try:

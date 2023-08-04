@@ -129,15 +129,9 @@ class VirtualServer:
             o["assetId"] = assetId
 
             if loadPolicies:
-                try:
-                    o["policies"] = VirtualServer(a, p, n).getPoliciesSummary()
-                except Exception:
-                    pass
+                o["policies"] = Backend.policies(a, p, n)
             if loadProfiles:
-                try:
-                    o["profiles"] = VirtualServer(a, p, n).getProfilesSummary()
-                except Exception:
-                    pass
+                o["profiles"] = Backend.profiles(a, p, n)
 
         try:
             l = Backend.list(assetId, partitionName)
@@ -171,15 +165,9 @@ class VirtualServer:
             data = Backend.info(self.assetId, self.partition, self.name)
             if data:
                 if loadPolicies:
-                    try:
-                        data["policies"] = self.getPoliciesSummary()
-                    except Exception:
-                        pass
+                    data["policies"] = self.getPoliciesSummary()
                 if loadProfiles:
-                    try:
-                        data["profiles"] = self.getProfilesSummary()
-                    except Exception:
-                        pass
+                    data["profiles"] = self.getProfilesSummary()
 
                 for k, v in data.items():
                     setattr(self, k, v)

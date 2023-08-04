@@ -67,6 +67,14 @@ class Policy:
 
 
 
+    def getRulesData(self) -> List[dict]:
+        try:
+            return Backend.rules(self.assetId, self.partition, self.subPath, self.name)
+        except Exception as e:
+            raise e
+
+
+
     ####################################################################################################################
     # Public static methods
     ####################################################################################################################
@@ -80,7 +88,7 @@ class Policy:
 
             if loadRules:
                 try:
-                    o["rules"] = Backend.getRules(a, p, s, o["name"])
+                    o["rules"] = Backend.rules(a, p, s, o["name"])
                 except CustomException as ex:
                     if ex.status == 404:
                         o["rules"] = []
@@ -119,7 +127,7 @@ class Policy:
             data = Backend.info(self.assetId, self.partition, self.subPath, self.name)
             if data:
                 if loadRules:
-                    data["rules"] = Backend.getRules(self.assetId, self.partition, self.subPath, self.name)
+                    data["rules"] = self.getRulesData()
 
                 for k, v in data.items():
                     setattr(self, k, v)
