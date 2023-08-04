@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import List, Dict, Union
 
 from f5.models.F5.ltm.backend.Policy import Policy as Backend
@@ -87,24 +88,16 @@ class Policy:
     ####################################################################################################################
 
     @staticmethod
-    def dataList(assetId: int, partitionName: str, policySubPath: str = "", loadRules: bool = False) -> List[dict]:
+    def list(assetId: int, partitionName: str, policySubPath: str = "", loadRules: bool = False) -> List[Policy]:
         import threading
+        l = []
 
-        def loadData(a, p, s, o):
-            o["assetId"] = assetId
-
-            if loadRules:
-                try:
-                    o["rules"] = Backend.rules(a, p, s, o["name"])
-                except CustomException as ex:
-                    if ex.status == 404:
-                        o["rules"] = []
-                    else:
-                        raise ex
+        def loadPolicy(a, p, s, n, lr, o):
+            o.append(Policy(a, p, s, n, lr)) # append Policy object.
 
         try:
-            l = Backend.list(assetId, partitionName)
-            workers = [threading.Thread(target=loadData, args=(assetId, partitionName, policySubPath, el)) for el in l]
+            summary = Backend.list(assetId, partitionName)
+            workers = [threading.Thread(target=loadPolicy, args=(assetId, partitionName, policySubPath, el.get("name", ""), loadRules, l)) for el in summary]
             for w in workers:
                 w.start()
             for w in workers:

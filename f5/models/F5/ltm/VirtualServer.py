@@ -181,8 +181,6 @@ class VirtualServer:
                     data["profiles"] = self.getProfilesSummary() # @todo.
                 else:
                     del self.profiles
-
-
             else:
                 raise CustomException(status=404)
         except Exception as e:
