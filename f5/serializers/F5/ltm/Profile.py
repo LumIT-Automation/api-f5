@@ -66,5 +66,5 @@ class F5ProfileSerializer(serializers.Serializer):
     tcpWscaleMode = serializers.CharField(max_length=255, required=False)
     tcpTimestampMode = serializers.CharField(max_length=255, required=False)
     timeoutRecovery = serializers.CharField(max_length=255, required=False)
-    cert = serializers.CharField(max_length=255, required=False)
-    key = serializers.CharField(max_length=255, required=False)
+    cert = serializers.CharField(max_length=255, required=False, allow_blank=True)
+    key = serializers.CharField(max_length=255, required=False, allow_blank=True)

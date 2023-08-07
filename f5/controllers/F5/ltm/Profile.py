@@ -10,10 +10,64 @@ from f5.serializers.F5.ltm.Profile import F5ProfileSerializer as Serializer
 from f5.controllers.CustomController import CustomController
 
 from f5.helpers.Lock import Lock
+from f5.helpers.Conditional import Conditional
 from f5.helpers.Log import Log
 
 
 class F5ProfileController(CustomController):
+    @staticmethod
+    def get(request: Request, assetId: int, partitionName: str, profileType: str, profileName: str) -> Response:
+        data = dict()
+        etagCondition = { "responseEtag": "" }
+
+        user = CustomController.loggedUser(request)
+
+        try:
+            if Permission.hasUserPermission(groups=user["groups"], action="profile_get", assetId=assetId, partition=partitionName) or user["authDisabled"]:
+                Log.actionLog("Profile information", user)
+
+                lock = Lock("profile", locals(), profileName)
+                if lock.isUnlocked():
+                    lock.lock()
+
+                    data = {
+                        "data": CustomController.validate(
+                            Profile(assetId, partitionName, profileType, profileName).repr(),
+                            Serializer,
+                            "value"
+                        ),
+                        "href": request.get_full_path()
+                    }
+
+                    # Check the response's ETag validity (against client request).
+                    conditional = Conditional(request)
+                    etagCondition = conditional.responseEtagFreshnessAgainstRequest(data["data"])
+                    if etagCondition["state"] == "fresh":
+                        data = None
+                        httpStatus = status.HTTP_304_NOT_MODIFIED
+                    else:
+                        httpStatus = status.HTTP_200_OK
+
+                    lock.release()
+                else:
+                    data = None
+                    httpStatus = status.HTTP_423_LOCKED
+            else:
+                data = None
+                httpStatus = status.HTTP_403_FORBIDDEN
+        except Exception as e:
+            Lock("profile", locals(), profileName).release()
+
+            data, httpStatus, headers = CustomController.exceptionHandler(e)
+            return Response(data, status=httpStatus, headers=headers)
+
+        return Response(data, status=httpStatus, headers={
+            "ETag": etagCondition["responseEtag"],
+            "Cache-Control": "must-revalidate"
+        })
+
+
+
     @staticmethod
     def delete(request: Request, assetId: int, partitionName: str, profileType: str, profileName: str) -> Response:
         user = CustomController.loggedUser(request)

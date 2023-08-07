@@ -2,6 +2,7 @@ from typing import Dict
 
 from f5.models.F5.ltm.backend.Profile import Profile as Backend
 
+from f5.helpers.Exception import CustomException
 from f5.helpers.Misc import Misc
 
 
@@ -77,31 +78,16 @@ class Profile:
         self.cert: str = ""
         self.key: str = ""
 
+        self.__load()
+
 
 
     ####################################################################################################################
     # Public methods
     ####################################################################################################################
 
-    @staticmethod
-    def types(assetId: int, partitionName: str) -> list:
-        try:
-            return Backend.types(assetId, partitionName)
-        except Exception as e:
-            raise e
-
-
-
-    def info(self, silent: bool = False):
-        try:
-            i = Backend.info(self.assetId, self.type, self.partition, self.name, silent)
-
-            i["assetId"] = self.assetId
-            i["type"] = self.type
-
-            return i
-        except Exception as e:
-            raise e
+    def repr(self):
+        return Misc.deepRepr(self)
 
 
 
@@ -130,6 +116,15 @@ class Profile:
     ####################################################################################################################
 
     @staticmethod
+    def types(assetId: int, partitionName: str) -> list:
+        try:
+            return Backend.types(assetId, partitionName)
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
     def dataList(assetId: int, partitionName: str, profileType: str) -> dict:
         try:
             l = Backend.list(assetId, partitionName, profileType)
@@ -147,5 +142,22 @@ class Profile:
     def add(assetId: int, profileType: str, data: dict) -> None:
         try:
             Backend.add(assetId, profileType, data)
+        except Exception as e:
+            raise e
+
+
+
+    ####################################################################################################################
+    # Private methods
+    ####################################################################################################################
+
+    def __load(self) -> None:
+        try:
+            data = Backend.info(self.assetId, self.type, self.partition, self.name)
+            if data:
+                for k, v in data.items():
+                    setattr(self, k, v)
+            else:
+                raise CustomException(status=404)
         except Exception as e:
             raise e

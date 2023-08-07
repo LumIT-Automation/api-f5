@@ -471,7 +471,7 @@ class VirtualServerWorkflow:
             def profileDetail(a, p, t, n):
                 try:
                     profileType.append(
-                        Profile(a, p, t, n).info(silent=True)
+                        Profile(a, p, t, n).repr()
                     ) # probe.
                 except Exception:
                     pass
