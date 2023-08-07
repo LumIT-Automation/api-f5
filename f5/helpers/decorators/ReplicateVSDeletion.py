@@ -4,7 +4,7 @@ import functools
 from django.conf import settings
 from rest_framework.request import Request
 
-from f5.models.F5.Workflow.VirtualServer import VirtualServerWorkflow
+from f5.models.F5.Usecases.VirtualServer import VirtualServerWorkflow
 
 from f5.controllers.CustomController import CustomController
 

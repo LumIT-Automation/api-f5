@@ -1,4 +1,4 @@
-from f5.models.F5.Partition import Partition as F5Partition
+from f5.models.F5.auth.Partition import Partition as F5Partition
 
 from f5.models.Permission.repository.Partition import Partition as Repository
 
@@ -42,7 +42,7 @@ class Partition:
                 raise e
         else:
             # Check if assetId/partition is a valid F5 partition (at the time of the insert).
-            partitions = F5Partition.list(asset)
+            partitions = F5Partition.dataList(asset)
             for v in partitions:
                 if v["name"] == partition:
                     try:

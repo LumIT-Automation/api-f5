@@ -39,7 +39,11 @@ class Misc:
                         for j in val:
                             if key not in r:
                                 r[key] = list()
-                            r[key].append(Misc.deepRepr(j))
+
+                            if isinstance(j, str) or isinstance(j, int) or isinstance(j, bool):
+                                r[key].append(j)
+                            else:
+                                r[key].append(Misc.deepRepr(j))
 
                     else:
                         if key not in r:
