@@ -1,5 +1,3 @@
-#import asyncio
-#from asgiref.sync import sync_to_async
 import threading
 
 from rest_framework.request import Request
@@ -40,7 +38,7 @@ class F5ProfilesController(CustomController):
                         if profileType != "ANY":
                             # Profiles' list of that type.
                             # F5 treats profile type as a sub-object instead of a property. Odd.
-                            itemData["items"] = Profile.dataList(assetId, partitionName, profileType)
+                            itemData["items"] = [r.repr() for r in Profile.list(assetId, partitionName, profileType)]
                             data["data"] = ProfilesSerializer(itemData).data
                         else:
                             profileTypes = Profile.types(assetId, partitionName)
@@ -48,7 +46,7 @@ class F5ProfilesController(CustomController):
                             # The threading way.
                             # This requires a consistent throttle on remote appliance.
                             def profilesListOfType(pType):
-                                itemData["items"] = Profile.dataList(assetId, partitionName, pType)
+                                itemData["items"] = [r.repr() for r in Profile.list(assetId, partitionName, pType)]
                                 data["data"][pType] = ProfilesSerializer(itemData).data
 
                             workers = [threading.Thread(target=profilesListOfType, args=(m,)) for m in profileTypes]

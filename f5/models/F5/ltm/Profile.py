@@ -1,4 +1,5 @@
-from typing import Dict
+from __future__ import annotations
+from typing import Dict, List
 
 from f5.models.F5.ltm.backend.Profile import Profile as Backend
 
@@ -125,12 +126,20 @@ class Profile:
 
 
     @staticmethod
-    def dataList(assetId: int, partitionName: str, profileType: str) -> dict:
+    def list(assetId: int, partitionName: str, profileType: str) -> List[Profile]:
+        import threading
+        l = []
+
+        def loadProfile(a, p, t, n, o):
+            o.append(Profile(a, p, t, n)) # append Profile object.
+
         try:
-            l = Backend.list(assetId, partitionName, profileType)
-            for el in l:
-                el["assetId"] = assetId
-                el["type"] = profileType
+            summary = Backend.list(assetId, partitionName, profileType)
+            workers = [threading.Thread(target=loadProfile, args=(assetId, partitionName, profileType, el.get("name", ""), l)) for el in summary]
+            for w in workers:
+                w.start()
+            for w in workers:
+                w.join()
 
             return l
         except Exception as e:
