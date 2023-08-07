@@ -82,7 +82,7 @@ class F5VirtualServerSerializer(serializers.Serializer):
     rulesReference = F5VirtualServersRulesReferenceSerializer(many=True, required=False)
 
     policies = F5PolicySerializer(many=True, required=False)
-    profiles = F5ProfileSerializer(many=True, required=False)
+    profiles = serializers.JSONField(required=False)
     rules = serializers.ListField(
         child=serializers.CharField(max_length=255, required=False),
         required=False

@@ -7,7 +7,6 @@ from f5.models.F5.ltm.backend.VirtualServer import VirtualServer as Backend
 
 from f5.helpers.Exception import CustomException
 from f5.helpers.Misc import Misc
-from f5.helpers.Log import Log
 
 
 SourceAddressTranslation: Dict[str, str] = {
@@ -178,12 +177,7 @@ class VirtualServer:
                     del self.policies
 
                 if loadProfiles:
-                    for p in self.getProfilesSummary():
-                        # Append Profile object.
-                        pass
-                        # self.profiles.append(
-                        #    Profile(self.assetId, p.get("partition", ""), p.get("type", ""), p.get("name", "")) #@todo: profile type!
-                        # )
+                    self.profiles = self.getProfilesSummary()
                 else:
                     del self.profiles
             else:
