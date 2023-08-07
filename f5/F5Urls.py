@@ -78,9 +78,9 @@ urlpatterns = [
     path('<int:assetId>/<str:partitionName>/pool/<str:poolName>/members/', PoolMembers.F5PoolMembersController.as_view(), name='f5-pool-members'),
 
     # Profile.
-    path('<int:assetId>/<str:partitionName>/profiles/<str:profileType>/<str:profileName>/', Profile.F5ProfileController.as_view(), name='f5-profile'),
     path('<int:assetId>/<str:partitionName>/profiles/<str:profileType>/', Profiles.F5ProfilesController.as_view(), name='f5-profiles'),
     path('<int:assetId>/<str:partitionName>/profiles/', Profiles.F5ProfilesController.as_view(), name='f5-profile-types'),
+    path('<int:assetId>/<str:partitionName>/profile/<str:profileType>/<str:profileName>/', Profile.F5ProfileController.as_view(), name='f5-profile'),
 
     # Policy.
     path('<int:assetId>/<str:partitionName>/policies/', Policies.F5PoliciesController.as_view(), name='f5-policies'),

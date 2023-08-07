@@ -3239,7 +3239,7 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/profiles/fastl4/FASTL4_PROFILE/",
+											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/profile/fastl4/FASTL4_PROFILE/",
 											"protocol": "http",
 											"host": [
 												"10",
@@ -3253,7 +3253,7 @@
 												"f5",
 												"2",
 												"Partition1",
-												"profiles",
+												"profile",
 												"fastl4",
 												"FASTL4_PROFILE",
 												""
@@ -3463,7 +3463,7 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/profiles/fastl4/FASTL4_PROFILE/",
+											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/profile/fastl4/FASTL4_PROFILE/",
 											"protocol": "http",
 											"host": [
 												"10",
@@ -3477,7 +3477,7 @@
 												"f5",
 												"2",
 												"Partition1",
-												"profiles",
+												"profile",
 												"fastl4",
 												"FASTL4_PROFILE",
 												""
@@ -3516,7 +3516,7 @@
 											}
 										},
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/profiles/fastl4/FASTL4_PROFILE/",
+											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/profile/fastl4/FASTL4_PROFILE/",
 											"protocol": "http",
 											"host": [
 												"10",
@@ -3530,7 +3530,7 @@
 												"f5",
 												"2",
 												"Partition1",
-												"profiles",
+												"profile",
 												"fastl4",
 												"FASTL4_PROFILE",
 												""

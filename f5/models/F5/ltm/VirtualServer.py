@@ -178,7 +178,12 @@ class VirtualServer:
                     del self.policies
 
                 if loadProfiles:
-                    data["profiles"] = self.getProfilesSummary() # @todo.
+                    for p in self.getProfilesSummary():
+                        # Append Profile object.
+                        pass
+                        # self.profiles.append(
+                        #    Profile(self.assetId, p.get("partition", ""), p.get("type", ""), p.get("name", "")) #@todo: profile type!
+                        # )
                 else:
                     del self.profiles
             else:
