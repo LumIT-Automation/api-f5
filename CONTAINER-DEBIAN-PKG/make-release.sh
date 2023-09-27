@@ -42,7 +42,7 @@ function System_run()
 
             echo "Created /tmp/$projectName.deb"
         else
-            echo "A Debian Bullseye operating system is required for the deb-ification. Aborting."
+            echo "A Debian Bookworm operating system is required for the deb-ification. Aborting."
             exit 1
         fi
     else
@@ -57,7 +57,7 @@ function System_run()
 function System_checkEnvironment()
 {
     if [ -f /etc/os-release ]; then
-        if ! grep -q 'Debian GNU/Linux 11 (bullseye)' /etc/os-release; then
+        if ! grep -q 'Debian GNU/Linux 12 (bookworm)' /etc/os-release; then
             return 1
         fi
     else

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -eu
+
+user="consul"
+
+if id -u $user > /dev/null 2>&1; then
+ usermod -d /var/lib/consul $user
+else
+ useradd \
+  --system \
+  --user-group \
+  --shell /bin/false \
+  --home-dir /var/lib/consul /bin/false \
+  $user
+fi
+

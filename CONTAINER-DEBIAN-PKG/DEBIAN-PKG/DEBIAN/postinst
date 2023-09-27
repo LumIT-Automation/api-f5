@@ -7,8 +7,7 @@ if [ "$1" == "configure" ]; then
     sed -i -r -e 's#.*Unattended-Upgrade::SyslogEnable .*#Unattended-Upgrade::SyslogEnable "true";#' -e 's#.*Unattended-Upgrade::SyslogFacility .*#Unattended-Upgrade::SyslogFacility "local5";#' /etc/apt/apt.conf.d/50unattended-upgrades
 
     printf "\n* Setting up Python3 as default Python interpreter...\n"
-    update-alternatives --install /usr/bin/python python /usr/bin/python3.9 1
-    update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1 # best practice for simply creating a symlink.
+    update-alternatives --install /usr/bin/python python /usr/bin/python3.11 1
 
     printf "\n* Enabling shell capabilities for the Apache user...\n"
     usermod --shell /bin/bash www-data
