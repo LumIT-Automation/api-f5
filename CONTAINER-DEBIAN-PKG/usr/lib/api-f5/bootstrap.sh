@@ -8,7 +8,6 @@ mv /hashicorp-archive-keyring.gpg /etc/apt/trusted.gpg.d/
 mv /hashicorp.list /etc/apt/sources.list.d/
 
 apt update
-
 apt install -y /*.deb
 rm -f /*.deb
 
