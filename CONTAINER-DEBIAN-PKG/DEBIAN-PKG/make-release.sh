@@ -89,7 +89,7 @@ function System_definitions()
         exit 1
     fi
 
-    git config --global --add safe.directory `pwd`
+    git config --global --add safe.directory $(cd .. && pwd)
     currentGitCommit=$(git log --pretty=oneline | head -1 | awk '{print $1}')
 
     projectName="automation-interface-api_${debPackageRelease}_amd64"
