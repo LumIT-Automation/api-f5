@@ -38,7 +38,7 @@ if [ -z "$workDir" ]; then
 fi
 
 if [ -z "$repoDir" ]; then
-    repoDir=$(cd ../.. && pwd)
+    repoDir=$(cd `dirname $0`/../.. && pwd)
     if [ ! -f ${repoDir}/.git/config ]; then
         echo "\$repoDir: $repoDir is not a git repo, please use the -r option."
         exit 1
