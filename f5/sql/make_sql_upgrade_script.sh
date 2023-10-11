@@ -56,42 +56,24 @@ updateTables='privilege role_privilege role'
 sqlFileOld=${workDir}/${api}_old.sql
 sqlFileNew=${workDir}/${api}_new.sql
 
-dbUser=migrator
-dbPassword=`uuidgen -r | tr -d '-' | head -c 12`
-hostIp=10.0.111.204
+dbUser=api
+dbPassword=password
+hostIp=$(grep -oP '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' $devSetupDir/vagrantfile-api-${api})
 
 # Outputfile for schema update
-sqlSchemaScript=${workDir}/dbSchema_update.sql
+sqlSchemaScript=${workDir}/dbSchema_${api}_update.sql
 # Outputfile for data update
-sqlDataScript=${workDir}/dbData_update.sql
+sqlDataScript=${workDir}/dbData_${api}_update.sql
+
+yellow='\033[0;33m'
+nc='\033[0m' # no color.
 
 dbVM_prepare() {
     devSetup="$1"
-    dbUser=$2
-    dbPwd=$3
 
     cd $devSetup
-    vagrant up deb12
+    vagrant up api${api}
 
-    vagrant ssh deb12 -c "sudo apt update"
-    vagrant ssh deb12 -c "sudo apt upgrade -y"
-    vagrant ssh deb12 -c "sudo apt install mariadb-server -y"
-    vagrant ssh deb12 -c "sudo apt clean"
-    vagrant ssh deb12 -c "sudo sed -i -r 's/bind-address([ \t]+)=/# bind-address\1=/g' /etc/mysql/mariadb.conf.d/50-server.cnf"
-    vagrant ssh deb12 -c "sudo systemctl restart mariadb"
-
-    vagrant ssh deb12 -c "sudo mysql -e \"grant all privileges on *.* to '$dbUser'@'%' identified by '$dbPwd';\""
-    cd -
-}
-
-dbVM_passwd() {
-    devSetup="$1"
-    dbUser=$2
-    dbPwd=$3
-
-    cd $devSetup
-    vagrant ssh deb12 -c "sudo mysql -e \"grant all privileges on *.* to '$dbUser'@'%' identified by '$dbPwd';\""
-    cd -
 }
 
 ###############################################
@@ -100,9 +82,7 @@ if ! which mysql-schema-diff > /dev/null; then
 fi
 
 if [ "$vmDbSetup" == "y" ]; then
-    dbVM_prepare $devSetupDir $dbUser $dbPassword
-else
-    dbVM_passwd $devSetupDir $dbUser $dbPassword
+    dbVM_prepare $devSetupDir
 fi
 
 cd $repoDir
@@ -113,6 +93,11 @@ git checkout $newCommit
 cp $sqlSchemaFile $sqlFileNew
 
 mysql-schema-diff --user=$dbUser --password=$dbPassword --host=$hostIp $sqlFileOld $sqlFileNew > $sqlSchemaScript
+
+if grep -Ei 'DROP\s+TABLE' $sqlSchemaScript || grep -Ei 'DROP\s+COLUMN' $sqlSchemaScript; then
+    echo -e "\n${yellow}WARNING: DROP TABLE or DROP COLUMN command found in script $sqlSchemaScript"
+    echo -e "Possible data drop, check if a RENAME TABLE + ALTER TABLE is a better choice.${nc}"
+fi
 
 
 echo "set foreign_key_checks = 0;" > $sqlDataScript
@@ -132,4 +117,5 @@ echo  >> $sqlDataScript
 
 echo "set foreign_key_checks = 1;" >> $sqlDataScript
 
+echo -e "\nOuput scripts: $sqlSchemaScript, $sqlDataScript."
 
