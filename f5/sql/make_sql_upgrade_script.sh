@@ -60,11 +60,6 @@ dbUser=api
 dbPassword=password
 hostIp=$(grep -oP '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' $devSetupDir/vagrantfile-api-${api})
 
-# Outputfile for schema update
-sqlSchemaScript=${workDir}/dbSchema_${api}_update.sql
-# Outputfile for data update
-sqlDataScript=${workDir}/dbData_${api}_update.sql
-
 yellow='\033[0;33m'
 nc='\033[0m' # no color.
 
@@ -87,35 +82,45 @@ fi
 
 cd $repoDir
 git checkout $oldCommit
+oldCommit=$(git log -1 --pretty=%H) # Get the full hash.
+oldCommitShort=$(git rev-parse --short=11 $oldCommit)
 cp $sqlSchemaFile $sqlFileOld
 
 git checkout $newCommit
+newCommit=$(git log -1 --pretty=%H) # Get the full hash.
+newCommitShort=$(git rev-parse --short=11 $newCommit)
 cp $sqlSchemaFile $sqlFileNew
 
-mysql-schema-diff --user=$dbUser --password=$dbPassword --host=$hostIp $sqlFileOld $sqlFileNew > $sqlSchemaScript
+outputSqlScript=${workDir}/dbUpdate_${api}_${oldCommitShort}-${newCommitShort}.sql
 
-if grep -Ei 'DROP\s+TABLE' $sqlSchemaScript || grep -Ei 'DROP\s+COLUMN' $sqlSchemaScript; then
-    echo -e "\n${yellow}WARNING: DROP TABLE or DROP COLUMN command found in script $sqlSchemaScript"
+echo -e "\n/*\nOLD COMMIT: $oldCommit\nNEW COMMIT: $newCommit\n*/\n\n" >> $outputSqlScript
+echo -e "/*\nSQL SCHEMA SECTION\n*/\n" >> $outputSqlScript
+
+mysql-schema-diff --user=$dbUser --password=$dbPassword --host=$hostIp $sqlFileOld $sqlFileNew >> $outputSqlScript
+
+if grep -Ei 'DROP\s+TABLE' $outputSqlScript || grep -Ei 'DROP\s+COLUMN' $outputSqlScript; then
+    echo -e "\n${yellow}WARNING: DROP TABLE or DROP COLUMN command found in script $outputSqlScript"
     echo -e "Possible data drop, check if a RENAME TABLE + ALTER TABLE is a better choice.${nc}"
 fi
 
 
-echo "set foreign_key_checks = 0;" > $sqlDataScript
-echo -e '\n' >> $sqlDataScript
+echo -e "\n\n/*\nDATA SECTION\n*/\n" >> $outputSqlScript
+echo "set foreign_key_checks = 0;" >> $outputSqlScript
+echo -e '\n' >> $outputSqlScript
 for table in $updateTables; do
-    echo "truncate table $table;" >> $sqlDataScript
+    echo "truncate table $table;" >> $outputSqlScript
 done
 
-echo -e '\n' >> $sqlDataScript
+echo -e '\n' >> $outputSqlScript
 
 for table in $updateTables; do
-    sed -r -n "/INSERT INTO \`${table}\`/,/.*\);/p" $sqlDataFile >> $sqlDataScript
-    echo >> $sqlDataScript
+    sed -r -n "/INSERT INTO \`${table}\`/,/.*\);/p" $sqlDataFile >> $outputSqlScript
+    echo >> $outputSqlScript
 done
 
-echo  >> $sqlDataScript
+echo  >> $outputSqlScript
 
-echo "set foreign_key_checks = 1;" >> $sqlDataScript
+echo "set foreign_key_checks = 1;" >> $outputSqlScript
 
-echo -e "\nOuput scripts: $sqlSchemaScript, $sqlDataScript."
+echo -e "\nOuput script: $outputSqlScript"
 
