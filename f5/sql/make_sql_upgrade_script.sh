@@ -93,7 +93,7 @@ cp $sqlSchemaFile $sqlFileNew
 
 outputSqlScript=${workDir}/dbUpdate_${api}_${oldCommitShort}-${newCommitShort}.sql
 
-echo -e "\n/*\nOLD COMMIT: $oldCommit\nNEW COMMIT: $newCommit\n*/\n\n" >> $outputSqlScript
+echo -e "\n/*\nOLD COMMIT: $oldCommit\nNEW COMMIT: $newCommit\n*/\n\n" > $outputSqlScript
 echo -e "/*\nSQL SCHEMA SECTION\n*/\n" >> $outputSqlScript
 
 mysql-schema-diff --user=$dbUser --password=$dbPassword --host=$hostIp $sqlFileOld $sqlFileNew >> $outputSqlScript
