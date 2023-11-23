@@ -4,7 +4,8 @@ set -e
 HELP="usage: $0 -o [The commit of the old schema version] (mandatory)\\n
 -n [Commit or branch at which make the update] (mandatory)\\n
 -d [dev-setup directory] (mandatory)\\n
--r [git repository directory] (mandatory)\\n
+-r [git repository directory]\\n
+-v [prepare VM for db comparison]\\n
 -w [workdir] (default: /tmp)\\n
 [-h] this help
 \\n"
@@ -25,7 +26,7 @@ while getopts "o:n:d:r:w:vh" opt
 done
 shift $(($OPTIND - 1))
 
-if [ -z "$oldCommit" ] || [ -z "$newCommit" ] || [ -z "$devSetupDir" ] || [ -z "$repoDir" ]; then
+if [ -z "$oldCommit" ] || [ -z "$newCommit" ] || [ -z "$devSetupDir" ]; then
     echo "Argument missing."
     echo
     echo -e ${HELP}
@@ -36,49 +37,38 @@ if [ -z "$workDir" ]; then
     workDir=/tmp
 fi
 
+if [ -z "$repoDir" ]; then
+    repoDir=$(cd `dirname $0`/../.. && pwd)
+    if [ ! -f ${repoDir}/.git/config ]; then
+        echo "\$repoDir: $repoDir is not a git repo, please use the -r option."
+        exit 1
+    fi
+fi
+
+api=f5
 # db schema file in the git repo.
-sqlSchemaFile=f5/sql/f5.schema.sql
+sqlSchemaFile=${api}/sql/${api}.schema.sql
 # db data file in the git repo.
-sqlDataFile=f5/sql/f5.data.sql
+sqlDataFile=${api}/sql/${api}.data.sql
 # Tables that need data update.
 updateTables='privilege role_privilege role'
 
-sqlFileOld=${workDir}/f5_old.sql
-sqlFileNew=${workDir}/f5_new.sql
+sqlFileOld=${workDir}/${api}_old.sql
+sqlFileNew=${workDir}/${api}_new.sql
 
-dbUser=migrator
-dbPassword=`uuidgen -r | tr -d '-' | head -c 12`
-hostIp=10.0.111.204
+dbUser=api
+dbPassword=password
+hostIp=$(grep -oP '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}' $devSetupDir/vagrantfile-api-${api})
 
-# Outputfile for schema update
-sqlSchemaScript=${workDir}/dbSchema_update.sql
-# Outputfile for data update
-sqlDataScript=${workDir}/dbData_update.sql
+yellow='\033[0;33m'
+nc='\033[0m' # no color.
 
 dbVM_prepare() {
     devSetup="$1"
-    dbUser=$2
-    dbPwd=$3
 
     cd $devSetup
-    vagrant up deb12
+    vagrant up api${api}
 
-    vagrant ssh deb12 -c "sudo apt install mariadb"
-    vagrant ssh deb12 -c "sudo sed -i -r 's/bind-address([ \t]+)=/# bind-address\1=/g' mariadb.conf.d/50-server.cnf"
-    vagrant ssh deb12 -c "sudo systemctl restart mariadb"
-
-    vagrant ssh deb12 -c "sudo mysql -e \"grant all privileges on *.* to '$dbUser'@'%' identified by '$dbPwd';\""
-    cd -
-}
-
-dbVM_passwd() {
-    devSetup="$1"
-    dbUser=$2
-    dbPwd=$3
-
-    cd $devSetup
-    vagrant ssh deb12 -c "sudo mysql -e \"grant all privileges on *.* to '$dbUser'@'%' identified by '$dbPwd';\""
-    cd -
 }
 
 ###############################################
@@ -87,36 +77,50 @@ if ! which mysql-schema-diff > /dev/null; then
 fi
 
 if [ "$vmDbSetup" == "y" ]; then
-    dbVM_prepare $devSetupDir $dbUser $dbPassword
-else
-    dbVM_passwd $devSetupDir $dbUser $dbPassword
+    dbVM_prepare $devSetupDir
 fi
 
 cd $repoDir
 git checkout $oldCommit
+oldCommit=$(git log -1 --pretty=%H) # Get the full hash.
+oldCommitShort=$(git rev-parse --short=11 $oldCommit)
 cp $sqlSchemaFile $sqlFileOld
 
 git checkout $newCommit
+newCommit=$(git log -1 --pretty=%H) # Get the full hash.
+newCommitShort=$(git rev-parse --short=11 $newCommit)
 cp $sqlSchemaFile $sqlFileNew
 
-mysql-schema-diff --user=$dbUser --password=$dbPassword --host=$hostIp $sqlFileOld $sqlFileNew > $sqlSchemaScript
+outputSqlScript=${workDir}/dbUpdate_${api}_${oldCommitShort}-${newCommitShort}.sql
+
+echo -e "\n/*\nOLD COMMIT: $oldCommit\nNEW COMMIT: $newCommit\n*/\n\n" > $outputSqlScript
+echo -e "/*\nSQL SCHEMA SECTION\n*/\n" >> $outputSqlScript
+
+mysql-schema-diff --user=$dbUser --password=$dbPassword --host=$hostIp $sqlFileOld $sqlFileNew >> $outputSqlScript
+
+if grep -Ei 'DROP\s+TABLE' $outputSqlScript || grep -Ei 'DROP\s+COLUMN' $outputSqlScript; then
+    echo -e "\n${yellow}WARNING: DROP TABLE or DROP COLUMN command found in script $outputSqlScript"
+    echo -e "Possible data drop, check if a RENAME TABLE + ALTER TABLE is a better choice.${nc}"
+fi
 
 
-echo "set foreign_key_checks = 0;" > $sqlDataScript
-echo -e '\n' >> $sqlDataScript
+echo -e "\n\n/*\nDATA SECTION\n*/\n" >> $outputSqlScript
+echo "set foreign_key_checks = 0;" >> $outputSqlScript
+echo -e '\n' >> $outputSqlScript
 for table in $updateTables; do
-    echo "truncate table $table;" >> $sqlDataScript
+    echo "truncate table $table;" >> $outputSqlScript
 done
 
-echo -e '\n' >> $sqlDataScript
+echo -e '\n' >> $outputSqlScript
 
 for table in $updateTables; do
-    sed -r -n "/INSERT INTO \`${table}\`/,/.*\);/p" $sqlDataFile >> $sqlDataScript
-    echo >> $sqlDataScript
+    sed -r -n "/INSERT INTO \`${table}\`/,/.*\);/p" $sqlDataFile >> $outputSqlScript
+    echo >> $outputSqlScript
 done
 
-echo  >> $sqlDataScript
+echo  >> $outputSqlScript
 
-echo "set foreign_key_checks = 1;" >> $sqlDataScript
+echo "set foreign_key_checks = 1;" >> $outputSqlScript
 
+echo -e "\nOuput script: $outputSqlScript"
 
