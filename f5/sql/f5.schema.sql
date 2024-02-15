@@ -46,7 +46,7 @@ CREATE TABLE `asset` (
   `tlsverify` tinyint(4) NOT NULL DEFAULT 1,
   `baseurl` varchar(255) NOT NULL DEFAULT '',
   `datacenter` varchar(255) NOT NULL DEFAULT '',
-  `environment` varchar(255) NOT NULL,
+  `environment` varchar(255) NOT NULL DEFAULT '',
   `position` varchar(255) NOT NULL DEFAULT '',
   `username` varchar(64) NOT NULL DEFAULT '',
   `password` varchar(64) NOT NULL DEFAULT ''
