@@ -71,7 +71,9 @@ function containerSetup()
         # Database api.
         echo "Creating database api and restoring SQL dump..."
         if [ "$(podman exec api-f5 mysql --vertical -e "SHOW DATABASES LIKE 'api';" | tail -1 | awk -F': ' '{print $2}')" == "" ]; then
-            podman exec api-f5 mysql -e 'CREATE DATABASE api DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;' # create database.
+            pkgVer=`dpkg-query --show --showformat='${Version}' automation-interface-api-f5-container`
+            commit=$(podman exec api-f5 dpkg-query --show --showformat='${Description}' automation-interface-api | sed -r -e 's/.*commit: (.*)/\1/' -e 's/\)\.//')
+            podman exec api-f5 mysql -e 'CREATE DATABASE `api` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci COMMENT ='"'"'pkgVersion='${pkgVer}' commit='${commit}"'"';'
             podman exec api-f5 mysql api -e "source /var/www/api/f5/sql/f5.schema.sql" # restore database schema.
             podman exec api-f5 mysql api -e "source /var/www/api/f5/sql/f5.data.sql" # restore database data.
         fi
