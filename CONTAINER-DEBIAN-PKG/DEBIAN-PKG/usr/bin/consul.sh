@@ -7,7 +7,7 @@ function start() {
     # Bind to *the* interface available within the container.
     # Connect to the server agent's ports, which are "attached" to the HOST IP => so, just find out the default route.
     serverAddress="$(ip route | grep default | grep -oP '(?<=via\ ).*(?=\ dev)')"
-    /usr/bin/consul agent -enable-script-checks=true -config-dir=/etc/consul.d/ -data-dir=/var/lib/consul/ -retry-join $serverAddress
+    /usr/bin/consul agent -enable-local-script-checks=true -config-dir=/etc/consul.d/ -data-dir=/var/lib/consul/ -retry-join $serverAddress
 
     # -retry-join allows retrying a join until it is successful.
     # Once it joins successfully to a member in a list of members it will never attempt to join again. Agents will then solely maintain their membership via gossip.
@@ -41,8 +41,7 @@ case $1 in
             ;;
 
         restart)
-            stop
-            start
+            restart
             ;;
 
         *)
