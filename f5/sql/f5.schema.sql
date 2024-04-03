@@ -211,7 +211,7 @@ ALTER TABLE `group_role_partition`
   ADD PRIMARY KEY (`id_group`,`id_role`,`id_partition`),
   ADD KEY `id_role` (`id_role`),
   ADD KEY `grp_partition` (`id_partition`),
-  ADD KEY `id` (`id`);
+  ADD UNIQUE KEY `id` (`id`);
 
 --
 -- Indici per le tabelle `identity_group`
