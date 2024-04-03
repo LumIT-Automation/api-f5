@@ -84,9 +84,9 @@ class PoolMember:
     ####################################################################################################################
 
     @staticmethod
-    def dataList(assetId: int, partitionName: str, poolName: str) -> dict:
+    def dataList(assetId: int, partitionName: str, poolName: str, subPath: str = "") -> dict:
         try:
-            l = Backend.list(assetId, partitionName, poolName)
+            l = Backend.list(assetId, partitionName, poolName, subPath)
             for el in l:
                 el["assetId"] = assetId
 

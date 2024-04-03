@@ -87,9 +87,9 @@ class Pool:
 
 
 
-    def getMembersData(self) -> dict:
+    def getMembersData(self, subPath: str = "") -> dict:
         try:
-            return PoolMember.dataList(self.assetId, self.partition, self.name) # return raw list.
+            return PoolMember.dataList(self.assetId, self.partition, self.name, subPath) # return raw list.
         except Exception as e:
             raise e
 

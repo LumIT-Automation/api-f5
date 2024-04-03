@@ -111,13 +111,15 @@ class PoolMember:
 
 
     @staticmethod
-    def list(assetId: int, partitionName: str, poolName: str) -> dict:
+    def list(assetId: int, partitionName: str, poolName: str, subPath: str = "") -> dict:
         membersStats: List[dict] = []
 
         try:
             f5 = Asset(assetId)
+            if subPath:
+                subPath = subPath + "~"
             apiStats = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/pool/~"+partitionName+"~"+poolName+"/members/stats/",
+                endpoint=f5.baseurl+"tm/ltm/pool/~"+partitionName+"~"+subPath+poolName+"/members/stats/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
@@ -131,7 +133,7 @@ class PoolMember:
                 })
 
             apiList = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/pool/~"+partitionName+"~"+poolName+"/members/",
+                endpoint=f5.baseurl+"tm/ltm/pool/~"+partitionName+"~"+subPath+poolName+"/members/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
