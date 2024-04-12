@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "6f5be775-9966-4fee-8fa5-4aa8bc54d298",
+		"_postman_id": "2b0e0e7a-0adb-4209-a48c-09db04b4006c",
 		"name": "api-f5",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -3951,7 +3951,7 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Common/virtualserver/vs_CONCERTO_TEST/?related=policies,profiles",
+											"raw": "http://10.0.111.22/api/v1/f5/2/Common/virtualserver/vs_testMik/?related=policies,profiles",
 											"protocol": "http",
 											"host": [
 												"10",
@@ -3966,13 +3966,66 @@
 												"2",
 												"Common",
 												"virtualserver",
-												"vs_CONCERTO_TEST",
+												"vs_testMik",
 												""
 											],
 											"query": [
 												{
 													"key": "related",
 													"value": "policies,profiles"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "virtualserver  (policies, profiles + filter profileType)",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											},
+											{
+												"key": "If-None-Match",
+												"value": "edfb456005712c3e68d97b525e247981",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "http://10.0.111.22/api/v1/f5/2/Common/virtualserver/vs_testMik/?related=policies,profiles&profileType=client-ssl,http",
+											"protocol": "http",
+											"host": [
+												"10",
+												"0",
+												"111",
+												"22"
+											],
+											"path": [
+												"api",
+												"v1",
+												"f5",
+												"2",
+												"Common",
+												"virtualserver",
+												"vs_testMik",
+												""
+											],
+											"query": [
+												{
+													"key": "related",
+													"value": "policies,profiles"
+												},
+												{
+													"key": "profileType",
+													"value": "client-ssl,http"
 												}
 											]
 										}

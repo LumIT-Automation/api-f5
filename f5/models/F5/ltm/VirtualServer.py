@@ -183,11 +183,14 @@ class VirtualServer:
                 if loadProfiles:
                     self.profiles = self.getProfilesSummary() # List[Dict].
                     if profileTypeFilter:
+                        profiles = []
                         for profileType in profileTypeFilter:
                             profileOfTypeList = Profile.list(assetId=self.assetId, partitionName=self.partition, profileType=profileType) # List[Profile]
-                            self.profiles[:] = [ p for p in self.profiles if p.get("fullPath", "") in [ pt.fullPath for pt in profileOfTypeList ] ] # Remove the profiles of the unwanted types.
-                            for p in self.profiles: # add the type field.
-                                p["type"] = profileType
+                            # Keep only the profiles of the wanted types.
+                            for profile in (p for p in self.profiles if p.get("fullPath", "") in [ pt.fullPath for pt in profileOfTypeList ] ):
+                                profile.update({"type": profileType})
+                                profiles.append(profile)
+                        self.profiles = profiles
                 else:
                     del self.profiles
             else:

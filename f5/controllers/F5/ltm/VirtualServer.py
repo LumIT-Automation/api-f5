@@ -20,6 +20,7 @@ class F5VirtualServerController(CustomController):
         data = dict()
         loadPolicies = False
         loadProfiles = False
+        profileTypeFilter = []
         etagCondition = { "responseEtag": "" }
 
         user = CustomController.loggedUser(request)
@@ -34,6 +35,8 @@ class F5VirtualServerController(CustomController):
                         loadPolicies = True
                     if "profiles" in rList:
                         loadProfiles = True
+                if "profileType" in request.GET:
+                    profileTypeFilter = request.GET.get("profileType").split(',')
 
                 lock = Lock("virtualServer", locals(), virtualServerName)
                 if lock.isUnlocked():
@@ -41,7 +44,7 @@ class F5VirtualServerController(CustomController):
 
                     data = {
                         "data": CustomController.validate(
-                            VirtualServer(assetId, partitionName, virtualServerName, loadPolicies=loadPolicies, loadProfiles=loadProfiles).repr(),
+                            VirtualServer(assetId, partitionName, virtualServerName, loadPolicies=loadPolicies, loadProfiles=loadProfiles, profileTypeFilter=profileTypeFilter).repr(),
                             Serializer,
                             "value"
                         ),
