@@ -24,7 +24,7 @@ Reference: Dict[str, Union[str, bool]] = {
 }
 
 class VirtualServer:
-    def __init__(self, assetId: int, partitionName: str, virtualServerName: str, loadPolicies: bool = False, loadProfiles: bool = False, *args, **kwargs):
+    def __init__(self, assetId: int, partitionName: str, virtualServerName: str, loadPolicies: bool = False, loadProfiles: bool = False, profileTypeFilter: list = None, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.assetId = int(assetId)
@@ -67,12 +67,14 @@ class VirtualServer:
         self.policiesReference: Reference = None
         self.profilesReference: Reference = None
         self.rules: list = []
+        self.profiles: list = []
+        profileTypeFilter = profileTypeFilter or []
 
         # Compositions.
         self.policies: List[Policy] = []
-        self.profiles: List[Profile] = []
 
-        self.__load(loadPolicies=loadPolicies, loadProfiles=loadProfiles)
+
+        self.__load(loadPolicies=loadPolicies, loadProfiles=loadProfiles, profileTypeFilter=profileTypeFilter)
 
 
 
@@ -160,7 +162,9 @@ class VirtualServer:
     # Private methods
     ####################################################################################################################
 
-    def __load(self, loadPolicies: bool = False, loadProfiles: bool = False) -> None:
+    def __load(self, loadPolicies: bool = False, loadProfiles: bool = False, profileTypeFilter: list = None) -> None:
+        profileTypeFilter = profileTypeFilter or []
+
         try:
             data = Backend.info(self.assetId, self.partition, self.name)
             if data:
@@ -177,7 +181,13 @@ class VirtualServer:
                     del self.policies
 
                 if loadProfiles:
-                    self.profiles = self.getProfilesSummary()
+                    self.profiles = self.getProfilesSummary() # List[Dict].
+                    if profileTypeFilter:
+                        for profileType in profileTypeFilter:
+                            profileOfTypeList = Profile.list(assetId=self.assetId, partitionName=self.partition, profileType=profileType) # List[Profile]
+                            self.profiles[:] = [ p for p in self.profiles if p.get("fullPath", "") in [ pt.fullPath for pt in profileOfTypeList ] ] # Remove the profiles of the unwanted types.
+                            for p in self.profiles: # add the type field.
+                                p["type"] = profileType
                 else:
                     del self.profiles
             else:
