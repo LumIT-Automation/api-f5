@@ -130,20 +130,24 @@ class VirtualServer:
     @staticmethod
     def list(assetId: int, partitionName: str, loadPolicies: bool = False, loadProfiles: bool = False) -> List[VirtualServer]:
         import threading
-        l = []
+        virtualServersList = []
 
         def loadVs(a, p, n, lpo, lpr, o):
             o.append(VirtualServer(a, p, n, lpo, lpr)) # append VirtualServer object.
 
         try:
             summary = Backend.list(assetId, partitionName)
-            workers = [threading.Thread(target=loadVs, args=(assetId, partitionName, el.get("name", ""), loadPolicies, loadProfiles, l)) for el in summary]
-            for w in workers:
-                w.start()
-            for w in workers:
-                w.join()
+            chunks = [summary[x:x + 100] for x in range(0, len(summary), 100)] # when virtualservers are many, split in chunks to retrieve the full data.
+            for chunk in chunks:
+                l = []
+                workers = [threading.Thread(target=loadVs, args=(assetId, partitionName, el.get("name", ""), loadPolicies, loadProfiles, l)) for el in chunk]
+                for w in workers:
+                    w.start()
+                for w in workers:
+                    w.join()
+                virtualServersList.extend(l)
 
-            return l
+            return virtualServersList
         except Exception as e:
             raise e
 
