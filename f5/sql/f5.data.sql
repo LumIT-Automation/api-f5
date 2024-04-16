@@ -203,6 +203,7 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (2, 31),
 (2, 35),
 (2, 37),
+(2, 40),
 (2, 46),
 (2, 57),
 (2, 59),
