@@ -1,3 +1,5 @@
+import re
+
 from collections import OrderedDict
 
 from f5.models.F5.ltm.Node import Node
@@ -97,12 +99,15 @@ class VirtualServersWorkflow:
             if nodeName == nodeAddress:
                 self.data["pool"]["nodes"][j]["name"] = nodeName = "node_"+nodeName # this fixes an F5 issue (name = address when using a root domain different than the default).
 
+            if not re.match('^.*%[0-9]+$', nodeAddress):
+                nodeAddress = nodeAddress + self.routeDomain
+
             try:
                 Log.actionLog("Virtual server workflow: attempting to create node: "+str(nodeAddress))
 
                 Node.add(self.assetId, {
                     "name": nodeName,
-                    "address": nodeAddress+self.routeDomain,
+                    "address": nodeAddress,
                     "partition": self.partitionName,
                     "State": "up"
                 })
@@ -112,7 +117,7 @@ class VirtualServersWorkflow:
                     "asset": self.assetId,
                     "partition": self.partitionName,
                     "name": nodeName,
-                    "address": nodeAddress+self.routeDomain,
+                    "address": nodeAddress,
                 })
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":
@@ -124,7 +129,7 @@ class VirtualServersWorkflow:
                             "asset": self.assetId,
                             "partition": self.partitionName,
                             "name": nodeName,
-                            "address": nodeAddress+self.routeDomain,
+                            "address": nodeAddress,
                         })
                     else:
                         self.__cleanCreatedObjects()
