@@ -5,3 +5,4 @@
 f5/sql/f5.data-development.sql
 client.log
 f5/clients/asm-policy-merge/client-input.json
+doc/swagger.yaml

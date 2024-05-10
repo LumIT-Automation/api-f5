@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .controllers import Root
+from .controllers import Root, RawTxtController
 from .controllers.F5.ltm import PoolMemberStats, Datagroup, VirtualServers, Irules, Monitors, SnatPool, Pool, Irule, \
     PoolMember, Profile, Policy, Nodes, Datagroups, Monitor, PoolMembers, VirtualServer, Pools, SnatPools, Node, \
     Profiles, Policies
@@ -25,6 +25,8 @@ urlpatterns = [
     path('permission/<int:permissionId>/', Permission.PermissionController.as_view(), name='permission'),
 
     path('authorizations/', Authorizations.AuthorizationsController.as_view(), name='authorizations'),
+
+    path('doc/<str:fileName>/', RawTxtController.F5RawTxtController.as_view(), name='txt'),
 
     path('configuration/<str:configType>/', Configuration.ConfigurationController.as_view(), name='configuration'),
 

@@ -232,3 +232,5 @@ API_SUPPLICANT_NETWORK_TIMEOUT = 30 # seconds.
 
 LOCK_MAX_VALIDITY = 30 # seconds.
 ENABLE_ASSET_DR = 1
+
+DOC_TXT_DIR = "/var/www/api/doc/"

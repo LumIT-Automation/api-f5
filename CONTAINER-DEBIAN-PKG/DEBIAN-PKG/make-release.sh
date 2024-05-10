@@ -39,6 +39,7 @@ function System_run()
             System_codeFilesPermissions
             System_venv
             System_fixDebVersion
+            System_swaggerFile
 
             System_debCreate
             System_cleanup
@@ -259,6 +260,13 @@ function System_debianFilesSetup()
 
     chmod +x $workingFolderPath/DEBIAN/postinst
     chmod +x $workingFolderPath/DEBIAN/preinst
+}
+
+
+function System_swaggerFile() {
+    mkdir $workingFolderPath/var/www/api/doc
+    cp /var/www/api/doc/postman.json $workingFolderPath/var/www/api/doc/
+    postman2openapi -f yaml /var/www/api/doc/postman.json > $workingFolderPath/var/www/api/doc/swagger.yaml
 }
 
 

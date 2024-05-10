@@ -1,0 +1,7220 @@
+{
+	"info": {
+		"_postman_id": "2c71f9cd-09c5-453d-9572-7719c9a69fe4",
+		"name": "api-checkpoint",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CheckPoint Direct API",
+			"item": [
+				{
+					"name": "Login token",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user\": \"lumit\",\n    \"password\": \"PASSWORD\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://172.25.0.100/web_api/v1.8/login",
+							"protocol": "https",
+							"host": [
+								"172",
+								"25",
+								"0",
+								"100"
+							],
+							"path": [
+								"web_api",
+								"v1.8",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "show domains",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							},
+							{
+								"key": "X-chkp-sid",
+								"value": "8rO7B89wI7ae4ocnSXiD8acyRiHGyqJ0O4o6QwErX2s",
+								"description": "Login token",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"details-level\": \"standard\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://172.25.0.100/web_api/v1.8/show-domains",
+							"protocol": "https",
+							"host": [
+								"172",
+								"25",
+								"0",
+								"100"
+							],
+							"path": [
+								"web_api",
+								"v1.8",
+								"show-domains"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "domain token",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							},
+							{
+								"key": "X-chkp-sid",
+								"value": "hoSW4W1uYezHAd-mOqnV-0qeWusbYy1FftyqSutxFiE",
+								"description": "Login token",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"domain\": \"POLAND\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://172.25.0.100/web_api/v1.8/login-to-domain",
+							"protocol": "https",
+							"host": [
+								"172",
+								"25",
+								"0",
+								"100"
+							],
+							"path": [
+								"web_api",
+								"v1.8",
+								"login-to-domain"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "show hosts",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							},
+							{
+								"key": "X-chkp-sid",
+								"value": "v94FWGTv4B7ctU1FuepTapA3AxYkt2_kybAO4Qk8QdI",
+								"description": "domain token",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"details-level\": \"standard\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://172.25.0.100/web_api/v1.8/show-hosts",
+							"protocol": "https",
+							"host": [
+								"172",
+								"25",
+								"0",
+								"100"
+							],
+							"path": [
+								"web_api",
+								"v1.8",
+								"show-hosts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "show sessions",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							},
+							{
+								"key": "X-chkp-sid",
+								"value": "v94FWGTv4B7ctU1FuepTapA3AxYkt2_kybAO4Qk8QdI",
+								"description": "domain token",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"details-level\": \"standard\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://172.25.0.100/web_api/v1.8/show-sessions",
+							"protocol": "https",
+							"host": [
+								"172",
+								"25",
+								"0",
+								"100"
+							],
+							"path": [
+								"web_api",
+								"v1.8",
+								"show-sessions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "discard session",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							},
+							{
+								"key": "X-chkp-sid",
+								"value": "v94FWGTv4B7ctU1FuepTapA3AxYkt2_kybAO4Qk8QdI",
+								"description": "domain token",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"uid\": \"605562e8-e1f1-417f-b125-d385d1756aaf\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://172.25.0.100/web_api/v1.8/discard",
+							"protocol": "https",
+							"host": [
+								"172",
+								"25",
+								"0",
+								"100"
+							],
+							"path": [
+								"web_api",
+								"v1.8",
+								"discard"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "show networks",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							},
+							{
+								"key": "X-chkp-sid",
+								"value": "xS7ZhKR8ifxcSiQEMu3YE5Tj2KtlNzuc1scKE9bpCJ0",
+								"description": "domain token",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"details-level\": \"standard\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://172.25.0.100/web_api/v1.8/show-networks",
+							"protocol": "https",
+							"host": [
+								"172",
+								"25",
+								"0",
+								"100"
+							],
+							"path": [
+								"web_api",
+								"v1.8",
+								"show-networks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "show nat rulebase",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							},
+							{
+								"key": "X-chkp-sid",
+								"value": "vAnTfzIBPPkWmWxIMpvUcbaKaAZZ0UjhkKmkASw16pw",
+								"description": "domain token",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"package\": \"CPVSX02CLS_VSX\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://172.25.0.100/web_api/v1.8/show-nat-rulebase",
+							"protocol": "https",
+							"host": [
+								"172",
+								"25",
+								"0",
+								"100"
+							],
+							"path": [
+								"web_api",
+								"v1.8",
+								"show-nat-rulebase"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "show nat rule",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							},
+							{
+								"key": "X-chkp-sid",
+								"value": "13JNHg3QRXhUVHjcrfvS_1gfb_DzaZV36UFK4tQQ8nE",
+								"description": "domain token",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"package\": \"DCPL-FWKR-PKG\",\n    \"uid\": \"f23c1a7d-d05f-4dc3-a87b-c6723f8bd7b3\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://172.25.0.100/web_api/v1.8/show-nat-rule",
+							"protocol": "https",
+							"host": [
+								"172",
+								"25",
+								"0",
+								"100"
+							],
+							"path": [
+								"web_api",
+								"v1.8",
+								"show-nat-rule"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "set nat rule",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							},
+							{
+								"key": "X-chkp-sid",
+								"value": "13JNHg3QRXhUVHjcrfvS_1gfb_DzaZV36UFK4tQQ8nE",
+								"description": "domain token",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"package\": \"DCPL-FWKR-PKG\",\n    \"uid\": \"f23c1a7d-d05f-4dc3-a87b-c6723f8bd7b3\",\n    \"install-on\": \"985223f6-e3d4-4325-9e52-73198aef8859\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://172.25.0.100/web_api/v1.8/set-nat-rule",
+							"protocol": "https",
+							"host": [
+								"172",
+								"25",
+								"0",
+								"100"
+							],
+							"path": [
+								"web_api",
+								"v1.8",
+								"set-nat-rule"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add access role",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							},
+							{
+								"key": "X-chkp-sid",
+								"value": "13JNHg3QRXhUVHjcrfvS_1gfb_DzaZV36UFK4tQQ8nE",
+								"description": "domain token",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"package\": \"DCPL-FWKR-PKG\",\n    \"uid\": \"f23c1a7d-d05f-4dc3-a87b-c6723f8bd7b3\",\n    \"install-on\": \"985223f6-e3d4-4325-9e52-73198aef8859\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://172.25.0.100/web_api/v1.8/set-nat-rule",
+							"protocol": "https",
+							"host": [
+								"172",
+								"25",
+								"0",
+								"100"
+							],
+							"path": [
+								"web_api",
+								"v1.8",
+								"set-nat-rule"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add access rule",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							},
+							{
+								"key": "X-chkp-sid",
+								"value": "13JNHg3QRXhUVHjcrfvS_1gfb_DzaZV36UFK4tQQ8nE",
+								"description": "domain token",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"package\": \"DCPL-FWKR-PKG\",\n    \"uid\": \"f23c1a7d-d05f-4dc3-a87b-c6723f8bd7b3\",\n    \"install-on\": \"985223f6-e3d4-4325-9e52-73198aef8859\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://172.25.0.100/web_api/v1.8/set-nat-rule",
+							"protocol": "https",
+							"host": [
+								"172",
+								"25",
+								"0",
+								"100"
+							],
+							"path": [
+								"web_api",
+								"v1.8",
+								"set-nat-rule"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "publish",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							},
+							{
+								"key": "X-chkp-sid",
+								"value": "13JNHg3QRXhUVHjcrfvS_1gfb_DzaZV36UFK4tQQ8nE",
+								"description": "domain token",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://172.25.0.100/web_api/v1.8/publish",
+							"protocol": "https",
+							"host": [
+								"172",
+								"25",
+								"0",
+								"100"
+							],
+							"path": [
+								"web_api",
+								"v1.8",
+								"publish"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "show nat rulebase",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							},
+							{
+								"key": "X-chkp-sid",
+								"value": "13JNHg3QRXhUVHjcrfvS_1gfb_DzaZV36UFK4tQQ8nE",
+								"description": "domain token",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"package\": \"DCPL-FWKR-PKG\",\n    \"uid\": \"f23c1a7d-d05f-4dc3-a87b-c6723f8bd7b3\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://172.25.0.100/web_api/v1.8/show-nat-rulebase",
+							"protocol": "https",
+							"host": [
+								"172",
+								"25",
+								"0",
+								"100"
+							],
+							"path": [
+								"web_api",
+								"v1.8",
+								"show-nat-rulebase"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "show ips status",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							},
+							{
+								"key": "X-chkp-sid",
+								"value": "CMRULHhqaT5VFvIjV4SiIXN-lkGEj1LtNEA7skbJXew",
+								"description": "domain token",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://172.25.0.100/web_api/v1.8/show-ips-status",
+							"protocol": "https",
+							"host": [
+								"172",
+								"25",
+								"0",
+								"100"
+							],
+							"path": [
+								"web_api",
+								"v1.8",
+								"show-ips-status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "where used",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							},
+							{
+								"key": "X-chkp-sid",
+								"value": "13JNHg3QRXhUVHjcrfvS_1gfb_DzaZV36UFK4tQQ8nE",
+								"description": "domain token",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"package\": \"DCPL-FWKR-PKG\",\n    \"uid\": \"f23c1a7d-d05f-4dc3-a87b-c6723f8bd7b3\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://172.25.0.100/web_api/v1.8/show-nat-rule",
+							"protocol": "https",
+							"host": [
+								"172",
+								"25",
+								"0",
+								"100"
+							],
+							"path": [
+								"web_api",
+								"v1.8",
+								"show-nat-rule"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Checkpoint Concerto API",
+			"item": [
+				{
+					"name": "Api doc",
+					"item": [
+						{
+							"name": "postman",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/doc/postman.json",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"doc",
+										"postman.json"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "swagger",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/doc/swagger.yaml",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"doc",
+										"swagger.yaml"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Configuration",
+					"item": [
+						{
+							"name": "configuration",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"fqdn\": \"172.25.0.101\",\n        \"protocol\": \"https\",\n        \"port\": 443,\n        \"path\": \"/web_api/\",\n        \"tlsverify\": true,\n        \"datacenter\": \"\",\n        \"environment\": \"Development\",\n        \"position\": \"RACK 2\",\n        \"username\": \"username\",\n        \"password\": \"password\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/configuration/global/",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"configuration",
+										"global",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "configuration",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"configuration\": [\n            {\n                \"key\": \"key1\",\n                \"value\": \"value1\"\n            },\n            {\n                \"key\": \"key2\",\n                \"value\": \"value2\"\n            }\n        ]\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/configuration/global/",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"configuration",
+										"global",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Assets",
+					"item": [
+						{
+							"name": "assets",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/assets/",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"assets",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "assets",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"fqdn\": \"172.25.0.101\",\n        \"protocol\": \"https\",\n        \"port\": 443,\n        \"path\": \"/web_api/\",\n        \"tlsverify\": true,\n        \"datacenter\": \"\",\n        \"environment\": \"Development\",\n        \"position\": \"RACK 2\",\n        \"username\": \"username\",\n        \"password\": \"password\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/assets/",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"assets",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "asset",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"protocol\": \"http\",\n        \"port\": 80\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/asset/2/",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"asset",
+										"2",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "asset",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/asset/2/",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"asset",
+										"2",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Use cases",
+					"item": [
+						{
+							"name": "custom application site urls",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"url-list\": [\n            \"www.teomondoscrofalo.org\",\n            \"www.vitocatozzo.it\",\n            \"www.vitocatozzo.it\"\n        ],\n        \"change-request-id\": \"ITIO-777777777\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/custom-application-site/e5957948-e978-49a5-9d6a-8fdac05dabf2/urls/",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"1",
+										"POLAND",
+										"custom-application-site",
+										"e5957948-e978-49a5-9d6a-8fdac05dabf2",
+										"urls",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "custom application site urls",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"url-list\": [\n            \"www.teomondoscrofalo.org\",\n            \"www.vitocatozzo.it\",\n            \"www.vitocatozzo.it\"\n        ],\n        \"change-request-id\": \"ITIO-777777777\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/custom-application-site/e5957948-e978-49a5-9d6a-8fdac05dabf2/urls/",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"1",
+										"POLAND",
+										"custom-application-site",
+										"e5957948-e978-49a5-9d6a-8fdac05dabf2",
+										"urls",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "group hosts",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"host-lists\": [\n            \"69c3d763-81b5-4545-953e-21c6509f2e49\",\n            \"83b46602-c0db-4b07-a7b1-559090a66333\"\n        ],\n        \"change-request-id\": \"ITIO-777777777\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/group/f253bf98-cb4b-4251-8d40-b1e7164cd39f/hosts/",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"1",
+										"POLAND",
+										"group",
+										"f253bf98-cb4b-4251-8d40-b1e7164cd39f",
+										"hosts",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "group hosts",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"host-list\": [\n            \"69c3d763-81b5-4545-953e-21c6509f2e49\",\n            \"83b46602-c0db-4b07-a7b1-559090a66333\"\n        ],\n        \"change-request-id\": \"ITIO-777777777\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/group/f253bf98-cb4b-4251-8d40-b1e7164cd39f/hosts/",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"1",
+										"POLAND",
+										"group",
+										"f253bf98-cb4b-4251-8d40-b1e7164cd39f",
+										"hosts",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "remove host",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"ipv4-address\": \"10.213.216.61\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/1/remove-host/",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"1",
+										"remove-host",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "vpn profiles to host",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"ipv4-address\": \"172.17.0.7\",\n        \"rule-package\": \"FWRAVPN_PKG\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/1/SHARED-SERVICES/vpn-to-host/",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"1",
+										"SHARED-SERVICES",
+										"vpn-to-host",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "vpn profiles to services",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"name\": \"VPN_CONS_HD Access Role\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/1/SHARED-SERVICES/vpn-to-services/",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"1",
+										"SHARED-SERVICES",
+										"vpn-to-services",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Permissions",
+					"item": [
+						{
+							"name": "authorizations",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "c485212f298abe5f8b867ca42617292a",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/authorizations/",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"authorizations",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "permissions",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "c485212f298abe5f8b867ca42617292a",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/permissions/",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"permissions",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "permissions",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "c485212f298abe5f8b867ca42617292a",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"identity_group_identifier\": \"cn=groupstaff,cn=users,dc=lab,dc=local\",\n        \"role\": \"readonly\",\n        \"domain\": {\n            \"name\": \"any\",\n            \"id_asset\": 1\n        },\n        \"tag\": \"tag\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/permissions/",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"permissions",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "permission",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "c485212f298abe5f8b867ca42617292a",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"identity_group_identifier\": \"cn=groupstaff,cn=users,dc=lab,dc=local\",\n        \"role\": \"staff\",\n        \"domain\": {\n            \"name\": \"POLAND\",\n            \"id_asset\": 1\n        },\n        \"tag\": \"brutto\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/permission/3/",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"permission",
+										"3",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "permission",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "c485212f298abe5f8b867ca42617292a",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/permission/4/",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"permission",
+										"4",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "identity-groups",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "c485212f298abe5f8b867ca42617292a",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/identity-groups/",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"identity-groups",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "identity-groups",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"name\": \"groupLocalNew\",\n        \"identity_group_identifier\": \"cn=groupStaff,cn=users,dc=lab,dc=localNew\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/identity-groups/",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"identity-groups",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "identity-group",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"name\": \"groupStaffModified\",\n        \"identity_group_identifier\": \"cn=groupStaff,cn=users,dc=lab,dc=localNewModified\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/identity-group/cn=groupStaff,cn=users,dc=lab,dc=localNew/",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"identity-group",
+										"cn=groupStaff,cn=users,dc=lab,dc=localNew",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "identity-group",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									}
+								],
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/identity-group/cn=groupStaff,cn=users,dc=lab,dc=localNewModified/",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"identity-group",
+										"cn=groupStaff,cn=users,dc=lab,dc=localNewModified",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "roles",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "c485212f298abe5f8b867ca42617292a",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/roles/",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"roles",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "roles  (privileges)",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "c485212f298abe5f8b867ca42617292a",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/roles/?related=privileges",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"roles",
+										""
+									],
+									"query": [
+										{
+											"key": "related",
+											"value": "privileges"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "tags",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{jwttoken}}"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "c485212f298abe5f8b867ca42617292a",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{checkpointBaseUrl}}/checkpoint/tags/",
+									"host": [
+										"{{checkpointBaseUrl}}"
+									],
+									"path": [
+										"checkpoint",
+										"tags",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Objects",
+					"item": [
+						{
+							"name": "domain",
+							"item": [
+								{
+									"name": "domains",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/domains/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"domains",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "domain",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/domain/e8387f10-1a67-4814-9f78-563b438e6443/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"domain",
+												"e8387f10-1a67-4814-9f78-563b438e6443",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "tag",
+							"item": [
+								{
+									"name": "tags",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/tags/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"tags",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "tags",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"name\": \"brutto\",\n        \"comment\": \"tag non bello\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/tags/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"tags",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "tag",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/tag/8f01bedd-facf-4aca-a89b-2c0e4c46f386/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"tag",
+												"8f01bedd-facf-4aca-a89b-2c0e4c46f386",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "tag",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"name\": \"poco bello\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/tag/1ec14820-3f61-4f4f-b3b1-32a3f8e841fe/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"tag",
+												"1ec14820-3f61-4f4f-b3b1-32a3f8e841fe",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "tag",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/tag/0ce350ae-cc3d-4e0e-9512-8a12db69fc77/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"tag",
+												"0ce350ae-cc3d-4e0e-9512-8a12db69fc77",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "host",
+							"item": [
+								{
+									"name": "hosts",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											},
+											{
+												"key": "If-None-Match",
+												"value": "851847cbe30d3d64e74703cac5fa8992",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/hosts/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"hosts",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "hosts",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"name\": \"10.213.214.15\",\n        \"ipv4-address\": \"10.213.214.15\",\n        \"interfaces\": [\n            {\n                \"name\": \"eth0\",\n                \"subnet4\": \"10.213.214.15\",\n                \"mask-length4\": 24,\n                \"subnet6\": \"FD00:1::45\",\n                \"mask-length6\": 64\n            },\n            {\n                \"name\": \"eth1\",\n                \"subnet4\": \"10.111.143.15\",\n                \"mask-length4\": 24,\n                \"subnet6\": \"FD00:1::46\",\n                \"mask-length6\": 64\n            }\n        ]\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/hosts/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"hosts",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "host",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/host/69c3d763-81b5-4545-953e-21c6509f2e49/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"host",
+												"69c3d763-81b5-4545-953e-21c6509f2e49",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "host",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"tags\": {\n            \"add\": [\n                \"8f01bedd-facf-4aca-a89b-2c0e4c46f386\"\n            ]\n\n        }\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/host/69c3d763-81b5-4545-953e-21c6509f2e49/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"host",
+												"69c3d763-81b5-4545-953e-21c6509f2e49",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "host",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/host/0ce350ae-cc3d-4e0e-9512-8a12db69fc77/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"host",
+												"0ce350ae-cc3d-4e0e-9512-8a12db69fc77",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "group",
+							"item": [
+								{
+									"name": "objects in",
+									"item": [
+										{
+											"name": "group's hosts",
+											"request": {
+												"auth": {
+													"type": "noauth"
+												},
+												"method": "GET",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{jwttoken}}"
+													}
+												],
+												"url": {
+													"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/group/a7312071-e2d2-4d9a-8f49-adb46c9be35d/hosts/",
+													"host": [
+														"{{checkpointBaseUrl}}"
+													],
+													"path": [
+														"checkpoint",
+														"1",
+														"POLAND",
+														"group",
+														"a7312071-e2d2-4d9a-8f49-adb46c9be35d",
+														"hosts",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "group's hosts",
+											"request": {
+												"auth": {
+													"type": "noauth"
+												},
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{jwttoken}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"data\": {\n        \"hosts\": [\n            \"564adca9-bde7-4bb1-ae68-e7b6868fbd57\",\n            \"573f33bd-1e7c-487c-bfcd-378987990fe8\",\n            \"e0d8f346-43d3-4b8b-89f9-3a44f855847a\"\n        ]\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/group/1e131cd5-ccad-4238-9fee-dbcdc79d3a6e/hosts/",
+													"host": [
+														"{{checkpointBaseUrl}}"
+													],
+													"path": [
+														"checkpoint",
+														"1",
+														"POLAND",
+														"group",
+														"1e131cd5-ccad-4238-9fee-dbcdc79d3a6e",
+														"hosts",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "group's host",
+											"request": {
+												"auth": {
+													"type": "noauth"
+												},
+												"method": "DELETE",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{jwttoken}}"
+													}
+												],
+												"url": {
+													"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/group/a7312071-e2d2-4d9a-8f49-adb46c9be35d/host/fa7f61c9-afca-48e2-958d-66fe76d90b46/",
+													"host": [
+														"{{checkpointBaseUrl}}"
+													],
+													"path": [
+														"checkpoint",
+														"1",
+														"POLAND",
+														"group",
+														"a7312071-e2d2-4d9a-8f49-adb46c9be35d",
+														"host",
+														"fa7f61c9-afca-48e2-958d-66fe76d90b46",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "group's groups",
+											"request": {
+												"auth": {
+													"type": "noauth"
+												},
+												"method": "GET",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{jwttoken}}"
+													}
+												],
+												"url": {
+													"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/group/a7312071-e2d2-4d9a-8f49-adb46c9be35d/groups/",
+													"host": [
+														"{{checkpointBaseUrl}}"
+													],
+													"path": [
+														"checkpoint",
+														"1",
+														"POLAND",
+														"group",
+														"a7312071-e2d2-4d9a-8f49-adb46c9be35d",
+														"groups",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "group's groups",
+											"request": {
+												"auth": {
+													"type": "noauth"
+												},
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{jwttoken}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"data\": {\n        \"groups\": [\n            \"c7b62182-ff39-462b-9f16-5b4a2ef50873\"\n        ]\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/group/b0f2311f-ecc0-4a1e-a82c-602c4da2f580/groups/",
+													"host": [
+														"{{checkpointBaseUrl}}"
+													],
+													"path": [
+														"checkpoint",
+														"1",
+														"POLAND",
+														"group",
+														"b0f2311f-ecc0-4a1e-a82c-602c4da2f580",
+														"groups",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "group's group",
+											"request": {
+												"auth": {
+													"type": "noauth"
+												},
+												"method": "DELETE",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{jwttoken}}"
+													}
+												],
+												"url": {
+													"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/group/61bfa122-18cc-41f8-a59b-cd8d7b441027/group/ed2a94ee-17ab-494b-acae-04bd0307cf9a/",
+													"host": [
+														"{{checkpointBaseUrl}}"
+													],
+													"path": [
+														"checkpoint",
+														"1",
+														"POLAND",
+														"group",
+														"61bfa122-18cc-41f8-a59b-cd8d7b441027",
+														"group",
+														"ed2a94ee-17ab-494b-acae-04bd0307cf9a",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "group's father groups",
+											"request": {
+												"auth": {
+													"type": "noauth"
+												},
+												"method": "GET",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{jwttoken}}"
+													}
+												],
+												"url": {
+													"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/group/a7312071-e2d2-4d9a-8f49-adb46c9be35d/father-groups/",
+													"host": [
+														"{{checkpointBaseUrl}}"
+													],
+													"path": [
+														"checkpoint",
+														"1",
+														"POLAND",
+														"group",
+														"a7312071-e2d2-4d9a-8f49-adb46c9be35d",
+														"father-groups",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "group's networks",
+											"request": {
+												"auth": {
+													"type": "noauth"
+												},
+												"method": "GET",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{jwttoken}}"
+													}
+												],
+												"url": {
+													"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/group/7a989cf9-d688-4972-b460-6626b10cd38f/networks/",
+													"host": [
+														"{{checkpointBaseUrl}}"
+													],
+													"path": [
+														"checkpoint",
+														"1",
+														"POLAND",
+														"group",
+														"7a989cf9-d688-4972-b460-6626b10cd38f",
+														"networks",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "group's networks",
+											"request": {
+												"auth": {
+													"type": "noauth"
+												},
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{jwttoken}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"data\": {\n        \"networks\": [\n            \"d2fd97d9-f22b-4014-a1a4-35e497eb9576\"\n        ]\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/group/7a989cf9-d688-4972-b460-6626b10cd38f/networks/",
+													"host": [
+														"{{checkpointBaseUrl}}"
+													],
+													"path": [
+														"checkpoint",
+														"1",
+														"POLAND",
+														"group",
+														"7a989cf9-d688-4972-b460-6626b10cd38f",
+														"networks",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "group's network",
+											"request": {
+												"auth": {
+													"type": "noauth"
+												},
+												"method": "DELETE",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{jwttoken}}"
+													}
+												],
+												"url": {
+													"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/group/7a989cf9-d688-4972-b460-6626b10cd38f/network/d5fcd7f1-bae9-48de-a73c-a8b77e10cf19/",
+													"host": [
+														"{{checkpointBaseUrl}}"
+													],
+													"path": [
+														"checkpoint",
+														"1",
+														"POLAND",
+														"group",
+														"7a989cf9-d688-4972-b460-6626b10cd38f",
+														"network",
+														"d5fcd7f1-bae9-48de-a73c-a8b77e10cf19",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "group's address ranges",
+											"request": {
+												"auth": {
+													"type": "noauth"
+												},
+												"method": "GET",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{jwttoken}}"
+													}
+												],
+												"url": {
+													"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/group/7a989cf9-d688-4972-b460-6626b10cd38f/address-ranges/",
+													"host": [
+														"{{checkpointBaseUrl}}"
+													],
+													"path": [
+														"checkpoint",
+														"1",
+														"POLAND",
+														"group",
+														"7a989cf9-d688-4972-b460-6626b10cd38f",
+														"address-ranges",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "group's address ranges",
+											"request": {
+												"auth": {
+													"type": "noauth"
+												},
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{jwttoken}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"data\": {\n        \"address-ranges\": [\n            \"72814e54-7458-4a92-a0c1-abafe0b1b7b1\"\n        ]\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/group/7a989cf9-d688-4972-b460-6626b10cd38f/address-ranges/",
+													"host": [
+														"{{checkpointBaseUrl}}"
+													],
+													"path": [
+														"checkpoint",
+														"1",
+														"POLAND",
+														"group",
+														"7a989cf9-d688-4972-b460-6626b10cd38f",
+														"address-ranges",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "group's address ranges",
+											"request": {
+												"auth": {
+													"type": "noauth"
+												},
+												"method": "DELETE",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{jwttoken}}"
+													}
+												],
+												"url": {
+													"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/group/7a989cf9-d688-4972-b460-6626b10cd38f/address-range/72814e54-7458-4a92-a0c1-abafe0b1b7b1/",
+													"host": [
+														"{{checkpointBaseUrl}}"
+													],
+													"path": [
+														"checkpoint",
+														"1",
+														"POLAND",
+														"group",
+														"7a989cf9-d688-4972-b460-6626b10cd38f",
+														"address-range",
+														"72814e54-7458-4a92-a0c1-abafe0b1b7b1",
+														""
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "groups",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"host-lists\": [\n            \"69c3d763-81b5-4545-953e-21c6509f2e49\",\n            \"83b46602-c0db-4b07-a7b1-559090a66333\"\n        ],\n        \"change-request-id\": \"ITIO-777777777\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/groups/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"groups",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "groups",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"name\": \"PippoGruppo\",\n        \"color\": \"black\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/groups/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"groups",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "group",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"url-list\": [\n            \"www.teomondoscrofalo.org\",\n            \"www.vitocatozzo.it\",\n            \"www.vitocatozzo.it\"\n        ],\n        \"change-request-id\": \"ITIO-777777777\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/group/c1af271d-c2d6-4882-8fdd-5b02ba7ac91f/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"group",
+												"c1af271d-c2d6-4882-8fdd-5b02ba7ac91f",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "group",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/group/f2ebce52-a8e0-466b-a111-674a7021f6d6/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"group",
+												"f2ebce52-a8e0-466b-a111-674a7021f6d6",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "group",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"new-name\": \"Gruppo uppo\",\n        \"members\": {\n            \"add\": [\n                \"0ce350ae-cc3d-4e0e-9512-8a12db69fc77\",\n                \"1e131cd5-ccad-4238-9fee-dbcdc79d3a6e\",\n                \"d5fcd7f1-bae9-48de-a73c-a8b77e10cf19\",\n                \"985223f6-e3d4-4325-9e52-73198aef8859\"\n            ]\n        }\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/group/ef5f0522-8ee8-4c3b-8883-8f450560c9b6/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"group",
+												"ef5f0522-8ee8-4c3b-8883-8f450560c9b6",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "network",
+							"item": [
+								{
+									"name": "networks",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/networks/?local",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"networks",
+												""
+											],
+											"query": [
+												{
+													"key": "local",
+													"value": null
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "networks",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"name\": \"Retone_da_pescona2\",\n        \"subnet4\": \"10.133.122.0\",\n        \"mask-length4\": 24,\n        \"subnet6\": \"FD00:4::0\",\n        \"mask-length6\": 64,\n        \"tags\": [\n            \"giangigio\",\n            \"dagoberto\" ]\n        }\n    }",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/networks/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"networks",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "network",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/network/d5fcd7f1-bae9-48de-a73c-a8b77e10cf19/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"network",
+												"d5fcd7f1-bae9-48de-a73c-a8b77e10cf19",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "network",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/network/c00261ef-5518-4cdd-b538-07788f409db6/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"network",
+												"c00261ef-5518-4cdd-b538-07788f409db6",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "network",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"new-name\": \"Rete_da_peschina\",\n        \"subnet4\": \"10.223.125.0\",\n        \"subnet6\": \"fd00:7::\",\n        \"mask-length4\": 24,\n        \"mask-length6\": 64,\n        \"tags\": {\n            \"add\": \"loziopino\"\n        }\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/network/0e83a392-c4c3-4b42-a5d5-3974e3e17521/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"network",
+												"0e83a392-c4c3-4b42-a5d5-3974e3e17521",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "service",
+							"item": [
+								{
+									"name": "services tcp",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/services-tcp/?local",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"services-tcp",
+												""
+											],
+											"query": [
+												{
+													"key": "local",
+													"value": null
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "services tcp",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"name\": \"Microsoft_Removal_Service_TCP\",\n        \"port\": \"1112-1113\",\n        \"source-port\": \"1112-1113\",\n        \"override-default-settings\": false,\n        \"session-timeout\": 3600,\n        \"use-default-session-timeout\": true,\n        \"match-for-any\": true,\n        \"sync-connections-on-cluster\": true,\n        \"aggressive-aging\": {\n            \"enable\": true,\n            \"timeout\": 600,\n            \"use-default-timeout\": true,\n            \"default-timeout\": 0\n        },\n        \"keep-connections-open-after-policy-installation\": false,\n        \"comments\": \"derva!\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/services-tcp/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"services-tcp",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "service tcp",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/service-tcp/be0eff2a-30bc-444d-8d37-9fa54019f543/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"service-tcp",
+												"be0eff2a-30bc-444d-8d37-9fa54019f543",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "service tcp",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/service-tcp/a3aa942f-28be-4b71-8639-3391fd90ffb1/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"service-tcp",
+												"a3aa942f-28be-4b71-8639-3391fd90ffb1",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "service tcp",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"new-name\": \"Microsoft_Removal_Service_TCP1\",\n        \"port\": \"11112-11114\",\n        \"source-port\": \"11112-11114\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/service-tcp/fcd46662-bcea-4b88-8a4b-0d85a5e315c6/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"service-tcp",
+												"fcd46662-bcea-4b88-8a4b-0d85a5e315c6",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "services udp",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/services-udp/?local",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"services-udp",
+												""
+											],
+											"query": [
+												{
+													"key": "local",
+													"value": null
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "services udp",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"name\": \"Microsoft_Removal_Service_UDP\",\n        \"port\": \"22222-22223\",\n        \"source-port\": \"22222-22223\",\n        \"protocol\": \"dhcp\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/services-udp/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"services-udp",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "service udp",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/service-udp/343464de-b128-4311-9ea3-9ca5fd2a4432/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"service-udp",
+												"343464de-b128-4311-9ea3-9ca5fd2a4432",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "service udp",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/service-udp/842e207a-9c92-4e0a-877e-4590341ca882/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"service-udp",
+												"842e207a-9c92-4e0a-877e-4590341ca882",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "service udp",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"new-name\": \"Microsoft_Removal_Service_UDP1\",\n        \"port\": \"11112-11114\",\n        \"source-port\": \"11112-11114\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/service-udp/343464de-b128-4311-9ea3-9ca5fd2a4432/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"service-udp",
+												"343464de-b128-4311-9ea3-9ca5fd2a4432",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "address range",
+							"item": [
+								{
+									"name": "address ranges",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/SHARED-SERVICES/address-ranges/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"SHARED-SERVICES",
+												"address-ranges",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "address ranges",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"name\": \"RANGE_10.127.124.1-10.127.124.20_G\",\n        \"ipv4-address-first\": \"10.127.124.1\",\n        \"ipv4-address-last\": \"10.127.124.20\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/address-ranges/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"address-ranges",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "address range",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/address-range/cae9771e-15c1-4cab-b0b7-7ae1d4a380a0/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"address-range",
+												"cae9771e-15c1-4cab-b0b7-7ae1d4a380a0",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "address range",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/address-range/cae9771e-15c1-4cab-b0b7-7ae1d4a380a0/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"address-range",
+												"cae9771e-15c1-4cab-b0b7-7ae1d4a380a0",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "address range",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"new-name\": \"RANGINOINO\",\n        \"ipv4-address-first\": \"10.123.146.1\",\n        \"ipv4-address-last\": \"10.123.146.20\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/address-range/72814e54-7458-4a92-a0c1-abafe0b1b7b1/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"address-range",
+												"72814e54-7458-4a92-a0c1-abafe0b1b7b1",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "application site",
+							"item": [
+								{
+									"name": "application sites",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/application-sites/?local",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"application-sites",
+												""
+											],
+											"query": [
+												{
+													"key": "local",
+													"value": null
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "application sites",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"name\": \"PippoApplicationSite\",\n        \"description\": \"DriveIn\",\n        \"primary-category\": \"Custom_Application_Site\",\n        \"url-list\": [\n            \"www.iltenerone.org\",\n            \"www.gianfrancodangelo.com\"\n        ],\n        \"urls-defined-as-regular-expression\": true\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/application-sites/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"application-sites",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "application site",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/application-site/e5957948-e978-49a5-9d6a-8fdac05dabf2/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"application-site",
+												"e5957948-e978-49a5-9d6a-8fdac05dabf2",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "application site",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/application-site/6e4115d2-a303-4ad1-be5c-f84d7e4d8059/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"application-site",
+												"6e4115d2-a303-4ad1-be5c-f84d7e4d8059",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "application site",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"url-list\": [\n            \"www.iltenerone.org\",\n            \"www.drivein.com\",\n            \"www.gianfrancodangelo.com\"\n        ]\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/application-site/69b7ba00-284e-4e5d-b812-8c69a0e88155/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"application-site",
+												"69b7ba00-284e-4e5d-b812-8c69a0e88155",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "custom application sites",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/application-sites/?custom&local",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"application-sites",
+												""
+											],
+											"query": [
+												{
+													"key": "custom",
+													"value": null
+												},
+												{
+													"key": "local",
+													"value": null
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "application site categories",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/application-site-categories/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"application-site-categories",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "application site categories",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"name\": \"Categorizzazione\",\n        \"description\": \"app molto brutta\",\n        \"tags\": [\n            \"prova\",\n            \"provolone\"\n        ],\n        \"color\": \"orange\",\n        \"comments\": \"proviamo\",\n        \"details-level\": \"standard\",\n        \"ignore-warnings\": false\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/application-site-categories/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"application-site-categories",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "application site category",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/application-site-category/1eea9fa1-8349-4732-97a2-a8479da44998/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"application-site-category",
+												"1eea9fa1-8349-4732-97a2-a8479da44998",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "application site category",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/application-site-category/1eea9fa1-8349-4732-97a2-a8479da44998/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"application-site-category",
+												"1eea9fa1-8349-4732-97a2-a8479da44998",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "application site category",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"new-name\": \"Ricategorizzazione\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/application-site-category/1eea9fa1-8349-4732-97a2-a8479da44998/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"application-site-category",
+												"1eea9fa1-8349-4732-97a2-a8479da44998",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "datacenter server",
+							"item": [
+								{
+									"name": "datacenter servers",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/SHARED-SERVICES/datacenter-servers/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"SHARED-SERVICES",
+												"datacenter-servers",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "datacenter servers",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"name\": \"Coso\",\n        \"type\": \"aws\",\n        \"authentication-method\": \"user-authentication\",\n        \"access-key-id\": \"AKIAI4EMUXLDYNO3KFGQ\",\n        \"secret-access-key\": \"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\",\n        \"region\": \"eu-west-1\",\n        \"tags\": [\n            \"testone\"\n        ],\n        \"color\": \"orange\",\n        \"comments\": \"proviamo\",\n        \"details-level\": \"standard\",\n        \"ignore-warnings\": true,\n        \"enable-sts-assume-role\": true,\n        \"sts-role\": \"STS\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/SHARED-SERVICES/datacenter-servers/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"SHARED-SERVICES",
+												"datacenter-servers",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "datacenter server",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/SHARED-SERVICES/datacenter-server/80540d42-bc1d-4e29-8981-bcdf434bf44d/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"SHARED-SERVICES",
+												"datacenter-server",
+												"80540d42-bc1d-4e29-8981-bcdf434bf44d",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "datacenter server",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/SHARED-SERVICES/datacenter-server/b74e9680-c085-4b58-ac16-406be29f8521/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"SHARED-SERVICES",
+												"datacenter-server",
+												"b74e9680-c085-4b58-ac16-406be29f8521",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "datacenter server",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"tags\": [\n            \"prova\",\n            \"provolone\"\n        ],\n        \"color\": \"orange\",\n        \"comments\": \"proviamo\",\n        \"details-level\": \"standard\",\n        \"ignore-warnings\": false\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/SHARED-SERVICES/datacenter-server/80540d42-bc1d-4e29-8981-bcdf434bf44d/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"SHARED-SERVICES",
+												"datacenter-server",
+												"80540d42-bc1d-4e29-8981-bcdf434bf44d",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "datacenter query",
+							"item": [
+								{
+									"name": "datacenter queries",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/SHARED-SERVICES/datacenter-queries/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"SHARED-SERVICES",
+												"datacenter-queries",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "datacenter queries",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"name\": \"pongo-una-domanda\",\n        \"query-rules\": {\n            \"key-type\": \"predefined\",\n            \"key\": \"ip-address\",\n            \"values\": [\n                \"10.8.5.3\"\n            ]\n        }\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/datacenter-queries/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"datacenter-queries",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "datacenter query",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/datacenter-query/aba1c91e-f0d2-46da-8019-f570f46df300/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"datacenter-query",
+												"aba1c91e-f0d2-46da-8019-f570f46df300",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "datacenter query",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/datacenter-query/5db14884-c094-44c6-afa4-38fc6e9dcea8/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"datacenter-query",
+												"5db14884-c094-44c6-afa4-38fc6e9dcea8",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "datacenter server",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"color\": \"blue\",\n        \"comments\": \"proviamo\",\n        \"details-level\": \"standard\",\n        \"ignore-warnings\": false\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/datacenter-query/aba1c91e-f0d2-46da-8019-f570f46df300/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"datacenter-query",
+												"aba1c91e-f0d2-46da-8019-f570f46df300",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "policy package",
+							"item": [
+								{
+									"name": "policy packages",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/policy-packages/?local",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"policy-packages",
+												""
+											],
+											"query": [
+												{
+													"key": "local",
+													"value": null
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "policy packages",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"name\": \"Pacchetto_di_pulizie\",\n        \"access\": true,\n        \"desktop-security\": false,\n        \"threat-prevention\": false\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/policy-packages/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"policy-packages",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "policy package",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/policy-package/47a84249-e965-4e94-a112-01c8835ffe17/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"policy-package",
+												"47a84249-e965-4e94-a112-01c8835ffe17",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "policy package",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/policy-package/47a84249-e965-4e94-a112-01c8835ffe17/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"policy-package",
+												"47a84249-e965-4e94-a112-01c8835ffe17",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "policy package",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"comments\": \"This is a comment, prove I'm wrong\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/policy-package/55f0b9d6-7ab1-478c-b8d7-a62f0551ac3c/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"policy-package",
+												"55f0b9d6-7ab1-478c-b8d7-a62f0551ac3c",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "layer",
+							"item": [
+								{
+									"name": "access layers",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/access-layers/?local",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"access-layers",
+												""
+											],
+											"query": [
+												{
+													"key": "local",
+													"value": null
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "access layers",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"name\": \"strato di accesso\",\n        \"add-default-rule\": false,\n        \"applications-and-url-filtering\": true,\n        \"content-awareness\": false,\n        \"detect-using-x-forward-for\": false,\n        \"firewall\": false,\n        \"implicit-cleanup-action\": \"drop\",\n        \"mobile-access\": false,\n        \"shared\": false,\n        \"tags\": [\n            \"prova\",\n            \"provolone\"\n        ],\n        \"color\": \"blue\",\n        \"comments\": \"proviamo\",\n        \"details-level\": \"standard\",\n        \"ignore-warnings\": false\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/access-layers/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"access-layers",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "access layer",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/access-layer/068799fa-f3f4-4a41-af64-61e16af22fe5/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"access-layer",
+												"068799fa-f3f4-4a41-af64-61e16af22fe5",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "access layer",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/access-layer/b3e93002-e383-4600-89de-7bc1680b9288/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"access-layer",
+												"b3e93002-e383-4600-89de-7bc1680b9288",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "access layer",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"applications-and-url-filtering\": true,\n        \"content-awareness\": false,\n        \"detect-using-x-forward-for\": false,\n        \"firewall\": false,\n        \"implicit-cleanup-action\": \"drop\",\n        \"mobile-access\": false,\n        \"shared\": false,\n        \"tags\": \"\",\n        \"color\": \"blue\",\n        \"comments\": \"proviamo\",\n        \"details-level\": \"standard\",\n        \"ignore-warnings\": false\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/access-layer/b3e93002-e383-4600-89de-7bc1680b9288/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"access-layer",
+												"b3e93002-e383-4600-89de-7bc1680b9288",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "threat layers",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/threat-layers/?local",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"threat-layers",
+												""
+											],
+											"query": [
+												{
+													"key": "local",
+													"value": null
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "threat layers",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"name\": \"campo minato\",\n        \"add-default-rule\": false,\n        \"tags\": [\n            \"prova\",\n            \"provolone\"\n        ],\n        \"color\": \"blue\",\n        \"comments\": \"proviamo\",\n        \"details-level\": \"standard\",\n        \"ignore-warnings\": false\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/threat-layers/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"threat-layers",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "threat layer",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/threat-layer/62f1703b-51f7-44df-aedc-c203c37f0ef6/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"threat-layer",
+												"62f1703b-51f7-44df-aedc-c203c37f0ef6",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "threat layer",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/threat-layer/b7d542bc-a536-4c16-9bf9-8e61777a5028/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"threat-layer",
+												"b7d542bc-a536-4c16-9bf9-8e61777a5028",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "threat layer",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"new-name\": \"campo sminato\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/threat-layer/62f1703b-51f7-44df-aedc-c203c37f0ef6/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"threat-layer",
+												"62f1703b-51f7-44df-aedc-c203c37f0ef6",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "https layers",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/https-layers/?local",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"https-layers",
+												""
+											],
+											"query": [
+												{
+													"key": "local",
+													"value": null
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "https layers",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"name\": \"httpismo\",\n        \"shared\": false,\n        \"tags\": [\n            \"prova\",\n            \"provolone\"\n        ],\n        \"color\": \"blue\",\n        \"comments\": \"proviamo\",\n        \"details-level\": \"standard\",\n        \"ignore-warnings\": false\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/https-layers/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"https-layers",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "https layer",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/https-layer/a4b38de8-d2b1-4abe-b2f7-a20726c1ce97/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"https-layer",
+												"a4b38de8-d2b1-4abe-b2f7-a20726c1ce97",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "https layer",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/https-layer/1dfabf6b-873b-4137-b759-85ae233daef4/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"https-layer",
+												"1dfabf6b-873b-4137-b759-85ae233daef4",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "https layer",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"new-name\": \"httpiamo\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/https-layer/a4b38de8-d2b1-4abe-b2f7-a20726c1ce97/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"https-layer",
+												"a4b38de8-d2b1-4abe-b2f7-a20726c1ce97",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "rule",
+							"item": [
+								{
+									"name": "objects in",
+									"item": [
+										{
+											"name": "objects in access rule",
+											"request": {
+												"auth": {
+													"type": "noauth"
+												},
+												"method": "GET",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{jwttoken}}"
+													}
+												],
+												"url": {
+													"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/layer/98e853be-a51d-4833-99fa-11ea30cba3be/access-rule/9ae550f9-993b-4063-9044-e897515b564d/objects/",
+													"host": [
+														"{{checkpointBaseUrl}}"
+													],
+													"path": [
+														"checkpoint",
+														"1",
+														"POLAND",
+														"layer",
+														"98e853be-a51d-4833-99fa-11ea30cba3be",
+														"access-rule",
+														"9ae550f9-993b-4063-9044-e897515b564d",
+														"objects",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "objects in access rule",
+											"request": {
+												"auth": {
+													"type": "noauth"
+												},
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{jwttoken}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"data\": {\n        \"source\": [\n            \"e3e06c81-ed07-4d45-90ba-6ed858369f1b\"\n        ],\n        \"destination\": [\n            \"669301df-ec54-46b2-a6a4-ebaa4ed4a736\"\n        ]\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/layer/98e853be-a51d-4833-99fa-11ea30cba3be/access-rule/9ae550f9-993b-4063-9044-e897515b564d/objects/",
+													"host": [
+														"{{checkpointBaseUrl}}"
+													],
+													"path": [
+														"checkpoint",
+														"1",
+														"POLAND",
+														"layer",
+														"98e853be-a51d-4833-99fa-11ea30cba3be",
+														"access-rule",
+														"9ae550f9-993b-4063-9044-e897515b564d",
+														"objects",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "object in access rule",
+											"request": {
+												"auth": {
+													"type": "noauth"
+												},
+												"method": "DELETE",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{jwttoken}}"
+													}
+												],
+												"url": {
+													"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/layer/98e853be-a51d-4833-99fa-11ea30cba3be/access-rule/c3613b99-5325-4f12-8dbb-ae8ace1b22c8/object/76a56b58-e7d5-46dd-a75d-02eaf7fa423a/",
+													"host": [
+														"{{checkpointBaseUrl}}"
+													],
+													"path": [
+														"checkpoint",
+														"1",
+														"POLAND",
+														"layer",
+														"98e853be-a51d-4833-99fa-11ea30cba3be",
+														"access-rule",
+														"c3613b99-5325-4f12-8dbb-ae8ace1b22c8",
+														"object",
+														"76a56b58-e7d5-46dd-a75d-02eaf7fa423a",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "objects in https rule",
+											"request": {
+												"auth": {
+													"type": "noauth"
+												},
+												"method": "GET",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{jwttoken}}"
+													}
+												],
+												"url": {
+													"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/layer/0ed184d4-1b3b-4909-a337-b6e4c5bb0913/https-rule/c8195eeb-898e-4700-89bd-070ab26893b9/objects/",
+													"host": [
+														"{{checkpointBaseUrl}}"
+													],
+													"path": [
+														"checkpoint",
+														"1",
+														"POLAND",
+														"layer",
+														"0ed184d4-1b3b-4909-a337-b6e4c5bb0913",
+														"https-rule",
+														"c8195eeb-898e-4700-89bd-070ab26893b9",
+														"objects",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "objects in https rule",
+											"request": {
+												"auth": {
+													"type": "noauth"
+												},
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{jwttoken}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"data\": {\n        \"source\": [\n            \"97aeb369-9aea-11d5-bd16-0090272ccb30\"\n        ]\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/layer/0ed184d4-1b3b-4909-a337-b6e4c5bb0913/https-rule/c8195eeb-898e-4700-89bd-070ab26893b9/objects/",
+													"host": [
+														"{{checkpointBaseUrl}}"
+													],
+													"path": [
+														"checkpoint",
+														"1",
+														"POLAND",
+														"layer",
+														"0ed184d4-1b3b-4909-a337-b6e4c5bb0913",
+														"https-rule",
+														"c8195eeb-898e-4700-89bd-070ab26893b9",
+														"objects",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "object in https rule",
+											"request": {
+												"auth": {
+													"type": "noauth"
+												},
+												"method": "DELETE",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{jwttoken}}"
+													}
+												],
+												"url": {
+													"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/layer/0ed184d4-1b3b-4909-a337-b6e4c5bb0913/https-rule/c8195eeb-898e-4700-89bd-070ab26893b9/object/97aeb369-9aea-11d5-bd16-0090272ccb30/",
+													"host": [
+														"{{checkpointBaseUrl}}"
+													],
+													"path": [
+														"checkpoint",
+														"1",
+														"POLAND",
+														"layer",
+														"0ed184d4-1b3b-4909-a337-b6e4c5bb0913",
+														"https-rule",
+														"c8195eeb-898e-4700-89bd-070ab26893b9",
+														"object",
+														"97aeb369-9aea-11d5-bd16-0090272ccb30",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "objects in threat rule",
+											"request": {
+												"auth": {
+													"type": "noauth"
+												},
+												"method": "GET",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{jwttoken}}"
+													}
+												],
+												"url": {
+													"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/layer/c7fc1061-09b6-438d-8c08-0fafa2ce7c24/threat-rule/04c7bf2e-7b39-4e2d-bfb2-10762fa73819/objects/",
+													"host": [
+														"{{checkpointBaseUrl}}"
+													],
+													"path": [
+														"checkpoint",
+														"1",
+														"POLAND",
+														"layer",
+														"c7fc1061-09b6-438d-8c08-0fafa2ce7c24",
+														"threat-rule",
+														"04c7bf2e-7b39-4e2d-bfb2-10762fa73819",
+														"objects",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "objects in threat rule",
+											"request": {
+												"auth": {
+													"type": "noauth"
+												},
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{jwttoken}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"data\": {\n        \"source\": [\n            \"e3e06c81-ed07-4d45-90ba-6ed858369f1b\"\n        ]\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/layer/c7fc1061-09b6-438d-8c08-0fafa2ce7c24/threat-rule/04c7bf2e-7b39-4e2d-bfb2-10762fa73819/objects/",
+													"host": [
+														"{{checkpointBaseUrl}}"
+													],
+													"path": [
+														"checkpoint",
+														"1",
+														"POLAND",
+														"layer",
+														"c7fc1061-09b6-438d-8c08-0fafa2ce7c24",
+														"threat-rule",
+														"04c7bf2e-7b39-4e2d-bfb2-10762fa73819",
+														"objects",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "object in threat rule",
+											"request": {
+												"auth": {
+													"type": "noauth"
+												},
+												"method": "DELETE",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{jwttoken}}"
+													}
+												],
+												"url": {
+													"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/layer/c7fc1061-09b6-438d-8c08-0fafa2ce7c24/threat-rule/04c7bf2e-7b39-4e2d-bfb2-10762fa73819/object/97aeb369-9aea-11d5-bd16-0090272ccb30/",
+													"host": [
+														"{{checkpointBaseUrl}}"
+													],
+													"path": [
+														"checkpoint",
+														"1",
+														"POLAND",
+														"layer",
+														"c7fc1061-09b6-438d-8c08-0fafa2ce7c24",
+														"threat-rule",
+														"04c7bf2e-7b39-4e2d-bfb2-10762fa73819",
+														"object",
+														"97aeb369-9aea-11d5-bd16-0090272ccb30",
+														""
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "access rules",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/SHARED-SERVICES/access-layer/d04e4578-088a-463f-b467-fa4e8f6fd0f8/rules/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"SHARED-SERVICES",
+												"access-layer",
+												"d04e4578-088a-463f-b467-fa4e8f6fd0f8",
+												"rules",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "access rules",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"name\": \"Blocking Something Random\",\n        \"position\": 1,\n        \"service\": [\n            \"SMTP\",\n            \"AOL\"\n        ]\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/access-layer/98e853be-a51d-4833-99fa-11ea30cba3be/rules/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"access-layer",
+												"98e853be-a51d-4833-99fa-11ea30cba3be",
+												"rules",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "access rule",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/SHARED-SERVICES/layer/44f814d0-e1c3-4c94-a711-42298f63c956/access-rule/b401b019-6a0d-4387-aaf2-cfdf9e027f92/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"SHARED-SERVICES",
+												"layer",
+												"44f814d0-e1c3-4c94-a711-42298f63c956",
+												"access-rule",
+												"b401b019-6a0d-4387-aaf2-cfdf9e027f92",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "access rule",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/layer/d04e4578-088a-463f-b467-fa4e8f6fd0f8/access-rule/818a9c8d-db72-4c89-b61c-7843af4db168/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"layer",
+												"d04e4578-088a-463f-b467-fa4e8f6fd0f8",
+												"access-rule",
+												"818a9c8d-db72-4c89-b61c-7843af4db168",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "access rule",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"source\": [\n            \"9bca6fdd-dfc9-407e-8450-e9e6e9184528\"\n        ],\n        \"destination\": [\n            \"7985d099-2ad2-48ab-b819-daf484e5425e\"\n        ]\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/SHARED-SERVICES/layer/44f814d0-e1c3-4c94-a711-42298f63c956/access-rule/b401b019-6a0d-4387-aaf2-cfdf9e027f92/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"SHARED-SERVICES",
+												"layer",
+												"44f814d0-e1c3-4c94-a711-42298f63c956",
+												"access-rule",
+												"b401b019-6a0d-4387-aaf2-cfdf9e027f92",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "https rules",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/https-layer/0ed184d4-1b3b-4909-a337-b6e4c5bb0913/rules/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"https-layer",
+												"0ed184d4-1b3b-4909-a337-b6e4c5bb0913",
+												"rules",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "https rules",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"name\": \"Rule that rulez!\",\n        \"position\": \"top\",\n        \"service\": [\n            \"97aeb443-9aea-11d5-bd16-0090272ccb30\",\n            \"2a2ca572-fbe7-4e7f-92e4-164f5b4fded1\"\n        ],\n        \"service-negate\": false,\n        \"site-category\": [\n            \"97aeb369-9aea-11d5-bd16-0090272ccb30\"\n        ],\n        \"site-category-negate\": false,\n        \"action\": \"f9c18167-91eb-4892-b6a6-2e5665abf199\",\n        \"track\": \"6c488338-8eec-4103-ad21-cd461ac2c471\",\n        \"certificate\": \"56844f13-2e49-4be9-8571-a071c1b6a8ba\",\n        \"comments\": \"\",\n        \"enabled\": true,\n        \"install-on\": [\n            \"213f0a22-49da-4719-94b3-f2d74623f3fb\"\n        ]\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/https-layer/0ed184d4-1b3b-4909-a337-b6e4c5bb0913/rules/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"https-layer",
+												"0ed184d4-1b3b-4909-a337-b6e4c5bb0913",
+												"rules",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "https rule",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/layer/0ed184d4-1b3b-4909-a337-b6e4c5bb0913/https-rule/c8195eeb-898e-4700-89bd-070ab26893b9/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"layer",
+												"0ed184d4-1b3b-4909-a337-b6e4c5bb0913",
+												"https-rule",
+												"c8195eeb-898e-4700-89bd-070ab26893b9",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "https rule",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/layer/0ed184d4-1b3b-4909-a337-b6e4c5bb0913/https-rule/8c912205-3091-400d-9d4c-bbcd69ec01bc/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"layer",
+												"0ed184d4-1b3b-4909-a337-b6e4c5bb0913",
+												"https-rule",
+												"8c912205-3091-400d-9d4c-bbcd69ec01bc",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "threat rules",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/threat-layer/c7fc1061-09b6-438d-8c08-0fafa2ce7c24/rules/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"threat-layer",
+												"c7fc1061-09b6-438d-8c08-0fafa2ce7c24",
+												"rules",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "threat rules",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"name\": \"Rule that rulez all the threats!\",\n        \"position\": \"top\",\n        \"comments\": \"\",\n        \"enabled\": true\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/threat-layer/c7fc1061-09b6-438d-8c08-0fafa2ce7c24/rules/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"threat-layer",
+												"c7fc1061-09b6-438d-8c08-0fafa2ce7c24",
+												"rules",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "threat rule",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/layer/c7fc1061-09b6-438d-8c08-0fafa2ce7c24/threat-rule/8310a441-193a-4efd-98ec-6c3d8d12bfd2/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"layer",
+												"c7fc1061-09b6-438d-8c08-0fafa2ce7c24",
+												"threat-rule",
+												"8310a441-193a-4efd-98ec-6c3d8d12bfd2",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "threat rule",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/layer/c7fc1061-09b6-438d-8c08-0fafa2ce7c24/threat-rule/8310a441-193a-4efd-98ec-6c3d8d12bfd2/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"layer",
+												"c7fc1061-09b6-438d-8c08-0fafa2ce7c24",
+												"threat-rule",
+												"8310a441-193a-4efd-98ec-6c3d8d12bfd2",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "NAT rule",
+							"item": [
+								{
+									"name": "objects in",
+									"item": [
+										{
+											"name": "objects in NAT rule",
+											"request": {
+												"auth": {
+													"type": "noauth"
+												},
+												"method": "GET",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{jwttoken}}"
+													}
+												],
+												"url": {
+													"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/package/55f0b9d6-7ab1-478c-b8d7-a62f0551ac3c/nat-rule/fa7e28bc-c5ee-46d6-a128-4370cf0942b5/objects/",
+													"host": [
+														"{{checkpointBaseUrl}}"
+													],
+													"path": [
+														"checkpoint",
+														"1",
+														"POLAND",
+														"package",
+														"55f0b9d6-7ab1-478c-b8d7-a62f0551ac3c",
+														"nat-rule",
+														"fa7e28bc-c5ee-46d6-a128-4370cf0942b5",
+														"objects",
+														""
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "objects in NAT rule",
+											"request": {
+												"auth": {
+													"type": "noauth"
+												},
+												"method": "POST",
+												"header": [
+													{
+														"key": "Authorization",
+														"type": "text",
+														"value": "Bearer {{jwttoken}}"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n    \"data\": {\n        \"original-source\": \"97aeb369-9aea-11d5-bd16-0090272ccb30\"\n    }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/package/55f0b9d6-7ab1-478c-b8d7-a62f0551ac3c/nat-rule/5710445d-1d58-45c5-91c6-49a7ce922f18/objects/",
+													"host": [
+														"{{checkpointBaseUrl}}"
+													],
+													"path": [
+														"checkpoint",
+														"1",
+														"POLAND",
+														"package",
+														"55f0b9d6-7ab1-478c-b8d7-a62f0551ac3c",
+														"nat-rule",
+														"5710445d-1d58-45c5-91c6-49a7ce922f18",
+														"objects",
+														""
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "NAT rules",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/package/55f0b9d6-7ab1-478c-b8d7-a62f0551ac3c/nat-rules/?local",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"package",
+												"55f0b9d6-7ab1-478c-b8d7-a62f0551ac3c",
+												"nat-rules",
+												""
+											],
+											"query": [
+												{
+													"key": "local",
+													"value": null
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "NAT rules",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"position\": \"top\",\n        \"enabled\": true\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/package/55f0b9d6-7ab1-478c-b8d7-a62f0551ac3c/nat-rules/?local",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"package",
+												"55f0b9d6-7ab1-478c-b8d7-a62f0551ac3c",
+												"nat-rules",
+												""
+											],
+											"query": [
+												{
+													"key": "local",
+													"value": null
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "NAT rule",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/package/55f0b9d6-7ab1-478c-b8d7-a62f0551ac3c/nat-rule/12fb2f05-bc8e-4aa8-9164-b687f06c8ef8/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"package",
+												"55f0b9d6-7ab1-478c-b8d7-a62f0551ac3c",
+												"nat-rule",
+												"12fb2f05-bc8e-4aa8-9164-b687f06c8ef8",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "NAT rule",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/package/55f0b9d6-7ab1-478c-b8d7-a62f0551ac3c/nat-rule/12fb2f05-bc8e-4aa8-9164-b687f06c8ef8/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"package",
+												"55f0b9d6-7ab1-478c-b8d7-a62f0551ac3c",
+												"nat-rule",
+												"12fb2f05-bc8e-4aa8-9164-b687f06c8ef8",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "role",
+							"item": [
+								{
+									"name": "access roles",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/SHARED-SERVICES/access-roles/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"SHARED-SERVICES",
+												"access-roles",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "access role",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/SHARED-SERVICES/access-role/b96916e3-d3c2-487b-a77c-5233bdbe6d69/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"SHARED-SERVICES",
+												"access-role",
+												"b96916e3-d3c2-487b-a77c-5233bdbe6d69",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "user",
+							"item": [
+								{
+									"name": "user",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/SHARED-SERVICES/user/1ec14820-3f61-4f4f-b3b1-32a3f8e841fe/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"SHARED-SERVICES",
+												"user",
+												"1ec14820-3f61-4f4f-b3b1-32a3f8e841fe",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Ips",
+							"item": [
+								{
+									"name": "ips",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/CORPORATE/ips/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"CORPORATE",
+												"ips",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "ips update",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {}\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/ips-update/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"ips-update",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "ips extended attribute",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/ips-extended-attribute/2a1d7bbf-a4ef-1e40-a014-955e1edf2a49/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"ips-extended-attribute",
+												"2a1d7bbf-a4ef-1e40-a014-955e1edf2a49",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "ips extended attributes Copy",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/ips-extended-attributes/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"ips-extended-attributes",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "ips schedule",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/ips-schedule/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"ips-schedule",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "ips schedule",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"enabled\": true,\n        \"recurrence\": {\n            \"pattern\": \"interval\",\n            \"minutes\": 1440\n        }\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://10.0.111.26/api/v1/checkpoint/1/POLAND/ips-schedule/",
+											"protocol": "http",
+											"host": [
+												"10",
+												"0",
+												"111",
+												"26"
+											],
+											"path": [
+												"api",
+												"v1",
+												"checkpoint",
+												"1",
+												"POLAND",
+												"ips-schedule",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "threat Protection",
+							"item": [
+								{
+									"name": "threat protections",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/threat-protections/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"threat-protections",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "threat protections delete all",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"package-format\": \"snort\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/Global/threat-protections/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"Global",
+												"threat-protections",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "threat protections",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"package-format\": \"snort\",\n        \"package-path\": \"/path/to/community.rules\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/threat-protections/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"threat-protections",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "threat protection",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/Global/threat-protection/4731947d-9837-a541-8ec2-3ffae793ebcb/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"Global",
+												"threat-protection",
+												"4731947d-9837-a541-8ec2-3ffae793ebcb",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "threat protection",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"comments\": \"Lo zio pino\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/Global/threat-protection/0e83a392-c4c3-4b42-a5d5-3974e3e17521/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"Global",
+												"threat-protection",
+												"0e83a392-c4c3-4b42-a5d5-3974e3e17521",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "threat Profile",
+							"item": [
+								{
+									"name": "threat profiles",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/Global/threat-profiles/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"Global",
+												"threat-profiles",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "threat profiles",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"name\": \"ciccio\",\n        \"active-protections-severity\": \"high\",\n        \"active-protections-performance-impact\": \"medium\",\n        \"confidence-level-low\": \"Detect\",\n        \"confidence-level-medium\": \"Prevent\",\n        \"confidence-level-high\": \"Prevent\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/Global/threat-profiles/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"Global",
+												"threat-profiles",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "threat profile",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/Global/threat-profile/0d1b5176-a76f-4613-b4f5-977e2569b75f/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"Global",
+												"threat-profile",
+												"0d1b5176-a76f-4613-b4f5-977e2569b75f",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "threat profile",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/threat-profile/caf8b711-d762-4c1e-82d5-6af2549b2869/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"threat-profile",
+												"caf8b711-d762-4c1e-82d5-6af2549b2869",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "threat profile",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"comments\": \"Lo zio pino\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/threat-profile/caf8b711-d762-4c1e-82d5-6af2549b2869/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"threat-profile",
+												"caf8b711-d762-4c1e-82d5-6af2549b2869",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "threat ioc feed",
+							"item": [
+								{
+									"name": "threat ioc feeds",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/Global/threat-ioc-feeds/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"Global",
+												"threat-ioc-feeds",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "threat ioc feeds",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "POST",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"name\": \"ciccio\",\n        \"action\": \"detect\",\n        \"feed-url\": \"https://per.di.qua.org/ciapa/\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/threat-ioc-feeds/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"threat-ioc-feeds",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "threat ioc feed",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/threat-ioc-feed/f0839e8e-7f66-4e48-86c9-05e04e359c77/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"threat-ioc-feed",
+												"f0839e8e-7f66-4e48-86c9-05e04e359c77",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "threat profile",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/threat-ioc-feed/caf8b711-d762-4c1e-82d5-6af2549b2869/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"threat-ioc-feed",
+												"caf8b711-d762-4c1e-82d5-6af2549b2869",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "threat profile",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"comments\": \"Lo zio pino\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/threat-ioc-feed/caf8b711-d762-4c1e-82d5-6af2549b2869/",
+											"host": [
+												"{{checkpointBaseUrl}}"
+											],
+											"path": [
+												"checkpoint",
+												"1",
+												"POLAND",
+												"threat-ioc-feed",
+												"caf8b711-d762-4c1e-82d5-6af2549b2869",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "checkpoint gateways",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "{{checkpointBaseUrl}}/checkpoint/1/gateways/",
+							"host": [
+								"{{checkpointBaseUrl}}"
+							],
+							"path": [
+								"checkpoint",
+								"1",
+								"gateways",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sessions mds",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "{{checkpointBaseUrl}}/checkpoint/1/sessions/?fullDetails",
+							"host": [
+								"{{checkpointBaseUrl}}"
+							],
+							"path": [
+								"checkpoint",
+								"1",
+								"sessions",
+								""
+							],
+							"query": [
+								{
+									"key": "fullDetails",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sessions",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/sessions/",
+							"host": [
+								"{{checkpointBaseUrl}}"
+							],
+							"path": [
+								"checkpoint",
+								"1",
+								"POLAND",
+								"sessions",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "tasks",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/tasks/",
+							"host": [
+								"{{checkpointBaseUrl}}"
+							],
+							"path": [
+								"checkpoint",
+								"1",
+								"POLAND",
+								"tasks",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "task",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "{{checkpointBaseUrl}}/checkpoint/1/SHARED-SERVICES/task/01234567-89ab-cdef-b254-e87514387b19/",
+							"host": [
+								"{{checkpointBaseUrl}}"
+							],
+							"path": [
+								"checkpoint",
+								"1",
+								"SHARED-SERVICES",
+								"task",
+								"01234567-89ab-cdef-b254-e87514387b19",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "object",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "{{checkpointBaseUrl}}/checkpoint/1/SHARED-SERVICES/object/aace093d-631c-4c8d-9257-9fc3da0c2d69/",
+							"host": [
+								"{{checkpointBaseUrl}}"
+							],
+							"path": [
+								"checkpoint",
+								"1",
+								"SHARED-SERVICES",
+								"object",
+								"aace093d-631c-4c8d-9257-9fc3da0c2d69",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "object (where used)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "{{checkpointBaseUrl}}/checkpoint/1/SHARED-SERVICES/object/c221bbd9-b01b-42cb-8a1a-f40e84aa1e43/where-used/",
+							"host": [
+								"{{checkpointBaseUrl}}"
+							],
+							"path": [
+								"checkpoint",
+								"1",
+								"SHARED-SERVICES",
+								"object",
+								"c221bbd9-b01b-42cb-8a1a-f40e84aa1e43",
+								"where-used",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "objects (show all unused)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "{{checkpointBaseUrl}}/checkpoint/1/POLAND/objects/unused/",
+							"host": [
+								"{{checkpointBaseUrl}}"
+							],
+							"path": [
+								"checkpoint",
+								"1",
+								"POLAND",
+								"objects",
+								"unused",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "history",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "{{checkpointBaseUrl}}/checkpoint/history/",
+							"host": [
+								"{{checkpointBaseUrl}}"
+							],
+							"path": [
+								"checkpoint",
+								"history",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
