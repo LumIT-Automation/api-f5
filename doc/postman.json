@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "32e60278-d3bd-480b-89f3-112a59ee3cd3",
+		"_postman_id": "665f82f7-8cb8-495f-aced-8e655b9f5b24",
 		"name": "api-f5",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -78,17 +78,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/asset/1/",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5/asset/1/",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5",
 								"asset",
 								"1",
@@ -113,17 +107,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/asset/2/?includeDr",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5/asset/2/?includeDr",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5",
 								"asset",
 								"2",
@@ -154,17 +142,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/assets/",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5/assets/",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5",
 								"assets",
 								""
@@ -188,17 +170,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/assets/?includeDr",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5/assets/?includeDr",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5",
 								"assets",
 								""
@@ -237,17 +213,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/assets/",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5/assets/",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5",
 								"assets",
 								""
@@ -280,17 +250,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/asset/1/",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5/asset/1/",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5",
 								"asset",
 								"1",
@@ -315,17 +279,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/asset/4/",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5/asset/4/",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5",
 								"asset",
 								"4",
@@ -359,17 +317,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/asset/2/assetsdr/",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5/asset/2/assetsdr/",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5",
 								"asset",
 								"2",
@@ -404,17 +356,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/asset/1/assetdr/3/",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5/asset/1/assetdr/3/",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5",
 								"asset",
 								"1",
@@ -441,17 +387,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/asset/1/assetdr/3/",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5/asset/1/assetdr/3/",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5",
 								"asset",
 								"1",
@@ -489,17 +429,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/authorizations/",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5/authorizations/",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5",
 								"authorizations",
 								""
@@ -529,17 +463,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/permissions/",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5/permissions/",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5",
 								"permissions",
 								""
@@ -578,17 +506,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/permissions/",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5/permissions/",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5",
 								"permissions",
 								""
@@ -627,17 +549,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/permission/5/",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5/permission/5/",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5",
 								"permission",
 								"5",
@@ -668,17 +584,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/permission/3/",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5/permission/3/",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5",
 								"permission",
 								"3",
@@ -709,17 +619,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/identity-groups/",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5/identity-groups/",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5",
 								"identity-groups",
 								""
@@ -752,17 +656,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/identity-groups/",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5/identity-groups/",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5",
 								"identity-groups",
 								""
@@ -795,17 +693,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/identity-group/cn=groupStaff,cn=users,dc=lab,dc=localNew/",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5/identity-group/cn=groupStaff,cn=users,dc=lab,dc=localNew/",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5",
 								"identity-group",
 								"cn=groupStaff,cn=users,dc=lab,dc=localNew",
@@ -830,17 +722,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/identity-group/cn=groupStaff,cn=users,dc=lab,dc=localNewModified/",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5/identity-group/cn=groupStaff,cn=users,dc=lab,dc=localNewModified/",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5",
 								"identity-group",
 								"cn=groupStaff,cn=users,dc=lab,dc=localNewModified",
@@ -871,17 +757,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/roles/",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5/roles/",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5",
 								"roles",
 								""
@@ -911,17 +791,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/roles/?related=privileges",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5/roles/?related=privileges",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5",
 								"roles",
 								""
@@ -953,17 +827,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/configuration/global/",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5/configuration/global/",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5",
 								"configuration",
 								"global",
@@ -994,17 +862,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/configuration/global/",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5/configuration/global/",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5",
 								"configuration",
 								"global",
@@ -1034,17 +896,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/action-history/",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5/action-history/",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5",
 								"action-history",
 								""
@@ -1068,17 +924,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5/history/",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5/history/",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5",
 								"history",
 								""
@@ -1125,17 +975,11 @@
 									}
 								},
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/workflow/virtualservers/?drReplica=1",
-									"protocol": "http",
+									"raw": "{{f5BaseUrl}}/f5/2/Partition1/workflow/virtualservers/?drReplica=1",
 									"host": [
-										"10",
-										"0",
-										"111",
-										"22"
+										"{{f5BaseUrl}}"
 									],
 									"path": [
-										"api",
-										"v1",
 										"f5",
 										"2",
 										"Partition1",
@@ -1183,17 +1027,11 @@
 									}
 								},
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/Common/workflow/virtualservers/",
-									"protocol": "http",
+									"raw": "{{f5BaseUrl}}/f5/2/Common/workflow/virtualservers/",
 									"host": [
-										"10",
-										"0",
-										"111",
-										"22"
+										"{{f5BaseUrl}}"
 									],
 									"path": [
-										"api",
-										"v1",
 										"f5",
 										"2",
 										"Common",
@@ -1226,17 +1064,11 @@
 									}
 								],
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/Common/workflow/virtualserver/vs_CONCERTO_TEST/?drReplica=1",
-									"protocol": "http",
+									"raw": "{{f5BaseUrl}}/f5/2/Common/workflow/virtualserver/vs_CONCERTO_TEST/?drReplica=1",
 									"host": [
-										"10",
-										"0",
-										"111",
-										"22"
+										"{{f5BaseUrl}}"
 									],
 									"path": [
-										"api",
-										"v1",
 										"f5",
 										"2",
 										"Common",
@@ -1276,17 +1108,11 @@
 									}
 								],
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/workflow/node/NODOSO/",
-									"protocol": "http",
+									"raw": "{{f5BaseUrl}}/f5/2/Partition1/workflow/node/NODOSO/",
 									"host": [
-										"10",
-										"0",
-										"111",
-										"22"
+										"{{f5BaseUrl}}"
 									],
 									"path": [
-										"api",
-										"v1",
 										"f5",
 										"2",
 										"Partition1",
@@ -1325,17 +1151,11 @@
 									}
 								],
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/asm/policies/",
-									"protocol": "http",
+									"raw": "{{f5BaseUrl}}/f5/2/asm/policies/",
 									"host": [
-										"10",
-										"0",
-										"111",
-										"22"
+										"{{f5BaseUrl}}"
 									],
 									"path": [
-										"api",
-										"v1",
 										"f5",
 										"2",
 										"asm",
@@ -1367,17 +1187,11 @@
 									}
 								],
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/3/asm/policy/vdlgq-KAexbclPfzMgeLqQ/",
-									"protocol": "http",
+									"raw": "{{f5BaseUrl}}/f5/3/asm/policy/vdlgq-KAexbclPfzMgeLqQ/",
 									"host": [
-										"10",
-										"0",
-										"111",
-										"22"
+										"{{f5BaseUrl}}"
 									],
 									"path": [
-										"api",
-										"v1",
 										"f5",
 										"3",
 										"asm",
@@ -1410,17 +1224,11 @@
 									}
 								],
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/3/asm/policy/vdlgq-KAexbclPfzMgeLqQ/apply/",
-									"protocol": "http",
+									"raw": "{{f5BaseUrl}}/f5/3/asm/policy/vdlgq-KAexbclPfzMgeLqQ/apply/",
 									"host": [
-										"10",
-										"0",
-										"111",
-										"22"
+										"{{f5BaseUrl}}"
 									],
 									"path": [
-										"api",
-										"v1",
 										"f5",
 										"3",
 										"asm",
@@ -1454,17 +1262,11 @@
 									}
 								],
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/asm/policy/_gzCjGA0oBICVI6Lkznebw/",
-									"protocol": "http",
+									"raw": "{{f5BaseUrl}}/f5/2/asm/policy/_gzCjGA0oBICVI6Lkznebw/",
 									"host": [
-										"10",
-										"0",
-										"111",
-										"22"
+										"{{f5BaseUrl}}"
 									],
 									"path": [
-										"api",
-										"v1",
 										"f5",
 										"2",
 										"asm",
@@ -1497,17 +1299,11 @@
 									}
 								],
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/source-asset/3/destination-asset/4/asm/source-policy/vdlgq-KAexbclPfzMgeLqQ/destination-policy/vdlgq-KAexbclPfzMgeLqQ/differences/",
-									"protocol": "http",
+									"raw": "{{f5BaseUrl}}/f5/source-asset/3/destination-asset/4/asm/source-policy/vdlgq-KAexbclPfzMgeLqQ/destination-policy/vdlgq-KAexbclPfzMgeLqQ/differences/",
 									"host": [
-										"10",
-										"0",
-										"111",
-										"22"
+										"{{f5BaseUrl}}"
 									],
 									"path": [
-										"api",
-										"v1",
 										"f5",
 										"source-asset",
 										"3",
@@ -1555,17 +1351,11 @@
 									}
 								},
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/4/asm/policy/vdlgq-KAexbclPfzMgeLqQ/merge/",
-									"protocol": "http",
+									"raw": "{{f5BaseUrl}}/f5/4/asm/policy/vdlgq-KAexbclPfzMgeLqQ/merge/",
 									"host": [
-										"10",
-										"0",
-										"111",
-										"22"
+										"{{f5BaseUrl}}"
 									],
 									"path": [
-										"api",
-										"v1",
 										"f5",
 										"4",
 										"asm",
@@ -1601,17 +1391,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Common/datagroups/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/datagroups/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Common",
@@ -1637,17 +1421,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Common/datagroups/internal/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/datagroups/internal/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Common",
@@ -1674,17 +1452,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Common/datagroups/ANY/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/datagroups/ANY/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Common",
@@ -1726,17 +1498,11 @@
 											}
 										},
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Common/datagroups/internal/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/datagroups/internal/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Common",
@@ -1769,17 +1535,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Common/datagroup/internal/DATAGROUP/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/datagroup/internal/DATAGROUP/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Common",
@@ -1822,17 +1582,11 @@
 											}
 										},
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Common/datagroup/internal/DATAGROUP/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/datagroup/internal/DATAGROUP/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Common",
@@ -1871,17 +1625,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Common/irules/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/irules/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Common",
@@ -1922,17 +1670,11 @@
 											}
 										},
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Common/irules/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/irules/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Common",
@@ -1973,17 +1715,11 @@
 											}
 										},
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Common/irule/TEST_RULE/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/irule/TEST_RULE/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Common",
@@ -2016,17 +1752,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Common/irule/TEST_RULE/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/irule/TEST_RULE/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Common",
@@ -2058,17 +1788,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/monitors/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/monitors/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -2094,17 +1818,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/monitors/tcp-half-open/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/monitors/tcp-half-open/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -2131,17 +1849,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/monitors/ANY/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/monitors/ANY/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -2183,17 +1895,11 @@
 											}
 										},
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/monitors/tcp-half-open/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/monitors/tcp-half-open/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -2226,17 +1932,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/monitor/tcp-half-open/MONITOR/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/monitor/tcp-half-open/MONITOR/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -2279,17 +1979,11 @@
 											}
 										},
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/monitor/tcp-half-open/MONITOR/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/monitor/tcp-half-open/MONITOR/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -2322,17 +2016,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/nodes/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/nodes/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -2373,17 +2061,11 @@
 											}
 										},
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/nodes/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/nodes/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -2415,17 +2097,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/node/NODE/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/node/NODE/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -2467,17 +2143,11 @@
 											}
 										},
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/node/NODE/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/node/NODE/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -2515,17 +2185,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Common/policy/asm_auto_l7_policy__vs_CONCERTO_TEST/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/policy/asm_auto_l7_policy__vs_CONCERTO_TEST/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Common",
@@ -2558,17 +2222,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Common/policies/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/policies/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Common",
@@ -2609,17 +2267,11 @@
 											}
 										},
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Common/policies/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/policies/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Common",
@@ -2660,17 +2312,11 @@
 											}
 										},
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Common/policy/PUBLISHED_POLICY/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/policy/PUBLISHED_POLICY/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Common",
@@ -2712,17 +2358,11 @@
 											}
 										},
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Common/policy/Drafts/POLICY/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/policy/Drafts/POLICY/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Common",
@@ -2756,17 +2396,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Common/policy/Drafts/POLICY/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/policy/Drafts/POLICY/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Common",
@@ -2805,17 +2439,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/pools/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/pools/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -2856,17 +2484,11 @@
 											}
 										},
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/pools/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/pools/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -2907,17 +2529,11 @@
 											}
 										},
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/pool/POOL/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/pool/POOL/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -2959,17 +2575,11 @@
 											}
 										},
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/pool/POOL/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/pool/POOL/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -3002,17 +2612,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/pool/POOL/members/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/pool/POOL/members/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -3055,17 +2659,11 @@
 											}
 										},
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/pool/POOL/members/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/pool/POOL/members/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -3099,17 +2697,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/pool/POOL/member/NODE:80/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/pool/POOL/member/NODE:80/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -3144,17 +2736,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/pool/POOL/member/NODE:80/stats/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/pool/POOL/member/NODE:80/stats/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -3199,17 +2785,11 @@
 											}
 										},
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/pool/POOL/member/NODE:80/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/pool/POOL/member/NODE:80/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -3244,17 +2824,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/pool/POOL/member/NODE:80/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/pool/POOL/member/NODE:80/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -3294,17 +2868,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/profile/fastl4/FASTL4_PROFILE/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/profile/fastl4/FASTL4_PROFILE/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -3338,17 +2906,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/profiles/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/profiles/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -3380,17 +2942,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/profiles/fastl4/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/profiles/fastl4/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -3423,17 +2979,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/profiles/ANY/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/profiles/ANY/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -3475,17 +3025,11 @@
 											}
 										},
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/profiles/fastl4/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/profiles/fastl4/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -3518,17 +3062,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/profile/fastl4/FASTL4_PROFILE/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/profile/fastl4/FASTL4_PROFILE/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -3571,17 +3109,11 @@
 											}
 										},
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/profile/fastl4/FASTL4_PROFILE/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/profile/fastl4/FASTL4_PROFILE/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -3620,17 +3152,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/snatpools/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/snatpools/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -3671,17 +3197,11 @@
 											}
 										},
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/snatpools/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/snatpools/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -3722,17 +3242,11 @@
 											}
 										},
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/snatpool/SNATPOOL/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/snatpool/SNATPOOL/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -3774,17 +3288,11 @@
 											}
 										},
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/snatpool/SNATPOOL/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/snatpool/SNATPOOL/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -3822,17 +3330,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Common/virtualservers/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/virtualservers/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Common",
@@ -3864,17 +3366,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Common/virtualservers/?related=policies,profiles",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/virtualservers/?related=policies,profiles",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Common",
@@ -3921,17 +3417,11 @@
 											}
 										},
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/virtualservers/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/virtualservers/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -3963,17 +3453,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Common/virtualserver/vs_CONCERTO_TEST/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/virtualserver/vs_CONCERTO_TEST/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Common",
@@ -4006,17 +3490,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Common/virtualserver/vs_testMik/?related=policies,profiles",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/virtualserver/vs_testMik/?related=policies,profiles",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Common",
@@ -4055,17 +3533,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Common/virtualserver/vs_testMik/?related=policies,profiles&profileType=client-ssl,http",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/virtualserver/vs_testMik/?related=policies,profiles&profileType=client-ssl,http",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Common",
@@ -4117,17 +3589,11 @@
 											}
 										},
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/virtualserver/VIRTUALSERVER/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/virtualserver/VIRTUALSERVER/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -4160,17 +3626,11 @@
 											}
 										],
 										"url": {
-											"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/virtualserver/VIRTUALSERVER/",
-											"protocol": "http",
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/virtualserver/VIRTUALSERVER/",
 											"host": [
-												"10",
-												"0",
-												"111",
-												"22"
+												"{{f5BaseUrl}}"
 											],
 											"path": [
-												"api",
-												"v1",
 												"f5",
 												"2",
 												"Partition1",
@@ -4204,17 +3664,11 @@
 									}
 								],
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/partitions/",
-									"protocol": "http",
+									"raw": "{{f5BaseUrl}}/f5/2/partitions/",
 									"host": [
-										"10",
-										"0",
-										"111",
-										"22"
+										"{{f5BaseUrl}}"
 									],
 									"path": [
-										"api",
-										"v1",
 										"f5",
 										"2",
 										"partitions",
@@ -4244,17 +3698,11 @@
 									}
 								],
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/routedomains/",
-									"protocol": "http",
+									"raw": "{{f5BaseUrl}}/f5/2/routedomains/",
 									"host": [
-										"10",
-										"0",
-										"111",
-										"22"
+										"{{f5BaseUrl}}"
 									],
 									"path": [
-										"api",
-										"v1",
 										"f5",
 										"2",
 										"routedomains",
@@ -4288,17 +3736,11 @@
 									}
 								],
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/certificates/",
-									"protocol": "http",
+									"raw": "{{f5BaseUrl}}/f5/2/Partition1/certificates/",
 									"host": [
-										"10",
-										"0",
-										"111",
-										"22"
+										"{{f5BaseUrl}}"
 									],
 									"path": [
-										"api",
-										"v1",
 										"f5",
 										"2",
 										"Partition1",
@@ -4337,17 +3779,11 @@
 									}
 								},
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/certificates/",
-									"protocol": "http",
+									"raw": "{{f5BaseUrl}}/f5/2/Partition1/certificates/",
 									"host": [
-										"10",
-										"0",
-										"111",
-										"22"
+										"{{f5BaseUrl}}"
 									],
 									"path": [
-										"api",
-										"v1",
 										"f5",
 										"2",
 										"Partition1",
@@ -4386,17 +3822,11 @@
 									}
 								},
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/certificate/mamma.crt/",
-									"protocol": "http",
+									"raw": "{{f5BaseUrl}}/f5/2/Partition1/certificate/mamma.crt/",
 									"host": [
-										"10",
-										"0",
-										"111",
-										"22"
+										"{{f5BaseUrl}}"
 									],
 									"path": [
-										"api",
-										"v1",
 										"f5",
 										"2",
 										"Partition1",
@@ -4427,17 +3857,11 @@
 									}
 								],
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/certificate/mamma.crt/",
-									"protocol": "http",
+									"raw": "{{f5BaseUrl}}/f5/2/Partition1/certificate/mamma.crt/",
 									"host": [
-										"10",
-										"0",
-										"111",
-										"22"
+										"{{f5BaseUrl}}"
 									],
 									"path": [
-										"api",
-										"v1",
 										"f5",
 										"2",
 										"Partition1",
@@ -4468,17 +3892,11 @@
 									}
 								],
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/keys/",
-									"protocol": "http",
+									"raw": "{{f5BaseUrl}}/f5/2/Partition1/keys/",
 									"host": [
-										"10",
-										"0",
-										"111",
-										"22"
+										"{{f5BaseUrl}}"
 									],
 									"path": [
-										"api",
-										"v1",
 										"f5",
 										"2",
 										"Partition1",
@@ -4518,17 +3936,11 @@
 									}
 								},
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/keys/",
-									"protocol": "http",
+									"raw": "{{f5BaseUrl}}/f5/2/Partition1/keys/",
 									"host": [
-										"10",
-										"0",
-										"111",
-										"22"
+										"{{f5BaseUrl}}"
 									],
 									"path": [
-										"api",
-										"v1",
 										"f5",
 										"2",
 										"Partition1",
@@ -4568,17 +3980,11 @@
 									}
 								},
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/key/mamma.key/",
-									"protocol": "http",
+									"raw": "{{f5BaseUrl}}/f5/2/Partition1/key/mamma.key/",
 									"host": [
-										"10",
-										"0",
-										"111",
-										"22"
+										"{{f5BaseUrl}}"
 									],
 									"path": [
-										"api",
-										"v1",
 										"f5",
 										"2",
 										"Partition1",
@@ -4609,17 +4015,11 @@
 									}
 								],
 								"url": {
-									"raw": "http://10.0.111.22/api/v1/f5/2/Partition1/key/mamma.key/",
-									"protocol": "http",
+									"raw": "{{f5BaseUrl}}/f5/2/Partition1/key/mamma.key/",
 									"host": [
-										"10",
-										"0",
-										"111",
-										"22"
+										"{{f5BaseUrl}}"
 									],
 									"path": [
-										"api",
-										"v1",
 										"f5",
 										"2",
 										"Partition1",
@@ -4649,17 +4049,11 @@
 							}
 						],
 						"url": {
-							"raw": "http://10.0.111.22/api/v1/f5",
-							"protocol": "http",
+							"raw": "{{f5BaseUrl}}/f5",
 							"host": [
-								"10",
-								"0",
-								"111",
-								"22"
+								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"api",
-								"v1",
 								"f5"
 							]
 						}
