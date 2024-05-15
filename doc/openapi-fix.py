@@ -138,39 +138,12 @@ for idx in range(len(lines)):
             print(blocks)
             # Starting from the second block, drop the url (at startBlockIndex) and put all the remaining lines under the previous block.
             for b in range(1, len(blocks)):
-                #print(lines[ blockIndexes[b][0] ])
                 blocks[b]["block"] = removeSubList(cleanedLines, blocks[b]["start"] - delta, blocks[b]["end"] - delta)
 
                 blocks[b]["block"].pop(0) # remove url.
                 delta += 1
-                #print('AAAAAAA   ' + str(blocks[b]))
-                #print('\n')
 
                 insertSubList(cleanedLines, blocks[0]["end"], blocks[b]["block"])
-
-
-"""
-cleanedLines = list()
-# uid
-prevUrlLine = ""
-for line in lines:
-    if re.match('\s+/f5/.*/:', line):
-        if line == prevUrlLine: # skip
-            continue
-        prevUrlLine = line
-    cleanedLines.append(line)
-
-# domain
-lines = cleanedLines
-cleanedLines = []
-prevUrlLine = ""
-for line in lines:
-    if re.match('(.*)/f5/assetId/partition/.*', line):
-        if line == prevUrlLine: # skip
-            continue
-        prevUrlLine = line
-    cleanedLines.append(line)
-"""
 
 
 with open(args.outputFile, 'w') as o:
