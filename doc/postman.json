@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "665f82f7-8cb8-495f-aced-8e655b9f5b24",
+		"_postman_id": "fe89639e-8db8-4257-b770-225408962d96",
 		"name": "api-f5",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -20,14 +20,15 @@
 							}
 						],
 						"url": {
-							"raw": "{{f5BaseUrl}}/f5/doc/postman.json",
+							"raw": "{{f5BaseUrl}}/f5/doc/postman.json/",
 							"host": [
 								"{{f5BaseUrl}}"
 							],
 							"path": [
 								"f5",
 								"doc",
-								"postman.json"
+								"postman.json",
+								""
 							]
 						}
 					},
@@ -45,14 +46,15 @@
 							}
 						],
 						"url": {
-							"raw": "{{f5BaseUrl}}/f5/doc/swagger.yaml",
+							"raw": "{{f5BaseUrl}}/f5/doc/swagger.yaml/",
 							"host": [
 								"{{f5BaseUrl}}"
 							],
 							"path": [
 								"f5",
 								"doc",
-								"swagger.yaml"
+								"swagger.yaml",
+								""
 							]
 						}
 					},
@@ -4049,12 +4051,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{f5BaseUrl}}/f5",
+							"raw": "{{f5BaseUrl}}/f5/",
 							"host": [
 								"{{f5BaseUrl}}"
 							],
 							"path": [
-								"f5"
+								"f5",
+								""
 							]
 						}
 					},

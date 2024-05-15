@@ -31,6 +31,49 @@ def insertSubList(l: list, pos: int, sublist: list) -> None:
 
 
 
+def getBlocksIndexes(l: list) -> (int, int):
+    start = 0
+    blocks = list()
+
+    try:
+        for i in range(len(l)):
+            if re.match('\s+/f5/(.*/)?:', l[i]):  # line delimiting of a block or end last block.
+                if not start:
+                    start = i
+                else:
+                    blocks.append((start, i))
+                    start = i
+            if start and re.match('^[a-z]+:', l[i]): # end last block.
+                blocks.append((start, i))
+                break
+
+        return blocks
+    except Exception as e:
+        raise e
+
+
+
+def getBlockHttpMethodsIndexes(b: list, blockStartIndex: int) -> (int, int):
+    httpMethods = ('get:', 'post:', 'put:', 'patch:', 'delete:')
+    start = 0
+    subBlocksIdx = list()
+
+    try:
+        for i in range(len(b)):
+            if b[i].strip() in httpMethods:
+                if not start:
+                    start = i
+                else:
+                    subBlocksIdx.append((blockStartIndex + start, blockStartIndex + i - 1)) # end subblock.
+                    start = i
+        subBlocksIdx.append((blockStartIndex + start, blockStartIndex + len(b) - 1)) # last subblock.
+
+        return subBlocksIdx
+    except Exception as e:
+        raise e
+
+
+### Begin.
 with open(args.inputFile, "r") as txtFile:
     lines = [ line.rstrip() for line in txtFile ]
 
@@ -85,7 +128,7 @@ for url in urls:
                 lines[idx] = adjustedLineUrl + ':'
 
 
-# When the same url for 2 http verbs is recorded in postman with 2 different parameters, it results 2 identical urls in swagger. Join them.
+# When the same url for 2 http methods is recorded in postman with 2 different parameters, it results 2 identical urls in swagger. Join them.
 # Example:
 #
 #  /checkpoint/1/POLAND/tag/8f01bedd-facf-4aca-a89b-2c0e4c46f386/:
@@ -121,7 +164,6 @@ for idx in range(len(lines)):
                     j += 1
                 blocks.append({"start": startBlockIndex, "end": j})
 
-            print(blocks)
             # Starting from the second block, drop the url (at startBlockIndex) and put all the remaining lines under the previous block.
             for b in range(1, len(blocks)):
                 blocks[b]["block"] = removeSubList(cleanedLines, blocks[b]["start"] - delta, blocks[b]["end"] - delta)
@@ -131,7 +173,41 @@ for idx in range(len(lines)):
                 insertSubList(cleanedLines, blocks[0]["end"], blocks[b]["block"])
 
 
+
+
+# Duplicated http method for the same url are forbidden. For each url extract the block and remove duplicate http verbs.
+lines = cleanedLines
+blocksIndexes = getBlocksIndexes(lines)
+
+badSubBlocks = list()
+for blockIdx in blocksIndexes:
+    block = [ lines[l] for l in range(blockIdx[0], blockIdx[1]) ]
+    subBlocksIndexes = getBlockHttpMethodsIndexes(block, blockIdx[0])
+
+    httpMethods = [ lines[i[0]].strip() for i in subBlocksIndexes ] # the first line of a subblock is the http method.
+    for m in httpMethods:
+        if httpMethods.count(m) > 1: # duplicated http method.
+            badSubIdx = list()
+            #first = True # preserve the first occurrence.
+            for i in subBlocksIndexes:
+                if lines[i[0]].strip() == m:
+                    badSubIdx.append(i)
+
+            sortedBadSubIdx = sorted(badSubIdx, key=lambda tup: tup[0]) # sort in order to preserve the first occurrence.
+            sortedBadSubIdx.pop(0)
+            badSubBlocks.extend(sortedBadSubIdx)
+
+#print(badSubBlocks)
+dedupe = list(set(badSubBlocks)) # remove duplicates.
+sortedBadSubBlocks = sorted(dedupe, key=lambda tup: tup[0], reverse=True)
+
+# Remove bad subblocks lines in reverse order.
+for badBlock in sortedBadSubBlocks:
+    for index in reversed(range(badBlock[0], badBlock[1])):
+        lines.pop(index)
+
+
 with open(args.outputFile, 'w') as o:
-    for line in cleanedLines:
+    for line in lines:
         print(line, file = o)
 
