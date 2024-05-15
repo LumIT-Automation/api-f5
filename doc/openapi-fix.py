@@ -44,20 +44,6 @@ for idx in range(len(lines)):
             lines[idx+1] = lines[idx+1].replace(' : ', '   ')
 """
 
-# AssetID, uid.
-i1 = re.compile('/f5/[0-9]+/(.*)') # AssetId.
-i2 = re.compile('(.*)/[0-9]+/(.*)') # other id.
-p2 = re.compile('(.*)\/[a-zA-z]{5}-[a-zA-Z]{16}\/(.*)[a-zA-z]{5}-[a-zA-Z]{16}\/(.*)') # ../uid/../uid/..
-p1 = re.compile('(.*)\/[a-zA-z]{5}-[a-zA-Z]{16}\/(.*)') # ../uid/..
-
-# loop the lines and replace when needed.
-for idx in range(len(lines)):
-    if re.match('\s+/f5/.*/:', lines[idx]): # adjust urls only.
-        lines[idx] = i1.sub('/f5/someId/\\1', lines[idx])
-        lines[idx] = i2.sub('\\1/someId/\\2', lines[idx])
-        lines[idx] = p2.sub('\\1/uid/\\2uid/\\3', lines[idx])
-        lines[idx] = p1.sub('\\1/uid/\\2', lines[idx])
-
 # Identify the urls parameters, using the F5Urls.py file.
 reUrl = re.compile("^\s+.*path\('([^']*)'.*")
 urls = list()
@@ -75,7 +61,7 @@ reId = re.compile('<int:([A-Za-z0-9]*[Ii]d)>/')
 reSegmentId = re.compile('<int:([A-Za-z0-9]*[Ii]d)>')
 for url in urls:
     strMatch = reStr.sub('[A-Za-z0-9_-]+/', url)
-    urlMatch = '/f5/' + reId.sub('someId/', strMatch)
+    urlMatch = '/f5/' + reId.sub('[0-9]+/', strMatch)
 
     for idx in range(len(lines)):
         if re.match('\s+/f5/.*/:', lines[idx]): # get urls only from the inputFile.
@@ -139,7 +125,6 @@ for idx in range(len(lines)):
             # Starting from the second block, drop the url (at startBlockIndex) and put all the remaining lines under the previous block.
             for b in range(1, len(blocks)):
                 blocks[b]["block"] = removeSubList(cleanedLines, blocks[b]["start"] - delta, blocks[b]["end"] - delta)
-
                 blocks[b]["block"].pop(0) # remove url.
                 delta += 1
 
@@ -149,4 +134,4 @@ for idx in range(len(lines)):
 with open(args.outputFile, 'w') as o:
     for line in cleanedLines:
         print(line, file = o)
-    
+
