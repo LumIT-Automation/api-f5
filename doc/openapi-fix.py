@@ -11,6 +11,26 @@ args = parser.parse_args()
 
 
 
+# Remove a sublist from list l starting from the element at the index pos.
+def removeSubList(l: list, startPos: int, endPos: int) -> list:
+    removedSubList = list()
+
+    try:
+        for i in range(startPos, endPos):
+            removedSubList.append(l.pop(startPos)) # the index shift, so the position is always the same.
+        return removedSubList
+    except Exception as e:
+        raise e
+
+
+
+# Insert a sublist at the index pos in the list l.
+def insertSubList(l: list, pos: int, sublist: list) -> None:
+    for i in range(len(sublist)):
+        l.insert(pos + i, sublist[i])
+
+
+
 with open(args.inputFile, "r") as txtFile:
     lines = [ line.rstrip() for line in txtFile ]
 
@@ -49,14 +69,13 @@ with open(args.urlFile, "r") as urlFile:
 
 # For each url try to find a match a line in the input file and adjust that line.
 # At each loop modify the url string to obtain a regex and try to match an url line of the inputFile.
-reStr = re.compile('<str:([A-Za-z0-9]+)>/')
-reSegmentStr = re.compile('<str:([A-Za-z0-9]+)>')
+reStr = re.compile('<str:([A-Za-z0-9_-]+)>/')
+reSegmentStr = re.compile('<str:([A-Za-z0-9_-]+)>')
 reId = re.compile('<int:([A-Za-z0-9]*[Ii]d)>/')
 reSegmentId = re.compile('<int:([A-Za-z0-9]*[Ii]d)>')
 for url in urls:
-    strMatch = reStr.sub('[A-Za-z0-9]+/', url)
+    strMatch = reStr.sub('[A-Za-z0-9_-]+/', url)
     urlMatch = '/f5/' + reId.sub('someId/', strMatch)
-
 
     for idx in range(len(lines)):
         if re.match('\s+/f5/.*/:', lines[idx]): # get urls only from the inputFile.
@@ -75,27 +94,12 @@ for url in urls:
                         s = reSegmentStr.sub('{\\1}', segment )
                     else:
                         s = segment
-                    #print('SSSSSSSSSSSSS ' + s )
                     adjustedLineUrl += s + '/'
 
                 lines[idx] = adjustedLineUrl + ':'
 
-"""
-for idx in range(len(lines)):
-    res = re.search(r'(.*)/f5/assetId/([^/]+)/(.*)', lines[idx])
-    if res:
-        endUrl = res.group(3)[:-1] # remove trailing ':"
-        endUrlPattern = endUrl
 
-        if '/uid/' in endUrlPattern:
-            endUrlPattern = endUrlPattern.replace('/uid/', '/<str:[a-zA-z0-9:]+[uU]id>/')
-        m = ".*path\('<int:assetId>/<str:partitionName/" + endUrlPattern + "'.*"
-        for u in urls:
-            if re.match(m, u):
-                lines[idx] = res.group(1)+ "/f5/assetId/partition/" + endUrl + ':'
-"""
-
-# When the same url for 2 http verbs is recorded in postman with 2 different uid or 2 different partition name, it results 2 identical urls in swagger. Join them.
+# When the same url for 2 http verbs is recorded in postman with 2 different parameters, it results 2 identical urls in swagger. Join them.
 # Example:
 #
 #  /checkpoint/1/POLAND/tag/8f01bedd-facf-4aca-a89b-2c0e4c46f386/:
@@ -105,7 +109,47 @@ for idx in range(len(lines)):
 #     patch:
 #
 # The result are 2 equal entries: /checkpoint/1/POLAND/tag/uid/
-# The second one should be removed the data will be automatically merged in the first one.
+# The second url should be removed and the data should be merged in the first one.
+# Find duplicated urls:
+cleanedLines = lines.copy()
+delta = 0 # when removing the duplicated url with the pop() function one position is subtracted.
+skipAlreadyProcessed = list()
+for idx in range(len(lines)):
+    if idx in skipAlreadyProcessed:
+        continue
+    if re.match('\s+/f5/.*/:', lines[idx]): # get urls only from the inputFile.
+        if lines.count(lines[idx]) > 1: # duplicated url.
+            dupIndexList = list() # a list with the positions of a duplicated url.
+            index = 0
+            while len(dupIndexList) < lines.count(lines[idx]):
+                index = lines.index(lines[idx], index+1)
+                dupIndexList.append(index)
+
+            skipAlreadyProcessed.extend(dupIndexList) # avoid to re-process.
+
+            # For each index of the duplicated url, find the length of the block under the url, which ends at the next url.
+            blocks = list() # list of dicts: (startBlockIndex, endBlockIndex).
+            for startBlockIndex in dupIndexList:
+                j = startBlockIndex + 1
+                while not re.match('\s+/f5/.*/:', lines[j]):
+                    j += 1
+                blocks.append({"start": startBlockIndex, "end": j})
+
+            print(blocks)
+            # Starting from the second block, drop the url (at startBlockIndex) and put all the remaining lines under the previous block.
+            for b in range(1, len(blocks)):
+                #print(lines[ blockIndexes[b][0] ])
+                blocks[b]["block"] = removeSubList(cleanedLines, blocks[b]["start"] - delta, blocks[b]["end"] - delta)
+
+                blocks[b]["block"].pop(0) # remove url.
+                delta += 1
+                #print('AAAAAAA   ' + str(blocks[b]))
+                #print('\n')
+
+                insertSubList(cleanedLines, blocks[0]["end"], blocks[b]["block"])
+
+
+"""
 cleanedLines = list()
 # uid
 prevUrlLine = ""
@@ -115,7 +159,7 @@ for line in lines:
             continue
         prevUrlLine = line
     cleanedLines.append(line)
-"""
+
 # domain
 lines = cleanedLines
 cleanedLines = []
