@@ -16,7 +16,7 @@ def removeSubList(l: list, startPos: int, endPos: int) -> list:
     removedSubList = list()
 
     try:
-        for i in range(startPos, endPos):
+        for i in range(startPos, endPos + 1):
             removedSubList.append(l.pop(startPos)) # the index shift, so the position is always the same.
         return removedSubList
     except Exception as e:
@@ -41,13 +41,14 @@ def getBlocksIndexes(l: list) -> (int, int):
                 if not start:
                     start = i
                 else:
-                    blocks.append((start, i))
+                    blocks.append((start, i-1))
                     start = i
             if start and re.match('^[a-z]+:', l[i]): # end last block.
-                blocks.append((start, i))
+                blocks.append((start, i-1))
                 break
 
-        return blocks
+        b = list(set(blocks)) # sort
+        return sorted(b, key=lambda tup: tup[0])
     except Exception as e:
         raise e
 
@@ -140,6 +141,7 @@ for url in urls:
 # The result are 2 equal entries: /checkpoint/1/POLAND/tag/uid/
 # The second url should be removed and the data should be merged in the first one.
 # Find duplicated urls:
+"""
 cleanedLines = lines.copy()
 delta = 0 # when removing the duplicated url with the pop() function one position is subtracted.
 skipAlreadyProcessed = list()
@@ -172,17 +174,51 @@ for idx in range(len(lines)):
 
                 insertSubList(cleanedLines, blocks[0]["end"], blocks[b]["block"])
 
+"""
+blocksIndexes = getBlocksIndexes(lines)
+blockUrls = list()
+goodUrls = list()
+badBlocks = list()
+for blockIdxs in blocksIndexes:
+    # Example: {"idxs": (1, 5), "url": "/f5/asset:"} -> {"idxs": (startIdx, endIdx), "url": url}
+    blockUrls.append({"idxs": blockIdxs, "url": lines[blockIdxs[0]]}) # the first line of a block is the url.
 
+for blockUrl in blockUrls:
+    if blockUrl["url"] not in [ url["url"] for url in goodUrls]: # the first occurrence of an url is good, the others are bad.
+        goodUrls.append(blockUrl)
+    else: # Example:
+        # {
+        #    "idxs": (10, 20) # (startIdx, endIdx)
+        #    "block": ["line10", "line11", ...] # [lines]
+        # }
+        badB = {
+            "idxs": blockUrl["idxs"],
+            "block": []
+        }
+        for r in range(blockUrl["idxs"][0], blockUrl["idxs"][1]+1):
+            badB["block"].append(lines[r])
+        if not badB in badBlocks:
+            badBlocks.append(badB)
+
+# now remove the lines[] list all the blocks listed in badBlocks in reverse order.
+sortedBadBlocks = sorted(badBlocks, key=lambda d: d["idxs"][0], reverse=True)
+for block in sortedBadBlocks:
+    removeSubList(lines, block["idxs"][0], block["idxs"][1])
+
+# for each removed block strip the url, find the good url in lines[] and append all others row at the good block.
+for block in sortedBadBlocks:
+    for url in goodUrls:
+        if url["url"] == block["block"][0]:
+            insertSubList(lines, url["idxs"][1]+1, block["block"][1:])
 
 
 # Duplicated http method for the same url are forbidden. For each url extract the block and remove duplicate http verbs.
-lines = cleanedLines
 blocksIndexes = getBlocksIndexes(lines)
-
 badSubBlocks = list()
 for blockIdx in blocksIndexes:
-    block = [ lines[l] for l in range(blockIdx[0], blockIdx[1]) ]
+    block = [ lines[l] for l in range(blockIdx[0], blockIdx[1]+1) ]
     subBlocksIndexes = getBlockHttpMethodsIndexes(block, blockIdx[0])
+    """
 
     httpMethods = [ lines[i[0]].strip() for i in subBlocksIndexes ] # the first line of a subblock is the http method.
     for m in httpMethods:
@@ -197,16 +233,16 @@ for blockIdx in blocksIndexes:
             sortedBadSubIdx.pop(0)
             badSubBlocks.extend(sortedBadSubIdx)
 
-#print(badSubBlocks)
+
 dedupe = list(set(badSubBlocks)) # remove duplicates.
 sortedBadSubBlocks = sorted(dedupe, key=lambda tup: tup[0], reverse=True)
 
 # Remove bad subblocks lines in reverse order.
 for badBlock in sortedBadSubBlocks:
-    for index in reversed(range(badBlock[0], badBlock[1])):
+    for index in reversed(range(badBlock[0], badBlock[1] + 1 )):
+        print("remove " + str(index))
         lines.pop(index)
-
-
+"""
 with open(args.outputFile, 'w') as o:
     for line in lines:
         print(line, file = o)
