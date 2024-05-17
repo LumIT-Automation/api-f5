@@ -114,6 +114,8 @@ with open(args.urlFile, "r") as urlFile:
 
 # For each url try to find a match a line in the input file and adjust that line.
 # At each loop modify the url string to obtain a regex and try to match an url line of the inputFile.
+# Also create a data structure to save the parameters info for each url.
+urlsData = list()
 reStr = re.compile('<str:([A-Za-z0-9_-]+)>/')
 reSegmentStr = re.compile('<str:([A-Za-z0-9_-]+)>')
 reId = re.compile('<int:([A-Za-z0-9]*[Ii]d)>/')
@@ -122,9 +124,11 @@ for url in urls:
     strMatch = reStr.sub('[A-Za-z0-9_-]+/', url)
     urlMatch = '/f5/' + reId.sub('[0-9]+/', strMatch)
 
+    # Now we have the right regexp built from the urlFile to match an url in the inputFile.
     for idx in range(len(lines)):
         if re.match('\s+/f5/.*/:', lines[idx]): # get urls only from the inputFile.
             if re.match(urlMatch, lines[idx].strip().replace(':','')): # url line example in inputFile: /f5/<int:assetId>/Partition1/pool/POOL/:.
+                urlData = dict()
 
                 adjustedLineUrl = '  /' # 2 leading spaces.
                 segments = url.split('/')
@@ -134,15 +138,20 @@ for url in urls:
 
                 for segment in segments:
                     if re.match(reSegmentId, segment):
-                        s = reSegmentId.sub('{\\1}', segment )
+                        paramName = reSegmentId.sub('\\1', segment )
+                        urlData[paramName] = "int"
+                        s = "{" + paramName + "}"
                     elif re.match(reSegmentStr, segment):
-                        s = reSegmentStr.sub('{\\1}', segment )
+                        paramName = reSegmentStr.sub('\\1', segment )
+                        urlData[paramName] = "string"
+                        s = "{" + paramName + "}"
                     else:
                         s = segment
                     adjustedLineUrl += s + '/'
 
                 lines[idx] = adjustedLineUrl + ':'
-
+                urlData["url"] = lines[idx]
+                urlsData.append(urlData)
 
 # When the same url for 2 http methods is recorded in postman with 2 different parameters, it results 2 identical urls in swagger. Join them.
 # Example:
