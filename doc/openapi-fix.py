@@ -30,6 +30,22 @@ def insertSubList(l: list, pos: int, sublist: list) -> None:
         l.insert(pos + i, sublist[i])
 
 
+# A "block" start with an url and end at the next url.
+def getBlockEndIdx(l: list, startIdx: int):
+    endIdx = startIdx
+
+    try:
+        for i in range(startIdx+1, len(l)):
+            # start next block or end of last block.
+            if re.match('\s+/f5/(.*/)?:', l[i]) or re.match('^[a-z]+:', l[i]):
+                endIdx = i - 1
+                break
+
+        return endIdx
+    except Exception as e:
+        raise e
+
+
 
 def getBlocksIndexes(l: list) -> (int, int):
     start = 0
@@ -46,7 +62,7 @@ def getBlocksIndexes(l: list) -> (int, int):
                         "url": l[start]
                     })
                     start = i
-            if start and re.match('^[a-z]+:', l[i]): # end last block.
+            elif start and re.match('^[a-z]+:', l[i]): # end last block.
                 blocks.append({
                     "idxs": (start, i-1),
                     "url": l[start]
@@ -139,7 +155,7 @@ for url in urls:
                 for segment in segments:
                     if re.match(reSegmentId, segment):
                         paramName = reSegmentId.sub('\\1', segment )
-                        urlData[paramName] = "int"
+                        urlData[paramName] = "integer"
                         s = "{" + paramName + "}"
                     elif re.match(reSegmentStr, segment):
                         paramName = reSegmentStr.sub('\\1', segment )
@@ -166,9 +182,9 @@ for url in urls:
 # The second url should be removed and the data should be merged in the first one.
 # Find duplicated urls:
 blocksIndexes = getBlocksIndexes(lines)
+
 goodUrls = list()
 badBlocks = list()
-
 for blockUrl in blocksIndexes:
     if blockUrl["url"] not in [ url["url"] for url in goodUrls]: # the first occurrence of an url is good, the others are bad.
         goodUrls.append(blockUrl)
@@ -233,6 +249,42 @@ sortedBadSubBlocks = sorted(badSubBlocks, key=lambda d: d["idxs"][0], reverse=Tr
 # Remove bad subblocks lines in reverse order.
 for badSubBlock in sortedBadSubBlocks:
     removeSubList(lines, badSubBlock["idxs"][0], badSubBlock["idxs"][1])
+
+# Now add the parameters info for each url, previously saved in urlsData.
+# First remove the duplicated, due to the (already removed) duplicated urls.
+dedupe = []
+for urlData in urlsData:
+    if urlData["url"] not in [ uData["url"] for uData in dedupe ]:
+        dedupe.append(urlData)
+urlsData = dedupe
+
+for urlData in urlsData:
+    urlInfoBlock = list()
+    for param in urlData.keys():
+        if param != 'url':
+            urlInfoBlock.extend([
+                "      - name: " + param,
+                "        in: path",
+                "        required: true",
+                "        schema:",
+                "          type: " + urlData[param],
+                "        description: " + param
+            ])
+
+    blockIdxs = dict()
+    for idx in range(len(lines)):
+        if lines[idx] == urlData["url"]:
+            blockIdxs["start"] = idx
+            blockIdxs["end"] = getBlockEndIdx(lines, idx)
+
+    if blockIdxs:
+        for i in range( blockIdxs["start"], blockIdxs["end"]):
+            if re.match('\s+parameters:', lines[i]): # append the url parameters info under the "parameters:" line if it exists.
+                # Verify that the "parameters:" have 6 leading spaces, otherwise the strings in urlInfoBlock must be adjusted.
+                if lines[i].rstrip().count(' ') == 6:
+                    insertSubList(lines, i+1, urlInfoBlock)
+                    break
+
 
 with open(args.outputFile, 'w') as o:
     for line in lines:
