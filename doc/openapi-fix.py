@@ -41,20 +41,26 @@ def getBlocksIndexes(l: list) -> (int, int):
                 if not start:
                     start = i
                 else:
-                    blocks.append((start, i-1))
+                    blocks.append({
+                        "idxs": (start, i-1),
+                        "url": l[start]
+                    })
                     start = i
             if start and re.match('^[a-z]+:', l[i]): # end last block.
-                blocks.append((start, i-1))
+                blocks.append({
+                    "idxs": (start, i-1),
+                    "url": l[start]
+                })
                 break
 
-        b = list(set(blocks)) # sort
-        return sorted(b, key=lambda tup: tup[0])
+        #b = list(set(blocks)) # sort
+        return sorted(blocks, key=lambda d: d["idxs"][0])
     except Exception as e:
         raise e
 
 
 
-def getBlockHttpMethodsIndexes(b: list, blockStartIndex: int) -> (int, int):
+def getSubBlocksIndexes(b: list, blockStartIndex: int) -> (int, int):
     httpMethods = ('get:', 'post:', 'put:', 'patch:', 'delete:')
     start = 0
     subBlocksIdx = list()
@@ -65,9 +71,15 @@ def getBlockHttpMethodsIndexes(b: list, blockStartIndex: int) -> (int, int):
                 if not start:
                     start = i
                 else:
-                    subBlocksIdx.append((blockStartIndex + start, blockStartIndex + i - 1)) # end subblock.
+                    subBlocksIdx.append({
+                        "idxs": (blockStartIndex + start, blockStartIndex + i - 1),
+                        "httpMethod": b[start].strip()
+                    }) # end subblock.
                     start = i
-        subBlocksIdx.append((blockStartIndex + start, blockStartIndex + len(b) - 1)) # last subblock.
+        subBlocksIdx.append({
+            "idxs": (blockStartIndex + start, blockStartIndex + len(b) - 1),
+            "httpMethod": b[start].strip()
+        }) # last subblock.
 
         return subBlocksIdx
     except Exception as e:
@@ -78,15 +90,18 @@ def getBlockHttpMethodsIndexes(b: list, blockStartIndex: int) -> (int, int):
 with open(args.inputFile, "r") as txtFile:
     lines = [ line.rstrip() for line in txtFile ]
 
-"""
-# Fix the file coming from postman2openapi, not always perfect.
+# Fix the file coming from postman2openapi, not always perfect. Bad lines example:
+#  ...
+#  ? /f5/source-asset/3/destination-asset/4/asm/source-policy/vdlgq-KAexbclPfzMgeLqQ/destination-policy/vdlgq-KAexbclPfzMgeLqQ/differences/
+#  : get:
+#  ...
+
 u = re.compile('(\s*)\? (/.*/$)')
 for idx in range(len(lines)):
     if re.match(u, lines[idx]):
         lines[idx] = u.sub('\\1\\2:', lines[idx])
         if re.match('\s+ : .*', lines[idx+1]):
             lines[idx+1] = lines[idx+1].replace(' : ', '   ')
-"""
 
 # Identify the urls parameters, using the F5Urls.py file.
 reUrl = re.compile("^\s+.*path\('([^']*)'.*")
@@ -141,49 +156,11 @@ for url in urls:
 # The result are 2 equal entries: /checkpoint/1/POLAND/tag/uid/
 # The second url should be removed and the data should be merged in the first one.
 # Find duplicated urls:
-"""
-cleanedLines = lines.copy()
-delta = 0 # when removing the duplicated url with the pop() function one position is subtracted.
-skipAlreadyProcessed = list()
-for idx in range(len(lines)):
-    if idx in skipAlreadyProcessed:
-        continue
-    if re.match('\s+/f5/.*/:', lines[idx]): # get urls only from the inputFile.
-        if lines.count(lines[idx]) > 1: # duplicated url.
-            dupIndexList = list() # a list with the positions of a duplicated url.
-            index = 0
-            while len(dupIndexList) < lines.count(lines[idx]):
-                index = lines.index(lines[idx], index+1)
-                dupIndexList.append(index)
-
-            skipAlreadyProcessed.extend(dupIndexList) # avoid to re-process.
-
-            # For each index of the duplicated url, find the length of the block under the url, which ends at the next url.
-            blocks = list() # list of dicts: (startBlockIndex, endBlockIndex).
-            for startBlockIndex in dupIndexList:
-                j = startBlockIndex + 1
-                while not re.match('\s+/f5/.*/:', lines[j]):
-                    j += 1
-                blocks.append({"start": startBlockIndex, "end": j})
-
-            # Starting from the second block, drop the url (at startBlockIndex) and put all the remaining lines under the previous block.
-            for b in range(1, len(blocks)):
-                blocks[b]["block"] = removeSubList(cleanedLines, blocks[b]["start"] - delta, blocks[b]["end"] - delta)
-                blocks[b]["block"].pop(0) # remove url.
-                delta += 1
-
-                insertSubList(cleanedLines, blocks[0]["end"], blocks[b]["block"])
-
-"""
 blocksIndexes = getBlocksIndexes(lines)
-blockUrls = list()
 goodUrls = list()
 badBlocks = list()
-for blockIdxs in blocksIndexes:
-    # Example: {"idxs": (1, 5), "url": "/f5/asset:"} -> {"idxs": (startIdx, endIdx), "url": url}
-    blockUrls.append({"idxs": blockIdxs, "url": lines[blockIdxs[0]]}) # the first line of a block is the url.
 
-for blockUrl in blockUrls:
+for blockUrl in blocksIndexes:
     if blockUrl["url"] not in [ url["url"] for url in goodUrls]: # the first occurrence of an url is good, the others are bad.
         goodUrls.append(blockUrl)
     else: # Example:
@@ -201,48 +178,53 @@ for blockUrl in blockUrls:
             badBlocks.append(badB)
 
 # now remove the lines[] list all the blocks listed in badBlocks in reverse order.
-sortedBadBlocks = sorted(badBlocks, key=lambda d: d["idxs"][0], reverse=True)
-for block in sortedBadBlocks:
+reverseSortedBadBlocks = sorted(badBlocks, key=lambda d: d["idxs"][0], reverse=True)
+for block in reverseSortedBadBlocks:
     removeSubList(lines, block["idxs"][0], block["idxs"][1])
 
-# for each removed block strip the url, find the good url in lines[] and append all others row at the good block.
-for block in sortedBadBlocks:
-    for url in goodUrls:
-        if url["url"] == block["block"][0]:
-            insertSubList(lines, url["idxs"][1]+1, block["block"][1:])
+blocksIndexes = getBlocksIndexes(lines) # the remove operation have shifted the indexes of the lines[] list.
+# for each removed block strip the url, find the url in lines[] and append all others row at the good block.
+for badBlock in reverseSortedBadBlocks:
+    for goodBlock in blocksIndexes:
+        if badBlock["block"][0].strip() == goodBlock["url"]: # the first line of a block is the url.
+            insertSubList(lines, goodBlock["idxs"][1]+1, badBlock["block"][1:])
+            goodBlock["idxs"] = (goodBlock["idxs"][0], goodBlock["idxs"][1] + len(badBlock["block"] -1)) # needed for > 1 inserts in the same block.
 
 
 # Duplicated http method for the same url are forbidden. For each url extract the block and remove duplicate http verbs.
 blocksIndexes = getBlocksIndexes(lines)
 badSubBlocks = list()
 for blockIdx in blocksIndexes:
-    block = [ lines[l] for l in range(blockIdx[0], blockIdx[1]+1) ]
-    subBlocksIndexes = getBlockHttpMethodsIndexes(block, blockIdx[0])
+    block = [ lines[l] for l in range(blockIdx["idxs"][0], blockIdx["idxs"][1]+1) ]
+    # A subblock start with the http method and end at the next method. Example line:
+    #    get:
+    subBlocksIndexes = getSubBlocksIndexes(block, blockIdx["idxs"][0])
+    """
+    [
+        {
+            "idxs": (492, 497), 
+            "httpMethod": "get:"
+        }, 
+        {   "idxs": (498, 530), 
+            "httpMethod": "delete:"
+        }
+    ]
     """
 
-    httpMethods = [ lines[i[0]].strip() for i in subBlocksIndexes ] # the first line of a subblock is the http method.
-    for m in httpMethods:
-        if httpMethods.count(m) > 1: # duplicated http method.
-            badSubIdx = list()
-            #first = True # preserve the first occurrence.
-            for i in subBlocksIndexes:
-                if lines[i[0]].strip() == m:
-                    badSubIdx.append(i)
+    goodSubBlocks = []
+    for i in subBlocksIndexes:
+        if i["httpMethod"] not in [m["httpMethod"] for m in goodSubBlocks]:
+            goodSubBlocks.append(i)
+        else:
+            badSubBlocks.append(i)
 
-            sortedBadSubIdx = sorted(badSubIdx, key=lambda tup: tup[0]) # sort in order to preserve the first occurrence.
-            sortedBadSubIdx.pop(0)
-            badSubBlocks.extend(sortedBadSubIdx)
-
-
-dedupe = list(set(badSubBlocks)) # remove duplicates.
-sortedBadSubBlocks = sorted(dedupe, key=lambda tup: tup[0], reverse=True)
+#dedupe = list(set(badSubBlocks)) # remove duplicates.
+sortedBadSubBlocks = sorted(badSubBlocks, key=lambda d: d["idxs"][0], reverse=True)
 
 # Remove bad subblocks lines in reverse order.
-for badBlock in sortedBadSubBlocks:
-    for index in reversed(range(badBlock[0], badBlock[1] + 1 )):
-        print("remove " + str(index))
-        lines.pop(index)
-"""
+for badSubBlock in sortedBadSubBlocks:
+    removeSubList(lines, badSubBlock["idxs"][0], badSubBlock["idxs"][1])
+
 with open(args.outputFile, 'w') as o:
     for line in lines:
         print(line, file = o)
