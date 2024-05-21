@@ -9,7 +9,7 @@ from .controllers.F5.net import RouteDomains
 from .controllers.F5.sys import Certificate, Certificates
 from .controllers.F5.asm import Policies as ASMPolicies, Policy as ASMPolicy, PoliciesDifference as ASMPolicyDifference, PolicyMerge as ASMPolicyMerge, PolicyApply as ASMPolicyApply
 from .controllers.Asset import AssetAssetDr, AssetAssetsDr, Asset, Assets
-from .controllers.F5.Usecases import VirtualServersController as WorkflowVirtualServers, VirtualServerController as WorkflowVirtualServer, DeleteNodeController as WorkflowNode
+from .controllers.F5.Usecases import VirtualServersController as WorkflowVirtualServers, VirtualServerController as WorkflowVirtualServer, DeleteNodeController as WorkflowNode, CertificateUpdateController as WorkflowCertificate
 from .controllers.Permission import Authorizations, IdentityGroups, IdentityGroup, Roles, Permission, Permissions
 from .controllers.Configuration import Configuration
 from .controllers.History import History, ActionHistory
@@ -110,6 +110,9 @@ urlpatterns = [
 
     # Node
     path('<int:assetId>/<str:partitionName>/workflow/node/<str:nodeName>/', WorkflowNode.F5WorkflowDeleteNodeController.as_view(), name='f5-workflow-node'),
+
+    # Certificate
+    path('<int:assetId>/<str:partitionName>/workflow/client-ssl-profile/<str:profileName>/', WorkflowCertificate.F5WorkflowCertificateUpdateController.as_view(), name='f5-workflow-certificate'),
 
     # History.
     path('history/', History.HistoryLogsController.as_view(), name='f5-log-history'),

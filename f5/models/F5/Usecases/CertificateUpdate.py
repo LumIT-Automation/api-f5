@@ -8,7 +8,7 @@ from f5.helpers.Log import Log
 from f5.helpers.Exception import CustomException
 
 
-class CertificateUpdateService():
+class CertificateUpdateWorkflow():
     def __init__(self, assetId: int, partitionName: str, profileName: str, user: dict, replicaUuid: str, *args, **kwargs):
 
         self.assetId = assetId
@@ -28,7 +28,7 @@ class CertificateUpdateService():
         try:
             self.__certInstall(data["certificate"])
 
-            dataKey = data.get("key", "")
+            dataKey = data.get("key", {})
             if dataKey:
                 self.__keyInstall(dataKey)
 

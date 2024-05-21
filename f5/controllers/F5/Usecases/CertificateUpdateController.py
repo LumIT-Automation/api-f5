@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from f5.models.Permission.Permission import Permission
-from f5.models.F5.Usecases.CertificateUpdate import CertificateUpdateService
+from f5.models.F5.Usecases.CertificateUpdate import CertificateUpdateWorkflow
 
 from f5.serializers.F5.Usecases.VirtualServer import F5WorkflowVirtualServerSerializer as WorkflowVirtualServerSerializer
 
@@ -14,7 +14,7 @@ from f5.helpers.Lock import Lock
 from f5.helpers.Log import Log
 
 
-class F5ServiceCertificateUpdateController(CustomController):
+class F5WorkflowCertificateUpdateController(CustomController):
     @staticmethod
     @ReplicateVirtualServerCreation
     def put(request: Request, assetId: int, partitionName: str, profileName: str) -> Response:
@@ -37,7 +37,7 @@ class F5ServiceCertificateUpdateController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        CertificateUpdateService(assetId, partitionName, profileName, user, replicaUuid).updateCert(data)
+                        CertificateUpdateWorkflow(assetId, partitionName, profileName, user, replicaUuid).updateCert(data)
 
                         httpStatus = status.HTTP_201_CREATED
                         lock.release()
