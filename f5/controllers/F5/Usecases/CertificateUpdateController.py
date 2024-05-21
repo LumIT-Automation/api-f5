@@ -5,7 +5,7 @@ from rest_framework import status
 from f5.models.Permission.Permission import Permission
 from f5.models.F5.Usecases.CertificateUpdate import CertificateUpdateWorkflow
 
-from f5.serializers.F5.Usecases.VirtualServer import F5WorkflowVirtualServerSerializer as WorkflowVirtualServerSerializer
+from f5.serializers.F5.Usecases.CertificateUpdate import F5CertificateUpdateSerializer as WorkflowCertificateSerializer
 
 from f5.controllers.CustomController import CustomController
 
@@ -28,7 +28,7 @@ class F5WorkflowCertificateUpdateController(CustomController):
                 Log.actionLog("Certificate update service", user)
                 Log.actionLog("User data: "+str(request.data), user)
 
-                serializer = WorkflowVirtualServerSerializer(data=request.data)
+                serializer = WorkflowCertificateSerializer(data=request.data)
                 if serializer.is_valid():
                     data = serializer.validated_data["data"]
 

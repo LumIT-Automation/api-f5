@@ -31,13 +31,13 @@ class CertificateUpdateWorkflow():
             dataKey = data.get("key", {})
             if dataKey:
                 self.__keyInstall(dataKey)
+                Key.install(self.assetId, self.partitionName, data["key"])
 
-            Key.install(self.assetId, self.partitionName, data["key"])
             profileData = {
                 "cert": "/" + self.partitionName + "/" + data["certificate"]["name"],
                 "key": "/" + self.partitionName + "/" + data["key"]["name"]
             }
-            Profile(self.assetId, self.partitionName, "client-ssl", data["profileName"]).modify(profileData)
+            self.__updateProfile(profileData)
 
         except Exception as e:
             raise e
@@ -70,9 +70,9 @@ class CertificateUpdateWorkflow():
 
 
 
-    def __updateProfile(self, profileName: str, data: dict):
+    def __updateProfile(self, data: dict):
         try:
-            Profile(self.assetId, self.partitionName, "client-ssl", profileName).modify(data)
+            Profile(self.assetId, self.partitionName, "client-ssl", self.sslProfile).modify(data)
             self.__log(action="[WORKFLOW] Update SSL Profile", objectType="client-ssl profile", object=str(data), status="update")
 
         except Exception as e:
