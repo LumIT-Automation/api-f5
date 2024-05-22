@@ -297,7 +297,6 @@ sortedParamsData = sorted(paramsData, key=lambda d: d["subBlocks"][0]["idxs"][0]
 for paramData in sortedParamsData:
     if paramData["paramLines"]:
         for subBlock in paramData["subBlocks"]:
-            print(subBlock)
             spaces = ""
             paramIndex = 0
             for idx in range(subBlock["idxs"][0], subBlock["idxs"][1]+1): # subblock lines.
