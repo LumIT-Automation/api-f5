@@ -298,12 +298,21 @@ for paramData in sortedParamsData:
     if paramData["paramLines"]:
         for subBlock in paramData["subBlocks"]:
             print(subBlock)
+            spaces = ""
+            paramIndex = 0
             for idx in range(subBlock["idxs"][0], subBlock["idxs"][1]+1): # subblock lines.
                 if re.match('\s+parameters:', lines[idx]): # append the url parameters info under the "parameters:" line if it exists.
                     # Count the number of leading spaces in the "parameters:" line to obtain the right indentation.
                     spaces = rSpaces.sub('\\1', lines[idx])
-                    insertSubList(lines, idx+1, [ spaces + line for line in paramData["paramLines"] ])
+                    paramIndex = idx + 1
                     break
+            if not paramIndex: # "parameters:" line not found: need add it.
+                spaces = rSpaces.sub('\\1', lines[subBlock["idxs"][0]]) + "  " # add 2 spaces to the indentation of the http method.
+                paramData["paramLines"].insert(0, "parameters:")
+                paramIndex = subBlock["idxs"][0] + 1
+
+            if paramIndex:
+                insertSubList(lines, paramIndex, [ spaces + line for line in paramData["paramLines"] ])
 
 with open(args.outputFile, 'w') as o:
     for line in lines:
