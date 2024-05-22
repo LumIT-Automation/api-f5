@@ -30,18 +30,20 @@ def insertSubList(l: list, pos: int, sublist: list) -> None:
         l.insert(pos + i, sublist[i])
 
 
+
 # A "block" start with an url and end at the next url.
-def getBlockEndIdx(l: list, startIdx: int):
-    endIdx = startIdx
+def getBlock(l: list, startIdx: int) -> list:
+    b = [l[startIdx]]
 
     try:
         for i in range(startIdx+1, len(l)):
             # start next block or end of last block.
             if re.match('\s+/f5/(.*/)?:', l[i]) or re.match('^[a-z]+:', l[i]):
-                endIdx = i - 1
                 break
+            else:
+                b.append(l[i])
 
-        return endIdx
+        return b
     except Exception as e:
         raise e
 
@@ -69,7 +71,6 @@ def getBlocksIndexes(l: list) -> (int, int):
                 })
                 break
 
-        #b = list(set(blocks)) # sort
         return sorted(blocks, key=lambda d: d["idxs"][0])
     except Exception as e:
         raise e
@@ -252,41 +253,58 @@ for badSubBlock in sortedBadSubBlocks:
 
 # Now add the parameters info for each url, previously saved in urlsData.
 # First remove the duplicated, due to the (already removed) duplicated urls.
+# Todo: removed subblocks there can be some query parameters. They should go in the swagger file.
 dedupe = []
 for urlData in urlsData:
     if urlData["url"] not in [ uData["url"] for uData in dedupe ]:
         dedupe.append(urlData)
 urlsData = dedupe
 
+# Use urlsData to create a data structure in order to merge the parameters in lines[], using a reverse loop.
+rSpaces = re.compile('^( +).*')
+paramsData = list()
 for urlData in urlsData:
-    urlInfoBlock = list()
+    paramData = {
+        "paramLines": [],
+        "subBlocks": []
+    }
+
     for param in urlData.keys():
         if param != 'url':
-            urlInfoBlock.extend([
-                "      - name: " + param,
-                "        in: path",
-                "        required: true",
-                "        schema:",
-                "          type: " + urlData[param],
-                "        description: " + param
+            paramData["paramLines"].extend([
+                "- name: " + param,
+                "  in: path",
+                "  required: true",
+                "  schema:",
+                "    type: " + urlData[param],
+                "  description: " + param
             ])
 
-    blockIdxs = dict()
+    # For each block: get the subblocks.
+    blockStart = 0
     for idx in range(len(lines)):
-        if lines[idx] == urlData["url"]:
-            blockIdxs["start"] = idx
-            blockIdxs["end"] = getBlockEndIdx(lines, idx)
+        if lines[idx] == urlData["url"]: # 1st line of a block.
+            blockStart = idx
+            break
 
-    if blockIdxs:
-        for i in range( blockIdxs["start"], blockIdxs["end"]):
-            if re.match('\s+parameters:', lines[i]): # append the url parameters info under the "parameters:" line if it exists.
-                # Verify that the "parameters:" have 6 leading spaces, otherwise the strings in urlInfoBlock must be adjusted.
-                if lines[i].rstrip().count(' ') == 6:
-                    insertSubList(lines, i+1, urlInfoBlock)
+    block = getBlock(lines, blockStart)
+    paramData["subBlocks"] = sorted(getSubBlocksIndexes(block, blockStart), key=lambda d: d["idxs"][0], reverse=True)
+    paramsData.append(paramData)
+
+sortedParamsData = sorted(paramsData, key=lambda d: d["subBlocks"][0]["idxs"][0], reverse=True)
+
+# Having the data in reverse order is now safe to insert the lines in the swagger while looping.
+for paramData in sortedParamsData:
+    if paramData["paramLines"]:
+        for subBlock in paramData["subBlocks"]:
+            print(subBlock)
+            for idx in range(subBlock["idxs"][0], subBlock["idxs"][1]+1): # subblock lines.
+                if re.match('\s+parameters:', lines[idx]): # append the url parameters info under the "parameters:" line if it exists.
+                    # Count the number of leading spaces in the "parameters:" line to obtain the right indentation.
+                    spaces = rSpaces.sub('\\1', lines[idx])
+                    insertSubList(lines, idx+1, [ spaces + line for line in paramData["paramLines"] ])
                     break
-
 
 with open(args.outputFile, 'w') as o:
     for line in lines:
         print(line, file = o)
-
