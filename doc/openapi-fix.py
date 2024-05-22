@@ -308,8 +308,8 @@ for paramData in sortedParamsData:
                     break
             if not paramIndex: # "parameters:" line not found: need add it.
                 spaces = rSpaces.sub('\\1', lines[subBlock["idxs"][0]]) + "  " # add 2 spaces to the indentation of the http method.
-                paramData["paramLines"].insert(0, "parameters:")
-                paramIndex = subBlock["idxs"][0] + 1
+                lines.insert(subBlock["idxs"][0] + 1, spaces + "parameters:") # insert the "parameters:" line after the http method.
+                paramIndex = subBlock["idxs"][0] + 2
 
             if paramIndex:
                 insertSubList(lines, paramIndex, [ spaces + line for line in paramData["paramLines"] ])
