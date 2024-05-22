@@ -32,8 +32,7 @@ class F5WorkflowCertificateUpdateController(CustomController):
                 if serializer.is_valid():
                     data = serializer.validated_data["data"]
 
-                    lock = Lock("virtualServer", locals(), data.get("virtualServerName", ""))
-                    #lock = Lock(VirtualServersWorkflow.relatedF5Objects(), locals(), "any")
+                    lock = Lock("profile", locals(), "client-ssl"+profileName)
                     if lock.isUnlocked():
                         lock.lock()
 
@@ -55,8 +54,7 @@ class F5WorkflowCertificateUpdateController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("virtualServer", locals(), locals().get("virtualServerName")).release()
-            #Lock(VirtualServersWorkflow.relatedF5Objects(), locals(), "any").release()
+            Lock("profile", locals(), "client-ssl"+profileName).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

@@ -35,9 +35,9 @@ class CertificateUpdateWorkflow():
 
             profileData = {
                 "cert": "/" + self.partitionName + "/" + data["certificate"]["name"],
-                "key": "/" + self.partitionName + "/" + data["key"]["name"]
+                "key": "/" + self.partitionName + "/" + data.get("key", {}).get("name", "")
             }
-            self.__updateProfile(profileData)
+            self.__updateProfile(profileData, data.get("virtualServerName", ""))
 
         except Exception as e:
             raise e
@@ -70,13 +70,17 @@ class CertificateUpdateWorkflow():
 
 
 
-    def __updateProfile(self, data: dict):
+    def __updateProfile(self, data: dict, virtualServerName: str = ""):
+        action = "Update SSL Profile"
+        if virtualServerName:
+            action += " of Virtualserver: " + virtualServerName
+
         try:
             Profile(self.assetId, self.partitionName, "client-ssl", self.sslProfile).modify(data)
-            self.__log(action="[WORKFLOW] Update SSL Profile", objectType="client-ssl profile", object=str(data), status="update")
+            self.__log(action="[WORKFLOW] " + action, objectType="client-ssl profile", object=str(data), status="updated")
 
         except Exception as e:
-            self.__log(action="[ERROR] Update SSL Profile Workflow:", objectType="client-ssl profile", object=str(data), status="not updated")
+            self.__log(action="[ERROR] Workflow " + action, objectType="client-ssl profile", object=str(data), status="not updated")
             raise CustomException(status=400, payload={"message": "Update client-ssl profile failed."})
 
 
