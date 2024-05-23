@@ -3,7 +3,6 @@ import json
 from f5.models.Asset.Asset import Asset
 
 from f5.helpers.ApiSupplicant import ApiSupplicant
-from f5.helpers.Log import Log
 
 
 class Node:
@@ -50,6 +49,7 @@ class Node:
 
     @staticmethod
     def delete(assetId: int, partitionName: str, nodeName: str):
+        from f5.helpers.Log import Log
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
@@ -58,7 +58,7 @@ class Node:
                 tlsVerify=f5.tlsverify
             )
 
-            api.delete()
+            Log.log(api.delete(), 'DDDDDDDDDDDDDDD')
         except Exception as e:
             raise e
 

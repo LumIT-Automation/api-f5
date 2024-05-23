@@ -71,7 +71,7 @@ class CertificateUpdateWorkflow():
 
 
     def __updateProfile(self, data: dict, virtualServerName: str = ""):
-        action = "Update SSL Profile"
+        action = "Update SSL Profile " + self.sslProfile
         if virtualServerName:
             action += " of Virtualserver: " + virtualServerName
 
