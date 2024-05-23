@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "fe89639e-8db8-4257-b770-225408962d96",
+		"_postman_id": "5c90eafd-2f8d-484d-866d-f8955a8b36c4",
 		"name": "api-f5",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -2065,14 +2065,14 @@
 											}
 										],
 										"url": {
-											"raw": "{{f5BaseUrl}}/f5/2/Partition1/nodes/",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/nodes/",
 											"host": [
 												"{{f5BaseUrl}}"
 											],
 											"path": [
 												"f5",
 												"2",
-												"Partition1",
+												"Common",
 												"nodes",
 												""
 											]
@@ -2102,7 +2102,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\n    \"data\": \n    {\n        \"name\": \"NODE\",\n        \"address\": \"1.1.1.210\",\n        \"state\": \"Enabled\"\n    }\n}",
+											"raw": "{\n    \"data\": \n    {\n        \"name\": \"provolone\",\n        \"address\": \"10.231.176.210\",\n        \"state\": \"Enabled\"\n    }\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -2110,15 +2110,52 @@
 											}
 										},
 										"url": {
-											"raw": "{{f5BaseUrl}}/f5/2/Partition1/nodes/",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/nodes/",
 											"host": [
 												"{{f5BaseUrl}}"
 											],
 											"path": [
 												"f5",
 												"2",
-												"Partition1",
+												"Common",
 												"nodes",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "node",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											},
+											{
+												"key": "If-None-Match",
+												"value": "62951e7f096cefb6a43b952ddcab869e",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{f5BaseUrl}}/f5/2/Common/node/provolone/",
+											"host": [
+												"{{f5BaseUrl}}"
+											],
+											"path": [
+												"f5",
+												"2",
+												"Common",
+												"node",
+												"provolone",
 												""
 											]
 										}
@@ -2488,14 +2525,14 @@
 											}
 										],
 										"url": {
-											"raw": "{{f5BaseUrl}}/f5/2/Partition1/pools/",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/pools/",
 											"host": [
 												"{{f5BaseUrl}}"
 											],
 											"path": [
 												"f5",
 												"2",
-												"Partition1",
+												"Common",
 												"pools",
 												""
 											]
@@ -2661,16 +2698,16 @@
 											}
 										],
 										"url": {
-											"raw": "{{f5BaseUrl}}/f5/2/Partition1/pool/POOL/members/",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/pool/PETTODIPOLLO/members/",
 											"host": [
 												"{{f5BaseUrl}}"
 											],
 											"path": [
 												"f5",
 												"2",
-												"Partition1",
+												"Common",
 												"pool",
-												"POOL",
+												"PETTODIPOLLO",
 												"members",
 												""
 											]

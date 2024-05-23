@@ -10,10 +10,64 @@ from f5.serializers.F5.ltm.Node import F5NodeSerializer as Serializer
 from f5.controllers.CustomController import CustomController
 
 from f5.helpers.Lock import Lock
+from f5.helpers.Conditional import Conditional
 from f5.helpers.Log import Log
 
 
 class F5NodeController(CustomController):
+    @staticmethod
+    def get(request: Request, assetId: int, partitionName: str, nodeName: str) -> Response:
+        data = dict()
+        etagCondition = {"responseEtag": ""}
+
+        user = CustomController.loggedUser(request)
+
+        try:
+            if Permission.hasUserPermission(groups=user["groups"], action="node_get", assetId=assetId, partition=partitionName) or user["authDisabled"]:
+                Log.actionLog("Pool member information", user)
+
+                lock = Lock("node", locals(), nodeName)
+                if lock.isUnlocked():
+                    lock.lock()
+
+                    data = {
+                        "data": CustomController.validate(
+                            Node(assetId, partitionName, nodeName).info(),
+                            Serializer,
+                            "value"
+                        ),
+                        "href": request.get_full_path()
+                    }
+
+                    # Check the response's ETag validity (against client request).
+                    conditional = Conditional(request)
+                    etagCondition = conditional.responseEtagFreshnessAgainstRequest(data["data"])
+                    if etagCondition["state"] == "fresh":
+                        data = None
+                        httpStatus = status.HTTP_304_NOT_MODIFIED
+                    else:
+                        httpStatus = status.HTTP_200_OK
+
+                    lock.release()
+                else:
+                    data = None
+                    httpStatus = status.HTTP_423_LOCKED
+            else:
+                data = None
+                httpStatus = status.HTTP_403_FORBIDDEN
+        except Exception as e:
+            Lock("node", locals(), nodeName).release()
+
+            data, httpStatus, headers = CustomController.exceptionHandler(e)
+            return Response(data, status=httpStatus, headers=headers)
+
+        return Response(data, status=httpStatus, headers={
+            "ETag": etagCondition["responseEtag"],
+            "Cache-Control": "must-revalidate"
+        })
+
+
+
     @staticmethod
     def delete(request: Request, assetId: int, partitionName: str, nodeName: str) -> Response:
         user = CustomController.loggedUser(request)

@@ -3,6 +3,7 @@ import json
 from f5.models.Asset.Asset import Asset
 
 from f5.helpers.ApiSupplicant import ApiSupplicant
+from f5.helpers.Log import Log
 
 
 class Node:
@@ -10,6 +11,21 @@ class Node:
     ####################################################################################################################
     # Public static methods
     ####################################################################################################################
+
+    @staticmethod
+    def info(assetId: int, partitionName: str, name: str) -> dict:
+        try:
+            f5 = Asset(assetId)
+            api = ApiSupplicant(
+                endpoint=f5.baseurl + "tm/ltm/node/~" + partitionName + "~" + name + "/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
+            )
+            return api.get()["payload"]
+        except Exception as e:
+            raise e
+
+
 
     @staticmethod
     def modify(assetId: int, partitionName: str, nodeName: str, data: dict):
