@@ -58,7 +58,6 @@ class Node:
                 tlsVerify=f5.tlsverify
             )
 
-            Log.log(api.delete(), 'DDDDDDDDDDDDDDD')
         except Exception as e:
             raise e
 
