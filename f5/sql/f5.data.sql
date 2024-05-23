@@ -104,7 +104,8 @@ INSERT INTO `privilege` (`id`, `privilege`, `privilege_type`, `description`) VAL
 (69, 'asm_policy_merge_post', 'asset', NULL),
 (70, 'asm_policy_apply_post', 'asset', NULL),
 (71, 'workflow_node_delete', 'object', NULL),
-(72, 'asset_get', 'asset', NULL);
+(72, 'asset_get', 'asset', NULL),
+(73, 'node_get', 'object', NULL);
 
 --
 -- Dump dei dati per la tabella `role`
@@ -189,6 +190,7 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (1, 70),
 (1, 71),
 (1, 72),
+(1, 73),
 (2, 3),
 (2, 5),
 (2, 6),
