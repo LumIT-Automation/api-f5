@@ -142,7 +142,7 @@ reId = re.compile('<int:([A-Za-z0-9]*[Ii]d)>/')
 reSegmentId = re.compile('<int:([A-Za-z0-9]*[Ii]d)>')
 for url in urls:
     strMatch = reStr.sub('[A-Za-z0-9,.=_-]+/', url)
-    urlMatch = '/f5/' + reId.sub('[0-9]+/', strMatch)
+    urlMatch = '/f5/' + reId.sub('[0-9]+/', strMatch) + '$'
 
     # Now we have the right regexp built from the urlFile to match an url in the inputFile.
     for idx in range(len(lines)):
