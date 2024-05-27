@@ -81,6 +81,7 @@ def getSubBlocksIndexes(b: list, blockStartIndex: int) -> (int, int):
     httpMethods = ('get:', 'post:', 'put:', 'patch:', 'delete:')
     start = 0
     subBlocksIdx = list()
+    url = b[0]
 
     try:
         for i in range(len(b)):
@@ -90,12 +91,14 @@ def getSubBlocksIndexes(b: list, blockStartIndex: int) -> (int, int):
                 else:
                     subBlocksIdx.append({
                         "idxs": (blockStartIndex + start, blockStartIndex + i - 1),
-                        "httpMethod": b[start].strip()
+                        "httpMethod": b[start].strip(),
+                        "url": url
                     }) # end subblock.
                     start = i
         subBlocksIdx.append({
             "idxs": (blockStartIndex + start, blockStartIndex + len(b) - 1),
-            "httpMethod": b[start].strip()
+            "httpMethod": b[start].strip(),
+            "url": url
         }) # last subblock.
 
         return subBlocksIdx
@@ -120,7 +123,7 @@ for idx in range(len(lines)):
         if re.match('\s+ : .*', lines[idx+1]):
             lines[idx+1] = lines[idx+1].replace(' : ', '   ')
 
-# Identify the urls parameters, using the F5Urls.py file.
+# Identify the urls parameters, using the f5Urls.py file.
 reUrl = re.compile("^\s+.*path\('([^']*)'.*")
 urls = list()
 with open(args.urlFile, "r") as urlFile:
@@ -212,9 +215,9 @@ blocksIndexes = getBlocksIndexes(lines) # the remove operation have shifted the 
 # for each removed block strip the url, find the url in lines[] and append all others row at the good block.
 for badBlock in reverseSortedBadBlocks:
     for goodBlock in blocksIndexes:
-        if badBlock["block"][0].strip() == goodBlock["url"]: # the first line of a block is the url.
+        if badBlock["block"][0].rstrip() == goodBlock["url"].rstrip(): # the first line of a block is the url.
             insertSubList(lines, goodBlock["idxs"][1]+1, badBlock["block"][1:])
-            goodBlock["idxs"] = (goodBlock["idxs"][0], goodBlock["idxs"][1] + len(badBlock["block"] -1)) # needed for > 1 inserts in the same block.
+            goodBlock["idxs"] = (goodBlock["idxs"][0], goodBlock["idxs"][1] + len(badBlock["block"]) - 1) # needed for > 1 inserts in the same block.
 
 
 # Duplicated http method for the same url are forbidden. For each url extract the block and remove duplicate http verbs.
@@ -236,7 +239,6 @@ for blockIdx in blocksIndexes:
         }
     ]
     """
-
     goodSubBlocks = []
     for i in subBlocksIndexes:
         if i["httpMethod"] not in [m["httpMethod"] for m in goodSubBlocks]:
@@ -293,6 +295,7 @@ for urlData in urlsData:
 
 sortedParamsData = sorted(paramsData, key=lambda d: d["subBlocks"][0]["idxs"][0], reverse=True)
 
+
 # Having the data in reverse order is now safe to insert the lines in the swagger while looping.
 for paramData in sortedParamsData:
     if paramData["paramLines"]:
@@ -305,7 +308,7 @@ for paramData in sortedParamsData:
                     spaces = rSpaces.sub('\\1', lines[idx])
                     paramIndex = idx + 1
                     break
-            if not paramIndex: # "parameters:" line not found: need add it.
+            if not paramIndex: # "parameters:" line not found: need to add it.
                 spaces = rSpaces.sub('\\1', lines[subBlock["idxs"][0]]) + "  " # add 2 spaces to the indentation of the http method.
                 lines.insert(subBlock["idxs"][0] + 1, spaces + "parameters:") # insert the "parameters:" line after the http method.
                 paramIndex = subBlock["idxs"][0] + 2
