@@ -12,11 +12,14 @@ class Node:
     ####################################################################################################################
 
     @staticmethod
-    def info(assetId: int, partitionName: str, name: str) -> dict:
+    def info(assetId: int, partitionName: str, name: str, subPath: str = "") -> dict:
+        if subPath:
+            subPath += "~"
+
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl + "tm/ltm/node/~" + partitionName + "~" + name + "/",
+                endpoint=f5.baseurl + "tm/ltm/node/~" + partitionName + "~" + subPath + name + "/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
@@ -27,11 +30,14 @@ class Node:
 
 
     @staticmethod
-    def modify(assetId: int, partitionName: str, nodeName: str, data: dict):
+    def modify(assetId: int, partitionName: str, nodeName: str, data: dict, subPath: str = ""):
+        if subPath:
+            subPath += "~"
+
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/node/~"+partitionName+"~"+nodeName+"/",
+                endpoint=f5.baseurl + "tm/ltm/node/~" + partitionName + "~" + subPath + nodeName + "/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
@@ -48,12 +54,14 @@ class Node:
 
 
     @staticmethod
-    def delete(assetId: int, partitionName: str, nodeName: str):
+    def delete(assetId: int, partitionName: str, nodeName: str, subPath: str = ""):
+        if subPath:
+            subPath += "~"
 
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/node/~"+partitionName+"~"+nodeName+"/",
+                endpoint=f5.baseurl + "tm/ltm/node/~" + partitionName + "~" + subPath + nodeName + "/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )

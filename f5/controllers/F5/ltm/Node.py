@@ -16,7 +16,7 @@ from f5.helpers.Log import Log
 
 class F5NodeController(CustomController):
     @staticmethod
-    def get(request: Request, assetId: int, partitionName: str, nodeName: str) -> Response:
+    def get(request: Request, assetId: int, partitionName: str, nodeName: str, subPath: str = "") -> Response:
         data = dict()
         etagCondition = {"responseEtag": ""}
 
@@ -32,7 +32,7 @@ class F5NodeController(CustomController):
 
                     data = {
                         "data": CustomController.validate(
-                            Node(assetId, partitionName, nodeName).info(),
+                            Node(assetId, partitionName, nodeName, subPath).info(),
                             Serializer,
                             "value"
                         ),
@@ -69,7 +69,7 @@ class F5NodeController(CustomController):
 
 
     @staticmethod
-    def delete(request: Request, assetId: int, partitionName: str, nodeName: str) -> Response:
+    def delete(request: Request, assetId: int, partitionName: str, nodeName: str, subPath: str = "") -> Response:
         user = CustomController.loggedUser(request)
 
         try:
@@ -80,7 +80,7 @@ class F5NodeController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    Node(assetId, partitionName, nodeName).delete()
+                    Node(assetId, partitionName, nodeName, subPath).delete()
 
                     httpStatus = status.HTTP_200_OK
                     lock.release()
@@ -101,7 +101,7 @@ class F5NodeController(CustomController):
 
 
     @staticmethod
-    def patch(request: Request, assetId: int, partitionName: str, nodeName: str) -> Response:
+    def patch(request: Request, assetId: int, partitionName: str, nodeName: str, subPath: str = "") -> Response:
         response = None
         user = CustomController.loggedUser(request)
 
@@ -118,7 +118,7 @@ class F5NodeController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        Node(assetId, partitionName, nodeName).modify(data)
+                        Node(assetId, partitionName, nodeName, subPath).modify(data)
 
                         httpStatus = status.HTTP_200_OK
                         lock.release()

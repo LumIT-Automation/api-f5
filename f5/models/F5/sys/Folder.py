@@ -13,6 +13,7 @@ class Folder:
         self.partition: str = partitionName
         self.name: str = folderName
         self.fullPath: str = ""
+        self.subPath: str = ""
         self.generation: int = 0
         self.selfLink: str = ""
         self.deviceGroup: str = ""
@@ -28,17 +29,6 @@ class Folder:
     ####################################################################################################################
     # Public methods
     ####################################################################################################################
-
-    def modify(self, data):
-        try:
-            Backend.modify(self.assetId, self.partition, self.name, data)
-
-            for k, v in Misc.toDict(data).items():
-                setattr(self, k, v)
-        except Exception as e:
-            raise e
-
-
 
     def delete(self):
         try:

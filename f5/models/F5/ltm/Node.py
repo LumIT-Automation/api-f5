@@ -13,13 +13,14 @@ Fqdn: Dict[str, Union[str, int]] = {
 }
 
 class Node:
-    def __init__(self, assetId: int, partitionName: str, nodeName: str, *args, **kwargs):
+    def __init__(self, assetId: int, partitionName: str, nodeName: str, subPath: str = "", *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.assetId = int(assetId)
         self.partition: str = partitionName
         self.name: str = nodeName
         self.fullPath: str = ""
+        self.subPath: str = subPath
         self.generation: int = 0
         self.selfLink: str = ""
         self.address: str = ""
@@ -42,7 +43,7 @@ class Node:
 
     def info(self) -> dict:
         try:
-            i = Backend.info(self.assetId, self.partition, self.name)
+            i = Backend.info(self.assetId, self.partition, self.name, self.subPath)
             i["assetId"] = self.assetId
 
             return i
@@ -53,7 +54,7 @@ class Node:
 
     def modify(self, data):
         try:
-            Backend.modify(self.assetId, self.partition, self.name, data)
+            Backend.modify(self.assetId, self.partition, self.name, data, self.subPath)
 
             for k, v in Misc.toDict(data).items():
                 setattr(self, k, v)
@@ -64,7 +65,7 @@ class Node:
 
     def delete(self):
         try:
-            Backend.delete(self.assetId, self.partition, self.name)
+            Backend.delete(self.assetId, self.partition, self.name, self.subPath)
             del self
         except Exception as e:
             raise e
