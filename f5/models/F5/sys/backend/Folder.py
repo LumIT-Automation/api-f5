@@ -1,11 +1,12 @@
 import json
+from typing import List
 
 from f5.models.Asset.Asset import Asset
 
 from f5.helpers.ApiSupplicant import ApiSupplicant
 
 
-class Node:
+class Folder:
 
     ####################################################################################################################
     # Public static methods
@@ -48,12 +49,12 @@ class Node:
 
 
     @staticmethod
-    def delete(assetId: int, partitionName: str, nodeName: str):
+    def delete(assetId: int, partitionName: str, folderName: str):
 
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/node/~"+partitionName+"~"+nodeName+"/",
+                endpoint=f5.baseurl + "tm/sys/folder/~"+partitionName+"~"+folderName+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
@@ -65,16 +66,15 @@ class Node:
 
 
     @staticmethod
-    def list(assetId: int, partitionName: str, silent: bool = False) -> dict:
+    def list(assetId: int, partitionName: str, silent: bool = False) -> List[dict]:
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/node/?$filter=partition+eq+"+partitionName,
+                endpoint=f5.baseurl + "tm/sys/folder/?$filter=partition+eq+" + partitionName,
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify,
                 silent=silent
             )
-
             return api.get()["payload"]["items"]
         except Exception as e:
             raise e
@@ -86,7 +86,7 @@ class Node:
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/node/",
+                endpoint=f5.baseurl+"tm/sys/folder/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )

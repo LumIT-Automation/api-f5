@@ -6,7 +6,7 @@ from .controllers.F5.ltm import PoolMemberStats, Datagroup, VirtualServers, Irul
     Profiles, Policies
 from .controllers.F5.auth import Partitions
 from .controllers.F5.net import RouteDomains
-from .controllers.F5.sys import Certificate, Certificates
+from .controllers.F5.sys import Certificate, Certificates, Folder, Folders
 from .controllers.F5.asm import Policies as ASMPolicies, Policy as ASMPolicy, PoliciesDifference as ASMPolicyDifference, PolicyMerge as ASMPolicyMerge, PolicyApply as ASMPolicyApply
 from .controllers.Asset import AssetAssetDr, AssetAssetsDr, Asset, Assets
 from .controllers.F5.Usecases import VirtualServersController as WorkflowVirtualServers, VirtualServerController as WorkflowVirtualServer, DeleteNodeController as WorkflowNode, CertificateUpdateController as WorkflowCertificate
@@ -40,6 +40,10 @@ urlpatterns = [
 
     # Partition.
     path('<int:assetId>/partitions/', Partitions.F5PartitionsController.as_view(), name='f5-partitions'),
+
+    # Folder.
+    path('<int:assetId>/<str:partitionName>/folders/', Folders.F5FoldersController.as_view(), name='f5-folders'),
+    path('<int:assetId>/<str:partitionName>/folder/<str:folderName>/', Folder.F5FolderController.as_view(), name='f5-folder'),
 
     # Root domain.
     path('<int:assetId>/routedomains/', RouteDomains.F5RouteDomainsController.as_view(), name='f5-route-domains'),
