@@ -12,13 +12,14 @@ MembersReference: Dict[str, Union[str, bool]] = {
 }
 
 class Pool:
-    def __init__(self, assetId: int, partitionName: str, poolName: str, *args, **kwargs):
+    def __init__(self, assetId: int, partitionName: str, poolName: str, subPath: str = "",*args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.assetId = int(assetId)
         self.partition = partitionName
         self.name = poolName
         self.fullPath: str = ""
+        self.subPath = subPath
         self.generation: int = 0
         self.selfLink: str = ""
         self.allowNat: str = ""
@@ -50,7 +51,7 @@ class Pool:
 
     def info(self):
         try:
-            i = Backend.info(self.assetId, self.partition, self.name)
+            i = Backend.info(self.assetId, self.partition, self.name, self.subPath)
             i["assetId"] = self.assetId
 
             return i
@@ -61,7 +62,7 @@ class Pool:
 
     def modify(self, data):
         try:
-            Backend.modify(self.assetId, self.partition, self.name, data)
+            Backend.modify(self.assetId, self.partition, self.name, data, self.subPath)
 
             for k, v in Misc.toDict(data).items():
                 setattr(self, k, v)
@@ -72,7 +73,7 @@ class Pool:
 
     def delete(self):
         try:
-            Backend.delete(self.assetId, self.partition, self.name)
+            Backend.delete(self.assetId, self.partition, self.name, self.subPath)
             del self
         except Exception as e:
             raise e
@@ -81,7 +82,7 @@ class Pool:
 
     def getMember(self, poolMemberName: str) -> PoolMember:
         try:
-            return PoolMember(self.assetId, self.partition, self.name, poolMemberName)
+            return PoolMember(self.assetId, self.partition, self.name, poolMemberName, self.subPath)
         except Exception as e:
             raise e
 
@@ -89,7 +90,8 @@ class Pool:
 
     def getMembersData(self, subPath: str = "") -> dict:
         try:
-            return PoolMember.dataList(self.assetId, self.partition, self.name, subPath) # return raw list.
+            #return PoolMember.dataList(self.assetId, self.partition, self.name, self.subPath) # return raw list.
+            return PoolMember.dataList(self.assetId, self.partition, self.name, subPath)  # return raw list.
         except Exception as e:
             raise e
 
@@ -98,6 +100,7 @@ class Pool:
     def addMember(self, data: dict) -> None:
         try:
             PoolMember.add(self.assetId, self.partition, self.name, data)
+            #PoolMember.add(self.assetId, self.partition, self.name, data, self.subPath)
         except Exception as e:
             raise e
 

@@ -63,7 +63,6 @@ urlpatterns = [
 
     # Node.
     path('<int:assetId>/<str:partitionName>/node/<str:nodeName>/', Node.F5NodeController.as_view(), name='f5-node'),
-    path('<int:assetId>/<str:partitionName>/<str:subPath>/node/<str:nodeName>/', Node.F5NodeController.as_view(), name='f5-node'),
     path('<int:assetId>/<str:partitionName>/nodes/', Nodes.F5NodesController.as_view(), name='f5-nodes'),
 
     # Monitor.

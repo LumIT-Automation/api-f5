@@ -10,6 +10,7 @@ class F5PoolSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=255, required=True)
     partition = serializers.CharField(max_length=255, required=False)
     fullPath = serializers.CharField(max_length=255, required=False)
+    subPath = serializers.CharField(max_length=255, required=False)
     generation = serializers.IntegerField(required=False)
     selfLink = serializers.CharField(max_length=255, required=False)
     allowNat = serializers.CharField(max_length=255, required=False)

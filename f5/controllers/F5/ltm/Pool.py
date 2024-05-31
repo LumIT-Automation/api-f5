@@ -16,17 +16,21 @@ from f5.helpers.Log import Log
 class F5PoolController(CustomController):
     @staticmethod
     def delete(request: Request, assetId: int, partitionName: str, poolName: str) -> Response:
+        subPath = ""
         user = CustomController.loggedUser(request)
 
         try:
             if Permission.hasUserPermission(groups=user["groups"], action="pool_delete", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Pool deletion", user)
+                if "subPath" in request.GET:
+                    subPath = request.GET.getlist('subPath')[0].replace('/', '~')
+
 
                 lock = Lock("pool", locals(), poolName)
                 if lock.isUnlocked():
                     lock.lock()
 
-                    Pool(assetId, partitionName, poolName).delete()
+                    Pool(assetId, partitionName, poolName, subPath).delete()
 
                     httpStatus = status.HTTP_200_OK
                     lock.release()
@@ -49,12 +53,15 @@ class F5PoolController(CustomController):
     @staticmethod
     def patch(request: Request, assetId: int, partitionName: str, poolName: str) -> Response:
         response = None
+        subPath = ""
         user = CustomController.loggedUser(request)
 
         try:
             if Permission.hasUserPermission(groups=user["groups"], action="pool_patch", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Pool modification", user)
                 Log.actionLog("User data: "+str(request.data), user)
+                if "subPath" in request.GET:
+                    subPath = request.GET.getlist('subPath')[0].replace('/', '~')
 
                 serializer = Serializer(data=request.data["data"], partial=True)
                 if serializer.is_valid():
@@ -64,7 +71,7 @@ class F5PoolController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        Pool(assetId, partitionName, poolName).modify(data)
+                        Pool(assetId, partitionName, poolName, subPath).modify(data)
 
                         httpStatus = status.HTTP_200_OK
                         lock.release()
