@@ -16,8 +16,9 @@ from f5.helpers.Log import Log
 
 class F5NodeController(CustomController):
     @staticmethod
-    def get(request: Request, assetId: int, partitionName: str, nodeName: str, subPath: str = "") -> Response:
+    def get(request: Request, assetId: int, partitionName: str, nodeName: str) -> Response:
         data = dict()
+        subPath = ""
         etagCondition = {"responseEtag": ""}
 
         user = CustomController.loggedUser(request)
@@ -25,6 +26,9 @@ class F5NodeController(CustomController):
         try:
             if Permission.hasUserPermission(groups=user["groups"], action="node_get", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Pool member information", user)
+
+                if "subPath" in request.GET:
+                    subPath = request.GET.getlist('subPath')[0].replace('/', '~')
 
                 lock = Lock("node", locals(), nodeName)
                 if lock.isUnlocked():
@@ -69,12 +73,16 @@ class F5NodeController(CustomController):
 
 
     @staticmethod
-    def delete(request: Request, assetId: int, partitionName: str, nodeName: str, subPath: str = "") -> Response:
+    def delete(request: Request, assetId: int, partitionName: str, nodeName: str) -> Response:
+        subPath = ""
         user = CustomController.loggedUser(request)
 
         try:
             if Permission.hasUserPermission(groups=user["groups"], action="node_delete", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Node deletion", user)
+
+                if "subPath" in request.GET:
+                    subPath = request.GET.getlist('subPath')[0].replace('/', '~')
 
                 lock = Lock("node", locals(), nodeName)
                 if lock.isUnlocked():
@@ -101,14 +109,18 @@ class F5NodeController(CustomController):
 
 
     @staticmethod
-    def patch(request: Request, assetId: int, partitionName: str, nodeName: str, subPath: str = "") -> Response:
+    def patch(request: Request, assetId: int, partitionName: str, nodeName: str) -> Response:
         response = None
+        subPath = ""
         user = CustomController.loggedUser(request)
 
         try:
             if Permission.hasUserPermission(groups=user["groups"], action="node_patch", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Node modification", user)
                 Log.actionLog("User data: "+str(request.data), user)
+
+                if "subPath" in request.GET:
+                    subPath = request.GET.getlist('subPath')[0].replace('/', '~')
 
                 serializer = Serializer(data=request.data["data"], partial=True)
                 if serializer.is_valid():

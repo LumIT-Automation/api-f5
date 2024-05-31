@@ -49,12 +49,14 @@ class Folder:
 
 
     @staticmethod
-    def delete(assetId: int, partitionName: str, folderName: str):
+    def delete(assetId: int, partitionName: str, folderName: str, subPath: str = ""):
+        if subPath:
+            subPath += "~"
 
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl + "tm/sys/folder/~"+partitionName+"~"+folderName+"/",
+                endpoint=f5.baseurl + "tm/sys/folder/~" + partitionName + "~" + subPath + folderName +"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )

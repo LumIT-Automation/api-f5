@@ -6,14 +6,14 @@ from f5.helpers.Misc import Misc
 
 
 class Folder:
-    def __init__(self, assetId: int, partitionName: str, folderName: str, *args, **kwargs):
+    def __init__(self, assetId: int, partitionName: str, folderName: str, subPath: str = "", *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.assetId = int(assetId)
         self.partition: str = partitionName
         self.name: str = folderName
         self.fullPath: str = ""
-        self.subPath: str = ""
+        self.subPath: str = subPath
         self.generation: int = 0
         self.selfLink: str = ""
         self.deviceGroup: str = ""
@@ -32,7 +32,7 @@ class Folder:
 
     def delete(self):
         try:
-            Backend.delete(self.assetId, self.partition, self.name)
+            Backend.delete(self.assetId, self.partition, self.name, self.subPath)
             del self
         except Exception as e:
             raise e
