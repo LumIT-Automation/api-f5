@@ -27,6 +27,7 @@ class VirtualServerWorkflow:
                 "type": ""
             }
             self.poolName = ""
+            self.PoolSubPath = ""
             self.snatPool = ""
             self.nodes = list()
 
@@ -97,8 +98,12 @@ class VirtualServerWorkflow:
 
             # General info.
             info = vs.repr()
+
             try:
-                self.poolName = info["pool"].split("/")[2]
+                infoPoolList = info["pool"].split("/")
+                self.poolName = infoPoolList[-1]
+                if len(infoPoolList) > 2:
+                    self.poolSubPath = '~'.join(infoPoolList[1:-1])
 
                 if "sourceAddressTranslation" in info \
                         and "pool" in info["sourceAddressTranslation"]:
@@ -138,7 +143,7 @@ class VirtualServerWorkflow:
 
             if self.poolName:
                 # Pool info -> monitor.
-                poolInfo = Pool(self.assetId, self.partitionName, self.poolName).info()
+                poolInfo = Pool(self.assetId, self.partitionName, self.poolName, self.poolSubPath).info()
 
                 if "monitor" in poolInfo:
                     try:
@@ -148,7 +153,7 @@ class VirtualServerWorkflow:
                         pass
 
                 # Pool members of self.poolName -> nodes.
-                poolMembers = Pool(self.assetId, self.partitionName, self.poolName).getMembersData()
+                poolMembers = Pool(self.assetId, self.partitionName, self.poolName, self.poolSubPath).getMembersData()
                 for pm in poolMembers:
                     self.nodes.append({
                         "name": Node.getNameFromAddress(
@@ -333,7 +338,7 @@ class VirtualServerWorkflow:
             try:
                 Log.actionLog("Virtual server deletion workflow: attempting to delete pool: "+str(self.poolName))
 
-                pool = Pool(self.assetId, self.partitionName, self.poolName)
+                pool = Pool(self.assetId, self.partitionName, self.poolName, self.poolSubPath)
                 pool.delete()
 
                 self.__deletedObjects["pool"] = {

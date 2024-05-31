@@ -13,11 +13,18 @@ class PoolMember:
     ####################################################################################################################
 
     @staticmethod
-    def info(assetId: int, partition: str, poolName: str, name: str) -> dict:
+    def info(assetId: int, partition: str, poolName: str, name: str, poolSubPath, subPath: str = "") -> dict:
+        from f5.helpers.Log import Log
+        Log.log(poolSubPath, 'AAAAAAAAAAAAAAAAAAAAAAA')
+        if poolSubPath:
+            poolSubPath += "~"
+        if subPath:
+            subPath += "~"
+
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/pool/~"+partition+"~"+poolName+"/members/~"+partition+"~"+name+"/",
+                endpoint=f5.baseurl+"tm/ltm/pool/~" + partition + "~" + poolSubPath + poolName + "/members/~" + partition + "~" + subPath + name + "/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
@@ -153,11 +160,14 @@ class PoolMember:
 
 
     @staticmethod
-    def add(assetId: int, partitionName: str, poolName: str, data: dict) -> None:
+    def add(assetId: int, partitionName: str, poolName: str, data: dict, subPath: str = "") -> None:
+        if subPath:
+            subPath += "~"
+
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/pool/~"+partitionName+"~"+poolName+"/members/",
+                endpoint=f5.baseurl+"tm/ltm/pool/~" + partitionName + "~" + subPath + poolName + "/members/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )

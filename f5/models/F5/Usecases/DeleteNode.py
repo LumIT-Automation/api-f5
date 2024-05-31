@@ -41,7 +41,7 @@ class DeleteNodeWorkflow:
         try:
             poolList = Pool.dataList(self.assetId, self.partitionName)
             for pool in poolList:
-                members = Pool(self.assetId, self.partitionName, pool["name"]).getMembersData(pool.get("subPath", ""))
+                members = Pool(self.assetId, self.partitionName, pool["name"], pool.get("subPath", "")).getMembersData()
                 for member in members:
                     if self.nodeName == member["name"].split(":")[0]:
                         membership.append( (pool["name"], member["name"]) )

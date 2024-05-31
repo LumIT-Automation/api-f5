@@ -10,14 +10,16 @@ Fqdn: Dict[str, str] = {
 }
 
 class PoolMember:
-    def __init__(self, assetId: int, poolName: str, partition: str, name: str, *args, **kwargs):
+    def __init__(self, assetId: int, poolName: str, partition: str, name: str, poolSubPath: str = "", subPath: str = "", *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.assetId: int = int(assetId)
         self.partition: str = partition
         self.poolName: str = poolName
+        self.poolSubPath: str = poolSubPath
         self.name: str = name
         self.fullPath: str = ""
+        self.subPath: str = subPath
         self.generation: int = 0
         self.selfLink: str = ""
         self.address: str = ""
@@ -43,7 +45,7 @@ class PoolMember:
 
     def info(self) -> dict:
         try:
-            i = Backend.info(self.assetId, self.partition, self.poolName, self.name)
+            i = Backend.info(self.assetId, self.partition, self.poolName, self.name, self.poolSubPath, self.subPath)
             i["assetId"] = self.assetId
 
             return i
@@ -97,8 +99,8 @@ class PoolMember:
 
 
     @staticmethod
-    def add(assetId: int, partitionName: str, poolName: str, data: dict) -> None:
+    def add(assetId: int, partitionName: str, poolName: str, data: dict, subPath: str = "") -> None:
         try:
-            Backend.add(assetId, partitionName, poolName, data)
+            Backend.add(assetId, partitionName, poolName, data, subPath)
         except Exception as e:
             raise e
