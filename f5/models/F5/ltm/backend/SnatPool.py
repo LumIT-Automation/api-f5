@@ -13,11 +13,14 @@ class SnatPool:
     ####################################################################################################################
 
     @staticmethod
-    def modify(assetId: int, partitionName: str, snatPoolName: str, data):
+    def modify(assetId: int, partitionName: str, snatPoolName: str, data, subPath: str = ""):
+        if subPath:
+            subPath += "~"
+
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/snatpool/~"+partitionName+"~"+snatPoolName+"/",
+                endpoint=f5.baseurl+"tm/ltm/snatpool/~"+partitionName+"~"+subPath+snatPoolName+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
@@ -34,11 +37,14 @@ class SnatPool:
 
 
     @staticmethod
-    def delete(assetId: int, partitionName: str, snatPoolName: str):
+    def delete(assetId: int, partitionName: str, snatPoolName: str, subPath: str = ""):
+        if subPath:
+            subPath += "~"
+
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/snatpool/~"+partitionName+"~"+snatPoolName+"/",
+                endpoint=f5.baseurl+"tm/ltm/snatpool/~"+partitionName+"~"+subPath+snatPoolName+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )

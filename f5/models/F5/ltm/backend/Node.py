@@ -19,7 +19,7 @@ class Node:
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl + "tm/ltm/node/~" + partitionName + "~" + subPath + name + "/",
+                endpoint=f5.baseurl+"tm/ltm/node/~"+partitionName+"~"+subPath+name+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
@@ -37,7 +37,7 @@ class Node:
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl + "tm/ltm/node/~" + partitionName + "~" + subPath + nodeName + "/",
+                endpoint=f5.baseurl+"tm/ltm/node/~"+partitionName+"~"+subPath+nodeName+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
@@ -61,7 +61,7 @@ class Node:
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl + "tm/ltm/node/~" + partitionName + "~" + subPath + nodeName + "/",
+                endpoint=f5.baseurl+"tm/ltm/node/~"+partitionName+"~"+subPath+nodeName+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )

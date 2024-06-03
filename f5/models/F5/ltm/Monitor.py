@@ -4,7 +4,7 @@ from f5.helpers.Misc import Misc
 
 
 class Monitor:
-    def __init__(self, assetId: int, partitionName: str, monitorType: str, monitorName: str, *args, **kwargs):
+    def __init__(self, assetId: int, partitionName: str, monitorType: str, monitorName: str, subPath: str = "", *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.assetId: int = int(assetId)
@@ -12,6 +12,7 @@ class Monitor:
         self.type: str = monitorType
         self.name: str = monitorName
         self.fullPath: str = ""
+        self.subPath: str = subPath
         self.generation: int = 0
         self.selfLink: str = ""
         self.defaultsFrom: str = ""
@@ -31,7 +32,7 @@ class Monitor:
 
     def info(self, silent: bool = False):
         try:
-            i = Backend.info(self.assetId, self.partition, self.type, self.name, silent)
+            i = Backend.info(self.assetId, self.partition, self.type, self.name, self.subPath, silent)
 
             i["assetId"] = self.assetId
             i["type"] = self.type
@@ -44,7 +45,7 @@ class Monitor:
 
     def modify(self, data):
         try:
-            Backend.modify(self.assetId, self.partition, self.type, self.name, data)
+            Backend.modify(self.assetId, self.partition, self.type, self.name, data, self.subPath)
 
             for k, v in Misc.toDict(data).items():
                 setattr(self, k, v)
@@ -55,7 +56,7 @@ class Monitor:
 
     def delete(self):
         try:
-            Backend.delete(self.assetId, self.partition, self.type, self.name)
+            Backend.delete(self.assetId, self.partition, self.type, self.name, self.subPath)
             del self
         except Exception as e:
             raise e

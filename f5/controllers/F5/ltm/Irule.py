@@ -16,17 +16,21 @@ from f5.helpers.Log import Log
 class F5IruleController(CustomController):
     @staticmethod
     def delete(request: Request, assetId: int, partitionName: str, iruleName: str) -> Response:
+        subPath = ""
         user = CustomController.loggedUser(request)
 
         try:
             if Permission.hasUserPermission(groups=user["groups"], action="irule_delete", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("iRule deletion", user)
 
+                if "subPath" in request.GET:
+                    subPath = request.GET.getlist('subPath')[0].replace('/', '~')
+
                 lock = Lock("irule", locals(), iruleName)
                 if lock.isUnlocked():
                     lock.lock()
 
-                    Irule(assetId, partitionName, iruleName).delete()
+                    Irule(assetId, partitionName, iruleName, subPath).delete()
 
                     httpStatus = status.HTTP_200_OK
                     lock.release()

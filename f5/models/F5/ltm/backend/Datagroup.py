@@ -13,11 +13,14 @@ class Datagroup:
     ####################################################################################################################
 
     @staticmethod
-    def modify(assetId, partitionName: str, datagroupType: str, datagroupName: str, data: dict):
+    def modify(assetId, partitionName: str, datagroupType: str, datagroupName: str, data: dict, subPath: str = ""):
+        if subPath:
+            subPath += "~"
+
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/data-group/"+datagroupType+"/~"+partitionName+"~"+datagroupName+"/",
+                endpoint=f5.baseurl+"tm/ltm/data-group/"+datagroupType+"/~"+partitionName+"~"+subPath+datagroupName+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
@@ -34,11 +37,14 @@ class Datagroup:
 
 
     @staticmethod
-    def delete(assetId, partitionName: str, datagroupType: str, datagroupName: str):
+    def delete(assetId, partitionName: str, datagroupType: str, datagroupName: str, subPath: str = ""):
+        if subPath:
+            subPath += "~"
+
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/data-group/"+datagroupType+"/~"+partitionName+"~"+datagroupName+"/",
+                endpoint=f5.baseurl+"tm/ltm/data-group/"+datagroupType+"/~"+partitionName+"~"+subPath+datagroupName+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )

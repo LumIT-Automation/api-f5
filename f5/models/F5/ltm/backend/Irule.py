@@ -13,11 +13,14 @@ class Irule:
     ####################################################################################################################
 
     @staticmethod
-    def modify(assetId: int, partitionName: str, iruleName: str, data):
+    def modify(assetId: int, partitionName: str, iruleName: str, data, subPath: str = ""):
+        if subPath:
+            subPath += "~"
+
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/rule/~"+partitionName+"~"+iruleName+"/",
+                endpoint=f5.baseurl+"tm/ltm/rule/~"+partitionName+"~"+subPath+iruleName+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
@@ -34,11 +37,14 @@ class Irule:
 
 
     @staticmethod
-    def delete(assetId: int, partitionName: str, iruleName: str):
+    def delete(assetId: int, partitionName: str, iruleName: str, subPath: str = ""):
+        if subPath:
+            subPath += "~"
+
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/rule/~"+partitionName+"~"+iruleName+"/",
+                endpoint=f5.baseurl+"tm/ltm/rule/~"+partitionName+"~"+subPath+iruleName+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )

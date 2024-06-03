@@ -11,7 +11,7 @@ Records: Dict[str, str] = {
 }
 
 class Datagroup:
-    def __init__(self, assetId: int, partitionName: str, datagroupType: str, datagroupName: str, *args, **kwargs):
+    def __init__(self, assetId: int, partitionName: str, datagroupType: str, datagroupName: str, subPath: str = "", *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.assetId: int = int(assetId)
@@ -19,6 +19,7 @@ class Datagroup:
         self.type: str = datagroupType
         self.name: str = datagroupName
         self.fullPath: str = ""
+        self.subPath: str = subPath
         self.generation: int = 0
         self.selfLink: str = ""
         self.records: Records = None
@@ -31,7 +32,7 @@ class Datagroup:
 
     def modify(self, data):
         try:
-            Backend.modify(self.assetId, self.partition, self.type, self.name, data)
+            Backend.modify(self.assetId, self.partition, self.type, self.name, data, self.subPath)
 
             for k, v in Misc.toDict(data).items():
                 setattr(self, k, v)
@@ -42,7 +43,7 @@ class Datagroup:
 
     def delete(self):
         try:
-            Backend.delete(self.assetId, self.partition, self.type, self.name)
+            Backend.delete(self.assetId, self.partition, self.type, self.name, self.subPath)
             del self
         except Exception as e:
             raise e

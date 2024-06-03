@@ -13,11 +13,14 @@ class Monitor:
     ####################################################################################################################
 
     @staticmethod
-    def info(assetId, partitionName: str, monitorType: str, monitorName: str, silent: bool = False):
+    def info(assetId, partitionName: str, monitorType: str, monitorName: str, subPath: str = "", silent: bool = False):
+        if subPath:
+            subPath += "~"
+
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/monitor/"+monitorType+"/~"+partitionName+"~"+monitorName+"/",
+                endpoint=f5.baseurl+"tm/ltm/monitor/"+monitorType+"/~"+partitionName+"~"+subPath+monitorName+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify,
                 silent=silent
@@ -30,11 +33,14 @@ class Monitor:
 
 
     @staticmethod
-    def modify(assetId, partitionName: str, monitorType: str, monitorName: str, data: dict):
+    def modify(assetId, partitionName: str, monitorType: str, monitorName: str, data: dict, subPath: str = ""):
+        if subPath:
+            subPath += "~"
+
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/monitor/"+monitorType+"/~"+partitionName+"~"+monitorName+"/",
+                endpoint=f5.baseurl+"tm/ltm/monitor/"+monitorType+"/~"+partitionName+"~"+subPath+monitorName+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
@@ -51,11 +57,14 @@ class Monitor:
 
 
     @staticmethod
-    def delete(assetId, partitionName: str, monitorType: str, monitorName: str):
+    def delete(assetId, partitionName: str, monitorType: str, monitorName: str, subPath: str = ""):
+        if subPath:
+            subPath += "~"
+
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/monitor/"+monitorType+"/~"+partitionName+"~"+monitorName+"/",
+                endpoint=f5.baseurl+"tm/ltm/monitor/"+monitorType+"/~"+partitionName+"~"+subPath+monitorName+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )

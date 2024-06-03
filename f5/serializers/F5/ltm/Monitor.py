@@ -7,6 +7,7 @@ class F5MonitorSerializer(serializers.Serializer):
     partition = serializers.CharField(max_length=255, required=False)
     type = serializers.CharField(max_length=255, required=False)
     fullPath = serializers.CharField(max_length=255, required=False)
+    subPath = serializers.CharField(max_length=255, required=False)
     generation = serializers.IntegerField(required=False)
     selfLink = serializers.CharField(max_length=255, required=False)
     defaultsFrom = serializers.CharField(max_length=255, required=False)

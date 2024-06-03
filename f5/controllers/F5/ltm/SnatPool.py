@@ -16,17 +16,21 @@ from f5.helpers.Log import Log
 class F5SnatPoolController(CustomController):
     @staticmethod
     def delete(request: Request, assetId: int, partitionName: str, snatPoolName: str) -> Response:
+        subPath = ""
         user = CustomController.loggedUser(request)
 
         try:
             if Permission.hasUserPermission(groups=user["groups"], action="snatPool_delete", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Snat pool deletion", user)
 
+                if "subPath" in request.GET:
+                    subPath = request.GET.getlist('subPath')[0].replace('/', '~')
+
                 lock = Lock("snatPool", locals(), snatPoolName)
                 if lock.isUnlocked():
                     lock.lock()
 
-                    SnatPool(assetId, partitionName, snatPoolName).delete()
+                    SnatPool(assetId, partitionName, snatPoolName, subPath).delete()
 
                     httpStatus = status.HTTP_200_OK
                     lock.release()

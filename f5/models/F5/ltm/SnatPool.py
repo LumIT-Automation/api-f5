@@ -10,13 +10,14 @@ MembersReference: Dict[str, str] = {
 }
 
 class SnatPool:
-    def __init__(self, assetId: int, partitionName: str, snatPoolName: str, *args, **kwargs):
+    def __init__(self, assetId: int, partitionName: str, snatPoolName: str, subPath: str = "", *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.assetId: int = int(assetId)
         self.partition: str = partitionName
         self.name: str = snatPoolName
         self.fullPath: str = ""
+        self.subPath: str = subPath
         self.generation: int = 0
         self.selfLink: str = ""
         self.members: List[str]
@@ -30,7 +31,7 @@ class SnatPool:
 
     def modify(self, data):
         try:
-            Backend.modify(self.assetId, self.partition, self.name, data)
+            Backend.modify(self.assetId, self.partition, self.name, data, self.subPath)
 
             for k, v in Misc.toDict(data).items():
                 setattr(self, k, v)
@@ -41,7 +42,7 @@ class SnatPool:
 
     def delete(self):
         try:
-            Backend.delete(self.assetId, self.partition, self.name)
+            Backend.delete(self.assetId, self.partition, self.name, self.subPath)
             del self
         except Exception as e:
             raise e

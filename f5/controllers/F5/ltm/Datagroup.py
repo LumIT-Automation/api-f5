@@ -16,17 +16,21 @@ from f5.helpers.Log import Log
 class F5DatagroupController(CustomController):
     @staticmethod
     def delete(request: Request, assetId: int, partitionName: str, datagroupType: str, datagroupName: str) -> Response:
+        subPath = ""
         user = CustomController.loggedUser(request)
 
         try:
             if Permission.hasUserPermission(groups=user["groups"], action="datagroup_delete", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Datagroup deletion", user)
 
+                if "subPath" in request.GET:
+                    subPath = request.GET.getlist('subPath')[0].replace('/', '~')
+
                 lock = Lock("datagroup", locals(), datagroupType+datagroupName)
                 if lock.isUnlocked():
                     lock.lock()
 
-                    Datagroup(assetId, partitionName, datagroupType, datagroupName).delete()
+                    Datagroup(assetId, partitionName, datagroupType, datagroupName, subPath).delete()
 
                     httpStatus = status.HTTP_200_OK
                     lock.release()
