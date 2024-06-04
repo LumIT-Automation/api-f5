@@ -91,7 +91,7 @@ urlpatterns = [
     # Policy.
     path('<int:assetId>/<str:partitionName>/policies/', Policies.F5PoliciesController.as_view(), name='f5-policies'),
     path('<int:assetId>/<str:partitionName>/policy/<str:policyName>/', Policy.F5PolicyController.as_view(), name='f5-policy'),
-    path('<int:assetId>/<str:partitionName>/policy/<str:policySubPath>/<str:policyName>/', Policy.F5PolicyController.as_view(), name='f5-policy-with-path'),
+    path('<int:assetId>/<str:partitionName>/policy/<str:subPath>/<str:policyName>/', Policy.F5PolicyController.as_view(), name='f5-policy-with-path'),
 
     # iRule.
     path('<int:assetId>/<str:partitionName>/irule/<str:iruleName>/', Irule.F5IruleController.as_view(), name='f5-irule'),

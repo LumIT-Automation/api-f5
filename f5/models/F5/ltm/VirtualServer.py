@@ -179,7 +179,7 @@ class VirtualServer:
                     for p in self.getPoliciesSummary():
                         # Append LTM Policy object.
                         self.policies.append(
-                            Policy(self.assetId, p.get("partition", ""), p.get("subPath", ""), p.get("name", ""), loadRules=True)
+                            Policy(self.assetId, p.get("partition", ""), p.get("name", ""), p.get("subPath", ""), loadRules=True)
                         )
                 else:
                     del self.policies

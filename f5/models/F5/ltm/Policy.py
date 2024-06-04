@@ -24,12 +24,12 @@ PolicyRuleData: Dict[str, Union[str, list]] = {
 
 
 class Policy:
-    def __init__(self, assetId: int, partitionName: str, policySubPath: str, policyName: str, loadRules: bool = False, *args, **kwargs):
+    def __init__(self, assetId: int, partitionName: str, policyName: str, subPath: str = "", loadRules: bool = False, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.assetId: int = int(assetId)
         self.partition: str = partitionName
-        self.subPath: str = policySubPath
+        self.subPath: str = subPath
         self.name: str = policyName
         self.fullPath: str = ""
         self.generation: int = 0
@@ -57,7 +57,7 @@ class Policy:
 
     def modify(self, data):
         try:
-            Backend.modify(self.assetId, self.partition, self.subPath, self.name, data)
+            Backend.modify(self.assetId, self.partition, self.name, data, self.subPath)
 
             for k, v in Misc.toDict(data).items():
                 setattr(self, k, v)
@@ -68,7 +68,7 @@ class Policy:
 
     def delete(self):
         try:
-            Backend.delete(self.assetId, self.partition, self.subPath, self.name)
+            Backend.delete(self.assetId, self.partition,  self.name, self.subPath)
             del self
         except Exception as e:
             raise e
@@ -77,7 +77,7 @@ class Policy:
 
     def getRulesData(self) -> List[dict]:
         try:
-            return Backend.rules(self.assetId, self.partition, self.subPath, self.name)
+            return Backend.rules(self.assetId, self.partition, self.name, self.subPath)
         except Exception as e:
             raise e
 
@@ -88,16 +88,16 @@ class Policy:
     ####################################################################################################################
 
     @staticmethod
-    def list(assetId: int, partitionName: str, policySubPath: str = "", loadRules: bool = False) -> List[Policy]:
+    def list(assetId: int, partitionName: str, subPath: str = "", loadRules: bool = False) -> List[Policy]:
         import threading
         l = []
 
-        def loadPolicy(a, p, s, n, lr, o):
-            o.append(Policy(a, p, s, n, lr)) # append Policy object.
+        def loadPolicy(a, p, n, s, lr, o):
+            o.append(Policy(a, p, n, s, lr)) # append Policy object.
 
         try:
             summary = Backend.list(assetId, partitionName)
-            workers = [threading.Thread(target=loadPolicy, args=(assetId, partitionName, policySubPath, el.get("name", ""), loadRules, l)) for el in summary]
+            workers = [threading.Thread(target=loadPolicy, args=(assetId, partitionName, el.get("name", ""), subPath, loadRules, l)) for el in summary]
             for w in workers:
                 w.start()
             for w in workers:
@@ -124,7 +124,8 @@ class Policy:
 
     def __load(self, loadRules: bool = False) -> None:
         try:
-            data = Backend.info(self.assetId, self.partition, self.subPath, self.name)
+            from f5.helpers.Log import Log
+            data = Backend.info(self.assetId, self.partition, self.name, self.subPath)
             if data:
                 for k, v in data.items():
                     setattr(self, k, v)

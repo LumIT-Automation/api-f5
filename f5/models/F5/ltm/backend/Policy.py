@@ -13,13 +13,12 @@ class Policy:
     ####################################################################################################################
 
     @staticmethod
-    def info(assetId: int, partitionName: str, policySubPath: str, policyName: str):
+    def info(assetId: int, partitionName: str, policyName: str, subPath: str = ""):
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
+
         try:
             f5 = Asset(assetId)
-            if policySubPath:
-                endpoint = f5.baseurl+"tm/ltm/policy/~"+partitionName+"~"+policySubPath+"~"+policyName+"/"
-            else:
-                endpoint = f5.baseurl+"tm/ltm/policy/~"+partitionName+"~"+policyName+"/"
+            endpoint = f5.baseurl+"tm/ltm/policy/~"+partitionName+"~"+subPath+policyName+"/"
 
             return ApiSupplicant(
                 endpoint=endpoint,
@@ -32,13 +31,12 @@ class Policy:
 
 
     @staticmethod
-    def modify(assetId: int, partitionName: str, policySubPath: str, policyName: str, data):
+    def modify(assetId: int, partitionName: str, policyName: str, data, subPath: str = ""):
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
+
         try:
             f5 = Asset(assetId)
-            if policySubPath:
-                endpoint = f5.baseurl+"tm/ltm/policy/~"+partitionName+"~"+policySubPath+"~"+policyName+"/"
-            else:
-                endpoint = f5.baseurl+"tm/ltm/policy/~"+partitionName+"~"+policyName+"/"
+            endpoint = f5.baseurl+"tm/ltm/policy/~"+partitionName+"~"+subPath+policyName+"/"
 
             api = ApiSupplicant(
                 endpoint=endpoint,
@@ -58,13 +56,12 @@ class Policy:
 
 
     @staticmethod
-    def delete(assetId: int, partitionName: str, policySubPath: str, policyName: str):
+    def delete(assetId: int, partitionName: str, policyName: str, subPath: str = ""):
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
+
         try:
             f5 = Asset(assetId)
-            if policySubPath:
-                endpoint = f5.baseurl+"tm/ltm/policy/~"+partitionName+"~"+policySubPath+"~"+policyName+"/"
-            else:
-                endpoint = f5.baseurl+"tm/ltm/policy/~"+partitionName+"~"+policyName+"/"
+            endpoint = f5.baseurl+"tm/ltm/policy/~"+partitionName+"~"+subPath+policyName+"/"
 
             api = ApiSupplicant(
                 endpoint=endpoint,
@@ -116,15 +113,13 @@ class Policy:
 
 
     @staticmethod
-    def rules(assetId: int, partitionName: str, policySubPath: str, policyName: str):
+    def rules(assetId: int, partitionName: str, policyName: str, subPath: str = ""):
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
         rules: List[dict] = []
 
         try:
             f5 = Asset(assetId)
-            if policySubPath:
-                endpoint = f5.baseurl+"tm/ltm/policy/~"+partitionName+"~"+policySubPath+"~"+policyName+"/rules/"
-            else:
-                endpoint = f5.baseurl+"tm/ltm/policy/~"+partitionName+"~"+policyName+"/rules/"
+            endpoint = f5.baseurl+"tm/ltm/policy/~"+partitionName+"~"+subPath+policyName+"/rules/"
 
             ruleItems = ApiSupplicant(
                 endpoint=endpoint,
@@ -133,12 +128,8 @@ class Policy:
             ).get()["payload"]["items"]
 
             for r in ruleItems:
-                if policySubPath:
-                    actionsEndpoint = f5.baseurl + "tm/ltm/policy/~" + partitionName + "~" + policySubPath + "~" + policyName + "/rules/" + r["name"] + "/actions/"
-                    conditionsEndpoint = f5.baseurl + "tm/ltm/policy/~" + partitionName + "~" + policySubPath + "~" + policyName + "/rules/" + r["name"] + "/conditions/"
-                else:
-                    actionsEndpoint = f5.baseurl + "tm/ltm/policy/~" + partitionName + "~" + policyName + "/rules/" + r["name"] + "/actions/"
-                    conditionsEndpoint = f5.baseurl + "tm/ltm/policy/~" + partitionName + "~" + policyName + "/rules/" + r["name"] + "/conditions/"
+                actionsEndpoint = f5.baseurl + "tm/ltm/policy/~" + partitionName + "~" + subPath + policyName + "/rules/" + r["name"] + "/actions/"
+                conditionsEndpoint = f5.baseurl + "tm/ltm/policy/~" + partitionName + "~" + subPath + policyName + "/rules/" + r["name"] + "/conditions/"
 
                 rules.append({
                     "name": r["name"],

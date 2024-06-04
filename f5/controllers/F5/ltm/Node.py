@@ -18,7 +18,7 @@ class F5NodeController(CustomController):
     @staticmethod
     def get(request: Request, assetId: int, partitionName: str, nodeName: str) -> Response:
         data = dict()
-        subPath = ""
+        subPath, name = nodeName.rsplit('~', 1) if '~' in nodeName else ['', nodeName]; subPath = subPath.replace('~', '/')
         etagCondition = {"responseEtag": ""}
 
         user = CustomController.loggedUser(request)
@@ -27,16 +27,13 @@ class F5NodeController(CustomController):
             if Permission.hasUserPermission(groups=user["groups"], action="node_get", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Pool member information", user)
 
-                if "subPath" in request.GET:
-                    subPath = request.GET.getlist('subPath')[0].replace('/', '~')
-
                 lock = Lock("node", locals(), nodeName)
                 if lock.isUnlocked():
                     lock.lock()
 
                     data = {
                         "data": CustomController.validate(
-                            Node(assetId, partitionName, nodeName, subPath).info(),
+                            Node(assetId, partitionName, name, subPath).info(),
                             Serializer,
                             "value"
                         ),
@@ -74,21 +71,18 @@ class F5NodeController(CustomController):
 
     @staticmethod
     def delete(request: Request, assetId: int, partitionName: str, nodeName: str) -> Response:
-        subPath = ""
+        subPath, name = nodeName.rsplit('~', 1) if '~' in nodeName else ['', nodeName]; subPath = subPath.replace('~', '/')
         user = CustomController.loggedUser(request)
 
         try:
             if Permission.hasUserPermission(groups=user["groups"], action="node_delete", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Node deletion", user)
 
-                if "subPath" in request.GET:
-                    subPath = request.GET.getlist('subPath')[0].replace('/', '~')
-
                 lock = Lock("node", locals(), nodeName)
                 if lock.isUnlocked():
                     lock.lock()
 
-                    Node(assetId, partitionName, nodeName, subPath).delete()
+                    Node(assetId, partitionName, name, subPath).delete()
 
                     httpStatus = status.HTTP_200_OK
                     lock.release()
@@ -111,16 +105,13 @@ class F5NodeController(CustomController):
     @staticmethod
     def patch(request: Request, assetId: int, partitionName: str, nodeName: str) -> Response:
         response = None
-        subPath = ""
+        subPath, name = nodeName.rsplit('~', 1) if '~' in nodeName else ['', nodeName]; subPath = subPath.replace('~', '/')
         user = CustomController.loggedUser(request)
 
         try:
             if Permission.hasUserPermission(groups=user["groups"], action="node_patch", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Node modification", user)
                 Log.actionLog("User data: "+str(request.data), user)
-
-                if "subPath" in request.GET:
-                    subPath = request.GET.getlist('subPath')[0].replace('/', '~')
 
                 serializer = Serializer(data=request.data["data"], partial=True)
                 if serializer.is_valid():
@@ -130,7 +121,7 @@ class F5NodeController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        Node(assetId, partitionName, nodeName, subPath).modify(data)
+                        Node(assetId, partitionName, name, subPath).modify(data)
 
                         httpStatus = status.HTTP_200_OK
                         lock.release()

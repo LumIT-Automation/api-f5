@@ -13,8 +13,7 @@ class Node:
 
     @staticmethod
     def info(assetId: int, partitionName: str, name: str, subPath: str = "") -> dict:
-        if subPath:
-            subPath += "~"
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
 
         try:
             f5 = Asset(assetId)
@@ -31,8 +30,7 @@ class Node:
 
     @staticmethod
     def modify(assetId: int, partitionName: str, nodeName: str, data: dict, subPath: str = ""):
-        if subPath:
-            subPath += "~"
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
 
         try:
             f5 = Asset(assetId)
@@ -55,8 +53,7 @@ class Node:
 
     @staticmethod
     def delete(assetId: int, partitionName: str, nodeName: str, subPath: str = ""):
-        if subPath:
-            subPath += "~"
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
 
         try:
             f5 = Asset(assetId)
