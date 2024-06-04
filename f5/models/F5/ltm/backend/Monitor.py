@@ -14,8 +14,7 @@ class Monitor:
 
     @staticmethod
     def info(assetId, partitionName: str, monitorType: str, monitorName: str, subPath: str = "", silent: bool = False):
-        if subPath:
-            subPath += "~"
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
 
         try:
             f5 = Asset(assetId)
@@ -34,8 +33,7 @@ class Monitor:
 
     @staticmethod
     def modify(assetId, partitionName: str, monitorType: str, monitorName: str, data: dict, subPath: str = ""):
-        if subPath:
-            subPath += "~"
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
 
         try:
             f5 = Asset(assetId)
@@ -58,8 +56,7 @@ class Monitor:
 
     @staticmethod
     def delete(assetId, partitionName: str, monitorType: str, monitorName: str, subPath: str = ""):
-        if subPath:
-            subPath += "~"
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
 
         try:
             f5 = Asset(assetId)

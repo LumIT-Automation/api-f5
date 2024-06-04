@@ -14,8 +14,7 @@ class Irule:
 
     @staticmethod
     def modify(assetId: int, partitionName: str, iruleName: str, data, subPath: str = ""):
-        if subPath:
-            subPath += "~"
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
 
         try:
             f5 = Asset(assetId)
@@ -38,8 +37,7 @@ class Irule:
 
     @staticmethod
     def delete(assetId: int, partitionName: str, iruleName: str, subPath: str = ""):
-        if subPath:
-            subPath += "~"
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
 
         try:
             f5 = Asset(assetId)

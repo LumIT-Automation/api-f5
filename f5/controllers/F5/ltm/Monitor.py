@@ -16,21 +16,18 @@ from f5.helpers.Log import Log
 class F5MonitorController(CustomController):
     @staticmethod
     def delete(request: Request, assetId: int, partitionName: str, monitorType: str, monitorName: str) -> Response:
-        subPath = ""
+        subPath, name = monitorName.rsplit('~', 1) if '~' in monitorName else ['', monitorName]; subPath = subPath.replace('~', '/')
         user = CustomController.loggedUser(request)
 
         try:
             if Permission.hasUserPermission(groups=user["groups"], action="monitor_delete", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Monitor deletion", user)
 
-                if "subPath" in request.GET:
-                    subPath = request.GET.getlist('subPath')[0].replace('/', '~')
-
                 lock = Lock("monitor", locals(), monitorType+monitorName)
                 if lock.isUnlocked():
                     lock.lock()
 
-                    Monitor(assetId, partitionName, monitorType, monitorName, subPath).delete()
+                    Monitor(assetId, partitionName, monitorType, name, subPath).delete()
 
                     httpStatus = status.HTTP_200_OK
                     lock.release()
@@ -53,6 +50,7 @@ class F5MonitorController(CustomController):
     @staticmethod
     def patch(request: Request, assetId: int, partitionName: str, monitorType: str, monitorName: str) -> Response:
         response = None
+        subPath, name = monitorName.rsplit('~', 1) if '~' in monitorName else ['', monitorName]; subPath = subPath.replace('~', '/')
         user = CustomController.loggedUser(request)
 
         try:
@@ -68,7 +66,7 @@ class F5MonitorController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        Monitor(assetId, partitionName, monitorType, monitorName).modify(data)
+                        Monitor(assetId, partitionName, monitorType, name, subPath).modify(data)
 
                         httpStatus = status.HTTP_200_OK
                         lock.release()

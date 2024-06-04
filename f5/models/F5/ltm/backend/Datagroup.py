@@ -14,8 +14,7 @@ class Datagroup:
 
     @staticmethod
     def modify(assetId, partitionName: str, datagroupType: str, datagroupName: str, data: dict, subPath: str = ""):
-        if subPath:
-            subPath += "~"
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
 
         try:
             f5 = Asset(assetId)
@@ -38,8 +37,7 @@ class Datagroup:
 
     @staticmethod
     def delete(assetId, partitionName: str, datagroupType: str, datagroupName: str, subPath: str = ""):
-        if subPath:
-            subPath += "~"
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
 
         try:
             f5 = Asset(assetId)

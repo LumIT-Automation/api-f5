@@ -16,21 +16,18 @@ from f5.helpers.Log import Log
 class F5IruleController(CustomController):
     @staticmethod
     def delete(request: Request, assetId: int, partitionName: str, iruleName: str) -> Response:
-        subPath = ""
+        subPath, name = iruleName.rsplit('~', 1) if '~' in iruleName else ['', iruleName]; subPath = subPath.replace('~', '/')
         user = CustomController.loggedUser(request)
 
         try:
             if Permission.hasUserPermission(groups=user["groups"], action="irule_delete", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("iRule deletion", user)
 
-                if "subPath" in request.GET:
-                    subPath = request.GET.getlist('subPath')[0].replace('/', '~')
-
                 lock = Lock("irule", locals(), iruleName)
                 if lock.isUnlocked():
                     lock.lock()
 
-                    Irule(assetId, partitionName, iruleName, subPath).delete()
+                    Irule(assetId, partitionName, name, subPath).delete()
 
                     httpStatus = status.HTTP_200_OK
                     lock.release()
@@ -53,6 +50,7 @@ class F5IruleController(CustomController):
     @staticmethod
     def patch(request: Request, assetId: int, partitionName: str, iruleName: str) -> Response:
         response = None
+        subPath, name = iruleName.rsplit('~', 1) if '~' in iruleName else ['', iruleName]; subPath = subPath.replace('~', '/')
         user = CustomController.loggedUser(request)
 
         try:
@@ -68,7 +66,7 @@ class F5IruleController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        Irule(assetId, partitionName, iruleName).modify(data)
+                        Irule(assetId, partitionName, name, subPath).modify(data)
 
                         httpStatus = status.HTTP_200_OK
                         lock.release()
