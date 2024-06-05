@@ -19,7 +19,7 @@ class F5PoolMembersController(CustomController):
     @staticmethod
     def get(request: Request, assetId: int, partitionName: str, poolName: str) -> Response:
         data = dict()
-        subPath = ""
+        subPath, name = poolName.rsplit('~', 1) if '~' in poolName else ['', poolName]; subPath = subPath.replace('~', '/')
         etagCondition = { "responseEtag": "" }
 
         user = CustomController.loggedUser(request)
@@ -27,9 +27,6 @@ class F5PoolMembersController(CustomController):
         try:
             if Permission.hasUserPermission(groups=user["groups"], action="poolMembers_get", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Pool members list", user)
-
-                if "subPath" in request.GET:
-                    subPath = request.GET.getlist('subPath')[0].replace('/', '~')
 
                 # Locking logic for pool member and pool.
                 lockp = Lock("pool", locals(), poolName)
@@ -41,7 +38,7 @@ class F5PoolMembersController(CustomController):
                     data = {
                         "data": {
                             "items": CustomController.validate(
-                                Pool(assetId, partitionName, poolName, subPath).getMembersData(),
+                                Pool(assetId, partitionName, name, subPath).getMembersData(),
                                 PoolMembersSerializer,
                                 "list"
                             )
@@ -83,16 +80,13 @@ class F5PoolMembersController(CustomController):
     @staticmethod
     def post(request: Request, assetId: int, partitionName: str, poolName: str) -> Response:
         response = None
-        subPath = ""
+        subPath, name = poolName.rsplit('~', 1) if '~' in poolName else ['', poolName]; subPath = subPath.replace('~', '/')
         user = CustomController.loggedUser(request)
 
         try:
             if Permission.hasUserPermission(groups=user["groups"], action="poolMembers_post", assetId=assetId, partition=partitionName) or user["authDisabled"]:
                 Log.actionLog("Add node/port to pool (create pool member)", user)
                 Log.actionLog("User data: "+str(request.data), user)
-
-                if "subPath" in request.GET:
-                    subPath = request.GET.getlist('subPath')[0].replace('/', '~')
 
                 serializer = PoolMemberSerializer(data=request.data["data"])
                 if serializer.is_valid():
@@ -108,7 +102,7 @@ class F5PoolMembersController(CustomController):
                         lockp.lock()
                         lockpm.lock()
 
-                        Pool(assetId, partitionName, poolName, subPath).addMember(data)
+                        Pool(assetId, partitionName, name, subPath).addMember(data)
 
                         httpStatus = status.HTTP_201_CREATED
                         lockp.release()

@@ -13,18 +13,15 @@ class PoolMember:
     ####################################################################################################################
 
     @staticmethod
-    def info(assetId: int, partition: str, poolName: str, name: str, poolSubPath, subPath: str = "") -> dict:
-        from f5.helpers.Log import Log
-        Log.log(poolSubPath, 'AAAAAAAAAAAAAAAAAAAAAAA')
-        if poolSubPath:
-            poolSubPath += "~"
-        if subPath:
-            subPath += "~"
+    def info(assetId: int, partition: str, poolName: str, name: str, poolSubPath: str = "", subPath: str = "") -> dict:
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
+        poolSubPath = poolSubPath.replace('/', '~') + '~' if poolSubPath else ''
+
 
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/pool/~" + partition + "~" + poolSubPath + poolName + "/members/~" + partition + "~" + subPath + name + "/",
+                endpoint=f5.baseurl+"tm/ltm/pool/~"+partition+"~"+poolSubPath+poolName+"/members/~"+partition+"~"+subPath+name+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
@@ -35,13 +32,15 @@ class PoolMember:
 
 
     @staticmethod
-    def stats(assetId: int, partition: str, poolName: str, name: str) -> dict:
+    def stats(assetId: int, partition: str, poolName: str, name: str, poolSubPath: str = "", subPath: str = "") -> dict:
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
+        poolSubPath = poolSubPath.replace('/', '~') + '~' if poolSubPath else ''
         o = dict()
 
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/pool/~"+partition+"~"+poolName+"/members/~"+partition+"~"+name+"/stats/",
+                endpoint=f5.baseurl+"tm/ltm/pool/~"+partition+"~"+poolSubPath+poolName+"/members/~"+partition+"~"+subPath+name+"/stats/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
@@ -83,11 +82,14 @@ class PoolMember:
 
 
     @staticmethod
-    def modify(assetId: int, partition: str, poolName: str, name: str, data: dict) -> None:
+    def modify(assetId: int, partition: str, poolName: str, name: str, data: dict, poolSubPath: str = "", subPath: str = "") -> None:
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
+        poolSubPath = poolSubPath.replace('/', '~') + '~' if poolSubPath else ''
+
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/pool/~"+partition+"~"+poolName+"/members/~"+partition+"~"+name+"/",
+                endpoint=f5.baseurl+"tm/ltm/pool/~"+partition+"~"+poolSubPath+poolName+"/members/~"+partition+"~"+subPath+name+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
@@ -103,11 +105,14 @@ class PoolMember:
 
 
     @staticmethod
-    def delete(assetId: int, partition: str, poolName: str, name: str) -> None:
+    def delete(assetId: int, partition: str, poolName: str, name: str, poolSubPath: str = "", subPath: str = "") -> None:
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
+        poolSubPath = poolSubPath.replace('/', '~') + '~' if poolSubPath else ''
+
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/pool/~"+partition+"~"+poolName+"/members/~"+partition+"~"+name+"/",
+                endpoint=f5.baseurl+"tm/ltm/pool/~"+partition+"~"+poolSubPath+poolName+"/members/~"+partition+"~"+subPath+name+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
@@ -118,15 +123,14 @@ class PoolMember:
 
 
     @staticmethod
-    def list(assetId: int, partitionName: str, poolName: str, subPath: str = "") -> dict:
+    def list(assetId: int, partitionName: str, poolName: str, poolSubPath: str = "") -> dict:
+        poolSubPath = poolSubPath.replace('/', '~') + '~' if poolSubPath else ''
         membersStats: List[dict] = []
 
         try:
             f5 = Asset(assetId)
-            if subPath:
-                subPath = subPath + "~"
             apiStats = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/pool/~"+partitionName+"~"+subPath+poolName+"/members/stats/",
+                endpoint=f5.baseurl+"tm/ltm/pool/~"+partitionName+"~"+poolSubPath+poolName+"/members/stats/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
@@ -140,7 +144,7 @@ class PoolMember:
                 })
 
             apiList = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/pool/~"+partitionName+"~"+subPath+poolName+"/members/",
+                endpoint=f5.baseurl+"tm/ltm/pool/~"+partitionName+"~"+poolSubPath+poolName+"/members/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
@@ -160,14 +164,13 @@ class PoolMember:
 
 
     @staticmethod
-    def add(assetId: int, partitionName: str, poolName: str, data: dict, subPath: str = "") -> None:
-        if subPath:
-            subPath += "~"
+    def add(assetId: int, partitionName: str, poolName: str, data: dict, poolSubPath: str = "") -> None:
+        poolSubPath = poolSubPath.replace('/', '~') + '~' if poolSubPath else ''
 
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/pool/~" + partitionName + "~" + subPath + poolName + "/members/",
+                endpoint=f5.baseurl+"tm/ltm/pool/~"+partitionName+"~"+poolSubPath+poolName+"/members/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )

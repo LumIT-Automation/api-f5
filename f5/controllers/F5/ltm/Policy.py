@@ -16,7 +16,7 @@ from f5.helpers.Log import Log
 
 class F5PolicyController(CustomController):
     @staticmethod
-    def get(request: Request, assetId: int, partitionName: str, policyName: str, subPath: str = "") -> Response:
+    def get(request: Request, assetId: int, partitionName: str, policyName: str) -> Response:
         data = dict()
         etagCondition = { "responseEtag": "" }
         subPath, name = policyName.rsplit('~', 1) if '~' in policyName else ['', policyName]; subPath = subPath.replace('~', '/')
@@ -69,7 +69,7 @@ class F5PolicyController(CustomController):
 
 
     @staticmethod
-    def delete(request: Request, assetId: int, partitionName: str, policyName: str, subPath: str = "") -> Response:
+    def delete(request: Request, assetId: int, partitionName: str, policyName: str) -> Response:
         subPath, name = policyName.rsplit('~', 1) if '~' in policyName else ['', policyName]; subPath = subPath.replace('~', '/')
         user = CustomController.loggedUser(request)
 
@@ -102,7 +102,7 @@ class F5PolicyController(CustomController):
 
 
     @staticmethod
-    def patch(request: Request, assetId: int, partitionName: str, policyName: str, subPath: str = "") -> Response:
+    def patch(request: Request, assetId: int, partitionName: str, policyName: str) -> Response:
         response = None
         subPath, name = policyName.rsplit('~', 1) if '~' in policyName else ['', policyName]; subPath = subPath.replace('~', '/')
         user = CustomController.loggedUser(request)

@@ -56,7 +56,7 @@ class PoolMember:
 
     def stats(self) -> dict:
         try:
-            return Backend.stats(self.assetId, self.partition, self.poolName, self.name)
+            return Backend.stats(self.assetId, self.partition, self.poolName, self.name, self.poolSubPath, self.subPath)
         except Exception as e:
             raise e
 
@@ -64,7 +64,7 @@ class PoolMember:
 
     def modify(self, data: dict) -> None:
         try:
-            Backend.modify(self.assetId, self.partition, self.poolName, self.name, data)
+            Backend.modify(self.assetId, self.partition, self.poolName, self.name, data, self.poolSubPath, self.subPath)
 
             for k, v in Misc.toDict(data).items():
                 setattr(self, k, v)
@@ -75,7 +75,7 @@ class PoolMember:
 
     def delete(self) -> None:
         try:
-            Backend.delete(self.assetId, self.partition, self.poolName, self.name)
+            Backend.delete(self.assetId, self.partition, self.poolName, self.name, self.poolSubPath, self.subPath)
             del self
         except Exception as e:
             raise e
@@ -86,9 +86,9 @@ class PoolMember:
     ####################################################################################################################
 
     @staticmethod
-    def dataList(assetId: int, partitionName: str, poolName: str, subPath: str = "") -> dict:
+    def dataList(assetId: int, partitionName: str, poolName: str, poolSubPath: str = "") -> dict:
         try:
-            l = Backend.list(assetId, partitionName, poolName, subPath)
+            l = Backend.list(assetId, partitionName, poolName, poolSubPath)
             for el in l:
                 el["assetId"] = assetId
 
@@ -99,8 +99,8 @@ class PoolMember:
 
 
     @staticmethod
-    def add(assetId: int, partitionName: str, poolName: str, data: dict, subPath: str = "") -> None:
+    def add(assetId: int, partitionName: str, poolName: str, data: dict, poolSubPath: str = "") -> None:
         try:
-            Backend.add(assetId, partitionName, poolName, data, subPath)
+            Backend.add(assetId, partitionName, poolName, data, poolSubPath)
         except Exception as e:
             raise e

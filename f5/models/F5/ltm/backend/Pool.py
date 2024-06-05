@@ -14,13 +14,12 @@ class Pool:
 
     @staticmethod
     def info(assetId, partitionName, poolName, subPath: str = ""):
-        if subPath:
-            subPath += "~"
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
 
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/pool/~" + partitionName + "~" + subPath + poolName + "/",
+                endpoint=f5.baseurl+"tm/ltm/pool/~"+partitionName+"~"+subPath+poolName+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
@@ -33,13 +32,12 @@ class Pool:
 
     @staticmethod
     def modify(assetId, partitionName, poolName, data, subPath: str = ""):
-        if subPath:
-            subPath += "~"
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
 
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl + "tm/ltm/pool/~" + partitionName + "~" + subPath + poolName + "/",
+                endpoint=f5.baseurl+"tm/ltm/pool/~"+partitionName+"~"+subPath+poolName+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
@@ -57,13 +55,12 @@ class Pool:
 
     @staticmethod
     def delete(assetId, partitionName, poolName, subPath: str = ""):
-        if subPath:
-            subPath += "~"
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
 
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl + "tm/ltm/pool/~" + partitionName + "~" + subPath + poolName + "/",
+                endpoint=f5.baseurl+"tm/ltm/pool/~"+partitionName+"~"+subPath+poolName+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )

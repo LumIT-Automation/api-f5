@@ -18,6 +18,8 @@ class F5PoolMemberStatsController(CustomController):
     @staticmethod
     def get(request: Request, assetId: int, partitionName: str, poolName: str, poolMemberName: str) -> Response:
         data = dict()
+        poolSubPath, pool = poolName.rsplit('~', 1) if '~' in poolName else ['', poolName]; poolSubPath = poolSubPath.replace('~', '/')
+        memberSubPath, poolMember = poolMemberName.rsplit('~', 1) if '~' in poolMemberName else ['', poolMemberName]; memberSubPath = memberSubPath.replace('~', '/')
         etagCondition = { "responseEtag": "" }
 
         user = CustomController.loggedUser(request)
@@ -32,7 +34,7 @@ class F5PoolMemberStatsController(CustomController):
 
                     data = {
                         "data": CustomController.validate(
-                            Pool(assetId, poolName, partitionName).getMember(poolMemberName).stats(),
+                            Pool(assetId, pool, partitionName, poolSubPath).getMember(poolMember, memberSubPath).stats(),
                             Serializer,
                             "value"
                         ),
