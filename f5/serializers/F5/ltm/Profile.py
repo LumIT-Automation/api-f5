@@ -10,6 +10,7 @@ class F5ProfileSerializer(serializers.Serializer):
     partition = serializers.CharField(max_length=255, required=False, allow_blank=True)
     type = serializers.CharField(max_length=255, required=False, allow_blank=True)
     fullPath = serializers.CharField(max_length=255, required=False, allow_blank=True)
+    subPath = serializers.CharField(max_length=255, required=False, allow_blank=True)
     generation = serializers.IntegerField(required=False)
     selfLink = serializers.CharField(max_length=255, required=False, allow_blank=True)
     defaultsFrom = serializers.CharField(max_length=255, required=False, allow_blank=True)

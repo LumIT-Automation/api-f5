@@ -12,7 +12,7 @@ Link: Dict[str, str] = {
 }
 
 class Profile:
-    def __init__(self, assetId: int, partitionName: str, profileType: str, profileName: str, *args, **kwargs):
+    def __init__(self, assetId: int, partitionName: str, profileType: str, profileName: str, subPath: str = "", *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.assetId: int = int(assetId)
@@ -20,6 +20,7 @@ class Profile:
         self.type: str = profileType
         self.name: str = profileName
         self.fullPath: str = ""
+        self.subPath = subPath
         self.generation: int = 0
         self.selfLink: str = ""
         self.defaultsFrom: str = ""
@@ -94,7 +95,7 @@ class Profile:
 
     def modify(self, data):
         try:
-            Backend.modify(self.assetId, self.type, self.partition, self.name, data)
+            Backend.modify(self.assetId, self.type, self.partition, self.name, data, self.subPath)
 
             for k, v in Misc.toDict(data).items():
                 setattr(self, k, v)
@@ -105,7 +106,7 @@ class Profile:
 
     def delete(self):
         try:
-            Backend.delete(self.assetId, self.type, self.partition, self.name)
+            Backend.delete(self.assetId, self.type, self.partition, self.name, self.subPath)
             del self
         except Exception as e:
             raise e
@@ -162,7 +163,7 @@ class Profile:
 
     def __load(self) -> None:
         try:
-            data = Backend.info(self.assetId, self.type, self.partition, self.name)
+            data = Backend.info(self.assetId, self.type, self.partition, self.name, self.subPath)
             if data:
                 for k, v in data.items():
                     setattr(self, k, v)

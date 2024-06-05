@@ -37,11 +37,13 @@ class Profile:
 
 
     @staticmethod
-    def info(assetId: int, profileType: str, partitionName: str, profileName: str, silent: bool = False):
+    def info(assetId: int, profileType: str, partitionName: str, profileName: str, subPath: str = "", silent: bool = False):
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
+
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/profile/"+profileType+"/~"+partitionName+"~"+profileName+"/",
+                endpoint=f5.baseurl+"tm/ltm/profile/"+profileType+"/~"+partitionName+"~"+subPath+profileName+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify,
                 silent=silent
@@ -54,11 +56,13 @@ class Profile:
 
 
     @staticmethod
-    def modify(assetId: int, profileType: str, partitionName: str, profileName: str, data):
+    def modify(assetId: int, profileType: str, partitionName: str, profileName: str, data, subPath: str = ""):
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
+
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/profile/"+profileType+"/~"+partitionName+"~"+profileName+"/",
+                endpoint=f5.baseurl+"tm/ltm/profile/"+profileType+"/~"+partitionName+"~"+subPath+profileName+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
@@ -75,11 +79,13 @@ class Profile:
 
 
     @staticmethod
-    def delete(assetId: int, profileType: str, partitionName: str, profileName: str):
+    def delete(assetId: int, profileType: str, partitionName: str, profileName: str, subPath: str = ""):
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
+
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/profile/"+profileType+"/~"+partitionName+"~"+profileName+"/",
+                endpoint=f5.baseurl+"tm/ltm/profile/"+profileType+"/~"+partitionName+"~"+subPath+profileName+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )

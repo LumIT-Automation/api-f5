@@ -18,6 +18,7 @@ class F5ProfileController(CustomController):
     @staticmethod
     def get(request: Request, assetId: int, partitionName: str, profileType: str, profileName: str) -> Response:
         data = dict()
+        subPath, name = profileName.rsplit('~', 1) if '~' in profileName else ['', profileName]; subPath = subPath.replace('~', '/')
         etagCondition = { "responseEtag": "" }
 
         user = CustomController.loggedUser(request)
@@ -32,7 +33,7 @@ class F5ProfileController(CustomController):
 
                     data = {
                         "data": CustomController.validate(
-                            Profile(assetId, partitionName, profileType, profileName).repr(),
+                            Profile(assetId, partitionName, profileType, name, subPath).repr(),
                             Serializer,
                             "value"
                         ),
@@ -70,6 +71,7 @@ class F5ProfileController(CustomController):
 
     @staticmethod
     def delete(request: Request, assetId: int, partitionName: str, profileType: str, profileName: str) -> Response:
+        subPath, name = profileName.rsplit('~', 1) if '~' in profileName else ['', profileName]; subPath = subPath.replace('~', '/')
         user = CustomController.loggedUser(request)
 
         try:
@@ -80,7 +82,7 @@ class F5ProfileController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    Profile(assetId, partitionName, profileType, profileName).delete()
+                    Profile(assetId, partitionName, profileType, name, subPath).delete()
 
                     httpStatus = status.HTTP_200_OK
                     lock.release()
@@ -103,6 +105,7 @@ class F5ProfileController(CustomController):
     @staticmethod
     def patch(request: Request, assetId: int, partitionName: str, profileType: str, profileName: str) -> Response:
         response = None
+        subPath, name = profileName.rsplit('~', 1) if '~' in profileName else ['', profileName]; subPath = subPath.replace('~', '/')
         user = CustomController.loggedUser(request)
 
         try:
@@ -118,7 +121,7 @@ class F5ProfileController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        Profile(assetId, partitionName, profileType, profileName).modify(data)
+                        Profile(assetId, partitionName, profileType, name, subPath).modify(data)
 
                         httpStatus = status.HTTP_200_OK
                         lock.release()
