@@ -24,13 +24,14 @@ Reference: Dict[str, Union[str, bool]] = {
 }
 
 class VirtualServer:
-    def __init__(self, assetId: int, partitionName: str, virtualServerName: str, loadPolicies: bool = False, loadProfiles: bool = False, profileTypeFilter: list = None, *args, **kwargs):
+    def __init__(self, assetId: int, partitionName: str, virtualServerName: str, subPath: str = "", loadPolicies: bool = False, loadProfiles: bool = False, profileTypeFilter: list = None, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.assetId = int(assetId)
         self.partition = partitionName
         self.name = virtualServerName
         self.fullPath: str = ""
+        self.subPath: str = subPath
         self.generation: int = 0
         self.selfLink: str = ""
         self.addressStatus: str = ""
@@ -89,7 +90,7 @@ class VirtualServer:
 
     def modify(self, data):
         try:
-            Backend.modify(self.assetId, self.partition, self.name, data)
+            Backend.modify(self.assetId, self.partition, self.name, data, self.subPath)
 
             for k, v in Misc.toDict(data).items():
                 setattr(self, k, v)
@@ -100,7 +101,7 @@ class VirtualServer:
 
     def delete(self):
         try:
-            Backend.delete(self.assetId, self.partition, self.name)
+            Backend.delete(self.assetId, self.partition, self.name, self.subPath)
             del self
         except Exception as e:
             raise e
@@ -109,7 +110,7 @@ class VirtualServer:
 
     def getPoliciesSummary(self) -> List[dict]:
         try:
-            return Backend.policies(self.assetId, self.partition, self.name)
+            return Backend.policies(self.assetId, self.partition, self.name, self.subPath)
         except Exception as e:
             raise e
 
@@ -117,7 +118,7 @@ class VirtualServer:
 
     def getProfilesSummary(self) -> List[dict]:
         try:
-            return Backend.profiles(self.assetId, self.partition, self.name)
+            return Backend.profiles(self.assetId, self.partition, self.name, self.subPath)
         except Exception as e:
             raise e
 
@@ -132,15 +133,15 @@ class VirtualServer:
         import threading
         virtualServersList = []
 
-        def loadVs(a, p, n, lpo, lpr, o):
-            o.append(VirtualServer(a, p, n, lpo, lpr)) # append VirtualServer object.
+        def loadVs(a, p, n, s, lpo, lpr, o):
+            o.append(VirtualServer(a, p, n, s, lpo, lpr)) # append VirtualServer object.
 
         try:
             summary = Backend.list(assetId, partitionName)
             chunks = [summary[x:x + 100] for x in range(0, len(summary), 100)] # when virtualservers are many, split in chunks to retrieve the full data.
             for chunk in chunks:
                 l = []
-                workers = [threading.Thread(target=loadVs, args=(assetId, partitionName, el.get("name", ""), loadPolicies, loadProfiles, l)) for el in chunk]
+                workers = [threading.Thread(target=loadVs, args=(assetId, partitionName, el.get("name", ""), el.get("subPath", ""), loadPolicies, loadProfiles, l)) for el in chunk]
                 for w in workers:
                     w.start()
                 for w in workers:
@@ -170,7 +171,7 @@ class VirtualServer:
         profileTypeFilter = profileTypeFilter or []
 
         try:
-            data = Backend.info(self.assetId, self.partition, self.name)
+            data = Backend.info(self.assetId, self.partition, self.name, self.subPath)
             if data:
                 for k, v in data.items():
                     setattr(self, k, v)

@@ -21,6 +21,7 @@ class F5VirtualServerController(CustomController):
         loadPolicies = False
         loadProfiles = False
         profileTypeFilter = []
+        subPath, name = virtualServerName.rsplit('~', 1) if '~' in virtualServerName else ['', virtualServerName]; subPath = subPath.replace('~', '/')
         etagCondition = { "responseEtag": "" }
 
         user = CustomController.loggedUser(request)
@@ -44,7 +45,7 @@ class F5VirtualServerController(CustomController):
 
                     data = {
                         "data": CustomController.validate(
-                            VirtualServer(assetId, partitionName, virtualServerName, loadPolicies=loadPolicies, loadProfiles=loadProfiles, profileTypeFilter=profileTypeFilter).repr(),
+                            VirtualServer(assetId, partitionName, name, subPath, loadPolicies=loadPolicies, loadProfiles=loadProfiles, profileTypeFilter=profileTypeFilter).repr(),
                             Serializer,
                             "value"
                         ),
@@ -82,6 +83,7 @@ class F5VirtualServerController(CustomController):
 
     @staticmethod
     def delete(request: Request, assetId: int, partitionName: str, virtualServerName: str) -> Response:
+        subPath, name = virtualServerName.rsplit('~', 1) if '~' in virtualServerName else ['', virtualServerName]; subPath = subPath.replace('~', '/')
         user = CustomController.loggedUser(request)
 
         try:
@@ -92,7 +94,7 @@ class F5VirtualServerController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    VirtualServer(assetId, partitionName, virtualServerName).delete()
+                    VirtualServer(assetId, partitionName, name, subPath).delete()
 
                     httpStatus = status.HTTP_200_OK
                     lock.release()
@@ -115,6 +117,7 @@ class F5VirtualServerController(CustomController):
     @staticmethod
     def patch(request: Request, assetId: int, partitionName: str, virtualServerName: str) -> Response:
         response = None
+        subPath, name = virtualServerName.rsplit('~', 1) if '~' in virtualServerName else ['', virtualServerName]; subPath = subPath.replace('~', '/')
         user = CustomController.loggedUser(request)
 
         try:
@@ -131,7 +134,7 @@ class F5VirtualServerController(CustomController):
                     if lock.isUnlocked():
                         lock.lock()
 
-                        VirtualServer(assetId, partitionName, virtualServerName).modify(data)
+                        VirtualServer(assetId, partitionName, name, subPath).modify(data)
 
                         httpStatus = status.HTTP_200_OK
                         lock.release()

@@ -13,11 +13,13 @@ class VirtualServer:
     ####################################################################################################################
 
     @staticmethod
-    def info(assetId: int, partitionName: str, virtualServerName: str) -> dict:
+    def info(assetId: int, partitionName: str, virtualServerName: str, subPath: str = "") -> dict:
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
+
         try:
             f5 = Asset(assetId)
             items = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/virtual/~"+partitionName+"~"+virtualServerName+"/",
+                endpoint=f5.baseurl+"tm/ltm/virtual/~"+partitionName+"~"+subPath+virtualServerName+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             ).get()["payload"]
@@ -29,11 +31,13 @@ class VirtualServer:
 
 
     @staticmethod
-    def policies(assetId: int, partitionName: str, virtualServerName: str) -> List[dict]:
+    def policies(assetId: int, partitionName: str, virtualServerName: str, subPath: str = "") -> List[dict]:
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
+
         try:
             f5 = Asset(assetId)
             items = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/virtual/~"+partitionName+"~"+virtualServerName+"/policies/",
+                endpoint=f5.baseurl+"tm/ltm/virtual/~"+partitionName+"~"+subPath+virtualServerName+"/policies/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             ).get()["payload"]["items"]
@@ -45,11 +49,13 @@ class VirtualServer:
 
 
     @staticmethod
-    def profiles(assetId: int, partitionName: str, virtualServerName: str) -> List[dict]:
+    def profiles(assetId: int, partitionName: str, virtualServerName: str, subPath: str = "") -> List[dict]:
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
+
         try:
             f5 = Asset(assetId)
             items = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/virtual/~"+partitionName+"~"+virtualServerName+"/profiles/",
+                endpoint=f5.baseurl+"tm/ltm/virtual/~"+partitionName+"~"+subPath+virtualServerName+"/profiles/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             ).get()["payload"]["items"]
@@ -61,11 +67,13 @@ class VirtualServer:
 
 
     @staticmethod
-    def modify(assetId: int, partitionName: str, virtualServerName: str, data: dict) -> None:
+    def modify(assetId: int, partitionName: str, virtualServerName: str, data: dict, subPath: str = "") -> None:
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
+
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/virtual/~"+partitionName+"~"+virtualServerName+"/",
+                endpoint=f5.baseurl+"tm/ltm/virtual/~"+partitionName+"~"+subPath+virtualServerName+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
@@ -82,11 +90,13 @@ class VirtualServer:
 
 
     @staticmethod
-    def delete(assetId: int, partitionName: str, virtualServerName: str) -> None:
+    def delete(assetId: int, partitionName: str, virtualServerName: str, subPath: str = "") -> None:
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
+
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
-                endpoint=f5.baseurl+"tm/ltm/virtual/~"+partitionName+"~"+virtualServerName+"/",
+                endpoint=f5.baseurl+"tm/ltm/virtual/~"+partitionName+"~"+subPath+virtualServerName+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify
             )
