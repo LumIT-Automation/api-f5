@@ -462,7 +462,8 @@ class VirtualServersWorkflow:
 
             if "irules" in self.data:
                 for el in self.data["irules"]:
-                    irules.append("/"+self.partitionName+"/"+el["name"])
+                    irulePath = el.get('iruleSubPath', '')+"/"+el["name"] if el.get('iruleSubPath', '') else el["name"]
+                    irules.append("/"+self.partitionName+"/"+irulePath)
 
             poolPath = self.data.get('poolSubPath', '')+"/"+self.data["pool"]["name"] if self.data.get('poolSubPath', '') else self.data["pool"]["name"]
 
