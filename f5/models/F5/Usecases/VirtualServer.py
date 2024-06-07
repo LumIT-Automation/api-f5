@@ -161,6 +161,13 @@ class VirtualServerWorkflow:
                 poolMembers = Pool(self.assetId, self.partitionName, self.poolName, self.poolSubPath).getMembersData()
                 for pm in poolMembers:
                     self.nodes.append({
+                        "name": pm.get("name", "").split(":")[0],
+                        "subPath": pm.get("subPath", ""),
+                        "address": pm.get("address", "")
+                    })
+
+                    """ 
+                    self.nodes.append({
                         "name": Node.getNameFromAddress(
                             self.assetId,
                             self.partitionName,
@@ -169,6 +176,7 @@ class VirtualServerWorkflow:
                         ),
                         "address": pm["address"]
                     })
+                    """
         except Exception as e:
             raise e
 
@@ -397,25 +405,26 @@ class VirtualServerWorkflow:
         for n in self.nodes:
             nodeName = n["name"]
             nodeAddress = n["address"]
+            nodeSubPath = n["subPath"]
+            nodePath = nodeSubPath + "/" + nodeName if nodeSubPath else nodeName
 
             try:
-                node = Node(self.assetId, self.partitionName, nodeName)
-                node.delete()
+                Node(self.assetId, self.partitionName, nodeName, nodeSubPath).delete()
 
                 self.__deletedObjects["node"].append({
                     "asset": self.assetId,
                     "partition": self.partitionName,
-                    "name": nodeName,
+                    "name": nodePath,
                     "address": nodeAddress
                 })
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":
                     if "F5" in e.payload and e.status == 400 and "is referenced" in e.payload["F5"]:
-                        Log.log("Node "+str(nodeName)+" in use; not deleting it. ")
+                        Log.log("Node "+str(nodePath)+" in use; not deleting it. ")
                     else:
-                        Log.log("[ERROR] Virtual server deletion workflow: cannot delete node "+nodeName+": "+str(e.payload))
+                        Log.log("[ERROR] Virtual server deletion workflow: cannot delete node "+nodePath+": "+str(e.payload))
                 else:
-                    Log.log("[ERROR] Virtual server deletion workflow: cannot delete node "+nodeName+": "+e.__str__())
+                    Log.log("[ERROR] Virtual server deletion workflow: cannot delete node "+nodePath+": "+e.__str__())
 
         Log.actionLog("Deleted objects: "+str(self.__deletedObjects))
 
