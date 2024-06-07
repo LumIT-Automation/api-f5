@@ -15,7 +15,7 @@ from f5.helpers.Log import Log
 
 
 class VirtualServerWorkflow:
-    def __init__(self, assetId: int, partitionName: str, virtualServerName: str, user: dict, replicaUuid: str):
+    def __init__(self, assetId: int, partitionName: str, virtualServerName: str, user: dict, replicaUuid: str, subPath: str = ""):
         try:
             self.profiles = list()
             self.certificates = list()
@@ -27,7 +27,7 @@ class VirtualServerWorkflow:
                 "type": ""
             }
             self.poolName = ""
-            self.PoolSubPath = ""
+            self.poolSubPath = ""
             self.snatPool = ""
             self.nodes = list()
 
@@ -47,6 +47,7 @@ class VirtualServerWorkflow:
             self.assetId = assetId
             self.partitionName = partitionName
             self.virtualServerName = virtualServerName
+            self.subPath = subPath
             self.username = user["username"]
             self.replicaUuid = replicaUuid  # for relating primary/dr operations, when appliable.
 
@@ -94,25 +95,23 @@ class VirtualServerWorkflow:
 
     def __info(self) -> None:
         try:
-            vs = VirtualServer(self.assetId, self.partitionName, self.virtualServerName, loadProfiles=True)
+            vs = VirtualServer(self.assetId, self.partitionName, self.virtualServerName, self.subPath, loadProfiles=True)
 
             # General info.
             info = vs.repr()
 
-            try:
-                infoPoolList = info["pool"].split("/")
-                self.poolName = infoPoolList[-1]
-                if len(infoPoolList) > 2:
-                    self.poolSubPath = '~'.join(infoPoolList[1:-1])
+            infoPoolList = list(filter(bool, info["pool"].split("/"))) # remove the leading empty string.
+            self.poolName = infoPoolList[-1]
+            if len(infoPoolList) > 2:
+                self.poolSubPath = '~'.join(infoPoolList[1:-1])
 
-                if "sourceAddressTranslation" in info \
-                        and "pool" in info["sourceAddressTranslation"]:
-                    self.snatPool = info["sourceAddressTranslation"]["pool"]
+            if "sourceAddressTranslation" in info \
+                    and "pool" in info["sourceAddressTranslation"]:
+                self.snatPool = info["sourceAddressTranslation"]["pool"]
 
-                for ir in info["rules"]:
-                    self.irules.append({"name": ir})
-            except Exception:
-                pass
+            for ir in info["rules"]:
+                self.irules.append({"name": ir})
+
 
             # Related profiles, certificates and keys.
             profiles = info.get("profiles", [])
@@ -172,7 +171,7 @@ class VirtualServerWorkflow:
         try:
             Log.actionLog("Virtual server deletion workflow: attempting to delete virtual server: "+str(self.virtualServerName))
 
-            vs = VirtualServer(self.assetId, self.partitionName, self.virtualServerName)
+            vs = VirtualServer(self.assetId, self.partitionName, self.virtualServerName, self.subPath)
             vs.delete()
 
             self.__deletedObjects["virtualServer"] = {

@@ -94,6 +94,8 @@ class VirtualServersWorkflow:
 
         for el in self.data["pool"]["nodes"]:
             nodeName = el["name"]
+            nodeSubPath = el.get('nodeSubPath', '')
+            nodeFullName = nodeSubPath + "/" + nodeName if nodeSubPath else nodeName
             nodeAddress = el["address"]
 
             if nodeName == nodeAddress:
@@ -107,6 +109,7 @@ class VirtualServersWorkflow:
 
                 Node.add(self.assetId, {
                     "name": nodeName,
+                    "subPath": nodeSubPath,
                     "address": nodeAddress,
                     "partition": self.partitionName,
                     "State": "up"
@@ -116,7 +119,7 @@ class VirtualServersWorkflow:
                 self.__createdObjects["node"].append({
                     "asset": self.assetId,
                     "partition": self.partitionName,
-                    "name": nodeName,
+                    "name": nodeFullName,
                     "address": nodeAddress,
                 })
             except Exception as e:
@@ -128,7 +131,7 @@ class VirtualServersWorkflow:
                         self.__usedObjects["node"].append({
                             "asset": self.assetId,
                             "partition": self.partitionName,
-                            "name": nodeName,
+                            "name": nodeFullName,
                             "address": nodeAddress,
                         })
                     else:
@@ -148,6 +151,8 @@ class VirtualServersWorkflow:
     def __createMonitor(self) -> None:
         if "monitor" in self.data:
             monitorName = self.data["monitor"]["name"]
+            monitorSubPath = self.data.get('monitorSubPath', '')
+            monitorFullName = monitorSubPath + "/" + monitorName if monitorSubPath else monitorName
             monitorType = self.data["monitor"]["type"]
 
             try:
@@ -155,6 +160,7 @@ class VirtualServersWorkflow:
 
                 mData = {
                     "name": monitorName,
+                    "subPath": monitorSubPath,
                     "partition": self.partitionName
                 }
 
@@ -169,7 +175,7 @@ class VirtualServersWorkflow:
                 self.__createdObjects["monitor"] = {
                     "asset": self.assetId,
                     "partition": self.partitionName,
-                    "name": monitorName,
+                    "name": monitorFullName,
                     "type": monitorType
                 }
             except Exception as e:
@@ -182,12 +188,15 @@ class VirtualServersWorkflow:
 
     def __createPool(self) -> None:
         poolName = self.data["pool"]["name"]
+        poolSubPath = self.data.get('poolSubPath', '')
+        poolFullName = poolSubPath + "/" + poolName if poolSubPath else poolName
 
         try:
             Log.actionLog("Virtual server workflow: attempting to create pool: "+str(poolName))
 
             Pool.add(self.assetId, {
                 "name": poolName,
+                "subPath": poolSubPath,
                 "partition": self.partitionName,
                 "monitor": "/"+self.partitionName+"/"+self.data["monitor"]["name"],
                 "loadBalancingMode": self.data["pool"]["loadBalancingMode"]
@@ -197,7 +206,7 @@ class VirtualServersWorkflow:
             self.__createdObjects["pool"] = {
                 "asset": self.assetId,
                 "partition": self.partitionName,
-                "name": poolName
+                "name": poolFullName,
             }
         except Exception as e:
             self.__cleanCreatedObjects()
@@ -209,18 +218,21 @@ class VirtualServersWorkflow:
 
     def __createPoolMembers(self) -> None:
         poolName = self.data["pool"]["name"]
+        poolSubPath = self.data.get('poolSubPath', '')
+        poolFullName = poolSubPath + "/" + poolName if poolSubPath else poolName
 
         if "nodes" in self.data["pool"]:
             for el in self.data["pool"]["nodes"]:
                 nodeName = el["name"]
                 poolMemberPort = el["port"]
-                poolMemberName = nodeName+":"+str(poolMemberPort)
+                nodeSubPath = el.get('nodeSubPath', '')
+                poolMemberFullName = nodeSubPath+"/"+nodeName+str(poolMemberPort) if nodeSubPath else nodeName+str(poolMemberPort)
 
                 try:
                     Log.actionLog("Virtual server workflow: attempting to create pool members: associate "+str(nodeName)+" to "+str(poolName)+" on port "+str(poolMemberPort))
 
-                    Pool(self.assetId, self.partitionName, poolName).addMember({
-                            "name": "/"+self.partitionName+"/"+poolMemberName,
+                    Pool(self.assetId, self.partitionName, poolName, poolSubPath).addMember({
+                            "name": "/"+self.partitionName+"/"+poolMemberFullName,
                             "State": "up",
                             "session": "user-enabled"
                         }
@@ -230,8 +242,8 @@ class VirtualServersWorkflow:
                     self.__createdObjects["poolMember"].append({
                         "asset": self.assetId,
                         "partition": self.partitionName,
-                        "pool": poolName,
-                        "name": poolMemberName
+                        "pool": poolFullName,
+                        "name": poolMemberFullName
                     })
                 except Exception as e:
                     self.__cleanCreatedObjects()
@@ -245,6 +257,9 @@ class VirtualServersWorkflow:
         if "irules" in self.data:
             for el in self.data["irules"]:
                 iruleName = el["name"]
+                iruleSubPath = self.data.get('iruleSubPath', '')
+                iruleFullName = iruleSubPath + "/" + iruleName if iruleSubPath else iruleName
+
                 iruleCode = ""
                 if "code" in el:
                     iruleCode = el["code"]
@@ -254,6 +269,7 @@ class VirtualServersWorkflow:
 
                     Irule.add(self.assetId, {
                         "name": iruleName,
+                        "subPath": iruleSubPath,
                         "partition": self.partitionName,
                         "apiAnonymous": iruleCode
                     })
@@ -262,7 +278,7 @@ class VirtualServersWorkflow:
                     self.__createdObjects["irule"].append({
                         "asset": self.assetId,
                         "partition": self.partitionName,
-                        "name": iruleName
+                        "name": iruleFullName
                     })
                 except Exception as e:
                     self.__cleanCreatedObjects()
@@ -308,9 +324,12 @@ class VirtualServersWorkflow:
         for el in self.data["profiles"]:
             profileName = el["name"]
             profileType = el["type"]
+            profileSubPath = self.data.get('profileSubPath', '')
+            profileFullName = profileSubPath + "/" + profileName if profileSubPath else profileName
 
             data = {
                 "name": profileName,
+                "subPath": profileSubPath,
                 "partition": self.partitionName
             }
 
@@ -357,7 +376,7 @@ class VirtualServersWorkflow:
                 self.__createdObjects["profile"].append({
                     "asset": self.assetId,
                     "partition": self.partitionName,
-                    "name": profileName,
+                    "name": profileFullName,
                     "type": profileType
                 })
             except Exception as e:
@@ -372,6 +391,8 @@ class VirtualServersWorkflow:
         if self.data["virtualServer"]["snat"] == "snat":
             if "snatPool" in self.data:
                 snatPoolName = self.data["snatPool"]["name"]
+                snatPoolSubPath = self.data.get('snatPoolSubPath', '')
+                snatPoolFullName = snatPoolSubPath + "/" + snatPoolName if snatPoolSubPath else snatPoolName
                 snatPoolMembers = list()
 
                 try:
@@ -383,6 +404,7 @@ class VirtualServersWorkflow:
 
                     SnatPool.add(self.assetId, {
                         "name": snatPoolName,
+                        "subPath": snatPoolSubPath,
                         "partition": self.partitionName,
                         "members": snatPoolMembers
                     })
@@ -391,7 +413,7 @@ class VirtualServersWorkflow:
                     self.__createdObjects["snatPool"] = {
                         "asset": self.assetId,
                         "partition": self.partitionName,
-                        "name": snatPoolName
+                        "name": snatPoolFullName
                     }
                 except Exception as e:
                     self.__cleanCreatedObjects()

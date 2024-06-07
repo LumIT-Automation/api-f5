@@ -16,6 +16,7 @@ class F5WorkflowVirtualServerController(CustomController):
     @staticmethod
     @ReplicateVirtualServerDeletion
     def delete(request: Request, assetId: int, partitionName: str, virtualServerName: str) -> Response:
+        subPath, name = virtualServerName.rsplit('~', 1) if '~' in virtualServerName else ['', virtualServerName]; subPath = subPath.replace('~', '/')
         replicaUuid = request.GET.get("__replicaUuid", "") # an uuid in order to correlate actions on logs.
         user = CustomController.loggedUser(request)
 
@@ -27,7 +28,7 @@ class F5WorkflowVirtualServerController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    VirtualServerWorkflow(assetId, partitionName, virtualServerName, user, replicaUuid).delete()
+                    VirtualServerWorkflow(assetId, partitionName, name, user, replicaUuid, subPath).delete()
 
                     httpStatus = status.HTTP_200_OK
                     lock.release()
