@@ -226,11 +226,13 @@ class VirtualServersWorkflow:
                 nodeName = el["name"]
                 poolMemberPort = el["port"]
                 nodeSubPath = el.get('nodeSubPath', '')
-                poolMemberFullName = nodeSubPath+"/"+nodeName+str(poolMemberPort) if nodeSubPath else nodeName+str(poolMemberPort)
+                poolMemberFullName = nodeSubPath+"/"+nodeName+":"+str(poolMemberPort) if nodeSubPath else nodeName+":"+str(poolMemberPort)
 
                 try:
                     Log.actionLog("Virtual server workflow: attempting to create pool members: associate "+str(nodeName)+" to "+str(poolName)+" on port "+str(poolMemberPort))
 
+                    Log.log(poolMemberFullName, 'LLLLLLLLLLLLLLLLL')
+     
                     Pool(self.assetId, self.partitionName, poolName, poolSubPath).addMember({
                             "name": "/"+self.partitionName+"/"+poolMemberFullName,
                             "State": "up",
