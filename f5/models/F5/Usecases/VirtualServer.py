@@ -146,9 +146,14 @@ class VirtualServerWorkflow:
                 poolInfo = Pool(self.assetId, self.partitionName, self.poolName, self.poolSubPath).info()
 
                 if "monitor" in poolInfo:
+                    monitorPathList = list(filter(bool, poolInfo["monitor"].split("/"))) # remove the leading element "".
+                    monitorName = monitorPathList.pop(-1)
+                    monitorSubPath = '/'.join(monitorPathList[1:])
+
                     try:
-                        self.monitor["name"] = poolInfo["monitor"].split("/")[2]
-                        self.monitor["type"] = VirtualServerWorkflow.__getMonitorDetails(self.assetId, self.partitionName, self.monitor["name"])["type"]
+                        self.monitor["name"] = monitorName
+                        self.monitor["subPath"] = monitorSubPath
+                        self.monitor["type"] = VirtualServerWorkflow.__getMonitorDetails(self.assetId, self.partitionName, monitorName, monitorSubPath)["type"]
                     except Exception:
                         pass
 
@@ -215,9 +220,9 @@ class VirtualServerWorkflow:
                     if "F5" in e.payload and e.status == 400 and "in use" in e.payload["F5"]:
                         Log.log("Irule "+str(iruleName)+" in use; not deleting it. ")
                     else:
-                        Log.log("[ERROR] Virtual server deletion workflow: cannot delete irule "+iruleName+": "+str(e.payload))
+                        Log.log("[ERROR] Virtual server deletion workflow: cannot delete irule "+irulePath+": "+str(e.payload))
                 else:
-                    Log.log("[ERROR] Virtual server deletion workflow: cannot delete irule "+iruleName+": "+e.__str__())
+                    Log.log("[ERROR] Virtual server deletion workflow: cannot delete irule "+irulePath+": "+e.__str__())
 
         Log.actionLog("Deleted objects: "+str(self.__deletedObjects))
 
@@ -243,9 +248,9 @@ class VirtualServerWorkflow:
                     if "F5" in e.payload and e.status == 400 and "in use" in e.payload["F5"]:
                         Log.log("Profile "+str(p["name"])+" in use; not deleting it. ")
                     else:
-                        Log.log("[ERROR] Virtual server deletion workflow: cannot delete profile "+p["name"]+": "+str(e.payload))
+                        Log.log("[ERROR] Virtual server deletion workflow: cannot delete profile "+profilePath+": "+str(e.payload))
                 else:
-                    Log.log("[ERROR] Virtual server deletion workflow: cannot delete profile "+p["name"]+": "+e.__str__())
+                    Log.log("[ERROR] Virtual server deletion workflow: cannot delete profile "+profilePath+": "+e.__str__())
 
         Log.actionLog("Deleted objects: "+str(self.__deletedObjects))
 
@@ -311,14 +316,14 @@ class VirtualServerWorkflow:
         if self.monitor["name"]:
             try:
                 Log.actionLog("Virtual server deletion workflow: attempting to delete monitor: "+str(self.monitor["name"]))
+                monitorPath = self.monitor.get("subPath", "") + "/" + self.monitor["name"] if self.monitor.get("subPath", "") else self.monitor["name"]
 
-                monitor = Monitor(self.assetId, self.partitionName, self.monitor["type"], self.monitor["name"])
-                monitor.delete()
+                Monitor(self.assetId, self.partitionName, self.monitor["type"], self.monitor["name"], self.monitor.get("subPath" ,"")).delete()
 
                 self.__deletedObjects["monitor"] = {
                     "asset": self.assetId,
                     "partition": self.partitionName,
-                    "name": self.monitor["name"],
+                    "name": monitorPath,
                     "type": self.monitor["type"]
                 }
             except Exception as e:
@@ -326,9 +331,9 @@ class VirtualServerWorkflow:
                     if "F5" in e.payload and e.status == 400 and "in use" in e.payload["F5"]:
                         Log.log("Monitor "+str(self.monitor["name"])+" in use; not deleting it. ")
                     else:
-                        Log.log("[ERROR] Virtual server deletion workflow: cannot delete monitor "+self.monitor["name"]+": "+str(e.payload))
+                        Log.log("[ERROR] Virtual server deletion workflow: cannot delete monitor "+monitorPath+": "+str(e.payload))
                 else:
-                    Log.log("[ERROR] Virtual server deletion workflow: cannot delete monitor "+self.monitor["name"]+": "+e.__str__())
+                    Log.log("[ERROR] Virtual server deletion workflow: cannot delete monitor "+monitorPath+": "+e.__str__())
 
         Log.actionLog("Deleted objects: "+str(self.__deletedObjects))
 
@@ -496,20 +501,20 @@ class VirtualServerWorkflow:
 
 
     @staticmethod
-    def __getMonitorDetails(assetId, partitionName, monitorName):
+    def __getMonitorDetails(assetId, partitionName, monitorName, monitorSubPath):
         monitorType = []
 
         try:
-            def monitorDetail(a, p, t, n):
+            def monitorDetail(a, p, t, n, s):
                 try:
                     monitorType.append(
-                        Monitor(a, p, t, n).info(silent=True)
+                        Monitor(a, p, t, n, s).info(silent=True)
                     )
                 except Exception:
                     pass
 
             monitorTypes = Monitor.types(assetId, partitionName)
-            workers = [threading.Thread(target=monitorDetail, args=(assetId, partitionName, m, monitorName)) for m in monitorTypes]
+            workers = [threading.Thread(target=monitorDetail, args=(assetId, partitionName, m, monitorName, monitorSubPath)) for m in monitorTypes]
             for w in workers:
                 w.start()
             for w in workers:

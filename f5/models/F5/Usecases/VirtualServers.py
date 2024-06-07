@@ -178,6 +178,7 @@ class VirtualServersWorkflow:
                     "name": monitorPath,
                     "type": monitorType
                 }
+
             except Exception as e:
                 self.__cleanCreatedObjects()
                 raise e
@@ -198,7 +199,7 @@ class VirtualServersWorkflow:
                 "name": poolName,
                 "subPath": poolSubPath,
                 "partition": self.partitionName,
-                "monitor": "/"+self.partitionName+"/"+self.data["monitor"]["name"],
+                "monitor": "/"+self.partitionName+"/"+self.__createdObjects["monitor"]["name"],
                 "loadBalancingMode": self.data["pool"]["loadBalancingMode"]
             })
 
@@ -613,7 +614,7 @@ class VirtualServersWorkflow:
             if k == "monitor":
                 if "name" in v:
                     monitorName = v["name"]
-                    monitorSubPath = n.get("monitorSubPath", "")
+                    monitorSubPath = v.get("monitorSubPath", "")
                     monitorType = v["type"]
                     try:
                         Log.log("Virtual server workflow: cleanup monitor "+monitorName)
