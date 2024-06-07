@@ -197,11 +197,13 @@ class VirtualServerWorkflow:
         Log.actionLog("Virtual server deletion workflow: attempting to delete irules: "+str(self.irules))
 
         for el in self.irules:
-            iruleName = el["name"].split("/")[2]
-            irulePath = el.get("subPath", "") + "/" + iruleName if el.get("subPath", "") else iruleName
+            irulePathList = list(filter(bool, el["name"].split("/"))) # remove the leading element "".
+            iruleName = irulePathList.pop(-1)
+            iruleSubPath = '/'.join(irulePathList[1:])
+            irulePath = iruleSubPath + "/" + iruleName if iruleSubPath else iruleName
 
             try:
-                Irule(self.assetId, self.partitionName, iruleName, el.get("subPath", "")).delete()
+                Irule(self.assetId, self.partitionName, iruleName, iruleSubPath).delete()
 
                 self.__deletedObjects["irule"].append({
                     "asset": self.assetId,

@@ -151,7 +151,7 @@ class VirtualServersWorkflow:
     def __createMonitor(self) -> None:
         if "monitor" in self.data:
             monitorName = self.data["monitor"]["name"]
-            monitorSubPath = self.data.get('monitorSubPath', '')
+            monitorSubPath = self.data["monitor"].get('monitorSubPath', '')
             monitorPath = monitorSubPath + "/" + monitorName if monitorSubPath else monitorName
             monitorType = self.data["monitor"]["type"]
 
@@ -188,7 +188,7 @@ class VirtualServersWorkflow:
 
     def __createPool(self) -> None:
         poolName = self.data["pool"]["name"]
-        poolSubPath = self.data.get('poolSubPath', '')
+        poolSubPath = self.data["pool"].get('poolSubPath', '')
         poolPath = poolSubPath + "/" + poolName if poolSubPath else poolName
 
         try:
@@ -256,7 +256,7 @@ class VirtualServersWorkflow:
         if "irules" in self.data:
             for el in self.data["irules"]:
                 iruleName = el["name"]
-                iruleSubPath = self.data.get('iruleSubPath', '')
+                iruleSubPath = el.get('iruleSubPath', '')
                 irulePath = iruleSubPath + "/" + iruleName if iruleSubPath else iruleName
 
                 iruleCode = ""
@@ -390,7 +390,7 @@ class VirtualServersWorkflow:
         if self.data["virtualServer"]["snat"] == "snat":
             if "snatPool" in self.data:
                 snatPoolName = self.data["snatPool"]["name"]
-                snatPoolSubPath = self.data.get('snatPoolSubPath', '')
+                snatPoolSubPath = self.data["snatPool"].get('snatPoolSubPath', '')
                 snatPoolPath = snatPoolSubPath + "/" + snatPoolName if snatPoolSubPath else snatPoolName
                 snatPoolMembers = list()
 
@@ -469,7 +469,7 @@ class VirtualServersWorkflow:
 
             VirtualServer.add(self.assetId, {
                 "name": virtualServerName,
-                "subPath": self.data.get("virtualServer", {}).get("subPath", ""),
+                "subPath": self.data["virtualServer"].get("subPath", ""),
                 "partition": self.partitionName,
                 "destination": "/"+self.partitionName+"/"+virtualServerDestination,
                 "ipProtocol": "tcp",
