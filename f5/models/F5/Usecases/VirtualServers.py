@@ -323,7 +323,7 @@ class VirtualServersWorkflow:
         for el in self.data["profiles"]:
             profileName = el["name"]
             profileType = el["type"]
-            profileSubPath = self.data.get('profileSubPath', '')
+            profileSubPath = el.get('profileSubPath', '')
             profilePath = profileSubPath + "/" + profileName if profileSubPath else profileName
 
             data = {
@@ -454,8 +454,9 @@ class VirtualServersWorkflow:
                     if "context" in el:
                         context = el["context"]
 
+                    profilePath = el.get('profileSubPath', '')+"/"+el["name"] if el.get('profileSubPath', '') else el["name"]
                     profiles.append({
-                        "name": "/"+self.partitionName+"/"+el["name"],
+                        "name": "/"+self.partitionName+"/"+profilePath,
                         "context": context
                     })
 
