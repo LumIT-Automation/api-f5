@@ -467,6 +467,7 @@ class VirtualServersWorkflow:
 
             VirtualServer.add(self.assetId, {
                 "name": virtualServerName,
+                "subPath": self.data.get("virtualServer", {}).get("subPath", ""),
                 "partition": self.partitionName,
                 "destination": "/"+self.partitionName+"/"+virtualServerDestination,
                 "ipProtocol": "tcp",
@@ -506,10 +507,11 @@ class VirtualServersWorkflow:
             if k == "virtualServer":
                 if "name" in v:
                     virtualServerName = v["name"]
+                    subPath = v.get("subPath", "")
                     try:
                         Log.log("Virtual server workflow: cleanup virtualServer "+virtualServerName)
 
-                        vs = VirtualServer(self.assetId, self.partitionName, virtualServerName)
+                        vs = VirtualServer(self.assetId, self.partitionName, virtualServerName, subPath)
                         vs.delete()
                     except Exception:
                         # If deletion failed, log.
