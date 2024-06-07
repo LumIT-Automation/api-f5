@@ -28,7 +28,8 @@ class VirtualServerWorkflow:
             }
             self.poolName = ""
             self.poolSubPath = ""
-            self.snatPool = ""
+            self.snatPoolName = ""
+            self.snatPoolSubPath = ""
             self.nodes = list()
 
             self.__deletedObjects = {
@@ -107,7 +108,9 @@ class VirtualServerWorkflow:
 
             if "sourceAddressTranslation" in info \
                     and "pool" in info["sourceAddressTranslation"]:
-                self.snatPool = info["sourceAddressTranslation"]["pool"]
+                infoSnatPoolList = list(filter(bool, info["sourceAddressTranslation"]["pool"].split("/"))) # remove the leading element "".
+                self.snatPoolName = infoSnatPoolList.pop(-1)
+                self.snatPoolSubPath = '/'.join(infoSnatPoolList[1:])
 
             for ir in info["rules"]:
                 self.irules.append({"name": ir})
@@ -374,26 +377,26 @@ class VirtualServerWorkflow:
 
 
     def __deleteSnatPool(self) -> None:
-        if self.snatPool:
+        if self.snatPoolName:
             try:
-                Log.actionLog("Virtual server deletion workflow: attempting to delete snat pool: "+str(self.snatPool))
+                Log.actionLog("Virtual server deletion workflow: attempting to delete snat pool: "+str(self.snatPoolName))
+                snatPoolPath = self.snatPoolSubPath + "/" + self.snatPoolName if self.snatPoolSubPath else self.snatPoolName
 
-                snatpool = SnatPool(self.assetId, self.partitionName, self.snatPool.split("/")[2])
-                snatpool.delete()
+                SnatPool(self.assetId, self.partitionName, self.snatPoolName, self.snatPoolSubPath).delete()
 
                 self.__deletedObjects["snatPool"] = {
                     "asset": self.assetId,
                     "partition": self.partitionName,
-                    "name": self.snatPool
+                    "name": snatPoolPath
                 }
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":
                     if "F5" in e.payload and e.status == 400 and "in use" in e.payload["F5"]:
-                        Log.log("Snat pool "+str(self.snatPool)+" in use; not deleting it. ")
+                        Log.log("Snat pool "+str(snatPoolPath)+" in use; not deleting it. ")
                     else:
-                        Log.log("[ERROR] Virtual server deletion workflow: cannot delete snat pool "+self.snatPool+": "+str(e.payload))
+                        Log.log("[ERROR] Virtual server deletion workflow: cannot delete snat pool "+snatPoolPath+": "+str(e.payload))
                 else:
-                    Log.log("[ERROR] Virtual server deletion workflow: cannot delete snat pool "+self.snatPool+": "+e.__str__())
+                    Log.log("[ERROR] Virtual server deletion workflow: cannot delete snat pool "+snatPoolPath+": "+e.__str__())
 
         Log.actionLog("Deleted objects: "+str(self.__deletedObjects))
 
