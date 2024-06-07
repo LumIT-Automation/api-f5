@@ -100,7 +100,7 @@ class VirtualServerWorkflow:
             # General info.
             info = vs.repr()
 
-            infoPoolList = list(filter(bool, info["pool"].split("/"))) # remove the leading empty string.
+            infoPoolList = list(filter(bool, info["pool"].split("/"))) # remove the leading element "".
             self.poolName = infoPoolList[-1]
             if len(infoPoolList) > 2:
                 self.poolSubPath = '~'.join(infoPoolList[1:-1])
@@ -117,9 +117,10 @@ class VirtualServerWorkflow:
             profiles = info.get("profiles", [])
             for profile in profiles:
                 try:
-                    details = VirtualServerWorkflow.__getProfileDetails(self.assetId, self.partitionName, profile["name"])
+                    details = VirtualServerWorkflow.__getProfileDetails(self.assetId, self.partitionName, profile["name"], profile.get("subPath", ""))
                     self.profiles.append({
                         "name": profile["name"],
+                        "subPath": profile.get("subPath", ""),
                         "type": details["type"]
                     })
 
@@ -197,14 +198,15 @@ class VirtualServerWorkflow:
 
         for el in self.irules:
             iruleName = el["name"].split("/")[2]
+            irulePath = el.get("subPath", "") + "/" + iruleName if el.get("subPath", "") else iruleName
+
             try:
-                irule = Irule(self.assetId, self.partitionName, iruleName)
-                irule.delete()
+                Irule(self.assetId, self.partitionName, iruleName, el.get("subPath", "")).delete()
 
                 self.__deletedObjects["irule"].append({
                     "asset": self.assetId,
                     "partition": self.partitionName,
-                    "name": iruleName
+                    "name": irulePath
                 })
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":
@@ -223,27 +225,25 @@ class VirtualServerWorkflow:
         Log.actionLog("Virtual server deletion workflow: attempting to delete profiles: "+str(self.profiles))
 
         for p in self.profiles:
-            profileName = p["name"]
-            profileType = p["type"]
+            profilePath = p.get("subPath", "") + "/" + p["name"] if p.get("subPath", "") else p["name"]
 
             try:
-                profile = Profile(self.assetId, self.partitionName, profileType, profileName)
-                profile.delete()
+                Profile(self.assetId, self.partitionName,  p["type"], p["name"], p.get("subPath", "")).delete()
 
                 self.__deletedObjects["profile"].append({
                     "asset": self.assetId,
                     "partition": self.partitionName,
-                    "name": profileName,
-                    "type": profileType
+                    "name": profilePath,
+                    "type": p["type"]
                 })
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":
                     if "F5" in e.payload and e.status == 400 and "in use" in e.payload["F5"]:
-                        Log.log("Profile "+str(profileName)+" in use; not deleting it. ")
+                        Log.log("Profile "+str(p["name"])+" in use; not deleting it. ")
                     else:
-                        Log.log("[ERROR] Virtual server deletion workflow: cannot delete profile "+profileName+": "+str(e.payload))
+                        Log.log("[ERROR] Virtual server deletion workflow: cannot delete profile "+p["name"]+": "+str(e.payload))
                 else:
-                    Log.log("[ERROR] Virtual server deletion workflow: cannot delete profile "+profileName+": "+e.__str__())
+                    Log.log("[ERROR] Virtual server deletion workflow: cannot delete profile "+p["name"]+": "+e.__str__())
 
         Log.actionLog("Deleted objects: "+str(self.__deletedObjects))
 
@@ -466,22 +466,22 @@ class VirtualServerWorkflow:
     ####################################################################################################################
 
     @staticmethod
-    def __getProfileDetails(assetId, partitionName, profileName):
+    def __getProfileDetails(assetId, partitionName, profileName, subPath):
         profileType = []
 
         try:
             # The only way to get a profile type is to iterate through all the profile types. A not so small pain in the ass.
             # The threading way. This requires a consistent throttle on remote appliance.
-            def profileDetail(a, p, t, n):
+            def profileDetail(a, p, t, n, s):
                 try:
                     profileType.append(
-                        Profile(a, p, t, n).repr()
+                        Profile(a, p, t, n, s).repr()
                     ) # probe.
                 except Exception:
                     pass
 
             profileTypes = Profile.types(assetId, partitionName)
-            workers = [threading.Thread(target=profileDetail, args=(assetId, partitionName, m, profileName)) for m in profileTypes]
+            workers = [threading.Thread(target=profileDetail, args=(assetId, partitionName, m, profileName, subPath)) for m in profileTypes]
             for w in workers:
                 w.start()
             for w in workers:
