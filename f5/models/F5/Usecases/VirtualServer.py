@@ -343,23 +343,23 @@ class VirtualServerWorkflow:
         if self.poolName:
             try:
                 Log.actionLog("Virtual server deletion workflow: attempting to delete pool: "+str(self.poolName))
+                poolPath = self.poolSubPath + "/" + self.poolName if self.poolSubPath else self.poolName
 
-                pool = Pool(self.assetId, self.partitionName, self.poolName, self.poolSubPath)
-                pool.delete()
+                Pool(self.assetId, self.partitionName, self.poolName, self.poolSubPath).delete()
 
                 self.__deletedObjects["pool"] = {
                     "asset": self.assetId,
                     "partition": self.partitionName,
-                    "name": self.poolName
+                    "name": poolPath
                 }
             except Exception as e:
                 if e.__class__.__name__ == "CustomException":
                     if "F5" in e.payload and e.status == 400 and "in use" in e.payload["F5"]:
-                        Log.log("Pool "+str(self.poolName)+" in use; not deleting it. ")
+                        Log.log("Pool "+str(self.poolPath)+" in use; not deleting it. ")
                     else:
-                        Log.log("[ERROR] Virtual server deletion workflow: cannot delete pool "+self.poolName+": "+str(e.payload))
+                        Log.log("[ERROR] Virtual server deletion workflow: cannot delete pool "+self.poolPath+": "+str(e.payload))
                 else:
-                    Log.log("[ERROR] Virtual server deletion workflow: cannot delete pool "+self.poolName+": "+e.__str__())
+                    Log.log("[ERROR] Virtual server deletion workflow: cannot delete pool "+self.poolPath+": "+e.__str__())
 
         Log.actionLog("Deleted objects: "+str(self.__deletedObjects))
 

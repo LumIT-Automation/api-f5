@@ -219,7 +219,7 @@ class VirtualServersWorkflow:
 
     def __createPoolMembers(self) -> None:
         poolName = self.data["pool"]["name"]
-        poolSubPath = self.data.get('poolSubPath', '')
+        poolSubPath = self.data["pool"].get('poolSubPath', '')
         poolPath = poolSubPath + "/" + poolName if poolSubPath else poolName
 
         if "nodes" in self.data["pool"]:
@@ -466,7 +466,7 @@ class VirtualServersWorkflow:
                     irulePath = el.get('iruleSubPath', '')+"/"+el["name"] if el.get('iruleSubPath', '') else el["name"]
                     irules.append("/"+self.partitionName+"/"+irulePath)
 
-            poolPath = self.data.get('poolSubPath', '')+"/"+self.data["pool"]["name"] if self.data.get('poolSubPath', '') else self.data["pool"]["name"]
+            poolPath = self.data["pool"].get('poolSubPath', '')+"/"+self.data["pool"]["name"] if self.data["pool"].get('poolSubPath', '') else self.data["pool"]["name"]
 
             VirtualServer.add(self.assetId, {
                 "name": virtualServerName,
