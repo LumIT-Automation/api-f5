@@ -22,7 +22,7 @@ class F5WorkflowDeleteNodeController(CustomController):
                 Log.actionLog("Node deletion (workflow)", user)
 
                 lock = Lock("node", locals(), nodeName)
-                #lock = Lock(DeleteNodeWorkflow.relatedF5Objects(), locals(), "any")
+                lock = Lock("pool", locals(), "any")
                 if lock.isUnlocked():
                     lock.lock()
 
@@ -35,7 +35,7 @@ class F5WorkflowDeleteNodeController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            #Lock(VirtualServerWorkflow.relatedF5Objects(), locals(), "any").release()
+            Lock("pool", locals(), "any").release()
             Lock("node", locals(), nodeName).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
