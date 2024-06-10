@@ -14,6 +14,7 @@ from f5.helpers.Log import Log
 class F5WorkflowDeleteNodeController(CustomController):
     @staticmethod
     def delete(request: Request, assetId: int, partitionName: str, nodeName: str) -> Response:
+        subPath, name = nodeName.rsplit('~', 1) if '~' in nodeName else ['', nodeName]; subPath = subPath.replace('~', '/')
         user = CustomController.loggedUser(request)
 
         try:
@@ -25,7 +26,7 @@ class F5WorkflowDeleteNodeController(CustomController):
                 if lock.isUnlocked():
                     lock.lock()
 
-                    DeleteNodeWorkflow(assetId, partitionName, nodeName, user).delete()
+                    DeleteNodeWorkflow(assetId, partitionName, name, user, subPath).delete()
 
                     httpStatus = status.HTTP_200_OK
                     lock.release()

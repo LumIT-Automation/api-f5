@@ -1,3 +1,5 @@
+import re
+
 from f5.models.F5.ltm.Node import Node
 from f5.models.F5.ltm.Pool import Pool
 from f5.models.F5.ltm.PoolMember import PoolMember
@@ -7,10 +9,11 @@ from f5.helpers.Log import Log
 
 
 class DeleteNodeWorkflow:
-    def __init__(self, assetId: int, partitionName: str, nodeNmae: str, user: dict):
+    def __init__(self, assetId: int, partitionName: str, nodeNmae: str, user: dict, subPath: str = ""):
         self.assetId = assetId
         self.partitionName = partitionName
         self.nodeName = nodeNmae
+        self.subPath = subPath
         self.username = user["username"]
         self.pool = ""
 
@@ -21,13 +24,26 @@ class DeleteNodeWorkflow:
     ####################################################################################################################
 
     def delete(self) -> None:
-        try:
-            poolName = self.__findPoolName()
-            self.__removePoolsMembership(poolName)
-            self.__deleteNode()
+        Log.actionLog("Node deletion workflow: attempting to delete node: " + self.nodeName)
+        deleted = False
+        while not deleted:
+            try:
+                Node(self.assetId, self.partitionName, self.nodeName, self.subPath).delete()
+                deleted = True
 
-        except Exception as e:
-            raise e
+            except Exception as e:
+                if e.__class__.__name__ == "CustomException" and e.status == 400 and " is referenced by a member of pool" in e.payload.get("F5", {}):
+                    pool = DeleteNodeWorkflow.__findReferencedPool(e.payload)
+                    nodePort = self.__getNodePort(pool)
+                    if nodePort:
+                        self.__removeFromPool(pool, nodePort)
+                    else:
+                        raise e
+                else:
+                    raise e
+
+        Log.actionLog("Deleted node: " + self.nodeName)
+        self.__logDeletedObjects(self.nodeName, "node", "deletion", "deleted")
 
 
 
@@ -35,65 +51,70 @@ class DeleteNodeWorkflow:
     # Private methods
     ####################################################################################################################
 
-    def __findPoolName(self) -> list:
-        membership = list()
-
+    def __removeFromPool(self, poolData: dict, nodePort: int) -> None:
         try:
-            poolList = Pool.dataList(self.assetId, self.partitionName)
-            for pool in poolList:
-                members = Pool(self.assetId, self.partitionName, pool["name"], pool.get("subPath", "")).getMembersData()
-                for member in members:
-                    if self.nodeName == member["name"].split(":")[0]:
-                        membership.append( (pool["name"], member["name"]) )
-
-            return membership
-        except Exception as e:
-            raise e
-
-
-
-    def __removePoolsMembership(self, membership: list) -> None:
-        try:
-            for member in membership:
-                Log.actionLog("Node deletion workflow: attempting to remove node " + str(member[1]) + " from pool " + str(member[0]))
-                PoolMember(self.assetId, member[0], self.partitionName, member[1]).delete()
-                self.__logDeletedObjects(member[0], "pool", "removing from pool", "removed")
+            Log.actionLog("Node deletion workflow: attempting to remove node " + self.nodeName + " from pool " + poolData["name"])
+            PoolMember(self.assetId, poolData["name"], self.partitionName, self.nodeName+":"+str(nodePort), poolData["subPath"], self.subPath).delete()
+            self.__logDeletedObjects(poolData["name"], "pool", "removing from pool", "removed")
 
         except Exception as e:
             raise e
 
 
 
-    def __deleteNode(self) -> None:
-        Log.actionLog("Node deletion workflow: attempting to delete node: " + self.nodeName)
+    def __getNodePort(self, poolData: dict) -> int:
+        nodePort = 0
 
         try:
-            node = Node(self.assetId, self.partitionName, self.nodeName)
-            node.delete()
+            nodeList = PoolMember.dataList(self.assetId, self.partitionName, poolData["name"], poolData["subPath"])
+            for n in nodeList:
+                if n.get("name", "").split(":")[0] == self.nodeName:
+                    nodePort = n.get("name", "").split(":")[1]
 
+            return nodePort
         except Exception as e:
-            if e.__class__.__name__ == "CustomException":
-                if "F5" in e.payload and e.status == 400 and "is referenced" in e.payload["F5"]:
-                    Log.log("Node " + self.nodeName + " in use; not deleting it. ")
-                else:
-                    Log.log("[ERROR] Node deletion workflow: cannot delete node " + self.nodeName + ": " + str(e.payload))
-            else:
-                Log.log("[ERROR] Node deletion workflow: cannot delete node " + self.nodeName + ": " + e.__str__())
-
-        Log.actionLog("Deleted node: " + self.nodeName)
-        self.__logDeletedObjects(self.nodeName, "node", "deletion", "deleted")
+            raise e
 
 
 
     def __logDeletedObjects(self, object: str, object_type: str, action: str, status: str) -> None:
+            try:
+                History.add({
+                    "username": self.username,
+                    "action": "[WORKFLOW] " + self.nodeName + " " + action,
+                    "asset_id": self.assetId,
+                    "config_object_type": object_type,
+                    "config_object": "/"+self.partitionName+"/" +  object,
+                    "status": status
+                })
+            except Exception:
+                pass
+
+
+
+    ####################################################################################################################
+    # Private static methods
+    ####################################################################################################################
+
+    @staticmethod
+    def __findReferencedPool(ePayload: dict) -> dict:
+        pool = {
+            "name": "",
+            "partition": "",
+            "subPath": ""
+        }
+
         try:
-            History.add({
-                "username": self.username,
-                "action": "[WORKFLOW] " + self.nodeName + " " + action,
-                "asset_id": self.assetId,
-                "config_object_type": object_type,
-                "config_object": "/"+self.partitionName+"/" +  object,
-                "status": status
-            })
-        except Exception:
-            pass
+            messageString = ePayload.get("F5", "")
+            if messageString:
+                match = re.search(r'by a member of pool (?=\')([^.]+)\.?', messageString)
+                poolPathList = match.group(1).replace("'", "").split('/')
+                poolPathList = list(filter(bool, poolPathList)) # remove the leading element "".
+
+                pool["name"] = poolPathList.pop(-1)
+                pool["subPath"] =  '/'.join(poolPathList[1:])
+                pool["partition"] = poolPathList[0]
+
+            return pool
+        except Exception as e:
+            raise e
