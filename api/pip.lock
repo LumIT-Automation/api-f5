@@ -1,6 +1,6 @@
 asgiref==3.8.1
 async-timeout==4.0.3
-certifi==2024.2.2
+certifi==2024.6.2
 cffi==1.16.0
 charset-normalizer==3.3.2
 cryptography==41.0.7
@@ -16,7 +16,7 @@ pip==24.0
 pycparser==2.22
 PyJWT==2.8.0
 pytz==2024.1
-redis==5.0.4
+redis==5.0.5
 requests==2.31.0
 setuptools==66.1.1
 sqlparse==0.5.0
