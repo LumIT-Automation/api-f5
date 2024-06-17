@@ -42,7 +42,7 @@ class Permission:
     ####################################################################################################################
 
     @staticmethod
-    def hasUserPermission(groups: list, action: str, assetId: int = 0, partition: str = "") -> bool:
+    def hasUserPermission(groups: list, action: str, assetId: int = 0, partition: str = "", isWorkflow: bool = False) -> bool:
         # Authorizations' list allowed for any (authenticated) user.
         if action == "authorizations_get":
             return True
@@ -53,9 +53,32 @@ class Permission:
                 return True
 
         try:
-            return bool(
-                PermissionPrivilegeRepository.countUserPermissions(groups, action, assetId, partition)
-            )
+            if isWorkflow:
+                return bool(
+                    PermissionPrivilegeRepository.countUserWorkflowPermissions(groups, action, assetId, partition)
+                )
+            else:
+                return bool(
+                    PermissionPrivilegeRepository.countUserPermissions(groups, action, assetId, partition)
+                )
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
+    def workflowPermissionsList(groups: list, workflow: str = "") -> dict:
+
+        # Superadmin's group.
+        for gr in groups:
+            if gr.lower() == "automation.local":
+                return  {
+                    "assetId": 0,
+                    "partition": "any"
+                }
+
+        try:
+            return PermissionPrivilegeRepository.workflowAuthorizationsList(groups=groups, workflow=workflow)
         except Exception as e:
             raise e
 
@@ -132,7 +155,7 @@ class Permission:
 
     @staticmethod
     def addFacade(identityGroupId: str, role: str, partitionInfo: dict) -> None:
-        partitionAssetId = partitionInfo.get("assetId", "")
+        partitionAssetId = int(partitionInfo.get("assetId", ""))
         partitionName = partitionInfo.get("name", "")
 
         try:
@@ -168,7 +191,7 @@ class Permission:
 
     @staticmethod
     def modifyFacade(permissionId: int, identityGroupId: str, role: str, partitionInfo: dict) -> None:
-        partitionAssetId = partitionInfo.get("assetId", "")
+        partitionAssetId = int(partitionInfo.get("assetId", ""))
         partitionName = partitionInfo.get("name", "")
 
         try:
