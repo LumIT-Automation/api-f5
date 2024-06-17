@@ -14,7 +14,7 @@ class WorkflowAuthorizationsController(CustomController):
     def get(request: Request) -> Response:
         etagCondition = {"responseEtag": ""}
         user = CustomController.loggedUser(request)
-        workflow = "flow_test"
+        workflow = ""
 
         try:
             if not user["authDisabled"]:

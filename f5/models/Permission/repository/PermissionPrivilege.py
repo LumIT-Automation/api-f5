@@ -403,6 +403,9 @@ class PermissionPrivilege:
 
     @staticmethod
     def workflowAuthorizationsList(groups: list, workflow: str = "") -> dict:
+        from f5.helpers.Log import Log
+        o = dict()
+
         if groups:
             workflowWhere = ""
             c = connection.cursor()
@@ -418,17 +421,38 @@ class PermissionPrivilege:
                     args.append(workflow)
 
                 c.execute(
-                    "SELECT workflow.workflow, `partition`.id_asset, `partition`.`partition` "
+                    "SELECT workflow.workflow, "
+
+                    "GROUP_CONCAT( "
+                        "DISTINCT CONCAT(`partition`.id_asset,'::',`partition`.`partition`) "
+                        "ORDER BY `partition`.id_asset "
+                        "SEPARATOR ',' "
+                    ") AS assetId_partition "
+
                     "FROM identity_group "
                     "LEFT JOIN group_workflow_partition ON group_workflow_partition.id_group = identity_group.id "
                     "LEFT JOIN workflow ON workflow.id = group_workflow_partition.id_workflow "
                     "LEFT JOIN `partition` ON `partition`.id = group_workflow_partition.id_partition "
                     "WHERE (" + groupWhere[:-4] + ") " +
-                    workflowWhere,
+                    workflowWhere +
+                    "GROUP BY workflow.workflow",
                         args
                 )
 
-                return DBHelper.asDict(c)[0]
+                items: List[Dict] = DBHelper.asDict(c)
+                for item in items:
+                    flow = item.get("workflow", "")
+                    o[flow] = []
+                    el = item.get("assetId_partition", "")
+                    assetId_partition = el.split(",")
+                    for ap in assetId_partition:
+                        [ a, p ] = ap.split("::")
+                        o[flow].append({
+                            "asseId": a,
+                            "partition": p
+                        })
+
+                return o
             except Exception as e:
                 raise CustomException(status=400, payload={"database": e.__str__()})
             finally:
