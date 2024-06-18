@@ -379,7 +379,7 @@ class PermissionPrivilege:
                 c.execute(
                     "SELECT COUNT(*) AS count "
                     "FROM identity_group "
-                    "LEFT JOIN group_role_partition ON group_role_partition.id_group = identity_group.id "
+                    "LEFT JOIN group_workflow_partition ON group_workflow_partition.id_group = identity_group.id "
                     "LEFT JOIN workflow ON workflow.id = group_workflow_partition.id_workflow "
                     "LEFT JOIN workflow_privilege ON workflow_privilege.id_workflow = workflow.id "
                     "LEFT JOIN `partition` ON `partition`.id = group_workflow_partition.id_partition "                      

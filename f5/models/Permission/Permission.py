@@ -4,6 +4,7 @@ from f5.models.Permission.IdentityGroup import IdentityGroup
 
 from f5.models.Permission.repository.Permission import Permission as Repository
 from f5.models.Permission.repository.PermissionPrivilege import PermissionPrivilege as PermissionPrivilegeRepository
+from f5.models.Permission.Privilege import Privilege
 
 from f5.helpers.Exception import CustomException
 
@@ -47,17 +48,24 @@ class Permission:
         if action == "authorizations_get":
             return True
 
-        # Superadmin's group.
-        for gr in groups:
-            if gr.lower() == "automation.local":
-                return True
-
         try:
             if isWorkflow:
+                for gr in groups:
+                    if gr.lower() == "automation.local":
+                        # Check if the given action exists.
+                        if action in [ p["privilege"] for p in Privilege.listQuick()]:
+                            return True
+                        else:
+                            return False
                 return bool(
                     PermissionPrivilegeRepository.countUserWorkflowPermissions(groups, action, assetId, partition)
                 )
             else:
+                # Superadmin's group.
+                for gr in groups:
+                    if gr.lower() == "automation.local":
+                        return True
+
                 return bool(
                     PermissionPrivilegeRepository.countUserPermissions(groups, action, assetId, partition)
                 )

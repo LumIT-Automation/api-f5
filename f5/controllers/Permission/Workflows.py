@@ -21,7 +21,7 @@ class WorkflowsPrivilegesController(CustomController):
 
         try:
             if Permission.hasUserPermission(groups=user["groups"], action="workflows_privileges_get") or user["authDisabled"]:
-                Log.actionLog("Roles list", user)
+                Log.actionLog("Workflow privileges list", user)
 
                 data = {
                     "data": {
