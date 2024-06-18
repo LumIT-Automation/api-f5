@@ -23,10 +23,15 @@ class WorkflowsPrivilegesController(CustomController):
             if Permission.hasUserPermission(groups=user["groups"], action="workflows_privileges_get") or user["authDisabled"]:
                 Log.actionLog("Workflow privileges list", user)
 
+                # Filter by workflows.
+                wList = []
+                if "workflow" in request.GET:
+                    wList = request.GET.getlist('workflow')
+
                 data = {
                     "data": {
                         "items": CustomController.validate(
-                            [r.repr() for r in Workflow.list()],
+                            [r.repr() for r in Workflow.list(loadPrivilege=True, selectWorkflow=wList)],
                             Serializer,
                             "list"
                         )

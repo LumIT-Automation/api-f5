@@ -37,16 +37,17 @@ class Workflow:
     ####################################################################################################################
 
     @staticmethod
-    def list(loadPrivilege: bool = True) -> List[Workflow]:
-        roles = []
+    def list(loadPrivilege: bool = True, selectWorkflow: list = None) -> List[Workflow]:
+        selectWorkflow = selectWorkflow or []
+        workflows = []
 
         try:
-            for role in Repository.list():
-                roles.append(
-                    Workflow(id=role["id"], loadPrivilege=loadPrivilege)
+            for w in Repository.list(selectWorkflows=selectWorkflow):
+                workflows.append(
+                    Workflow(id=w["id"], loadPrivilege=loadPrivilege)
                 )
 
-            return roles
+            return workflows
         except Exception as e:
             raise e
 

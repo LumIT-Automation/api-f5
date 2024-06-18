@@ -28,6 +28,7 @@ urlpatterns = [
 
     path('workflow-authorizations/', WorkflowAuthorizations.WorkflowAuthorizationsController.as_view(), name='workflow-authorizations'),
     path('workflows-privileges/', Workflows.WorkflowsPrivilegesController.as_view(), name='workflows-privileges'),
+    path('workflow-privileges/', Workflows.WorkflowsPrivilegesController.as_view(), name='workflow-privileges'),
     path('has-workflow-permission/<int:assetId>/<str:partitionName>/<str:action>/', HasWorkflowPermission.HasWorkflowPermissionController.as_view(), name='has-workflow-permission'),
 
     path('doc/<str:fileName>/', RawTxtController.F5RawTxtController.as_view(), name='txt'),

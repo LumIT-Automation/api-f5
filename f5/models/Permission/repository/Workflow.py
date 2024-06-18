@@ -37,11 +37,18 @@ class Workflow:
 
 
     @staticmethod
-    def list() -> List[Dict]:
+    def list(selectWorkflows: list = None) -> List[Dict]:
+        selectWorkflows = selectWorkflows or []
         c = connection.cursor()
 
+        sql = "SELECT id, workflow, IFNULL(description, '') AS description FROM workflow"
         try:
-            c.execute("SELECT id, workflow, IFNULL(description, '') AS description FROM workflow")
+            if selectWorkflows:
+                sql += " WHERE workflow.workflow = %s"
+                for i in range(1,  len(selectWorkflows)):
+                    sql += " OR workflow.workflow = %s"
+
+            c.execute(sql, selectWorkflows)
 
             return DBHelper.asDict(c)
         except Exception as e:
