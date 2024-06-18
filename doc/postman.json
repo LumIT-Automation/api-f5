@@ -479,6 +479,40 @@
 					"response": []
 				},
 				{
+					"name": "workflows privileges",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "c485212f298abe5f8b867ca42617292a",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{f5BaseUrl}}/f5/workflows-privileges/",
+							"host": [
+								"{{f5BaseUrl}}"
+							],
+							"path": [
+								"f5",
+								"workflows-privileges",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "permissions",
 					"request": {
 						"auth": {
