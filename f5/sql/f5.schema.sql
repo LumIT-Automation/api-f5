@@ -78,7 +78,7 @@ CREATE TABLE `group_role_partition` (
 
 -- --------------------------------------------------------
 --
--- Struttura della tabella `group_role_partition`
+-- Struttura della tabella `group_workflow_partition`
 --
 
 CREATE TABLE `group_workflow_partition` (
@@ -322,7 +322,7 @@ ALTER TABLE `workflow`
   ADD UNIQUE KEY `workflow` (`workflow`);
 
 --
--- Indici per le tabelle `role_privilege`
+-- Indici per le tabelle `workflow_privilege`
 --
 ALTER TABLE `workflow_privilege`
   ADD PRIMARY KEY (`id_workflow`,`id_privilege`),

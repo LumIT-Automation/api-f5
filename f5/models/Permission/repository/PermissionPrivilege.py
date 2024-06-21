@@ -403,7 +403,6 @@ class PermissionPrivilege:
 
     @staticmethod
     def workflowAuthorizationsList(groups: list, workflow: str = "") -> dict:
-        from f5.helpers.Log import Log
         o = dict()
 
         if groups:
