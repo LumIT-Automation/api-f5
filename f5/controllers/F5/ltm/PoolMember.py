@@ -27,7 +27,7 @@ class F5PoolMemberController(CustomController):
         checkWorkflowPermission = request.headers.get("checkWorkflowPermission", "")
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="poolMember_get", assetId=assetId, partition=partitionName) or user["authDisabled"]:
+            if Permission.hasUserPermission(groups=user["groups"], action="poolMember_get", assetId=assetId, partition=partitionName, isWorkflow=bool(workflowId)) or user["authDisabled"]:
                 if workflowId and checkWorkflowPermission:
                     httpStatus = status.HTTP_204_NO_CONTENT
                 else:
