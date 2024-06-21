@@ -10,7 +10,7 @@ from .controllers.F5.sys import Certificate, Certificates, Folder, Folders
 from .controllers.F5.asm import Policies as ASMPolicies, Policy as ASMPolicy, PoliciesDifference as ASMPolicyDifference, PolicyMerge as ASMPolicyMerge, PolicyApply as ASMPolicyApply
 from .controllers.Asset import AssetAssetDr, AssetAssetsDr, Asset, Assets
 from .controllers.F5.Usecases import VirtualServersController as WorkflowVirtualServers, VirtualServerController as WorkflowVirtualServer, DeleteNodeController as WorkflowNode, CertificateUpdateController as WorkflowCertificate
-from .controllers.Permission import Authorizations, IdentityGroups, IdentityGroup, Roles, Permission, Permissions, WorkflowAuthorizations, Workflows, HasWorkflowPermission
+from .controllers.Permission import Authorizations, IdentityGroups, IdentityGroup, Roles, Permission, Permissions, WorkflowAuthorizations, Workflows
 from .controllers.Configuration import Configuration
 from .controllers.History import History, ActionHistory
 
@@ -29,7 +29,6 @@ urlpatterns = [
     path('workflow-authorizations/', WorkflowAuthorizations.WorkflowAuthorizationsController.as_view(), name='workflow-authorizations'),
     path('workflows-privileges/', Workflows.WorkflowsPrivilegesController.as_view(), name='workflows-privileges'),
     path('workflow-privileges/', Workflows.WorkflowsPrivilegesController.as_view(), name='workflow-privileges'),
-    path('has-workflow-permission/<int:assetId>/<str:partitionName>/<str:action>/', HasWorkflowPermission.HasWorkflowPermissionController.as_view(), name='has-workflow-permission'),
 
     path('doc/<str:fileName>/', RawTxtController.F5RawTxtController.as_view(), name='txt'),
 

@@ -106,8 +106,7 @@ INSERT INTO `privilege` (`id`, `privilege`, `privilege_type`, `description`) VAL
 (71, 'workflow_node_delete', 'object', NULL),
 (72, 'asset_get', 'asset', NULL),
 (73, 'node_get', 'object', NULL),
-(74, 'workflows_privileges_get', 'global', NULL),
-(75, 'has_workflow_permission_get', 'global', NULL);
+(74, 'workflows_privileges_get', 'global', NULL);
 
 --
 -- Dump dei dati per la tabella `role`
@@ -193,6 +192,7 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (1, 71),
 (1, 72),
 (1, 73),
+(1, 74),
 (2, 3),
 (2, 5),
 (2, 6),
@@ -214,7 +214,6 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (2, 71),
 (2, 72),
 (2, 74),
-(2, 75),
 (3, 3),
 (3, 6),
 (3, 8),

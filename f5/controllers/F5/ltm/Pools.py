@@ -22,39 +22,44 @@ class F5PoolsController(CustomController):
         etagCondition = { "responseEtag": "" }
 
         user = CustomController.loggedUser(request)
+        workflowId = request.headers.get("workflowId", "") # a correlation id.
+        checkWorkflowPermission = request.headers.get("checkWorkflowPermission", "")
 
         try:
             if Permission.hasUserPermission(groups=user["groups"], action="pools_get", assetId=assetId, partition=partitionName) or user["authDisabled"]:
-                Log.actionLog("Pools list", user)
-
-                lock = Lock("pool", locals())
-                if lock.isUnlocked():
-                    lock.lock()
-
-                    data = {
-                        "data": {
-                            "items": CustomController.validate(
-                                Pool.dataList(assetId, partitionName),
-                                PoolsSerializer,
-                                "list"
-                            )
-                        },
-                        "href": request.get_full_path()
-                    }
-
-                    # Check the response's ETag validity (against client request).
-                    conditional = Conditional(request)
-                    etagCondition = conditional.responseEtagFreshnessAgainstRequest(data["data"])
-                    if etagCondition["state"] == "fresh":
-                        data = None
-                        httpStatus = status.HTTP_304_NOT_MODIFIED
-                    else:
-                        httpStatus = status.HTTP_200_OK
-
-                    lock.release()
+                if workflowId and checkWorkflowPermission:
+                    httpStatus = status.HTTP_204_NO_CONTENT
                 else:
-                    data = None
-                    httpStatus = status.HTTP_423_LOCKED
+                    Log.actionLog("Pools list", user)
+
+                    lock = Lock("pool", locals())
+                    if lock.isUnlocked():
+                        lock.lock()
+
+                        data = {
+                            "data": {
+                                "items": CustomController.validate(
+                                    Pool.dataList(assetId, partitionName),
+                                    PoolsSerializer,
+                                    "list"
+                                )
+                            },
+                            "href": request.get_full_path()
+                        }
+
+                        # Check the response's ETag validity (against client request).
+                        conditional = Conditional(request)
+                        etagCondition = conditional.responseEtagFreshnessAgainstRequest(data["data"])
+                        if etagCondition["state"] == "fresh":
+                            data = None
+                            httpStatus = status.HTTP_304_NOT_MODIFIED
+                        else:
+                            httpStatus = status.HTTP_200_OK
+
+                        lock.release()
+                    else:
+                        data = None
+                        httpStatus = status.HTTP_423_LOCKED
             else:
                 data = None
                 httpStatus = status.HTTP_403_FORBIDDEN
