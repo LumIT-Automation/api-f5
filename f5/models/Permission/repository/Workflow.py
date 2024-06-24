@@ -24,7 +24,7 @@ class Workflow:
             if id:
                 c.execute("SELECT id, workflow, IFNULL(description, '') AS description FROM workflow WHERE id = %s", [id])
             if workflow:
-                c.execute("SELECT id, workflow, IFNULL(description, '') AS description FROM workflow WHERE role = %s", [role])
+                c.execute("SELECT id, workflow, IFNULL(description, '') AS description FROM workflow WHERE workflow = %s", [workflow])
 
             return DBHelper.asDict(c)[0]
         except IndexError:

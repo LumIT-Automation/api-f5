@@ -420,13 +420,13 @@ class PermissionPrivilege:
                     args.append(workflow)
 
                 c.execute(
-                    "SELECT workflow.workflow, "
+                    "SELECT IFNULL(workflow.workflow, '') AS workflow, "
 
-                    "GROUP_CONCAT( "
+                    "IFNULL(GROUP_CONCAT( "
                         "DISTINCT CONCAT(`partition`.id_asset,'::',`partition`.`partition`) "
                         "ORDER BY `partition`.id_asset "
                         "SEPARATOR ',' "
-                    ") AS assetId_partition "
+                    "), '') AS assetId_partition "
 
                     "FROM identity_group "
                     "LEFT JOIN group_workflow_partition ON group_workflow_partition.id_group = identity_group.id "
@@ -441,15 +441,16 @@ class PermissionPrivilege:
                 items: List[Dict] = DBHelper.asDict(c)
                 for item in items:
                     flow = item.get("workflow", "")
-                    o[flow] = []
-                    el = item.get("assetId_partition", "")
-                    assetId_partition = el.split(",")
-                    for ap in assetId_partition:
-                        [ a, p ] = ap.split("::")
-                        o[flow].append({
-                            "asseId": a,
-                            "partition": p
-                        })
+                    if flow:
+                        o[flow] = []
+                        el = item.get("assetId_partition", "")
+                        assetId_partition = el.split(",")
+                        for ap in assetId_partition:
+                                [ a, p ] = ap.split("::")
+                                o[flow].append({
+                                    "asseId": a,
+                                    "partition": p
+                                })
 
                 return o
             except Exception as e:
