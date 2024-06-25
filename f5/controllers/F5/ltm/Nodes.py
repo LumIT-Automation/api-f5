@@ -80,39 +80,44 @@ class F5NodesController(CustomController):
     def post(request: Request, assetId: int, partitionName: str) -> Response:
         response = None
         user = CustomController.loggedUser(request)
+        workflowId = request.headers.get("workflowId", "") # a correlation id.
+        checkWorkflowPermission = request.headers.get("checkWorkflowPermission", "")
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="nodes_post", assetId=assetId, partition=partitionName) or user["authDisabled"]:
-                Log.actionLog("Node addition", user)
-                Log.actionLog("User data: "+str(request.data), user)
-
-                serializer = NodeSerializer(data=request.data["data"])
-                if serializer.is_valid():
-                    data = serializer.validated_data
-                    data["partition"] = partitionName
-                    if "state" in data:
-                        data["State"] = data["state"] # curious F5 field's name.
-                        del(data["state"])
-
-                    lock = Lock("node", locals(), data["name"])
-                    if lock.isUnlocked():
-                        lock.lock()
-
-                        Node.add(assetId, data)
-
-                        httpStatus = status.HTTP_201_CREATED
-                        lock.release()
-                    else:
-                        httpStatus = status.HTTP_423_LOCKED
+            if Permission.hasUserPermission(groups=user["groups"], action="nodes_post", assetId=assetId, partition=partitionName, isWorkflow=bool(workflowId)) or user["authDisabled"]:
+                if workflowId and checkWorkflowPermission:
+                    httpStatus = status.HTTP_204_NO_CONTENT
                 else:
-                    httpStatus = status.HTTP_400_BAD_REQUEST
-                    response = {
-                        "F5": {
-                            "error": str(serializer.errors)
-                        }
-                    }
+                    Log.actionLog("Node addition", user)
+                    Log.actionLog("User data: "+str(request.data), user)
 
-                    Log.actionLog("User data incorrect: "+str(response), user)
+                    serializer = NodeSerializer(data=request.data["data"])
+                    if serializer.is_valid():
+                        data = serializer.validated_data
+                        data["partition"] = partitionName
+                        if "state" in data:
+                            data["State"] = data["state"] # curious F5 field's name.
+                            del(data["state"])
+
+                        lock = Lock("node", locals(), data["name"])
+                        if lock.isUnlocked():
+                            lock.lock()
+
+                            Node.add(assetId, data)
+
+                            httpStatus = status.HTTP_201_CREATED
+                            lock.release()
+                        else:
+                            httpStatus = status.HTTP_423_LOCKED
+                    else:
+                        httpStatus = status.HTTP_400_BAD_REQUEST
+                        response = {
+                            "F5": {
+                                "error": str(serializer.errors)
+                            }
+                        }
+
+                        Log.actionLog("User data incorrect: "+str(response), user)
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
