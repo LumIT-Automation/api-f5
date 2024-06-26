@@ -8,7 +8,7 @@ from f5.helpers.Conditional import Conditional
 from f5.helpers.Log import Log
 
 
-class WorkflowAuthorizationsController(CustomController):
+class AuthorizationsWorkflowController(CustomController):
     @staticmethod
     # Enlist caller's permissions (depending on groups user belongs to).
     def get(request: Request) -> Response:
