@@ -2,9 +2,8 @@ from f5.models.Permission.Workflow import Workflow
 from f5.models.Permission.Partition import Partition
 from f5.models.Permission.IdentityGroup import IdentityGroup
 
-#from f5.models.Permission.repository.Permission import Permission as Repository
-from f5.models.Permission.repository.Workflow import Workflow as Repository
-from f5.models.Permission.repository.WorkflowPrivilege import WorkflowPrivilege as WorkflowPrivilegeRepository
+from f5.models.Permission.repository.PermissionWorkflow import PermissionWorkflow as Repository
+from f5.models.Permission.repository.PermissionWorkflowPrivilege import PermissionWorkflowPrivilege as PermissionPrivilegeRepository
 from f5.models.Permission.Privilege import Privilege
 
 from f5.helpers.Exception import CustomException
@@ -22,21 +21,21 @@ class PermissionWorkflow:
         self.workflow: Workflow
         self.partition: Partition
 
-        #self.__load()
+        self.__load()
 
 
 
     ####################################################################################################################
     # Public methods
     ####################################################################################################################
-    """
+
     def delete(self) -> None:
         try:
             Repository.delete(self.id)
             del self
         except Exception as e:
             raise e
-    """
+
 
 
     ####################################################################################################################
@@ -58,7 +57,7 @@ class PermissionWorkflow:
                     else:
                         return False
             return bool(
-                WorkflowPrivilegeRepository.countUserWorkflowPermissions(groups, action, assetId, partition)
+                PermissionPrivilegeRepository.countUserWorkflowPermissions(groups, action, assetId, partition)
             )
 
         except Exception as e:
@@ -87,42 +86,36 @@ class PermissionWorkflow:
                 }
 
         try:
-            return WorkflowPrivilegeRepository.workflowAuthorizationsList(groups=groups, workflow=workflow)
+            return PermissionPrivilegeRepository.workflowAuthorizationsList(groups=groups, workflow=workflow)
         except Exception as e:
             raise e
 
 
 
-    """
     @staticmethod
-    def addFacade(identityGroupId: str, role: str, partitionInfo: dict) -> None:
+    def addFacade(identityGroupId: str, workflow: str, partitionInfo: dict) -> None:
         partitionAssetId = int(partitionInfo.get("assetId", ""))
         partitionName = partitionInfo.get("name", "")
 
         try:
-            # Get existent or new partition.
-            if role == "admin":
-                # role admin -> "any" partition, which always exists.
-                partition = Partition(assetId=partitionAssetId, name="any")
-            else:
-                try:
-                    # Try retrieving partition.
-                    partition = Partition(assetId=partitionAssetId, name=partitionName)
-                except CustomException as e:
-                    if e.status == 404:
-                        try:
-                            # If partition does not exist, create it (permissions database).
-                            partition = Partition(
-                                id=Partition.add(partitionAssetId, partitionName)
-                            )
-                        except Exception:
-                            raise e
-                    else:
+            try:
+                # Try retrieving partition.
+                partition = Partition(assetId=partitionAssetId, name=partitionName)
+            except CustomException as e:
+                if e.status == 404:
+                    try:
+                        # If partition does not exist, create it (permissions database).
+                        partition = Partition(
+                            id=Partition.add(partitionAssetId, partitionName)
+                        )
+                    except Exception:
                         raise e
+                else:
+                    raise e
 
-            Permission.__add(
+            PermissionWorkflow.__add(
                 identityGroup=IdentityGroup(identityGroupIdentifier=identityGroupId),
-                role=Role(role=role),
+                workflow=Workflow(workflow=workflow),
                 partition=partition
             )
         except Exception as e:
@@ -131,39 +124,33 @@ class PermissionWorkflow:
 
 
     @staticmethod
-    def modifyFacade(permissionId: int, identityGroupId: str, role: str, partitionInfo: dict) -> None:
+    def modifyFacade(permissionId: int, identityGroupId: str, workflow: str, partitionInfo: dict) -> None:
         partitionAssetId = int(partitionInfo.get("assetId", ""))
         partitionName = partitionInfo.get("name", "")
 
         try:
-            # Get existent or new partition.
-            if role == "admin":
-                # role admin -> "any" partition, which always exists.
-                partition = Partition(assetId=partitionAssetId, name="any")
-            else:
-                try:
-                    # Try retrieving partition.
-                    partition = Partition(assetId=partitionAssetId, name=partitionName)
-                except CustomException as e:
-                    if e.status == 404:
-                        try:
-                            # If partition does not exist, create it (permissions database).
-                            partition = Partition(
-                                id=Partition.add(partitionAssetId, partitionName)
-                            )
-                        except Exception:
-                            raise e
-                    else:
+            try:
+                # Try retrieving partition.
+                partition = Partition(assetId=partitionAssetId, name=partitionName)
+            except CustomException as e:
+                if e.status == 404:
+                    try:
+                        # If partition does not exist, create it (permissions database).
+                        partition = Partition(
+                            id=Partition.add(partitionAssetId, partitionName)
+                        )
+                    except Exception:
                         raise e
+                else:
+                    raise e
 
-            Permission(permissionId).__modify(
+            PermissionWorkflow(permissionId).__modify(
                 identityGroup=IdentityGroup(identityGroupIdentifier=identityGroupId),
-                role=Role(role=role),
+                workflow=Workflow(workflow=workflow),
                 partition=partition
             )
         except Exception as e:
             raise e
-      
 
     ####################################################################################################################
     # Private methods
@@ -210,4 +197,3 @@ class PermissionWorkflow:
             )
         except Exception as e:
             raise e
-    """
