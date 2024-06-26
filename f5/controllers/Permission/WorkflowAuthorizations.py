@@ -2,7 +2,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status
 
-from f5.models.Permission.Permission import Permission
+from f5.models.Permission.WorkflowPermission import WorkflowPermission
 from f5.controllers.CustomController import CustomController
 from f5.helpers.Conditional import Conditional
 from f5.helpers.Log import Log
@@ -22,7 +22,7 @@ class WorkflowAuthorizationsController(CustomController):
 
                 data = {
                     "data": {
-                        "items": Permission.workflowPermissionsList(user["groups"], workflow)
+                        "items": WorkflowPermission.workflowPermissionsList(user["groups"], workflow)
                     },
                     "href": request.get_full_path()
                 }

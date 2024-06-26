@@ -3,8 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from f5.models.F5.ltm.Node import Node
-from f5.models.Permission.Permission import Permission
-
+from f5.models.Permission.CheckPermissionFacade import CheckPermissionFacade
 from f5.serializers.F5.ltm.Nodes import F5NodesSerializer as NodesSerializer
 from f5.serializers.F5.ltm.Node import F5NodeSerializer as NodeSerializer
 
@@ -26,7 +25,7 @@ class F5NodesController(CustomController):
         checkWorkflowPermission = request.headers.get("checkWorkflowPermission", "")
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="nodes_get", assetId=assetId, partition=partitionName, isWorkflow=bool(workflowId)) or user["authDisabled"]:
+            if CheckPermissionFacade.hasUserPermission(groups=user["groups"], action="nodes_get", assetId=assetId, partition=partitionName, isWorkflow=bool(workflowId)) or user["authDisabled"]:
                 if workflowId and checkWorkflowPermission:
                     httpStatus = status.HTTP_204_NO_CONTENT
                 else:
@@ -84,7 +83,7 @@ class F5NodesController(CustomController):
         checkWorkflowPermission = request.headers.get("checkWorkflowPermission", "")
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="nodes_post", assetId=assetId, partition=partitionName, isWorkflow=bool(workflowId)) or user["authDisabled"]:
+            if CheckPermissionFacade.hasUserPermission(groups=user["groups"], action="nodes_post", assetId=assetId, partition=partitionName, isWorkflow=bool(workflowId)) or user["authDisabled"]:
                 if workflowId and checkWorkflowPermission:
                     httpStatus = status.HTTP_204_NO_CONTENT
                 else:

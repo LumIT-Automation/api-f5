@@ -4,6 +4,7 @@ from rest_framework import status
 
 from f5.models.F5.ltm.Pool import Pool
 from f5.models.Permission.Permission import Permission
+from f5.models.Permission.CheckPermissionFacade import CheckPermissionFacade
 
 from f5.serializers.F5.ltm.PoolMembers import F5PoolMembersSerializer as PoolMembersSerializer
 from f5.serializers.F5.ltm.PoolMember import F5PoolMemberSerializer as PoolMemberSerializer
@@ -27,7 +28,7 @@ class F5PoolMembersController(CustomController):
         checkWorkflowPermission = request.headers.get("checkWorkflowPermission", "")
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="poolMembers_get", assetId=assetId, partition=partitionName, isWorkflow=bool(workflowId)) or user["authDisabled"]:
+            if CheckPermissionFacade.hasUserPermission(groups=user["groups"], action="poolMembers_get", assetId=assetId, partition=partitionName, isWorkflow=bool(workflowId)) or user["authDisabled"]:
                 if workflowId and checkWorkflowPermission:
                     httpStatus = status.HTTP_204_NO_CONTENT
                 else:
