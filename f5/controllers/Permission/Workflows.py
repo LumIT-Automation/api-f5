@@ -31,7 +31,7 @@ class PermissionWorkflowsController(CustomController):
                 data = {
                     "data": {
                         "items": CustomController.validate(
-                            [r.repr() for r in Workflow.list(loadPrivilege=True, selectWorkflow=wList)],
+                            [r.repr() for r in Workflow.list(selectWorkflow=wList)],
                             Serializer,
                             "list"
                         )

@@ -10,7 +10,7 @@ from f5.helpers.Misc import Misc
 
 
 class Workflow:
-    def __init__(self, id: int = 0, workflow: str = "", loadPrivilege: bool = True, *args, **kwargs):
+    def __init__(self, id: int = 0, workflow: str = "", *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.id: int = int(id)
@@ -19,7 +19,7 @@ class Workflow:
 
         self.privileges: List[Privilege] = []
 
-        self.__load(loadPrivilege=loadPrivilege)
+        self.__load()
 
 
 
@@ -37,14 +37,14 @@ class Workflow:
     ####################################################################################################################
 
     @staticmethod
-    def list(loadPrivilege: bool = True, selectWorkflow: list = None) -> List[Workflow]:
+    def list(selectWorkflow: list = None) -> List[Workflow]:
         selectWorkflow = selectWorkflow or []
         workflows = []
 
         try:
             for w in Repository.list(selectWorkflows=selectWorkflow):
                 workflows.append(
-                    Workflow(id=w["id"], loadPrivilege=loadPrivilege)
+                    Workflow(id=w["id"])
                 )
 
             return workflows
@@ -57,17 +57,14 @@ class Workflow:
     # Private methods
     ####################################################################################################################
 
-    def __load(self, loadPrivilege: bool = True) -> None:
+    def __load(self) -> None:
         try:
             info = Repository.get(id=self.id, workflow=self.workflow)
 
-            if loadPrivilege:
-                for privilegeId in WorkflowPrivilegeRepository.workflowPrivileges(workflowId=self.id):
-                    self.privileges.append(
-                        Privilege(privilegeId)
-                    )
-            else:
-                del self.privileges
+            for privilegeId in WorkflowPrivilegeRepository.workflowPrivileges(workflowId=self.id):
+                self.privileges.append(
+                    Privilege(privilegeId)
+                )
 
             # Set attributes.
             for k, v in info.items():
