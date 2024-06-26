@@ -1,5 +1,5 @@
 from f5.models.Permission.Permission import Permission
-from f5.models.Permission.WorkflowPermission import WorkflowPermission
+from f5.models.Permission.PermissionWorkflow import PermissionWorkflow
 
 
 class CheckPermissionFacade:
@@ -15,7 +15,7 @@ class CheckPermissionFacade:
         try:
             if isWorkflow:
                 return bool(
-                    WorkflowPermission.hasUserPermission(groups=groups, action=action, assetId=assetId, partition=partition)
+                    PermissionWorkflow.hasUserPermission(groups=groups, action=action, assetId=assetId, partition=partition)
                 )
             else:
                 return bool(

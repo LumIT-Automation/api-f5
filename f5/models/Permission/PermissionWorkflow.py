@@ -2,15 +2,15 @@ from f5.models.Permission.Workflow import Workflow
 from f5.models.Permission.Partition import Partition
 from f5.models.Permission.IdentityGroup import IdentityGroup
 
-from f5.models.Permission.repository.Permission import Permission as Repository
-from f5.models.Permission.repository.Workflow import Workflow as WRepository
+#from f5.models.Permission.repository.Permission import Permission as Repository
+from f5.models.Permission.repository.Workflow import Workflow as Repository
 from f5.models.Permission.repository.WorkflowPrivilege import WorkflowPrivilege as WorkflowPrivilegeRepository
 from f5.models.Permission.Privilege import Privilege
 
 from f5.helpers.Exception import CustomException
 
 
-class WorkflowPermission:
+class PermissionWorkflow:
 
     # IdentityGroupWorkflowPartition
 
@@ -67,7 +67,16 @@ class WorkflowPermission:
 
 
     @staticmethod
-    def workflowPermissionsList(groups: list, workflow: str = "") -> dict:
+    def workflowPermissionsDataList() -> list:
+        try:
+            return Repository.list()
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
+    def workflowAuthorizationsList(groups: list, workflow: str = "") -> dict:
 
         # Superadmin's group.
         for gr in groups:
