@@ -23,14 +23,13 @@ urlpatterns = [
     path('roles/', Roles.PermissionRolesController.as_view(), name='permission-roles'),
     path('permissions/', Permissions.PermissionsController.as_view(), name='permissions'),
     path('permission/<int:permissionId>/', Permission.PermissionController.as_view(), name='permission'),
+
+    path('workflows/', Workflows.WorkflowsController.as_view(), name='workflows'),
     path('permissions-workflow/', PermissionsWorkflow.PermissionsWorkflowController.as_view(), name='permissions-workflow'),
     path('permission-workflow/<int:permissionId>/', PermissionWorkflow.PermissionWorkflowController.as_view(), name='permission-workflow'),
 
     path('authorizations/', Authorizations.AuthorizationsController.as_view(), name='authorizations'),
-
     path('workflow-authorizations/', AuthorizationsWorkflow.AuthorizationsWorkflowController.as_view(), name='workflow-authorizations'),
-    path('workflows/', Workflows.PermissionWorkflowsController.as_view(), name='permission-workflows'),
-
 
     path('doc/<str:fileName>/', RawTxtController.F5RawTxtController.as_view(), name='txt'),
 

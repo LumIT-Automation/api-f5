@@ -12,7 +12,7 @@ from f5.helpers.Conditional import Conditional
 from f5.helpers.Log import Log
 
 
-class PermissionWorkflowsController(CustomController):
+class WorkflowsController(CustomController):
     @staticmethod
     def get(request: Request) -> Response:
         etagCondition = {"responseEtag": ""}
