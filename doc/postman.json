@@ -2407,16 +2407,16 @@
 											}
 										],
 										"url": {
-											"raw": "{{f5BaseUrl}}/f5/2/Partition1/node/NODE/",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/node/provooo/",
 											"host": [
 												"{{f5BaseUrl}}"
 											],
 											"path": [
 												"f5",
 												"2",
-												"Partition1",
+												"Common",
 												"node",
-												"NODE",
+												"provooo",
 												""
 											]
 										}
