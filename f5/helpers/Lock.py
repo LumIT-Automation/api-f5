@@ -7,7 +7,7 @@ from f5.helpers.Log import Log
 
 
 class Lock:
-    def __init__(self, objectClass: any, o: dict, objectName: str = "", *args, **kwargs):
+    def __init__(self, objectClass: any, o: dict, objectName: str = "", workflowId: str = "", *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.assetId = ""
@@ -15,6 +15,11 @@ class Lock:
         self.request = ""
         self.objectClass = objectClass
         self.objectName = objectName
+
+        if workflowId:
+            self.workflowId = "_" + workflowId
+        else:
+            self.workflowId = ""
 
         if "assetId" in o:
             self.assetId = str(o["assetId"])
@@ -93,7 +98,7 @@ class Lock:
                     if oc:
                         if str(httpMethod) in table:
                             for method, compatibility in table[httpMethod].items():
-                                entry = oc+":"+str(method)+":"+self.assetId+":"+self.partitionName
+                                entry = oc+":"+str(method)+":"+self.assetId+":"+self.partitionName+"*" # add the glob to possibly match the workflowId suffix.
 
                                 # <httpMethod>: {
                                 #    "POST": "x",
@@ -154,7 +159,7 @@ class Lock:
                 for oc in self.objectClass:
                     if oc:
                         # @todo: a Redis cache transaction lock is needed here.
-                        entry = oc+":"+str(httpMethod)+":"+self.assetId+":"+self.partitionName
+                        entry = oc+":"+str(httpMethod)+":"+self.assetId+":"+self.partitionName+self.workflowId
                         c = cache.get(entry)
 
                         # If some locked objectName already set, add the current one.
@@ -181,7 +186,7 @@ class Lock:
             if httpMethod:
                 for oc in self.objectClass:
                     if oc:
-                        entry = oc+":"+str(httpMethod)+":"+self.assetId+":"+self.partitionName
+                        entry = oc+":"+str(httpMethod)+":"+self.assetId+":"+self.partitionName+self.workflowId
                         c = cache.get(entry)
 
                         if "lock" in c:
@@ -198,6 +203,35 @@ class Lock:
                                 Log.log("Lock released for "+entry+"; now it values: "+str(cache.get(entry)))
         except Exception:
             pass
+
+
+
+    ####################################################################################################################
+    # Public static methods
+    ####################################################################################################################
+
+    @staticmethod
+    def listWorkflowLocks(workflowId:str) -> list:
+        try:
+            if workflowId:
+                globEntries = "*_" + workflowId
+                return cache.keys(globEntries)
+            else:
+                return []
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
+    def releaseWorkflow(workflowId: str) -> None:
+        try:
+            entriesList = Lock.listWorkflowLocks(workflowId)
+            globEntries = "*_" + workflowId
+            cache.delete_pattern(globEntries)
+            Log.log("Lock entries released: " + str(entriesList) + " - workflow: " + workflowId + ".")
+        except Exception as e:
+            raise e
 
 
 

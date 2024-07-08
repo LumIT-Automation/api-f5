@@ -13,6 +13,7 @@ from .controllers.F5.Usecases import VirtualServersController as WorkflowVirtual
 from .controllers.Permission import Authorizations, IdentityGroups, IdentityGroup, Roles, Permission, Permissions, AuthorizationsWorkflow, Workflows, PermissionsWorkflow, PermissionWorkflow
 from .controllers.Configuration import Configuration
 from .controllers.History import History, ActionHistory
+from .controllers.Helpers import Locks
 
 
 urlpatterns = [
@@ -121,6 +122,10 @@ urlpatterns = [
 
     # Certificate
     path('<int:assetId>/<str:partitionName>/workflow/client-ssl-profile/<str:profileName>/', WorkflowCertificate.F5WorkflowCertificateUpdateController.as_view(), name='f5-workflow-certificate'),
+
+    # Locks
+    path('locks/<str:workflowId>/', Locks.F5LocksController.as_view(), name='f5-workflow-locks'),
+    path('locks/', Locks.F5LocksUnlockController.as_view(), name='f5-workflow-locks-unlock'),
 
     # History.
     path('history/', History.HistoryLogsController.as_view(), name='f5-log-history'),
