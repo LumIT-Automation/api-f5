@@ -4,7 +4,6 @@ from f5.models.Permission.IdentityGroup import IdentityGroup
 
 from f5.models.Permission.repository.PermissionWorkflow import PermissionWorkflow as Repository
 from f5.models.Permission.repository.PermissionWorkflowPrivilege import PermissionWorkflowPrivilege as PermissionPrivilegeRepository
-from f5.models.Permission.Privilege import Privilege
 
 from f5.helpers.Exception import CustomException
 
@@ -51,11 +50,7 @@ class PermissionWorkflow:
         try:
             for gr in groups:
                 if gr.lower() == "automation.local":
-                    # Check if the given action exists.
-                    if action in [ p["privilege"] for p in Privilege.listQuick()]:
-                        return True
-                    else:
-                        return False
+                    return True
             return bool(
                 PermissionPrivilegeRepository.countUserWorkflowPermissions(groups, action, assetId, partition)
             )

@@ -98,14 +98,15 @@ class F5NodesController(CustomController):
                             data["State"] = data["state"] # curious F5 field's name.
                             del(data["state"])
 
-                        lock = Lock("node", locals(), data["name"])
+                        lock = Lock("node", locals(), data["name"], workflowId=workflowId)
                         if lock.isUnlocked():
                             lock.lock()
 
                             Node.add(assetId, data)
 
                             httpStatus = status.HTTP_201_CREATED
-                            lock.release()
+                            if not workflowId:
+                                lock.release()
                         else:
                             httpStatus = status.HTTP_423_LOCKED
                     else:
@@ -120,7 +121,7 @@ class F5NodesController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            if "serializer" in locals():
+            if "serializer" in locals() and not workflowId:
                 Lock("node", locals(), locals()["serializer"].data["name"]).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)

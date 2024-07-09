@@ -7,49 +7,10 @@ from f5.models.Permission.CheckPermissionFacade import CheckPermissionFacade
 
 from f5.controllers.CustomController import CustomController
 
-from f5.helpers.Conditional import Conditional
 from f5.helpers.Log import Log
 
 
-class F5LocksController(CustomController):
-    @staticmethod
-    def get(request: Request, workflowId: str) -> Response:
-        etagCondition = { "responseEtag": "" }
-        user = CustomController.loggedUser(request)
-
-        try:
-            if CheckPermissionFacade.hasUserPermission(groups=user["groups"], action="locks_get") or user["authDisabled"]:
-                Log.actionLog("Locks list", user)
-                data = {
-                    "data": {
-                        "items": Lock.listWorkflowLocks(workflowId=workflowId)
-                    },
-                    "href": request.get_full_path()
-                }
-
-                # Check the response's ETag validity (against client request).
-                conditional = Conditional(request)
-                etagCondition = conditional.responseEtagFreshnessAgainstRequest(data["data"])
-                if etagCondition["state"] == "fresh":
-                    data = None
-                    httpStatus = status.HTTP_304_NOT_MODIFIED
-                else:
-                    httpStatus = status.HTTP_200_OK
-            else:
-                data = None
-                httpStatus = status.HTTP_403_FORBIDDEN
-        except Exception as e:
-            data, httpStatus, headers = CustomController.exceptionHandler(e)
-            return Response(data, status=httpStatus, headers=headers)
-
-        return Response(data, status=httpStatus, headers={
-            "ETag": etagCondition["responseEtag"],
-            "Cache-Control": "must-revalidate"
-        })
-
-
-
-class F5LocksUnlockController(CustomController):
+class F5WorkflowLocksController(CustomController):
     @staticmethod
     def delete(request: Request) -> Response:
         user = CustomController.loggedUser(request)

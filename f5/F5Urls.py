@@ -124,8 +124,7 @@ urlpatterns = [
     path('<int:assetId>/<str:partitionName>/workflow/client-ssl-profile/<str:profileName>/', WorkflowCertificate.F5WorkflowCertificateUpdateController.as_view(), name='f5-workflow-certificate'),
 
     # Locks
-    path('locks/<str:workflowId>/', Locks.F5LocksController.as_view(), name='f5-workflow-locks'),
-    path('locks/', Locks.F5LocksUnlockController.as_view(), name='f5-workflow-locks-unlock'),
+    path('locks/', Locks.F5WorkflowLocksController.as_view(), name='f5-workflow-locks'),
 
     # History.
     path('history/', History.HistoryLogsController.as_view(), name='f5-log-history'),
