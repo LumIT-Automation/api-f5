@@ -26,7 +26,7 @@ class Configuration:
 
     def rewrite(self, data: dict) -> None:
         try:
-            Repository.modify(self.id, data.get("configuration", ""))
+            Repository.modify(self.id, data.get("configuration", {}))
         except Exception as e:
             raise e
 

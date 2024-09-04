@@ -77,6 +77,18 @@ CREATE TABLE `group_role_partition` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
+--
+-- Struttura della tabella `group_workflow_partition`
+--
+
+CREATE TABLE `group_workflow_partition` (
+  `id` int(255) NOT NULL,
+  `id_group` int(11) NOT NULL,
+  `id_workflow` int(11) NOT NULL,
+  `id_partition` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
 
 --
 -- Struttura della tabella `identity_group`
@@ -155,7 +167,7 @@ CREATE TABLE `partition` (
 CREATE TABLE `privilege` (
   `id` int(11) NOT NULL,
   `privilege` varchar(64) NOT NULL,
-  `privilege_type` enum('object','asset','global') NOT NULL DEFAULT 'object',
+  `privilege_type` enum('object','asset','global','workflow') NOT NULL DEFAULT 'object',
   `description` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -179,6 +191,29 @@ CREATE TABLE `role` (
 
 CREATE TABLE `role_privilege` (
   `id_role` int(11) NOT NULL,
+  `id_privilege` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `workflow`
+--
+
+CREATE TABLE `workflow` (
+  `id` int(11) NOT NULL,
+  `workflow` varchar(64) NOT NULL,
+  `description` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Struttura della tabella `workflow_privilege`
+--
+
+CREATE TABLE `workflow_privilege` (
+  `id_workflow` int(11) NOT NULL,
   `id_privilege` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -211,6 +246,15 @@ ALTER TABLE `group_role_partition`
   ADD PRIMARY KEY (`id_group`,`id_role`,`id_partition`),
   ADD KEY `id_role` (`id_role`),
   ADD KEY `grp_partition` (`id_partition`),
+  ADD UNIQUE KEY `id` (`id`);
+
+--
+-- Indici per le tabelle `group_workflow_partition`
+--
+ALTER TABLE `group_workflow_partition`
+  ADD PRIMARY KEY (`id_group`,`id_workflow`,`id_partition`),
+  ADD KEY `id_workflow` (`id_workflow`),
+  ADD KEY `gwp_partition` (`id_partition`),
   ADD UNIQUE KEY `id` (`id`);
 
 --
@@ -271,6 +315,20 @@ ALTER TABLE `role_privilege`
   ADD KEY `rp_privilege` (`id_privilege`);
 
 --
+-- Indici per le tabelle `workflow`
+--
+ALTER TABLE `workflow`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `workflow` (`workflow`);
+
+--
+-- Indici per le tabelle `workflow_privilege`
+--
+ALTER TABLE `workflow_privilege`
+  ADD PRIMARY KEY (`id_workflow`,`id_privilege`),
+  ADD KEY `wp_privilege` (`id_privilege`);
+
+--
 -- AUTO_INCREMENT per le tabelle scaricate
 --
 
@@ -291,6 +349,12 @@ ALTER TABLE `asset`
 -- AUTO_INCREMENT per la tabella `group_role_partition`
 --
 ALTER TABLE `group_role_partition`
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT per la tabella `group_workflow_partition`
+--
+ALTER TABLE `group_workflow_partition`
   MODIFY `id` int(255) NOT NULL AUTO_INCREMENT;
 
 --
@@ -336,6 +400,12 @@ ALTER TABLE `role`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT per la tabella `workflow`
+--
+ALTER TABLE `workflow`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- Limiti per le tabelle scaricate
 --
 
@@ -355,6 +425,14 @@ ALTER TABLE `group_role_partition`
   ADD CONSTRAINT `grp_role` FOREIGN KEY (`id_role`) REFERENCES `role` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Limiti per la tabella `group_workflow_partition`
+--
+ALTER TABLE `group_workflow_partition`
+  ADD CONSTRAINT `gwp_group` FOREIGN KEY (`id_group`) REFERENCES `identity_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `gwp_partition` FOREIGN KEY (`id_partition`) REFERENCES `partition` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `gwp_workflow` FOREIGN KEY (`id_workflow`) REFERENCES `workflow` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Limiti per la tabella `partition`
 --
 ALTER TABLE `partition`
@@ -369,10 +447,20 @@ ALTER TABLE `role_privilege`
 COMMIT;
 
 --
+-- Limiti per la tabella `workflow_privilege`
+--
+ALTER TABLE `workflow_privilege`
+  ADD CONSTRAINT `wp_privilege` FOREIGN KEY (`id_privilege`) REFERENCES `privilege` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `wp_workflow` FOREIGN KEY (`id_workflow`) REFERENCES `workflow` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
+
+--
 -- Limiti per la tabella `log_request`
 --
 ALTER TABLE `log_request`
   ADD CONSTRAINT `log_request_asset_id` FOREIGN KEY (`asset_id`) REFERENCES `asset` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

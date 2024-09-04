@@ -4,6 +4,7 @@ from rest_framework import status
 
 from f5.models.F5.ltm.Pool import Pool
 from f5.models.Permission.Permission import Permission
+from f5.models.Permission.CheckPermissionFacade import CheckPermissionFacade
 
 from f5.serializers.F5.ltm.Pools import F5PoolsSerializer as PoolsSerializer
 from f5.serializers.F5.ltm.Pool import F5PoolSerializer as PoolSerializer
@@ -22,39 +23,44 @@ class F5PoolsController(CustomController):
         etagCondition = { "responseEtag": "" }
 
         user = CustomController.loggedUser(request)
+        workflowId = request.headers.get("workflowId", "") # a correlation id.
+        checkWorkflowPermission = request.headers.get("checkWorkflowPermission", "")
 
         try:
-            if Permission.hasUserPermission(groups=user["groups"], action="pools_get", assetId=assetId, partition=partitionName) or user["authDisabled"]:
-                Log.actionLog("Pools list", user)
-
-                lock = Lock("pool", locals())
-                if lock.isUnlocked():
-                    lock.lock()
-
-                    data = {
-                        "data": {
-                            "items": CustomController.validate(
-                                Pool.dataList(assetId, partitionName),
-                                PoolsSerializer,
-                                "list"
-                            )
-                        },
-                        "href": request.get_full_path()
-                    }
-
-                    # Check the response's ETag validity (against client request).
-                    conditional = Conditional(request)
-                    etagCondition = conditional.responseEtagFreshnessAgainstRequest(data["data"])
-                    if etagCondition["state"] == "fresh":
-                        data = None
-                        httpStatus = status.HTTP_304_NOT_MODIFIED
-                    else:
-                        httpStatus = status.HTTP_200_OK
-
-                    lock.release()
+            if CheckPermissionFacade.hasUserPermission(groups=user["groups"], action="pools_get", assetId=assetId, partition=partitionName, isWorkflow=bool(workflowId)) or user["authDisabled"]:
+                if workflowId and checkWorkflowPermission:
+                    httpStatus = status.HTTP_204_NO_CONTENT
                 else:
-                    data = None
-                    httpStatus = status.HTTP_423_LOCKED
+                    Log.actionLog("Pools list", user)
+
+                    lock = Lock("pool", locals())
+                    if lock.isUnlocked():
+                        lock.lock()
+
+                        data = {
+                            "data": {
+                                "items": CustomController.validate(
+                                    Pool.dataList(assetId, partitionName),
+                                    PoolsSerializer,
+                                    "list"
+                                )
+                            },
+                            "href": request.get_full_path()
+                        }
+
+                        # Check the response's ETag validity (against client request).
+                        conditional = Conditional(request)
+                        etagCondition = conditional.responseEtagFreshnessAgainstRequest(data["data"])
+                        if etagCondition["state"] == "fresh":
+                            data = None
+                            httpStatus = status.HTTP_304_NOT_MODIFIED
+                        else:
+                            httpStatus = status.HTTP_200_OK
+
+                        lock.release()
+                    else:
+                        data = None
+                        httpStatus = status.HTTP_423_LOCKED
             else:
                 data = None
                 httpStatus = status.HTTP_403_FORBIDDEN

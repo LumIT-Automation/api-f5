@@ -15,6 +15,7 @@ class CustomController(APIView):
 
         permission_classes = [IsAuthenticated]
         authentication_classes = [JWTTokenUserAuthentication]
+        isWorkflow = False
 
 
 

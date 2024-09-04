@@ -132,7 +132,7 @@ class Permission:
 
     @staticmethod
     def addFacade(identityGroupId: str, role: str, partitionInfo: dict) -> None:
-        partitionAssetId = partitionInfo.get("assetId", "")
+        partitionAssetId = int(partitionInfo.get("assetId", ""))
         partitionName = partitionInfo.get("name", "")
 
         try:
@@ -168,7 +168,7 @@ class Permission:
 
     @staticmethod
     def modifyFacade(permissionId: int, identityGroupId: str, role: str, partitionInfo: dict) -> None:
-        partitionAssetId = partitionInfo.get("assetId", "")
+        partitionAssetId = int(partitionInfo.get("assetId", ""))
         partitionName = partitionInfo.get("name", "")
 
         try:

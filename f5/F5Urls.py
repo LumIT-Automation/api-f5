@@ -10,9 +10,10 @@ from .controllers.F5.sys import Certificate, Certificates, Folder, Folders
 from .controllers.F5.asm import Policies as ASMPolicies, Policy as ASMPolicy, PoliciesDifference as ASMPolicyDifference, PolicyMerge as ASMPolicyMerge, PolicyApply as ASMPolicyApply
 from .controllers.Asset import AssetAssetDr, AssetAssetsDr, Asset, Assets
 from .controllers.F5.Usecases import VirtualServersController as WorkflowVirtualServers, VirtualServerController as WorkflowVirtualServer, DeleteNodeController as WorkflowNode, CertificateUpdateController as WorkflowCertificate
-from .controllers.Permission import Authorizations, IdentityGroups, IdentityGroup, Roles, Permission, Permissions
+from .controllers.Permission import Authorizations, IdentityGroups, IdentityGroup, Roles, Permission, Permissions, AuthorizationsWorkflow, Workflows, PermissionsWorkflow, PermissionWorkflow
 from .controllers.Configuration import Configuration
 from .controllers.History import History, ActionHistory
+from .controllers.Helpers import Locks
 
 
 urlpatterns = [
@@ -24,7 +25,12 @@ urlpatterns = [
     path('permissions/', Permissions.PermissionsController.as_view(), name='permissions'),
     path('permission/<int:permissionId>/', Permission.PermissionController.as_view(), name='permission'),
 
+    path('workflows/', Workflows.WorkflowsController.as_view(), name='workflows'),
+    path('permissions-workflow/', PermissionsWorkflow.PermissionsWorkflowController.as_view(), name='permissions-workflow'),
+    path('permission-workflow/<int:permissionId>/', PermissionWorkflow.PermissionWorkflowController.as_view(), name='permission-workflow'),
+
     path('authorizations/', Authorizations.AuthorizationsController.as_view(), name='authorizations'),
+    path('workflow-authorizations/', AuthorizationsWorkflow.AuthorizationsWorkflowController.as_view(), name='workflow-authorizations'),
 
     path('doc/<str:fileName>/', RawTxtController.F5RawTxtController.as_view(), name='txt'),
 
@@ -116,6 +122,9 @@ urlpatterns = [
 
     # Certificate
     path('<int:assetId>/<str:partitionName>/workflow/client-ssl-profile/<str:profileName>/', WorkflowCertificate.F5WorkflowCertificateUpdateController.as_view(), name='f5-workflow-certificate'),
+
+    # Locks
+    path('locks/', Locks.F5WorkflowLocksController.as_view(), name='f5-workflow-locks'),
 
     # History.
     path('history/', History.HistoryLogsController.as_view(), name='f5-log-history'),

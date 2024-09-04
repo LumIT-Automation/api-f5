@@ -1,17 +1,23 @@
 from __future__ import annotations
 from typing import List
 
-from f5.models.Permission.repository.Privilege import Privilege as Repository
+from f5.models.Permission.Privilege import Privilege
+
+from f5.models.Permission.repository.Workflow import Workflow as Repository
+from f5.models.Permission.repository.WorkflowPrivilege import WorkflowPrivilege as WorkflowPrivilegeRepository
+
+from f5.helpers.Misc import Misc
 
 
-class Privilege:
-    def __init__(self, id: int, *args, **kwargs):
+class Workflow:
+    def __init__(self, id: int = 0, workflow: str = "", *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.id: int = int(id)
-        self.privilege: str = ""
-        self.privilege_type: str = ""
+        self.workflow: str = workflow
         self.description: str = ""
+
+        self.privileges: List[Privilege] = []
 
         self.__load()
 
@@ -22,7 +28,7 @@ class Privilege:
     ####################################################################################################################
 
     def repr(self):
-        return repr(self)
+        return Misc.deepRepr(self)
 
 
 
@@ -31,25 +37,17 @@ class Privilege:
     ####################################################################################################################
 
     @staticmethod
-    def list() -> List[Privilege]:
-        privileges = []
+    def list(selectWorkflow: list = None) -> List[Workflow]:
+        selectWorkflow = selectWorkflow or []
+        workflows = []
 
         try:
-            for privilege in Repository.list():
-                privileges.append(
-                    Privilege(privilege["id"])
+            for w in Repository.list(selectWorkflows=selectWorkflow):
+                workflows.append(
+                    Workflow(id=w["id"])
                 )
 
-            return privileges
-        except Exception as e:
-            raise e
-
-
-
-    @staticmethod
-    def listQuick() -> list:
-        try:
-            return Repository.list()
+            return workflows
         except Exception as e:
             raise e
 
@@ -61,7 +59,12 @@ class Privilege:
 
     def __load(self) -> None:
         try:
-            info = Repository.get(self.id)
+            info = Repository.get(id=self.id, workflow=self.workflow)
+
+            for privilegeId in WorkflowPrivilegeRepository.workflowPrivileges(workflowId=self.id):
+                self.privileges.append(
+                    Privilege(privilegeId)
+                )
 
             # Set attributes.
             for k, v in info.items():

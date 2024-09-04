@@ -105,7 +105,9 @@ INSERT INTO `privilege` (`id`, `privilege`, `privilege_type`, `description`) VAL
 (70, 'asm_policy_apply_post', 'asset', NULL),
 (71, 'workflow_node_delete', 'object', NULL),
 (72, 'asset_get', 'asset', NULL),
-(73, 'node_get', 'object', NULL);
+(73, 'node_get', 'object', NULL),
+(74, 'workflows_privileges_get', 'global', NULL),
+(75, 'locks_delete', 'global', NULL);
 
 --
 -- Dump dei dati per la tabella `role`
@@ -114,8 +116,7 @@ INSERT INTO `privilege` (`id`, `privilege`, `privilege_type`, `description`) VAL
 INSERT INTO `role` (`id`, `role`, `description`) VALUES
 (1, 'admin', 'admin'),
 (2, 'staff', 'read / write, excluding assets'),
-(3, 'readonly', 'readonly'),
-(4, 'workflow', 'workflow system user');
+(3, 'readonly', 'readonly');
 
 --
 -- Dump dei dati per la tabella `role_privilege`
@@ -191,6 +192,8 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (1, 71),
 (1, 72),
 (1, 73),
+(1, 74),
+(1, 75),
 (2, 3),
 (2, 5),
 (2, 6),
@@ -211,6 +214,7 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (2, 59),
 (2, 71),
 (2, 72),
+(2, 74),
 (3, 3),
 (3, 6),
 (3, 8),
@@ -229,15 +233,8 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (3, 57),
 (3, 59),
 (3, 63),
-(3, 72),
-(4, 3),
-(4, 72);
+(3, 72);
 
--- Dump dei dati per la tabella `identity_group`
--- (Workflow system group)
-
-INSERT INTO `identity_group` (`id`, `name`, `identity_group_identifier`) VALUES
-(1, 'workflow.local', 'workflow.local');
 
 COMMIT;
 
