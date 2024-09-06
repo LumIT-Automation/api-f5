@@ -20,7 +20,7 @@ class F5NodeController(CustomControllerF5GetInfo, CustomControllerF5Delete, Cust
 
         return self.getInfo(
             request=request,
-            actionCallback=lambda: Node(assetId, partitionName, nodeName, subPath).info(),
+            actionCallback=lambda: Node(assetId, partitionName, name, subPath).info(),
             objectName=nodeName,
             assetId=assetId,
             partition=partitionName,

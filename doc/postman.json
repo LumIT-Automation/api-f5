@@ -2190,6 +2190,44 @@
 										"auth": {
 											"type": "noauth"
 										},
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											},
+											{
+												"key": "If-None-Match",
+												"value": "62951e7f096cefb6a43b952ddcab869e",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"url": {
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/monitor/tcp-half-open/MONITOR/",
+											"host": [
+												"{{f5BaseUrl}}"
+											],
+											"path": [
+												"f5",
+												"2",
+												"Partition1",
+												"monitor",
+												"tcp-half-open",
+												"MONITOR",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "monitor",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
 										"method": "DELETE",
 										"header": [
 											{
