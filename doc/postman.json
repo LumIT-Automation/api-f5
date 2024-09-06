@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "2e4fbf16-1d6c-4c56-8d42-61e1f56eb128",
+		"_postman_id": "eea2f405-2f59-4baa-8412-fc8813defa38",
 		"name": "api-f5",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -2816,6 +2816,55 @@
 											"type": "noauth"
 										},
 										"method": "DELETE",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											},
+											{
+												"key": "If-None-Match",
+												"value": "62951e7f096cefb6a43b952ddcab869e",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{f5BaseUrl}}/f5/2/Partition1/pool/POOL/",
+											"host": [
+												"{{f5BaseUrl}}"
+											],
+											"path": [
+												"f5",
+												"2",
+												"Partition1",
+												"pool",
+												"POOL",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "pool",
+									"protocolProfileBehavior": {
+										"disableBodyPruning": true
+									},
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "GET",
 										"header": [
 											{
 												"key": "Authorization",
