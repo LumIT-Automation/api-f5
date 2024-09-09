@@ -13,18 +13,18 @@ class Pool:
     ####################################################################################################################
 
     @staticmethod
-    def info(assetId, partitionName, poolName, subPath: str = "") -> dict:
+    def info(assetId, partitionName, poolName, subPath: str = "", silent: bool = False) -> dict:
         subPath = subPath.replace('/', '~') + '~' if subPath else ''
 
         try:
             f5 = Asset(assetId)
-            api = ApiSupplicant(
+            return ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/pool/~"+partitionName+"~"+subPath+poolName+"/",
                 auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
+                tlsVerify=f5.tlsverify,
+                silent=silent
+            ).get()["payload"]
 
-            return api.get()["payload"]
         except Exception as e:
             raise e
 

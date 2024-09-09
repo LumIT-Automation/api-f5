@@ -12,17 +12,18 @@ class Node:
     ####################################################################################################################
 
     @staticmethod
-    def info(assetId: int, partitionName: str, name: str, subPath: str = "") -> dict:
+    def info(assetId: int, partitionName: str, name: str, subPath: str = "", silent: bool = False) -> dict:
         subPath = subPath.replace('/', '~') + '~' if subPath else ''
 
         try:
             f5 = Asset(assetId)
-            api = ApiSupplicant(
+            return ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/node/~"+partitionName+"~"+subPath+name+"/",
                 auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
-            return api.get()["payload"]
+                tlsVerify=f5.tlsverify,
+                silent=silent
+            ).get()["payload"]
+
         except Exception as e:
             raise e
 

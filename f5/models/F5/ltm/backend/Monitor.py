@@ -18,14 +18,13 @@ class Monitor:
 
         try:
             f5 = Asset(assetId)
-            api = ApiSupplicant(
+            return ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/monitor/"+monitorType+"/~"+partitionName+"~"+subPath+monitorName+"/",
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify,
                 silent=silent
-            )
+            ).get()["payload"]
 
-            return api.get()["payload"]
         except Exception as e:
             raise e
 

@@ -13,18 +13,18 @@ class VirtualServer:
     ####################################################################################################################
 
     @staticmethod
-    def info(assetId: int, partitionName: str, virtualServerName: str, subPath: str = "") -> dict:
+    def info(assetId: int, partitionName: str, virtualServerName: str, subPath: str = "", silent: bool = False) -> dict:
         subPath = subPath.replace('/', '~') + '~' if subPath else ''
 
         try:
             f5 = Asset(assetId)
-            items = ApiSupplicant(
+            return ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/virtual/~"+partitionName+"~"+subPath+virtualServerName+"/",
                 auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
+                tlsVerify=f5.tlsverify,
+                silent=silent
             ).get()["payload"]
 
-            return items
         except Exception as e:
             raise e
 

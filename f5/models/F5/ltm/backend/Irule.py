@@ -13,18 +13,18 @@ class Irule:
     ####################################################################################################################
 
     @staticmethod
-    def info(assetId: int, partitionName: str, iruleName: str, subPath: str = "") -> dict:
+    def info(assetId: int, partitionName: str, iruleName: str, subPath: str = "", silent: bool = False) -> dict:
         subPath = subPath.replace('/', '~') + '~' if subPath else ''
 
         try:
             f5 = Asset(assetId)
-            api = ApiSupplicant(
+            return ApiSupplicant(
                 endpoint=f5.baseurl+"tm/ltm/rule/~"+partitionName+"~"+subPath+iruleName+"/",
                 auth=(f5.username, f5.password),
-                tlsVerify=f5.tlsverify
-            )
+                tlsVerify=f5.tlsverify,
+                silent=silent
+            ).get()["payload"]
 
-            return api.get()["payload"]
         except Exception as e:
             raise e
 
