@@ -38,8 +38,7 @@ class F5VirtualServerController(CustomControllerF5GetInfo, CustomControllerF5Del
             actionCallback=lambda: VirtualServer(assetId, partitionName, name, subPath, loadPolicies=loadPolicies, loadProfiles=loadProfiles, profileTypeFilter=profileTypeFilter).repr(),
             objectName=virtualServerName,
             assetId=assetId,
-            partition=partitionName,
-            objectType="virtualServer"
+            partition=partitionName
         )
 
 
@@ -52,8 +51,7 @@ class F5VirtualServerController(CustomControllerF5GetInfo, CustomControllerF5Del
             actionCallback=lambda: VirtualServer(assetId, partitionName, name, subPath).delete(),
             objectName=virtualServerName,
             assetId=assetId,
-            partition=partitionName,
-            objectType="virtualServer"
+            partition=partitionName
         )
 
 
@@ -67,6 +65,5 @@ class F5VirtualServerController(CustomControllerF5GetInfo, CustomControllerF5Del
             objectName=virtualServerName,
             assetId=assetId,
             partition=partitionName,
-            objectType="virtualServer",
             Serializer=Serializer
         )

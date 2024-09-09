@@ -23,8 +23,7 @@ class F5NodeController(CustomControllerF5GetInfo, CustomControllerF5Delete, Cust
             actionCallback=lambda: Node(assetId, partitionName, name, subPath).info(),
             objectName=nodeName,
             assetId=assetId,
-            partition=partitionName,
-            objectType="node"
+            partition=partitionName
         )
 
 
@@ -37,8 +36,7 @@ class F5NodeController(CustomControllerF5GetInfo, CustomControllerF5Delete, Cust
             actionCallback=lambda: Node(assetId, partitionName, name, subPath).delete(),
             objectName=nodeName,
             assetId=assetId,
-            partition=partitionName,
-            objectType="node"
+            partition=partitionName
         )
 
 
@@ -52,6 +50,5 @@ class F5NodeController(CustomControllerF5GetInfo, CustomControllerF5Delete, Cust
             objectName=nodeName,
             assetId=assetId,
             partition=partitionName,
-            objectType="node",
             Serializer=Serializer
         )
