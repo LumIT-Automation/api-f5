@@ -18,12 +18,14 @@ class CustomControllerF5Delete(CustomControllerBase):
         self.subject = subject
 
 
-    def remove(self, request: Request, actionCallback: Callable, objectName: str, assetId: int = 0, partition: str = "", objectType: str = "", Serializer: Callable = None) -> Response:
+    def remove(self, request: Request, actionCallback: Callable, objectName: str, assetId: int = 0, partition: str = "", objectType: str = "", Serializer: Callable = None, parentSubject: str = "", parentName: str = "") -> Response:
         Serializer = Serializer or None
 
         action = self.subject + "_delete"
         actionLog = f"{self.subject.capitalize()} {objectType} - deletion: {partition} {objectName}".replace("  ", " ")
         lockedObjectClass = self.subject + objectType
+        lockParent = None
+        httpStatus = None
 
         # Example:
         #   subject: node
@@ -40,8 +42,17 @@ class CustomControllerF5Delete(CustomControllerBase):
                 else:
                     Log.actionLog(actionLog, user)
 
+                    if parentSubject:
+                        lockParent = Lock(parentSubject, locals(), parentName)
                     lock = Lock(lockedObjectClass, locals(), objectName)
-                    if lock.isUnlocked():
+
+                    if lockParent:
+                        if lockParent.isUnlocked():
+                            lockParent.lock()
+                        else:
+                            httpStatus = status.HTTP_423_LOCKED
+
+                    if lock.isUnlocked() and httpStatus != status.HTTP_423_LOCKED:
                         lock.lock()
 
                         actionCallback()
@@ -49,6 +60,8 @@ class CustomControllerF5Delete(CustomControllerBase):
 
                         if not workflowId:
                             lock.release()
+                            if lockParent:
+                                lockParent.release()
                     else:
                         httpStatus = status.HTTP_423_LOCKED
             else:
@@ -57,6 +70,8 @@ class CustomControllerF5Delete(CustomControllerBase):
         except Exception as e:
             if not workflowId:
                 Lock(lockedObjectClass, locals(), objectName).release()
+                if parentSubject:
+                    Lock(parentSubject, locals(), parentName).release()
 
             data, httpStatus, headers = CustomControllerBase.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
