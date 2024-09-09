@@ -1964,7 +1964,7 @@
 										"auth": {
 											"type": "noauth"
 										},
-										"method": "PATCH",
+										"method": "GET",
 										"header": [
 											{
 												"key": "Authorization",
@@ -1978,17 +1978,8 @@
 												"disabled": true
 											}
 										],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n    \"data\": {\n        \"name\": \"TEST_RULE\",\n        \"apiAnonymous\": \"when CLIENT_ACCEPTED {ACCESS::session remove}\"\n    }\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
-											}
-										},
 										"url": {
-											"raw": "{{f5BaseUrl}}/f5/2/Common/irule/TEST_RULE/",
+											"raw": "{{f5BaseUrl}}/f5/2/Common/irule/TEST0_RULE/",
 											"host": [
 												"{{f5BaseUrl}}"
 											],
@@ -1997,7 +1988,7 @@
 												"2",
 												"Common",
 												"irule",
-												"TEST_RULE",
+												"TEST0_RULE",
 												""
 											]
 										}
@@ -2024,6 +2015,52 @@
 												"disabled": true
 											}
 										],
+										"url": {
+											"raw": "{{f5BaseUrl}}/f5/2/Common/irule/TEST_RULE/",
+											"host": [
+												"{{f5BaseUrl}}"
+											],
+											"path": [
+												"f5",
+												"2",
+												"Common",
+												"irule",
+												"TEST_RULE",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "irule",
+									"request": {
+										"auth": {
+											"type": "noauth"
+										},
+										"method": "PATCH",
+										"header": [
+											{
+												"key": "Authorization",
+												"type": "text",
+												"value": "Bearer {{jwttoken}}"
+											},
+											{
+												"key": "If-None-Match",
+												"value": "edfb456005712c3e68d97b525e247981",
+												"type": "text",
+												"disabled": true
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n    \"data\": {\n        \"name\": \"TEST_RULE\",\n        \"apiAnonymous\": \"when CLIENT_ACCEPTED {ACCESS::session remove}\"\n    }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
 										"url": {
 											"raw": "{{f5BaseUrl}}/f5/2/Common/irule/TEST_RULE/",
 											"host": [
