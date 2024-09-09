@@ -13,7 +13,7 @@ from f5.controllers.CustomControllerPatch import CustomControllerF5Update
 
 class F5IruleController(CustomControllerF5GetInfo, CustomControllerF5Delete, CustomControllerF5Update):
     def __init__(self, *args, **kwargs):
-        CustomControllerF5GetInfo.__init__(self, subject="pool", *args, **kwargs)
+        CustomControllerF5GetInfo.__init__(self, subject="irule", *args, **kwargs)
 
 
     def get(self, request: Request, assetId: int, partitionName: str, iruleName: str) -> Response:
