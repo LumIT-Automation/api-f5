@@ -13,7 +13,7 @@ class Pool:
     ####################################################################################################################
 
     @staticmethod
-    def info(assetId, partitionName, poolName, subPath: str = ""):
+    def info(assetId, partitionName, poolName, subPath: str = "") -> dict:
         subPath = subPath.replace('/', '~') + '~' if subPath else ''
 
         try:

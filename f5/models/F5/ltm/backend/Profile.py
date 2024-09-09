@@ -37,7 +37,7 @@ class Profile:
 
 
     @staticmethod
-    def info(assetId: int, profileType: str, partitionName: str, profileName: str, subPath: str = "", silent: bool = False):
+    def info(assetId: int, profileType: str, partitionName: str, profileName: str, subPath: str = "", silent: bool = False) -> dict:
         subPath = subPath.replace('/', '~') + '~' if subPath else ''
 
         try:

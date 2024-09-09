@@ -29,6 +29,17 @@ class SnatPool:
     # Public methods
     ####################################################################################################################
 
+    def info(self) -> dict:
+        try:
+            i = Backend.info(self.assetId, self.partition, self.name, self.subPath)
+            i["assetId"] = self.assetId
+
+            return i
+        except Exception as e:
+            raise e
+
+
+
     def modify(self, data):
         try:
             Backend.modify(self.assetId, self.partition, self.name, data, self.subPath)

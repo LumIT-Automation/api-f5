@@ -13,7 +13,7 @@ class Monitor:
     ####################################################################################################################
 
     @staticmethod
-    def info(assetId, partitionName: str, monitorType: str, monitorName: str, subPath: str = "", silent: bool = False):
+    def info(assetId, partitionName: str, monitorType: str, monitorName: str, subPath: str = "", silent: bool = False) -> dict:
         subPath = subPath.replace('/', '~') + '~' if subPath else ''
 
         try:

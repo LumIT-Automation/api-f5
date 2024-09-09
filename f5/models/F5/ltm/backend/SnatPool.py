@@ -13,6 +13,24 @@ class SnatPool:
     ####################################################################################################################
 
     @staticmethod
+    def info(assetId: int, partitionName: str, snatPoolName: str, subPath: str = "") -> dict:
+        subPath = subPath.replace('/', '~') + '~' if subPath else ''
+
+        try:
+            f5 = Asset(assetId)
+            api = ApiSupplicant(
+                endpoint=f5.baseurl+"tm/ltm/snatpool/~"+partitionName+"~"+subPath+snatPoolName+"/",
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify
+            )
+
+            return api.get()["payload"]
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
     def modify(assetId: int, partitionName: str, snatPoolName: str, data, subPath: str = ""):
         subPath = subPath.replace('/', '~') + '~' if subPath else ''
 

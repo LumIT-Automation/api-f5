@@ -13,7 +13,7 @@ class Irule:
     ####################################################################################################################
 
     @staticmethod
-    def info(assetId: int, partitionName: str, iruleName: str, subPath: str = ""):
+    def info(assetId: int, partitionName: str, iruleName: str, subPath: str = "") -> dict:
         subPath = subPath.replace('/', '~') + '~' if subPath else ''
 
         try:
