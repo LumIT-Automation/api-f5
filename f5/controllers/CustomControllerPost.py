@@ -17,7 +17,7 @@ class CustomControllerF5Create(CustomControllerBase):
         self.subject = subject
 
 
-    def create(self, request: Request, actionCallback: Callable, assetId: int = 0, partition: str = "", objectType: str = "", lockItemField: str = "", Serializer: Callable = None, dataFix: Callable = None) -> Response:
+    def create(self, request: Request, actionCallback: Callable, assetId: int = 0, partition: str = "", objectType: str = "", Serializer: Callable = None, lockItemField: str = "", dataFix: Callable = None) -> Response:
         Serializer = Serializer or None
         httpStatus = None
 

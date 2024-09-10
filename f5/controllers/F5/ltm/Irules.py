@@ -39,7 +39,7 @@ class F5IrulesController(CustomControllerF5GetList, CustomControllerF5Create):
             actionCallback=lambda data: Irule.add(assetId, data),
             assetId=assetId,
             partition=partitionName,
-            Serializer=IrulesSerializer,
+            Serializer=IruleSerializer,
             lockItemField="name",
             dataFix=dataFix,
         )
