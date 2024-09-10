@@ -113,9 +113,9 @@ class CustomControllerF5GetList(CustomControllerBase):
 
 
 
-    def getList(self, request: Request, actionCallback: Callable, assetId: int = 0, partition: str = "", objectType: str = "", Serializer: Callable = None) -> Response:
+    def getList(self, request: Request, actionCallback: Callable, assetId: int = 0, partition: str = "", objectType: str = "", Serializer: Callable = None, customCallback: bool = False) -> Response:
         Serializer = Serializer or None
-        data = dict()
+        data = {"data": dict()}
         etagCondition = {"responseEtag": ""}
         workflowId = request.headers.get("workflowId", "")  # a correlation id.
         checkWorkflowPermission = request.headers.get("checkWorkflowPermission", "")
@@ -144,12 +144,15 @@ class CustomControllerF5GetList(CustomControllerBase):
                         if not workflowId:
                             lock.lock()
 
-                        data = {
-                            "data": {
-                                "items": CustomControllerBase.validate(actionCallback(), Serializer, many=True)
-                            },
-                            "href": request.get_full_path()
-                        }
+                        if customCallback:
+                            data = actionCallback()
+                        else:
+                            data = {
+                                "data": {
+                                    "items": CustomControllerBase.validate(actionCallback(), Serializer, many=True)
+                                },
+                                "href": request.get_full_path()
+                            }
 
                         # Check the response's ETag validity (against client request).
                         conditional = Conditional(request)
