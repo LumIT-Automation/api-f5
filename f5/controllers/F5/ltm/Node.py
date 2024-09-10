@@ -46,7 +46,7 @@ class F5NodeController(CustomControllerF5GetInfo, CustomControllerF5Delete, Cust
 
         return self.modify(
             request=request,
-            actionCallback=lambda data:  Node(assetId, partitionName, name, subPath).modify(data),
+            actionCallback=lambda data: Node(assetId, partitionName, name, subPath).modify(data),
             objectName=nodeName,
             assetId=assetId,
             partition=partitionName,

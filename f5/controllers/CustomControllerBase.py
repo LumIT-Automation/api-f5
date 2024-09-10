@@ -57,7 +57,7 @@ class CustomControllerBase(APIView):
                 Log.log("Upstream data incorrect: " + str(serializer.errors))
                 raise CustomException(
                     status=500,
-                    payload={"CheckPoint": "Upstream data mismatch."}
+                    payload={"F5": "Upstream data mismatch."}
                 )
             else:
                 return data

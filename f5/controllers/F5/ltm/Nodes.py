@@ -1,132 +1,49 @@
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework import status
 
 from f5.models.F5.ltm.Node import Node
-from f5.models.Permission.CheckPermissionFacade import CheckPermissionFacade
+
 from f5.serializers.F5.ltm.Nodes import F5NodesSerializer as NodesSerializer
 from f5.serializers.F5.ltm.Node import F5NodeSerializer as NodeSerializer
 
-from f5.controllers.CustomController import CustomController
+from f5.controllers.CustomControllerGet import CustomControllerF5GetList
+from f5.controllers.CustomControllerPost import CustomControllerF5Create
 
-from f5.helpers.Lock import Lock
-from f5.helpers.Conditional import Conditional
 from f5.helpers.Log import Log
 
-
-class F5NodesController(CustomController):
-    @staticmethod
-    def get(request: Request, assetId: int, partitionName: str) -> Response:
-        data = dict()
-        etagCondition = { "responseEtag": "" }
-
-        user = CustomController.loggedUser(request)
-        workflowId = request.headers.get("workflowId", "") # a correlation id.
-        checkWorkflowPermission = request.headers.get("checkWorkflowPermission", "")
-
-        try:
-            if CheckPermissionFacade.hasUserPermission(groups=user["groups"], action="nodes_get", assetId=assetId, partition=partitionName, isWorkflow=bool(workflowId)) or user["authDisabled"]:
-                if workflowId and checkWorkflowPermission:
-                    httpStatus = status.HTTP_204_NO_CONTENT
-                else:
-                    Log.actionLog("Nodes list", user)
-
-                    lock = Lock("node", locals())
-                    if lock.isUnlocked():
-                        lock.lock()
-
-                        data = {
-                            "data": {
-                                "items": CustomController.validate(
-                                    Node.dataList(assetId, partitionName),
-                                    NodesSerializer,
-                                    "list"
-                                )
-                            },
-                            "href": request.get_full_path()
-                        }
-
-                        # Check the response's ETag validity (against client request).
-                        conditional = Conditional(request)
-                        etagCondition = conditional.responseEtagFreshnessAgainstRequest(data["data"])
-                        if etagCondition["state"] == "fresh":
-                            data = None
-                            httpStatus = status.HTTP_304_NOT_MODIFIED
-                        else:
-                            httpStatus = status.HTTP_200_OK
-
-                        lock.release()
-                    else:
-                        data = None
-                        httpStatus = status.HTTP_423_LOCKED
-            else:
-                data = None
-                httpStatus = status.HTTP_403_FORBIDDEN
-        except Exception as e:
-            Lock("node", locals()).release()
-
-            data, httpStatus, headers = CustomController.exceptionHandler(e)
-            return Response(data, status=httpStatus, headers=headers)
-
-        return Response(data, status=httpStatus, headers={
-            "ETag": etagCondition["responseEtag"],
-            "Cache-Control": "must-revalidate"
-        })
+class F5NodesController(CustomControllerF5GetList, CustomControllerF5Create):
+    def __init__(self, *args, **kwargs):
+        super().__init__(subject="node", *args, **kwargs)
 
 
 
-    @staticmethod
-    def post(request: Request, assetId: int, partitionName: str) -> Response:
-        response = None
-        user = CustomController.loggedUser(request)
-        workflowId = request.headers.get("workflowId", "") # a correlation id.
-        checkWorkflowPermission = request.headers.get("checkWorkflowPermission", "")
+    def get(self, request: Request, assetId: int, partitionName: str) -> Response:
 
-        try:
-            if CheckPermissionFacade.hasUserPermission(groups=user["groups"], action="nodes_post", assetId=assetId, partition=partitionName, isWorkflow=bool(workflowId)) or user["authDisabled"]:
-                if workflowId and checkWorkflowPermission:
-                    httpStatus = status.HTTP_204_NO_CONTENT
-                else:
-                    Log.actionLog("Node addition", user)
-                    Log.actionLog("User data: "+str(request.data), user)
+        return self.getList(
+            request=request,
+            actionCallback=lambda:  Node.dataList(assetId, partitionName),
+            assetId=assetId,
+            partition=partitionName,
+            Serializer=NodesSerializer,
+        )
 
-                    serializer = NodeSerializer(data=request.data["data"])
-                    if serializer.is_valid():
-                        data = serializer.validated_data
-                        data["partition"] = partitionName
-                        if "state" in data:
-                            data["State"] = data["state"] # curious F5 field's name.
-                            del(data["state"])
 
-                        lock = Lock("node", locals(), data["name"], workflowId=workflowId)
-                        if lock.isUnlocked():
-                            lock.lock()
 
-                            Node.add(assetId, data)
+    def post(self, request: Request, assetId: int, partitionName: str) -> Response:
+        def dataFix(data: dict):
+            data["partition"] = partitionName
+            if "state" in data:
+                data["State"] = data["state"]  # curious F5 field's name.
+                del (data["state"])
 
-                            httpStatus = status.HTTP_201_CREATED
-                            if not workflowId:
-                                lock.release()
-                        else:
-                            httpStatus = status.HTTP_423_LOCKED
-                    else:
-                        httpStatus = status.HTTP_400_BAD_REQUEST
-                        response = {
-                            "F5": {
-                                "error": str(serializer.errors)
-                            }
-                        }
+            return data
 
-                        Log.actionLog("User data incorrect: "+str(response), user)
-            else:
-                httpStatus = status.HTTP_403_FORBIDDEN
-        except Exception as e:
-            if "serializer" in locals() and not workflowId:
-                Lock("node", locals(), locals()["serializer"].data["name"]).release()
 
-            data, httpStatus, headers = CustomController.exceptionHandler(e)
-            return Response(data, status=httpStatus, headers=headers)
-
-        return Response(response, status=httpStatus, headers={
-            "Cache-Control": "no-cache"
-        })
+        return self.create(
+            request=request,
+            actionCallback=lambda data: Node.add(assetId, data),
+            assetId=assetId,
+            partition=partitionName,
+            Serializer=NodeSerializer,
+            dataFix=dataFix
+        )
