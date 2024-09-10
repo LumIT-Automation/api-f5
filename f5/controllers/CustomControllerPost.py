@@ -17,7 +17,7 @@ class CustomControllerF5Create(CustomControllerBase):
         self.subject = subject
 
 
-    def create(self, request: Request, actionCallback: Callable, assetId: int = 0, partition: str = "", objectType: str = "", Serializer: Callable = None, dataFix: Callable = None) -> Response:
+    def create(self, request: Request, actionCallback: Callable, assetId: int = 0, partition: str = "", objectType: str = "", lockItemField: str = "", Serializer: Callable = None, dataFix: Callable = None) -> Response:
         Serializer = Serializer or None
         httpStatus = None
 
@@ -27,6 +27,7 @@ class CustomControllerF5Create(CustomControllerBase):
             action = self.subject + "s_post"
         actionLog = f"{self.subject.capitalize()} {objectType} - addition: {partition}".replace("  ", " ")
         lockedObjectClass = self.subject + objectType
+        lockItem = ""
 
         # Example:
         #   subject: nodes
@@ -56,7 +57,7 @@ class CustomControllerF5Create(CustomControllerBase):
                         else:
                             httpStatus = status.HTTP_400_BAD_REQUEST
                             response = {
-                                "CheckPoint": {
+                                "F5": {
                                     "error": str(serializer.errors)
                                 }
                             }
@@ -65,7 +66,9 @@ class CustomControllerF5Create(CustomControllerBase):
                         data = request.data.get("data", {})
 
                     if data:
-                        lock = Lock(lockedObjectClass, locals())
+                        if lockItemField:
+                            lockItem = data[lockItemField]
+                        lock = Lock(lockedObjectClass, locals(), lockItem)
                         if lock.isUnlocked():
                             lock.lock()
 
@@ -83,7 +86,9 @@ class CustomControllerF5Create(CustomControllerBase):
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
             if not workflowId:
-                Lock(lockedObjectClass, locals()).release()
+                if lockItemField:
+                    lockItem = locals()["serializer"].data[lockItemField]
+                Lock(lockedObjectClass, locals(), lockItem).release()
 
             data, httpStatus, headers = CustomControllerBase.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

@@ -9,7 +9,6 @@ from f5.serializers.F5.ltm.Node import F5NodeSerializer as NodeSerializer
 from f5.controllers.CustomControllerGet import CustomControllerF5GetList
 from f5.controllers.CustomControllerPost import CustomControllerF5Create
 
-from f5.helpers.Log import Log
 
 class F5NodesController(CustomControllerF5GetList, CustomControllerF5Create):
     def __init__(self, *args, **kwargs):
@@ -45,5 +44,6 @@ class F5NodesController(CustomControllerF5GetList, CustomControllerF5Create):
             assetId=assetId,
             partition=partitionName,
             Serializer=NodeSerializer,
+            lockItemField="name",
             dataFix=dataFix
         )
