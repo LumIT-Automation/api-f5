@@ -41,6 +41,6 @@ class F5SnatPoolsController(CustomControllerF5GetList, CustomControllerF5Create)
             assetId=assetId,
             partition=partitionName,
             Serializer=SnatPoolSerializer,
-            lockItemField="name",
+            lockItemDataKey="name",
             dataFix=dataFix,
         )

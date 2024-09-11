@@ -73,6 +73,6 @@ class F5DatagroupsController(CustomControllerF5GetList, CustomControllerF5Create
             partition=partitionName,
             objectType=datagroupType,
             Serializer=DatagroupSerializer,
-            lockItemField="name",
+            lockItemDataKey="name",
             dataFix=dataFix
         )

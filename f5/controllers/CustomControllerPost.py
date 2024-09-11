@@ -8,7 +8,7 @@ from f5.models.Permission.CheckPermissionFacade import CheckPermissionFacade
 
 from f5.controllers.CustomControllerBase import CustomControllerBase
 
-from f5.helpers.Lock import Lock
+from f5.helpers.Lock import Locker
 from f5.helpers.Log import Log
 
 
@@ -17,7 +17,7 @@ class CustomControllerF5Create(CustomControllerBase):
         self.subject = subject
 
 
-    def create(self, request: Request, actionCallback: Callable, assetId: int = 0, partition: str = "", objectType: str = "", Serializer: Callable = None, lockItemField: str = "", dataFix: Callable = None, parentSubject: str = "", parentName: str = "") -> Response:
+    def create(self, request: Request, actionCallback: Callable, assetId: int = 0, partition: str = "", objectType: str = "", Serializer: Callable = None, lockItemDataKey: str = "", dataFix: Callable = None, parentSubject: str = "", parentName: str = "") -> Response:
         Serializer = Serializer or None
         httpStatus = None
 
@@ -27,8 +27,6 @@ class CustomControllerF5Create(CustomControllerBase):
             action = self.subject + "s_post"
         actionLog = f"{self.subject.capitalize()} {objectType} - addition: {partition}".replace("  ", " ")
         lockedObjectClass = self.subject + objectType
-        lockItem = ""
-        lockParent = None
 
         # Example:
         #   subject: nodes
@@ -67,20 +65,9 @@ class CustomControllerF5Create(CustomControllerBase):
                         data = request.data.get("data", {})
 
                     if data:
-                        if parentSubject:
-                            lockParent = Lock(parentSubject, locals(), parentName)
-                        if lockItemField:
-                            lockItem = data[lockItemField]
-                        lock = Lock(lockedObjectClass, locals(), lockItem)
-
-                        if lockParent:
-                            if lockParent.isUnlocked():
-                                lockParent.lock()
-                            else:
-                                httpStatus = status.HTTP_423_LOCKED
-
-                        if lock.isUnlocked() and httpStatus != status.HTTP_423_LOCKED:
-                            lock.lock()
+                        locker = Locker(lockedObjectClass, locals(), data.get(lockItemDataKey, "").split('/')[-1], workflowId, parentSubject, parentName) # Sometimes the item is passed in payload with the full path.
+                        if locker.isUnlocked():
+                            locker.lock()
 
                             response["data"] = actionCallback(data)
                             if not response["data"]:
@@ -88,9 +75,7 @@ class CustomControllerF5Create(CustomControllerBase):
                             httpStatus = status.HTTP_201_CREATED
 
                             if not workflowId:
-                                lock.release()
-                                if lockParent:
-                                    lockParent.release()
+                                locker.release()
                         else:
                             httpStatus = status.HTTP_423_LOCKED
             else:
@@ -98,11 +83,7 @@ class CustomControllerF5Create(CustomControllerBase):
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
             if not workflowId:
-                if lockItemField:
-                    lockItem = locals()["serializer"].data[lockItemField]
-                Lock(lockedObjectClass, locals(), lockItem).release()
-                if parentSubject:
-                    Lock(parentSubject, locals(), parentName).release()
+                locker = Locker(objectClass=lockedObjectClass, o=locals(), item=locals()["serializer"].data[lockItemDataKey], parentObjectClass=parentSubject, parentItem=parentName).release()
 
             data, httpStatus, headers = CustomControllerBase.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

@@ -76,6 +76,6 @@ class F5ProfilesController(CustomControllerF5GetList, CustomControllerF5Create):
             partition=partitionName,
             objectType=profileType,
             Serializer=ProfileSerializer,
-            lockItemField="name",
+            lockItemDataKey="name",
             dataFix=dataFix
         )

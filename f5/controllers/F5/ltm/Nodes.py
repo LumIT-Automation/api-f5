@@ -44,6 +44,6 @@ class F5NodesController(CustomControllerF5GetList, CustomControllerF5Create):
             assetId=assetId,
             partition=partitionName,
             Serializer=NodeSerializer,
-            lockItemField="name",
+            lockItemDataKey="name",
             dataFix=dataFix
         )

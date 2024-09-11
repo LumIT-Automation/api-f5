@@ -40,6 +40,6 @@ class F5PoliciesController(CustomControllerF5GetList, CustomControllerF5Create):
             assetId=assetId,
             partition=partitionName,
             Serializer=PolicySerializer,
-            lockItemField="name",
+            lockItemDataKey="name",
             dataFix=dataFix,
         )

@@ -251,3 +251,45 @@ class Lock:
                 pass
 
         return httpMethod
+
+
+
+class Locker():
+    def __init__(self, objectClass: str, o: dict, item: str = "", workflowId: str = "", parentObjectClass: str = "", parentItem: str = "", *args, **kwargs):
+        self.lockItem = Lock(objectClass, o, item, workflowId)
+        self.o = o
+        if parentObjectClass:
+            self.lockParent = Lock(parentObjectClass, o, parentItem, workflowId)
+        else:
+            self.lockParent = None
+
+    def isUnlocked(self) -> bool:
+        try:
+            if self.lockParent:
+                if not self.lockParent.isUnlocked():
+                    return False
+
+            if self.lockItem.isUnlocked():
+                return True
+
+            return False
+        except Exception as e:
+            raise e
+
+
+    def lock(self):
+        try:
+            if self.lockParent:
+                self.lockParent.lock()
+            self.lockItem.lock()
+        except Exception as e:
+            raise e
+
+    def release(self):
+        try:
+            if self.lockParent:
+                self.lockParent.release()
+            self.lockItem.release()
+        except Exception as e:
+            raise e
+

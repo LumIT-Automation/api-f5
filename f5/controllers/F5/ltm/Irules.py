@@ -40,6 +40,6 @@ class F5IrulesController(CustomControllerF5GetList, CustomControllerF5Create):
             assetId=assetId,
             partition=partitionName,
             Serializer=IruleSerializer,
-            lockItemField="name",
+            lockItemDataKey="name",
             dataFix=dataFix,
         )

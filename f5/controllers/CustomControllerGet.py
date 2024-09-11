@@ -8,7 +8,7 @@ from f5.models.Permission.CheckPermissionFacade import CheckPermissionFacade
 
 from f5.controllers.CustomControllerBase import CustomControllerBase
 
-from f5.helpers.Lock import Lock
+from f5.helpers.Lock import Locker
 from f5.helpers.Conditional import Conditional
 from f5.helpers.Log import Log
 
@@ -29,7 +29,6 @@ class CustomControllerF5GetInfo(CustomControllerBase):
         action = self.subject + "_get" # example: host_get.
         actionLog = f"{self.subject.capitalize()} {objectType} - info {partition} {objectName}".replace("  ", " ")
         lockedObjectClass = self.subject + objectType # example: host (subject=host) // ruleaccess (subject=rule + type=access).
-        lockParent = None
         httpStatus = None
 
         # Example:
@@ -50,18 +49,9 @@ class CustomControllerF5GetInfo(CustomControllerBase):
                 else:
                     Log.actionLog(actionLog, user)
 
-                    if parentSubject:
-                        lockParent = Lock(parentSubject, locals(), parentName)
-                    lock = Lock(lockedObjectClass, locals(), objectName)
-
-                    if lockParent:
-                        if lockParent.isUnlocked():
-                            lockParent.lock()
-                        else:
-                            httpStatus = status.HTTP_423_LOCKED
-
-                    if lock.isUnlocked() and httpStatus != status.HTTP_423_LOCKED:
-                        lock.lock()
+                    locker = Locker(lockedObjectClass, locals(), objectName, workflowId, parentSubject, parentName)
+                    if locker.isUnlocked():
+                        locker.lock()
 
                         data = {
                             "data": CustomControllerBase.validate(actionCallback(), Serializer),
@@ -77,9 +67,7 @@ class CustomControllerF5GetInfo(CustomControllerBase):
                         else:
                             httpStatus = status.HTTP_200_OK
                         if not workflowId:
-                            lock.release()
-                            if lockParent:
-                                lockParent.release()
+                            locker.release()
                     else:
                         data = None
                         httpStatus = status.HTTP_423_LOCKED
@@ -89,9 +77,7 @@ class CustomControllerF5GetInfo(CustomControllerBase):
 
         except Exception as e:
             if not workflowId:
-                Lock(lockedObjectClass, locals(), objectName).release()
-                if parentSubject:
-                    Lock(parentSubject, locals(), parentName).release()
+                Locker(objectClass=lockedObjectClass, o=locals(), item=objectName, parentObjectClass=parentSubject, parentItem=parentName).release()
 
             data, httpStatus, headers = CustomControllerBase.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
@@ -113,7 +99,7 @@ class CustomControllerF5GetList(CustomControllerBase):
 
 
 
-    def getList(self, request: Request, actionCallback: Callable, assetId: int = 0, partition: str = "", objectType: str = "", Serializer: Callable = None, customCallback: bool = False) -> Response:
+    def getList(self, request: Request, actionCallback: Callable, assetId: int = 0, partition: str = "", objectType: str = "", Serializer: Callable = None, customCallback: bool = False, parentSubject: str = "", parentName: str = "") -> Response:
         Serializer = Serializer or None
         data = {"data": dict()}
         etagCondition = {"responseEtag": ""}
@@ -139,10 +125,9 @@ class CustomControllerF5GetList(CustomControllerBase):
                 else:
                     Log.actionLog(actionLog, user)
 
-                    lock = Lock(lockedObjectClass, locals())
-                    if lock.isUnlocked():
-                        if not workflowId:
-                            lock.lock()
+                    locker = Locker(objectClass=lockedObjectClass, o=locals(), workflowId=workflowId, parentObjectClass=parentSubject, parentItem=parentName)
+                    if locker.isUnlocked():
+                        locker.lock()
 
                         if customCallback:
                             data = actionCallback()
@@ -164,7 +149,7 @@ class CustomControllerF5GetList(CustomControllerBase):
                             httpStatus = status.HTTP_200_OK
 
                         if not workflowId:
-                            lock.release()
+                            locker.release()
                     else:
                         data = None
                         httpStatus = status.HTTP_423_LOCKED
@@ -173,7 +158,7 @@ class CustomControllerF5GetList(CustomControllerBase):
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
             if not workflowId:
-                Lock(lockedObjectClass, locals()).release()
+                Locker(lockedObjectClass, locals()).release()
 
             data, httpStatus, headers = CustomControllerBase.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

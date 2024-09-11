@@ -40,6 +40,6 @@ class F5PoolsController(CustomControllerF5GetList, CustomControllerF5Create):
             assetId=assetId,
             partition=partitionName,
             Serializer=PoolSerializer,
-            lockItemField="name",
+            lockItemDataKey="name",
             dataFix=dataFix,
         )

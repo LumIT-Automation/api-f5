@@ -54,6 +54,6 @@ class F5VirtualServersController(CustomControllerF5GetList, CustomControllerF5Cr
             assetId=assetId,
             partition=partitionName,
             Serializer=VirtualServerSerializer,
-            lockItemField="name",
+            lockItemDataKey="name",
             dataFix=dataFix,
         )

@@ -76,6 +76,6 @@ class F5MonitorsController(CustomControllerF5GetList, CustomControllerF5Create):
             partition=partitionName,
             objectType=monitorType,
             Serializer=MonitorSerializer,
-            lockItemField="name",
+            lockItemDataKey="name",
             dataFix=dataFix
         )

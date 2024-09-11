@@ -8,7 +8,7 @@ from f5.models.Permission.CheckPermissionFacade import CheckPermissionFacade
 
 from f5.controllers.CustomControllerBase import CustomControllerBase
 
-from f5.helpers.Lock import Lock
+from f5.helpers.Lock import Locker
 from f5.helpers.Log import Log
 
 
@@ -24,7 +24,6 @@ class CustomControllerF5Delete(CustomControllerBase):
         action = self.subject + "_delete"
         actionLog = f"{self.subject.capitalize()} {objectType} - deletion: {partition} {objectName}".replace("  ", " ")
         lockedObjectClass = self.subject + objectType
-        lockParent = None
         httpStatus = None
 
         # Example:
@@ -42,26 +41,15 @@ class CustomControllerF5Delete(CustomControllerBase):
                 else:
                     Log.actionLog(actionLog, user)
 
-                    if parentSubject:
-                        lockParent = Lock(parentSubject, locals(), parentName)
-                    lock = Lock(lockedObjectClass, locals(), objectName)
-
-                    if lockParent:
-                        if lockParent.isUnlocked():
-                            lockParent.lock()
-                        else:
-                            httpStatus = status.HTTP_423_LOCKED
-
-                    if lock.isUnlocked() and httpStatus != status.HTTP_423_LOCKED:
-                        lock.lock()
+                    locker = Locker(lockedObjectClass, locals(), objectName, workflowId, parentSubject, parentName)
+                    if locker.isUnlocked():
+                        locker.lock()
 
                         actionCallback()
                         httpStatus = status.HTTP_200_OK
 
                         if not workflowId:
-                            lock.release()
-                            if lockParent:
-                                lockParent.release()
+                            locker.release()
                     else:
                         httpStatus = status.HTTP_423_LOCKED
             else:
@@ -69,9 +57,7 @@ class CustomControllerF5Delete(CustomControllerBase):
 
         except Exception as e:
             if not workflowId:
-                Lock(lockedObjectClass, locals(), objectName).release()
-                if parentSubject:
-                    Lock(parentSubject, locals(), parentName).release()
+                Locker(objectClass=lockedObjectClass, o=locals(), item=objectName, parentObjectClass=parentSubject, parentItem=parentName).release()
 
             data, httpStatus, headers = CustomControllerBase.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
