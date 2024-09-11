@@ -3,7 +3,7 @@ from rest_framework.response import Response
 
 from f5.models.F5.ltm.Pool import Pool
 
-from f5.serializers.F5.ltm.PoolMember import F5PoolMemberSerializer as Serializer
+from f5.serializers.F5.ltm.PoolMemberStats import  F5PoolMemberStatsSerializer as Serializer
 
 from f5.controllers.CustomControllerGet import CustomControllerF5GetInfo
 from f5.controllers.CustomControllerDelete import CustomControllerF5Delete
@@ -25,6 +25,7 @@ class F5PoolMemberStatsController(CustomControllerF5GetInfo, CustomControllerF5D
             objectName=poolMemberName,
             assetId=assetId,
             partition=partitionName,
+            Serializer=Serializer,
             parentSubject="pool",
             parentName=poolName
         )
