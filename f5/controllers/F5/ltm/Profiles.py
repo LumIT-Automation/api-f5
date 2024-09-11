@@ -56,7 +56,7 @@ class F5ProfilesController(CustomControllerF5GetList, CustomControllerF5Create):
             request=request,
             actionCallback=actionCallback,
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             objectType=profileType,
             customCallback=True
         )
@@ -73,7 +73,7 @@ class F5ProfilesController(CustomControllerF5GetList, CustomControllerF5Create):
             request=request,
             actionCallback=lambda data: Profile.add(assetId, profileType, data),
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             objectType=profileType,
             Serializer=ProfileSerializer,
             lockItemDataKey="name",

@@ -24,7 +24,7 @@ class F5MonitorController(CustomControllerF5GetInfo, CustomControllerF5Delete, C
             actionCallback=lambda: Monitor(assetId, partitionName, monitorType, name, subPath).info(),
             objectName=monitorName,
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             objectType=monitorType
         )
 
@@ -38,7 +38,7 @@ class F5MonitorController(CustomControllerF5GetInfo, CustomControllerF5Delete, C
             actionCallback=lambda: Monitor(assetId, partitionName, monitorType, name, subPath).delete(),
             objectName=monitorName,
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             objectType=monitorType
         )
 
@@ -52,7 +52,7 @@ class F5MonitorController(CustomControllerF5GetInfo, CustomControllerF5Delete, C
             actionCallback=lambda data: Monitor(assetId, partitionName, monitorType, name, subPath).modify(data),
             objectName=monitorName,
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             objectType=monitorType,
             Serializer=Serializer
         )

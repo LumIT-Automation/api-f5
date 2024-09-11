@@ -36,7 +36,7 @@ class F5VirtualServersController(CustomControllerF5GetList, CustomControllerF5Cr
             request=request,
             actionCallback=lambda: [r.repr() for r in VirtualServer.list(assetId, partitionName, loadPolicies=loadPolicies, loadProfiles=loadProfiles)],
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             Serializer=VirtualServersSerializer
         )
 
@@ -52,7 +52,7 @@ class F5VirtualServersController(CustomControllerF5GetList, CustomControllerF5Cr
             request=request,
             actionCallback=lambda data: VirtualServer.add(assetId, data),
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             Serializer=VirtualServerSerializer,
             lockItemDataKey="name",
             dataFix=dataFix,

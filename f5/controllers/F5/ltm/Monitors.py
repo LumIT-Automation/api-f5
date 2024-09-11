@@ -56,7 +56,7 @@ class F5MonitorsController(CustomControllerF5GetList, CustomControllerF5Create):
             request=request,
             actionCallback=actionCallback,
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             objectType=monitorType,
             customCallback=True
         )
@@ -73,7 +73,7 @@ class F5MonitorsController(CustomControllerF5GetList, CustomControllerF5Create):
             request=request,
             actionCallback=lambda data: Monitor.add(assetId, monitorType, data),
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             objectType=monitorType,
             Serializer=MonitorSerializer,
             lockItemDataKey="name",

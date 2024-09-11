@@ -17,7 +17,7 @@ class CustomControllerF5Create(CustomControllerBase):
         self.subject = subject
 
 
-    def create(self, request: Request, actionCallback: Callable, assetId: int = 0, partition: str = "", objectType: str = "", Serializer: Callable = None, lockItemDataKey: str = "", dataFix: Callable = None, parentSubject: str = "", parentName: str = "") -> Response:
+    def create(self, request: Request, actionCallback: Callable, assetId: int = 0, partitionName: str = "", objectType: str = "", Serializer: Callable = None, lockItemDataKey: str = "", dataFix: Callable = None, parentSubject: str = "", parentName: str = "") -> Response:
         Serializer = Serializer or None
         httpStatus = None
 
@@ -25,13 +25,11 @@ class CustomControllerF5Create(CustomControllerBase):
             action = self.subject[:-1] + "ies_post"
         else:
             action = self.subject + "s_post"
-        actionLog = f"{self.subject.capitalize()} {objectType} - addition: {partition}".replace("  ", " ")
-        lockedObjectClass = self.subject + objectType
+        actionLog = f"{self.subject.capitalize()} {objectType} - addition: {partitionName}".replace("  ", " ")
 
         # Example:
         #   subject: nodes
         #   action: nodes_post
-        #   lockedObjectClass: node
 
         data = None
         response = dict()
@@ -40,7 +38,7 @@ class CustomControllerF5Create(CustomControllerBase):
 
         try:
             user = CustomControllerBase.loggedUser(request)
-            if CheckPermissionFacade.hasUserPermission(groups=user["groups"], action=action, assetId=assetId, partition=partition, isWorkflow=bool(workflowId)) or user["authDisabled"]:
+            if CheckPermissionFacade.hasUserPermission(groups=user["groups"], action=action, assetId=assetId, partition=partitionName, isWorkflow=bool(workflowId)) or user["authDisabled"]:
                 if workflowId and checkWorkflowPermission:
                     httpStatus = status.HTTP_204_NO_CONTENT
                 else:
@@ -65,7 +63,7 @@ class CustomControllerF5Create(CustomControllerBase):
                         data = request.data.get("data", {})
 
                     if data:
-                        locker = Locker(lockedObjectClass, locals(), data.get(lockItemDataKey, "").split('/')[-1], workflowId, parentSubject, parentName) # Sometimes the item is passed in payload with the full path.
+                        locker = Locker(self.subject, locals(), data.get(lockItemDataKey, "").split('/')[-1], workflowId, parentSubject, parentName) # Sometimes the item is passed in payload with the full path.
                         if locker.isUnlocked():
                             locker.lock()
 
@@ -83,7 +81,7 @@ class CustomControllerF5Create(CustomControllerBase):
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
             if not workflowId:
-                locker = Locker(objectClass=lockedObjectClass, o=locals(), item=locals()["serializer"].data[lockItemDataKey], parentObjectClass=parentSubject, parentItem=parentName).release()
+                locker = Locker(objectClass=self.subject, o=locals(), item=locals()["serializer"].data[lockItemDataKey], parentObjectClass=parentSubject, parentItem=parentName).release()
 
             data, httpStatus, headers = CustomControllerBase.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

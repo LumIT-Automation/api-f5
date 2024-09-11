@@ -23,7 +23,7 @@ class F5SnatPoolController(CustomControllerF5GetInfo, CustomControllerF5Delete, 
             actionCallback=lambda: SnatPool(assetId, partitionName, name, subPath).info(),
             objectName=snatPoolName,
             assetId=assetId,
-            partition=partitionName
+            partitionName=partitionName
         )
 
 
@@ -36,7 +36,7 @@ class F5SnatPoolController(CustomControllerF5GetInfo, CustomControllerF5Delete, 
             actionCallback=lambda: SnatPool(assetId, partitionName, name, subPath).delete(),
             objectName=snatPoolName,
             assetId=assetId,
-            partition=partitionName
+            partitionName=partitionName
         )
 
 
@@ -49,6 +49,6 @@ class F5SnatPoolController(CustomControllerF5GetInfo, CustomControllerF5Delete, 
             actionCallback=lambda data:  SnatPool(assetId, partitionName, name, subPath).modify(data),
             objectName=snatPoolName,
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             Serializer=Serializer
         )

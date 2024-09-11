@@ -18,30 +18,29 @@ class CustomControllerF5Delete(CustomControllerBase):
         self.subject = subject
 
 
-    def remove(self, request: Request, actionCallback: Callable, objectName: str, assetId: int = 0, partition: str = "", objectType: str = "", Serializer: Callable = None, parentSubject: str = "", parentName: str = "") -> Response:
+    def remove(self, request: Request, actionCallback: Callable, objectName: str, assetId: int = 0, partitionName: str = "", objectType: str = "", Serializer: Callable = None, parentSubject: str = "", parentName: str = "") -> Response:
         Serializer = Serializer or None
 
         action = self.subject + "_delete"
-        actionLog = f"{self.subject.capitalize()} {objectType} - deletion: {partition} {objectName}".replace("  ", " ")
-        lockedObjectClass = self.subject + objectType
+        actionLog = f"{self.subject.capitalize()} {objectType} - deletion: {partitionName} {objectName}".replace("  ", " ")
         httpStatus = None
 
         # Example:
         #   subject: node
         #   action: node_delete
-        #   lockedObjectClass: node
+
         workflowId = request.headers.get("workflowId", "")  # a correlation id.
         checkWorkflowPermission = request.headers.get("checkWorkflowPermission", "")
 
         try:
             user = CustomControllerBase.loggedUser(request)
-            if CheckPermissionFacade.hasUserPermission(groups=user["groups"], action=action, assetId=assetId, partition=partition, isWorkflow=bool(workflowId)) or user["authDisabled"]:
+            if CheckPermissionFacade.hasUserPermission(groups=user["groups"], action=action, assetId=assetId, partition=partitionName, isWorkflow=bool(workflowId)) or user["authDisabled"]:
                 if workflowId and checkWorkflowPermission:
                     httpStatus = status.HTTP_204_NO_CONTENT
                 else:
                     Log.actionLog(actionLog, user)
 
-                    locker = Locker(lockedObjectClass, locals(), objectName, workflowId, parentSubject, parentName)
+                    locker = Locker(self.subject, locals(), objectName, workflowId, parentSubject, parentName)
                     if locker.isUnlocked():
                         locker.lock()
 
@@ -57,7 +56,7 @@ class CustomControllerF5Delete(CustomControllerBase):
 
         except Exception as e:
             if not workflowId:
-                Locker(objectClass=lockedObjectClass, o=locals(), item=objectName, parentObjectClass=parentSubject, parentItem=parentName).release()
+                Locker(objectClass=self.subject, o=locals(), item=objectName, parentObjectClass=parentSubject, parentItem=parentName).release()
 
             data, httpStatus, headers = CustomControllerBase.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

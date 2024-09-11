@@ -22,7 +22,7 @@ class F5PoolsController(CustomControllerF5GetList, CustomControllerF5Create):
             request=request,
             actionCallback=lambda: Pool.dataList(assetId, partitionName),
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             Serializer=PoolsSerializer
         )
 
@@ -38,7 +38,7 @@ class F5PoolsController(CustomControllerF5GetList, CustomControllerF5Create):
             request=request,
             actionCallback=lambda data: Pool.add(assetId, data),
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             Serializer=PoolSerializer,
             lockItemDataKey="name",
             dataFix=dataFix,

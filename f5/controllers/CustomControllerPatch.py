@@ -17,18 +17,16 @@ class CustomControllerF5Update(CustomControllerBase):
         self.subject = subject
 
 
-    def modify(self, request: Request, actionCallback: Callable, objectName: str, assetId: int = 0, partition: str = "", objectType: str = "", Serializer: Callable = None, parentSubject: str = "", parentName: str = "") -> Response:
+    def modify(self, request: Request, actionCallback: Callable, objectName: str, assetId: int = 0, partitionName: str = "", objectType: str = "", Serializer: Callable = None, parentSubject: str = "", parentName: str = "") -> Response:
         Serializer = Serializer or None
 
         action = self.subject + "_patch"
-        actionLog = f"{self.subject.capitalize()} {objectType} - modification: {partition} {objectName}".replace("  ", " ")
-        lockedObjectClass = self.subject + objectType
+        actionLog = f"{self.subject.capitalize()} {objectType} - modification: {partitionName} {objectName}".replace("  ", " ")
         httpStatus = None
 
         # Example:
         #   subject: node
         #   action: node_patch
-        #   lockedObjectClass: node
 
         data = None
         response = None
@@ -38,7 +36,7 @@ class CustomControllerF5Update(CustomControllerBase):
 
         try:
             user = CustomControllerBase.loggedUser(request)
-            if CheckPermissionFacade.hasUserPermission(groups=user["groups"], action=action, assetId=assetId, partition=partition, isWorkflow=bool(workflowId)) or user["authDisabled"]:
+            if CheckPermissionFacade.hasUserPermission(groups=user["groups"], action=action, assetId=assetId, partition=partitionName, isWorkflow=bool(workflowId)) or user["authDisabled"]:
                 if workflowId and checkWorkflowPermission:
                     httpStatus = status.HTTP_204_NO_CONTENT
                 else:
@@ -61,7 +59,7 @@ class CustomControllerF5Update(CustomControllerBase):
                         data = request.data.get("data", {})
 
                     if data:
-                        locker = Locker(lockedObjectClass, locals(), objectName, workflowId, parentSubject, parentName)
+                        locker = Locker(self.subject, locals(), objectName, workflowId, parentSubject, parentName)
                         if locker.isUnlocked():
                             locker.lock()
 
@@ -76,7 +74,7 @@ class CustomControllerF5Update(CustomControllerBase):
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
             if not workflowId:
-                Locker(objectClass=lockedObjectClass, o=locals(), item=objectName, parentObjectClass=parentSubject, parentItem=parentName).release()
+                Locker(objectClass=self.subject, o=locals(), item=objectName, parentObjectClass=parentSubject, parentItem=parentName).release()
 
             data, httpStatus, headers = CustomControllerBase.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

@@ -22,7 +22,7 @@ class F5NodesController(CustomControllerF5GetList, CustomControllerF5Create):
             request=request,
             actionCallback=lambda:  Node.dataList(assetId, partitionName),
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             Serializer=NodesSerializer,
         )
 
@@ -42,7 +42,7 @@ class F5NodesController(CustomControllerF5GetList, CustomControllerF5Create):
             request=request,
             actionCallback=lambda data: Node.add(assetId, data),
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             Serializer=NodeSerializer,
             lockItemDataKey="name",
             dataFix=dataFix

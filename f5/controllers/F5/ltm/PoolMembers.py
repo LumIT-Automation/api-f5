@@ -24,7 +24,7 @@ class F5PoolMembersController(CustomControllerF5GetList, CustomControllerF5Creat
             request=request,
             actionCallback=lambda: Pool(assetId, partitionName, name, subPath).getMembersData(),
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             Serializer=PoolMembersSerializer,
             parentSubject="pool",
             parentName=poolName
@@ -47,7 +47,7 @@ class F5PoolMembersController(CustomControllerF5GetList, CustomControllerF5Creat
             request=request,
             actionCallback=lambda data: Pool(assetId, partitionName, name, subPath).addMember(data),
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             Serializer=PoolMemberSerializer,
             lockItemDataKey="name",
             dataFix=dataFix,

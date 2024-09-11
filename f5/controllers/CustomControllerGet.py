@@ -23,18 +23,16 @@ class CustomControllerF5GetInfo(CustomControllerBase):
 
 
 
-    def getInfo(self, request: Request, actionCallback: Callable, objectName: str, assetId: int = 0, partition: str = "", objectType: str = "", Serializer: Callable = None, parentSubject: str = "", parentName: str = "") -> Response:
+    def getInfo(self, request: Request, actionCallback: Callable, objectName: str, assetId: int = 0, partitionName: str = "", objectType: str = "", Serializer: Callable = None, parentSubject: str = "", parentName: str = "") -> Response:
         Serializer = Serializer or None
 
         action = self.subject + "_get" # example: host_get.
-        actionLog = f"{self.subject.capitalize()} {objectType} - info {partition} {objectName}".replace("  ", " ")
-        lockedObjectClass = self.subject + objectType # example: host (subject=host) // ruleaccess (subject=rule + type=access).
+        actionLog = f"{self.subject.capitalize()} {objectType} - info {partitionName} {objectName}".replace("  ", " ")
         httpStatus = None
 
         # Example:
         #   subject: node
         #   action: node_get
-        #   lockedObjectClass: node
 
         data = dict()
         etagCondition = {"responseEtag": ""}
@@ -43,13 +41,13 @@ class CustomControllerF5GetInfo(CustomControllerBase):
 
         try:
             user = CustomControllerBase.loggedUser(request)
-            if CheckPermissionFacade.hasUserPermission(groups=user["groups"], action=action, assetId=assetId, partition=partition, isWorkflow=bool(workflowId)) or user["authDisabled"]:
+            if CheckPermissionFacade.hasUserPermission(groups=user["groups"], action=action, assetId=assetId, partition=partitionName, isWorkflow=bool(workflowId)) or user["authDisabled"]:
                 if workflowId and checkWorkflowPermission:
                     httpStatus = status.HTTP_204_NO_CONTENT
                 else:
                     Log.actionLog(actionLog, user)
 
-                    locker = Locker(lockedObjectClass, locals(), objectName, workflowId, parentSubject, parentName)
+                    locker = Locker(self.subject, locals(), objectName, workflowId, parentSubject, parentName)
                     if locker.isUnlocked():
                         locker.lock()
 
@@ -77,7 +75,7 @@ class CustomControllerF5GetInfo(CustomControllerBase):
 
         except Exception as e:
             if not workflowId:
-                Locker(objectClass=lockedObjectClass, o=locals(), item=objectName, parentObjectClass=parentSubject, parentItem=parentName).release()
+                Locker(objectClass=self.subject, o=locals(), item=objectName, parentObjectClass=parentSubject, parentItem=parentName).release()
 
             data, httpStatus, headers = CustomControllerBase.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
@@ -99,7 +97,7 @@ class CustomControllerF5GetList(CustomControllerBase):
 
 
 
-    def getList(self, request: Request, actionCallback: Callable, assetId: int = 0, partition: str = "", objectType: str = "", Serializer: Callable = None, customCallback: bool = False, parentSubject: str = "", parentName: str = "") -> Response:
+    def getList(self, request: Request, actionCallback: Callable, assetId: int = 0, partitionName: str = "", objectType: str = "", Serializer: Callable = None, customCallback: bool = False, parentSubject: str = "", parentName: str = "") -> Response:
         Serializer = Serializer or None
         data = {"data": dict()}
         etagCondition = {"responseEtag": ""}
@@ -110,22 +108,21 @@ class CustomControllerF5GetList(CustomControllerBase):
             action = self.subject[:-1] + "ies_get" # example: categories_get.
         else:
             action = self.subject + "s_get" # example: host_get.
-        actionLog = f"{self.subject.capitalize()} {objectType} - list {partition}".replace("  ", " ")
-        lockedObjectClass = self.subject + objectType # example: category // layeraccess.
-        
+        actionLog = f"{self.subject.capitalize()} {objectType} - list {partitionName}".replace("  ", " ")
+
         # Example: 
         #   subject: host
         #   action: hosts_get
-        #   lockedObjectClass: host
+
         try:
             user = CustomControllerBase.loggedUser(request)
-            if CheckPermissionFacade.hasUserPermission(groups=user["groups"], action="action", assetId=assetId, partition=partition, isWorkflow=bool(workflowId)) or user["authDisabled"]:
+            if CheckPermissionFacade.hasUserPermission(groups=user["groups"], action="action", assetId=assetId, partition=partitionName, isWorkflow=bool(workflowId)) or user["authDisabled"]:
                 if workflowId and checkWorkflowPermission:
                     httpStatus = status.HTTP_204_NO_CONTENT
                 else:
                     Log.actionLog(actionLog, user)
 
-                    locker = Locker(objectClass=lockedObjectClass, o=locals(), workflowId=workflowId, parentObjectClass=parentSubject, parentItem=parentName)
+                    locker = Locker(objectClass=self.subject, o=locals(), workflowId=workflowId, parentObjectClass=parentSubject, parentItem=parentName)
                     if locker.isUnlocked():
                         locker.lock()
 
@@ -158,7 +155,7 @@ class CustomControllerF5GetList(CustomControllerBase):
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
             if not workflowId:
-                Locker(lockedObjectClass, locals()).release()
+                Locker(self.subject, locals()).release()
 
             data, httpStatus, headers = CustomControllerBase.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)

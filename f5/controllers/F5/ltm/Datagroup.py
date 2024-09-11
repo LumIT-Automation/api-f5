@@ -23,7 +23,7 @@ class F5DatagroupController(CustomControllerF5GetInfo, CustomControllerF5Delete,
             actionCallback=lambda: Datagroup(assetId, partitionName, datagroupType, name, subPath).delete(),
             objectName=datagroupName,
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             objectType=datagroupType
         )
 
@@ -37,7 +37,7 @@ class F5DatagroupController(CustomControllerF5GetInfo, CustomControllerF5Delete,
             actionCallback=lambda data: Datagroup(assetId, partitionName, datagroupType, name, subPath).modify(data),
             objectName=datagroupName,
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             objectType=datagroupType,
             Serializer=Serializer
         )

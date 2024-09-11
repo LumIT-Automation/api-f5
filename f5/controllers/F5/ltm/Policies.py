@@ -22,7 +22,7 @@ class F5PoliciesController(CustomControllerF5GetList, CustomControllerF5Create):
             request=request,
             actionCallback=lambda: [r.repr() for r in Policy.list(assetId, partitionName, loadRules=True)],
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             Serializer=PoliciesSerializer
         )
 
@@ -38,7 +38,7 @@ class F5PoliciesController(CustomControllerF5GetList, CustomControllerF5Create):
             request=request,
             actionCallback=lambda data: Policy.add(assetId, data),
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             Serializer=PolicySerializer,
             lockItemDataKey="name",
             dataFix=dataFix,

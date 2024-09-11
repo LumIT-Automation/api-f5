@@ -23,7 +23,7 @@ class F5PoolController(CustomControllerF5GetInfo, CustomControllerF5Delete, Cust
             actionCallback=lambda: Pool(assetId, partitionName, name, subPath).info(),
             objectName=poolName,
             assetId=assetId,
-            partition=partitionName
+            partitionName=partitionName
         )
 
 
@@ -36,7 +36,7 @@ class F5PoolController(CustomControllerF5GetInfo, CustomControllerF5Delete, Cust
             actionCallback=lambda: Pool(assetId, partitionName, name, subPath).delete(),
             objectName=poolName,
             assetId=assetId,
-            partition=partitionName
+            partitionName=partitionName
         )
 
 
@@ -49,6 +49,6 @@ class F5PoolController(CustomControllerF5GetInfo, CustomControllerF5Delete, Cust
             actionCallback=lambda data:  Pool(assetId, partitionName, name, subPath).modify(data),
             objectName=poolName,
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             Serializer=Serializer
         )

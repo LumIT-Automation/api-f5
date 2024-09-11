@@ -23,7 +23,7 @@ class F5SnatPoolsController(CustomControllerF5GetList, CustomControllerF5Create)
             request=request,
             actionCallback=lambda: SnatPool.dataList(assetId, partitionName),
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             Serializer=SnatPoolsSerializer
         )
 
@@ -39,7 +39,7 @@ class F5SnatPoolsController(CustomControllerF5GetList, CustomControllerF5Create)
             request=request,
             actionCallback=lambda data: SnatPool.add(assetId, data),
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             Serializer=SnatPoolSerializer,
             lockItemDataKey="name",
             dataFix=dataFix,

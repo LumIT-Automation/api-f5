@@ -23,7 +23,7 @@ class F5PolicyController(CustomControllerF5GetInfo, CustomControllerF5Delete, Cu
             actionCallback=lambda: Policy(assetId, partitionName, name, subPath, loadRules=True).repr(),
             objectName=policyName,
             assetId=assetId,
-            partition=partitionName
+            partitionName=partitionName
         )
 
 
@@ -36,7 +36,7 @@ class F5PolicyController(CustomControllerF5GetInfo, CustomControllerF5Delete, Cu
             actionCallback=lambda: Policy(assetId, partitionName, name, subPath).delete(),
             objectName=policyName,
             assetId=assetId,
-            partition=partitionName
+            partitionName=partitionName
         )
 
 
@@ -49,6 +49,6 @@ class F5PolicyController(CustomControllerF5GetInfo, CustomControllerF5Delete, Cu
             actionCallback=lambda data: Policy(assetId, partitionName, name, subPath).modify(data),
             objectName=policyName,
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             Serializer=Serializer
         )

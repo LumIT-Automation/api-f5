@@ -53,7 +53,7 @@ class F5DatagroupsController(CustomControllerF5GetList, CustomControllerF5Create
             request=request,
             actionCallback=actionCallback,
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             objectType=datagroupType,
             customCallback=True
         )
@@ -70,7 +70,7 @@ class F5DatagroupsController(CustomControllerF5GetList, CustomControllerF5Create
             request=request,
             actionCallback=lambda data: Datagroup.add(assetId, datagroupType, data),
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             objectType=datagroupType,
             Serializer=DatagroupSerializer,
             lockItemDataKey="name",

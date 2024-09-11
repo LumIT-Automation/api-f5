@@ -24,7 +24,7 @@ class F5PoolMemberStatsController(CustomControllerF5GetInfo, CustomControllerF5D
             actionCallback=lambda: Pool(assetId, pool, partitionName, poolSubPath).getMember(poolMember, memberSubPath).stats(),
             objectName=poolMemberName,
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             Serializer=Serializer,
             parentSubject="pool",
             parentName=poolName

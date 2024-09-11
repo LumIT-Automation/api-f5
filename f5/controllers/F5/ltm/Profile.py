@@ -23,7 +23,7 @@ class F5ProfileController(CustomControllerF5GetInfo, CustomControllerF5Delete, C
             actionCallback=lambda: Profile(assetId, partitionName, profileType, name, subPath).repr(),
             objectName=profileName,
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             objectType=profileType
         )
 
@@ -37,7 +37,7 @@ class F5ProfileController(CustomControllerF5GetInfo, CustomControllerF5Delete, C
             actionCallback=lambda: Profile(assetId, partitionName, profileType, name, subPath).delete(),
             objectName=profileName,
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             objectType=profileType
         )
 
@@ -51,7 +51,7 @@ class F5ProfileController(CustomControllerF5GetInfo, CustomControllerF5Delete, C
             actionCallback=lambda data: Profile(assetId, partitionName, profileType, name, subPath).modify(data),
             objectName=profileName,
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             objectType=profileType,
             Serializer=Serializer
         )

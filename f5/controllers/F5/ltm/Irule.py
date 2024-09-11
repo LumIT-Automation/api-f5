@@ -24,7 +24,7 @@ class F5IruleController(CustomControllerF5GetInfo, CustomControllerF5Delete, Cus
             actionCallback=lambda: Irule(assetId, partitionName, name, subPath).info(),
             objectName=iruleName,
             assetId=assetId,
-            partition=partitionName
+            partitionName=partitionName
         )
 
 
@@ -37,7 +37,7 @@ class F5IruleController(CustomControllerF5GetInfo, CustomControllerF5Delete, Cus
             actionCallback=lambda: Irule(assetId, partitionName, name, subPath).delete(),
             objectName=iruleName,
             assetId=assetId,
-            partition=partitionName
+            partitionName=partitionName
         )
 
 
@@ -50,6 +50,6 @@ class F5IruleController(CustomControllerF5GetInfo, CustomControllerF5Delete, Cus
             actionCallback=lambda data: Irule(assetId, partitionName, name, subPath).modify(data),
             objectName=iruleName,
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             Serializer=Serializer
         )

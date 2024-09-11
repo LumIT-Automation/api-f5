@@ -22,7 +22,7 @@ class F5IrulesController(CustomControllerF5GetList, CustomControllerF5Create):
             request=request,
             actionCallback=lambda: Irule.dataList(assetId, partitionName),
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             Serializer=IrulesSerializer
         )
 
@@ -38,7 +38,7 @@ class F5IrulesController(CustomControllerF5GetList, CustomControllerF5Create):
             request=request,
             actionCallback=lambda data: Irule.add(assetId, data),
             assetId=assetId,
-            partition=partitionName,
+            partitionName=partitionName,
             Serializer=IruleSerializer,
             lockItemDataKey="name",
             dataFix=dataFix,
