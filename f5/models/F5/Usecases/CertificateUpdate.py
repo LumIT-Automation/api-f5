@@ -1,3 +1,6 @@
+from OpenSSL import crypto, SSL
+import base64
+
 from f5.models.F5.sys.Certificate import Certificate
 from f5.models.F5.sys.Key import Key
 from f5.models.F5.ltm.Profile import Profile
@@ -26,12 +29,13 @@ class CertificateUpdateWorkflow():
 
     def updateCert(self, data: dict) -> None:
         try:
+            CertificateUpdateWorkflow.__checkKeyCert(data["certificate"].get("content_base64", ""), data.get("key", {}).get("content_base64", ""))
             self.__certInstall(data["certificate"])
 
             dataKey = data.get("key", {})
             if dataKey:
                 self.__keyInstall(dataKey)
-                Key.install(self.assetId, self.partitionName, data["key"])
+                #Key.install(self.assetId, self.partitionName, data["key"])
 
             profileData = {
                 "cert": "/" + self.partitionName + "/" + data["certificate"]["name"],
@@ -100,3 +104,34 @@ class CertificateUpdateWorkflow():
                 })
         except Exception:
             pass
+
+
+
+    ####################################################################################################################
+    # Private static methods
+    ####################################################################################################################
+
+    @staticmethod
+    def __checkKeyCert(cert: str, privKey: str = ""):
+        try:
+            certBase64Bytes = cert.encode("ascii")
+            certBytes = base64.b64decode(certBase64Bytes)
+            certObj = crypto.load_certificate(crypto.FILETYPE_PEM, certBytes)
+        except Exception:
+            raise CustomException(status=400, payload={"message": "Invalid certificate: %s" % cert})
+
+        if privKey:
+            try:
+                keyBase64Bytes = privKey.encode("ascii")
+                keyBytes = base64.b64decode(keyBase64Bytes)
+                keyObj = crypto.load_privatekey(crypto.FILETYPE_PEM, keyBytes)
+            except Exception:
+                raise CustomException(status=400, payload={"message": "Invalid private key: %s" % privKey})
+
+            context = SSL.Context(SSL.TLSv1_METHOD)
+            context.use_privatekey(keyObj)
+            context.use_certificate(certObj)
+            try:
+                context.check_privatekey()
+            except SSL.Error:
+                raise CustomException(status=400, payload={"message": "This private key do not belong to the given certificate: %s" % privKey})
