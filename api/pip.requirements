@@ -11,3 +11,4 @@ redis~=5.0.1
 requests~=2.31.0
 func-timeout~=4.3.5
 xmltodict~=0.13.0
+pyOpenSSL~=24.2.1
