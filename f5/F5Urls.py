@@ -121,7 +121,7 @@ urlpatterns = [
     path('<int:assetId>/<str:partitionName>/workflow/node/<str:nodeName>/', WorkflowNode.F5WorkflowDeleteNodeController.as_view(), name='f5-workflow-node'),
 
     # Certificate
-    path('<int:assetId>/<str:partitionName>/workflow/client-ssl-profile/<str:profileName>/', WorkflowCertificate.F5WorkflowCertificateUpdateController.as_view(), name='f5-workflow-certificate'),
+    path('<int:assetId>/<str:partitionName>/workflow/profile/<str:profileType>/<str:profileName>/', WorkflowCertificate.F5WorkflowCertificateUpdateController.as_view(), name='f5-workflow-certificate'),
 
     # Locks
     path('locks/', Locks.F5WorkflowLocksController.as_view(), name='f5-workflow-locks'),

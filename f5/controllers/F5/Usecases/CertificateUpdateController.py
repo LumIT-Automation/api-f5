@@ -17,7 +17,7 @@ from f5.helpers.Log import Log
 class F5WorkflowCertificateUpdateController(CustomController):
     @staticmethod
     @ReplicateVirtualServerCreation
-    def put(request: Request, assetId: int, partitionName: str, profileName: str) -> Response:
+    def put(request: Request, assetId: int, partitionName: str, profileType: str, profileName: str) -> Response:
         response = None
         replicaUuid = request.GET.get("__replicaUuid", "") # an uuid in order to correlate actions on logs.
 
@@ -32,11 +32,11 @@ class F5WorkflowCertificateUpdateController(CustomController):
                 if serializer.is_valid():
                     data = serializer.validated_data["data"]
 
-                    lock = Lock("profile", locals(), "client-ssl"+profileName)
+                    lock = Lock("profile", locals(), profileType+profileName)
                     if lock.isUnlocked():
                         lock.lock()
 
-                        CertificateUpdateWorkflow(assetId, partitionName, profileName, user, replicaUuid).updateCert(data)
+                        CertificateUpdateWorkflow(assetId, partitionName, profileType, profileName, user, replicaUuid).updateCert(data)
 
                         httpStatus = status.HTTP_201_CREATED
                         lock.release()
@@ -54,7 +54,7 @@ class F5WorkflowCertificateUpdateController(CustomController):
             else:
                 httpStatus = status.HTTP_403_FORBIDDEN
         except Exception as e:
-            Lock("profile", locals(), "client-ssl"+profileName).release()
+            Lock("profile", locals(), profileType+profileName).release()
 
             data, httpStatus, headers = CustomController.exceptionHandler(e)
             return Response(data, status=httpStatus, headers=headers)
