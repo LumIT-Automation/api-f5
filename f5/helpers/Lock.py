@@ -256,6 +256,8 @@ class Lock:
 
 class Locker():
     def __init__(self, objectClass: str, o: dict, item: str = "", workflowId: str = "", parentObjectClass: str = "", parentItem: str = "", *args, **kwargs):
+        if "~" in item:
+            item = item.split("~")[-1] # Remove subPath if present.
         self.lockItem = Lock(objectClass, o, item, workflowId)
         self.o = o
         if parentObjectClass:
