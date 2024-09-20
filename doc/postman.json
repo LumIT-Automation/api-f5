@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "eea2f405-2f59-4baa-8412-fc8813defa38",
+		"_postman_id": "e5614a88-d51e-4ff3-b6cd-1b7efebc6bdf",
 		"name": "api-f5",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2436069"
 	},
 	"item": [
 		{
@@ -75,8 +76,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							}
 						],
 						"url": {
@@ -104,8 +105,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							}
 						],
 						"url": {
@@ -139,8 +140,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							}
 						],
 						"url": {
@@ -167,8 +168,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							}
 						],
 						"url": {
@@ -201,8 +202,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							}
 						],
 						"body": {
@@ -238,8 +239,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							}
 						],
 						"body": {
@@ -276,8 +277,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							}
 						],
 						"url": {
@@ -305,8 +306,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							}
 						],
 						"body": {
@@ -344,8 +345,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							}
 						],
 						"body": {
@@ -384,8 +385,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							}
 						],
 						"url": {
@@ -420,8 +421,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							},
 							{
 								"key": "If-None-Match",
@@ -454,8 +455,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							},
 							{
 								"key": "If-None-Match",
@@ -488,8 +489,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							},
 							{
 								"key": "If-None-Match",
@@ -522,8 +523,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							},
 							{
 								"key": "If-None-Match",
@@ -565,8 +566,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							},
 							{
 								"key": "If-None-Match",
@@ -609,8 +610,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							},
 							{
 								"key": "If-None-Match",
@@ -644,8 +645,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							},
 							{
 								"key": "If-None-Match",
@@ -678,8 +679,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							},
 							{
 								"key": "If-None-Match",
@@ -721,8 +722,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							},
 							{
 								"key": "If-None-Match",
@@ -765,8 +766,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							},
 							{
 								"key": "If-None-Match",
@@ -800,8 +801,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							},
 							{
 								"key": "If-None-Match",
@@ -834,8 +835,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							}
 						],
 						"body": {
@@ -871,8 +872,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							}
 						],
 						"body": {
@@ -909,8 +910,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							}
 						],
 						"url": {
@@ -938,8 +939,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							},
 							{
 								"key": "If-None-Match",
@@ -972,8 +973,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							},
 							{
 								"key": "If-None-Match",
@@ -1012,8 +1013,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							},
 							{
 								"key": "If-None-Match",
@@ -1117,8 +1118,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							}
 						],
 						"url": {
@@ -1145,8 +1146,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							}
 						],
 						"url": {
@@ -1181,8 +1182,8 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer {{jwttoken}}"
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
 									},
 									{
 										"key": "If-None-Match",
@@ -1233,8 +1234,8 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer {{jwttoken}}"
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
 									},
 									{
 										"key": "If-None-Match",
@@ -1270,7 +1271,7 @@
 							"response": []
 						},
 						{
-							"name": "certificate",
+							"name": "certificate (client ssl)",
 							"request": {
 								"auth": {
 									"type": "noauth"
@@ -1279,8 +1280,8 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer {{jwttoken}}"
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
 									},
 									{
 										"key": "If-None-Match",
@@ -1299,7 +1300,7 @@
 									}
 								},
 								"url": {
-									"raw": "{{f5BaseUrl}}/f5/2/Common/workflow/client-ssl-profile/client-ssl_testMik/",
+									"raw": "{{f5BaseUrl}}/f5/2/Common/workflow/profile/client-ssl/client-ssl_testMik/",
 									"host": [
 										"{{f5BaseUrl}}"
 									],
@@ -1308,8 +1309,57 @@
 										"2",
 										"Common",
 										"workflow",
-										"client-ssl-profile",
+										"profile",
+										"client-ssl",
 										"client-ssl_testMik",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "certificate (server ssl)",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
+									},
+									{
+										"key": "If-None-Match",
+										"value": "edfb456005712c3e68d97b525e247981",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"data\": {\n        \"virtualServerName\": \"vs_testMik\",\n        \"certificate\": {\n            \"name\": \"mamma.crt\",\n            \"content_base64\": \"LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURyakNDQXBhZ0F3SUJBZ0lFRlVVYlJUQU5CZ2txaGtpRzl3MEJBUXNGQURDQm1ERUxNQWtHQTFVRUJoTUMKVlZNeEN6QUpCZ05WQkFnVEFsZEJNUkF3RGdZRFZRUUhFd2RUWldGMGRHeGxNUkl3RUFZRFZRUUtFd2xOZVVOdgpiWEJoYm5reEN6QUpCZ05WQkFzVEFrbFVNUjR3SEFZRFZRUURFeFZzYjJOaGJHaHZjM1F1Ykc5allXeGtiMjFoCmFXNHhLVEFuQmdrcWhraUc5dzBCQ1FFV0duSnZiM1JBYkc5allXeG9iM04wTG14dlkyRnNaRzl0WVdsdU1CNFgKRFRJeE1EUXlNekV6TURneU1Wb1hEVE14TURReU1URXpNRGd5TVZvd2daZ3hDekFKQmdOVkJBWVRBbFZUTVFzdwpDUVlEVlFRSUV3SlhRVEVRTUE0R0ExVUVCeE1IVTJWaGRIUnNaVEVTTUJBR0ExVUVDaE1KVFhsRGIyMXdZVzU1Ck1Rc3dDUVlEVlFRTEV3SkpWREVlTUJ3R0ExVUVBeE1WYkc5allXeG9iM04wTG14dlkyRnNaRzl0WVdsdU1Ta3cKSndZSktvWklodmNOQVFrQkZocHliMjkwUUd4dlkyRnNhRzl6ZEM1c2IyTmhiR1J2YldGcGJqQ0NBU0l3RFFZSgpLb1pJaHZjTkFRRUJCUUFEZ2dFUEFEQ0NBUW9DZ2dFQkFMY0dYWmxQejUrOHJxdkM5WkdGOGV4WEdScFdMOC83Ck1NZklkZmJtam5GWlllUzc0VmJzbHRkVlQ5K20vTmpXZnRBc1N4bmZUaW1tUkw5Q1hwaGpIdlZXdnJ0K2M2VlMKSGl2Tm9kUzBOVkcyM1RvZ204OG52Z3VyT3AyN3VKdFdVYjZpQ0ZCc295MFdYTndIRW05a3EvTEk0N1g3NGErNwpReW9mWmUvTkVFeGI2elFPcjJkUVhRcmpXYWZsK3Q3Yk5LY01QUHlMK1RhVkd3SzFTZGJ0aGdmT2tKYm9ndEFLCkRGVzdyWURISld2Y095YVRxL2psbkFUMXBSZEd3azNpSVZIQndJVm84akNEUkxqekRQdjM3L3pIM1ZRcFM2TXcKSjFxUzZmOXM0QWNkQWFtejV4ZTJ0dU03aURrUW43dmx3a3VBVW90eWVOeVlBVXdHZnhiQldsTUNBd0VBQVRBTgpCZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFWVjVic1FRVmsxUGpTTzhHOXRTRE1XS2pkems2ZDFjNmtKaVVBaHdrClR5UUJYM1B1UmFJUC9SeFkxQkRHNGRMUC9OQVRuK2h0bW5YM0Vmd0FQNWNGd1N1djBLVUtKclpuRm9ibmM0cWIKeGN2RVN3UVdlb3lYdVVOS21BWnFqbnBIcW9RR1ZFZkswOEtZK0cvc09JZ3Y1bTF2NUlkN0prWFo3c0FvTEkyUgpNaVNYc0FzcWpnQkMyeTJQdUhWNlEybjQxUURVa3BUbEwxdCt1NXQvazBXODNjRmtxQVJJeUJjQnFwTW93NStZCjRaWWJ1NXl2MUoxOWRQeExsRzJ5NG52SmNRLzMyR1NObXVnelZYcm1DVjhHWkUrby9JNGpWa3M4RHd1VU0vMDQKSHJobXhZUG5kTzRxNEtxYW02M1dQTVV6MXpQdDdDM2R5TStLRXVuclFoemZWdz09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0=\"\n        },\n        \"key\": {\n            \"name\": \"mamma.key\",\n            \"content_base64\": \"LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV2Z0lCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktnd2dnU2tBZ0VBQW9JQkFRQzNCbDJaVDgrZnZLNnIKd3ZXUmhmSHNWeGthVmkvUCt6REh5SFgyNW81eFdXSGt1K0ZXN0piWFZVL2ZwdnpZMW43UUxFc1ozMDRwcGtTLwpRbDZZWXg3MVZyNjdmbk9sVWg0cnphSFV0RFZSdHQwNklKdlBKNzRMcXpxZHU3aWJWbEcrb2doUWJLTXRGbHpjCkJ4SnZaS3Z5eU9PMSsrR3Z1ME1xSDJYdnpSQk1XK3MwRHE5blVGMEs0MW1uNWZyZTJ6U25ERHo4aS9rMmxSc0MKdFVuVzdZWUh6cENXNklMUUNneFZ1NjJBeHlWcjNEc21rNnY0NVp3RTlhVVhSc0pONGlGUndjQ0ZhUEl3ZzBTNAo4d3o3OSsvOHg5MVVLVXVqTUNkYWt1bi9iT0FISFFHcHMrY1h0cmJqTzRnNUVKKzc1Y0pMZ0ZLTGNuamNtQUZNCkJuOFd3VnBUQWdNQkFBRUNnZ0VBU0xuWlVIWER5VFBtN201eU9PaVNHSGtGaXc4TFFhZ05HcDIvcmlPd0h6OUcKcEdhNXBGb3ZtQklZd29TdXZSVUNZQUx4dHE2aWR1OVFLdldhOUErUytpY0ZkQ2hMbUxvWUxneXdUUDVzbjNNNwoxZ0NtR1Bzd1M1KzNFMzFIM2tXL0JyS0kvamdrNE9JZGRQckVhd29FUDExdkNsMnpzS29IQnNKaU5aYjA3bm44CitnS2JaUzNvZzhONEp1bDlpanZhT0svQnllQWlUWG8yWkpmc1hQMG9rR2lvbHVYZEp6SFc3bmZBOFY5VDVEWVoKTEFGV2I0QnR6RFg1T3ltVDlwMWJYdUprQ0RQR3FKMXhmZkVYN0xzUFh3UVBmSXZPMDBndjRTR3lzdUhZT0YwdApRSjhqVXpjQmtjT3ZoTDFMY0ZrSmhPeWt6TllRZG0yWUFDdW9XdmQ1b1FLQmdRRHdFSGhRWmhpc3BSQ1B0dytSClNEYndIUS95TTN5dURheDVvTDhmWUxTQUx0ajNqNVlaVFFCZGNCSWxPRE9acFpNMy93RXdJR3h5bVpGYkQxWSsKaDJuQWtoZ2ZHNnV1dy83Nlo0cWVZZzR0UXNHc2xFYUkrckRRZzZPSVpsY2Z5aHZER2VsazVNWWtOS2oyT0kwQgpqOVROOEFMK3ZrZnNaTzZROXl6M3Naay9zd0tCZ1FERExKaWZpemx6bzQzUExudWtzbUpoSm5LSFBJeDgyZ2lxCkM1TEN1Z201R2JTZER2dzMyUWpueEt0Y21IN1BtcmQ1TlNTZnYzN1RmREc3VDU3RjhUVytCY3puTGM0TG00dHcKMzh2alhVRWd2Vkt1WllWeUs1NzFFbytkVW5vc1N1NUQrYStWWHExWU5TbnYzN091b2NCNVRNNWdsMCswZFRRbAp0ek95MUc4cTRRS0JnUUN4bVQycEhSNzcrbEc2UUkrL3gxRDlha0sxeCtsaFNyUmlkczF1QlRrRDY2U1A0U1lHCktiVXZhdzNCZzBhSlVMa05JQlpjNkYvU21GRzBzQy81cW14T0RzYlJuTUx5VkFWNmNzZFdUT3g0QjM4SWtkbHMKMVNtaDJRRk9rNGU0K09oNCtkNTB5ZHJjUmlrSm51U1NWem56OExBR2pmYmZwL3ZtT3phRk9GcExpUUtCZ1FDcwpGcEZIODJFbnhpa09hWVRabGZQS2h6VHFhd2ZRT2dyenJCcXVHWXpqS1hnb0Y0TnAxckxVY0lOTHRLWHpkUTZiCkQ3R0lMVGV0VDA4bVFqRFRoVGdHb1dTbTNhdFVic1NITkx5NGI0d3lTdHd4S3hCN3QxeUQ1K2E3SjNMVHhRbksKNDhmZVkwbGlnaFhGRERDSkpOUHA0RUFEeU1hZGJjNGFCeXZOWFNQYjRRS0JnQkRBS21IaFVGbm9UaFVVQ2NEQwp2eXRKdWdmeVlKdlB2TkJacDdVZVhjRGI1TW42cWVtcUplUDZuQWtUd3ZjWHU3NEVRQU80M0RkUXNGUzNna2VSCjA4WXdqSDZvM2pWT084NUhIbGNNalZ3K3M4c1ZHOVhLWGRrUk84MGVvNVRLelpGUWw0U04wcGRibzY3bXpRaTIKeW1rSGdrYVVSWkRyTWJJWTVXOE41V0w5Ci0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0=\"\n        }\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{f5BaseUrl}}/f5/2/Common/workflow/profile/server-ssl/server-ssl_testMik/",
+									"host": [
+										"{{f5BaseUrl}}"
+									],
+									"path": [
+										"f5",
+										"2",
+										"Common",
+										"workflow",
+										"profile",
+										"server-ssl",
+										"server-ssl_testMik",
 										""
 									]
 								}
@@ -1326,8 +1376,8 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer {{jwttoken}}"
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
 									},
 									{
 										"key": "If-None-Match",
@@ -1370,8 +1420,8 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer {{jwttoken}}"
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
 									},
 									{
 										"key": "If-None-Match",
@@ -1413,8 +1463,8 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer {{jwttoken}}"
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
 									},
 									{
 										"key": "If-None-Match",
@@ -1449,8 +1499,8 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer {{jwttoken}}"
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
 									},
 									{
 										"key": "If-None-Match",
@@ -1486,8 +1536,8 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer {{jwttoken}}"
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
 									},
 									{
 										"key": "If-None-Match",
@@ -1524,8 +1574,8 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer {{jwttoken}}"
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
 									},
 									{
 										"key": "If-None-Match",
@@ -1561,8 +1611,8 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer {{jwttoken}}"
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
 									},
 									{
 										"key": "If-None-Match",
@@ -1604,8 +1654,8 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer {{jwttoken}}"
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
 									},
 									{
 										"key": "If-None-Match",
@@ -1659,8 +1709,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											}
 										],
 										"url": {
@@ -1689,8 +1739,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											}
 										],
 										"url": {
@@ -1720,8 +1770,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											}
 										],
 										"url": {
@@ -1751,8 +1801,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -1797,8 +1847,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -1835,8 +1885,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -1887,8 +1937,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -1923,8 +1973,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -1968,8 +2018,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -2005,8 +2055,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -2042,8 +2092,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -2093,8 +2143,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											}
 										],
 										"url": {
@@ -2123,8 +2173,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											}
 										],
 										"url": {
@@ -2154,8 +2204,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											}
 										],
 										"url": {
@@ -2185,8 +2235,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -2231,8 +2281,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -2269,8 +2319,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -2307,8 +2357,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -2359,8 +2409,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											}
 										],
 										"url": {
@@ -2389,8 +2439,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -2434,8 +2484,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -2471,8 +2521,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -2508,8 +2558,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -2559,8 +2609,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -2596,8 +2646,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -2632,8 +2682,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -2677,8 +2727,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -2723,8 +2773,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -2769,8 +2819,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -2811,8 +2861,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -2847,8 +2897,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -2892,8 +2942,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -2941,8 +2991,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -2987,8 +3037,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -3033,8 +3083,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -3071,8 +3121,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -3118,8 +3168,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -3157,8 +3207,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -3197,8 +3247,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -3245,8 +3295,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -3289,8 +3339,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -3327,8 +3377,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -3363,8 +3413,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -3400,8 +3450,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -3437,8 +3487,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -3483,8 +3533,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -3521,8 +3571,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -3573,8 +3623,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -3609,8 +3659,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -3657,8 +3707,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -3703,8 +3753,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -3749,8 +3799,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -3800,8 +3850,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -3836,8 +3886,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -3878,8 +3928,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -3923,8 +3973,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -3960,8 +4010,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -4003,8 +4053,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -4050,8 +4100,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -4096,8 +4146,8 @@
 										"header": [
 											{
 												"key": "Authorization",
-												"type": "text",
-												"value": "Bearer {{jwttoken}}"
+												"value": "Bearer {{jwttoken}}",
+												"type": "text"
 											},
 											{
 												"key": "If-None-Match",
@@ -4140,8 +4190,8 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer {{jwttoken}}"
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
 									}
 								],
 								"url": {
@@ -4174,8 +4224,8 @@
 								"header": [
 									{
 										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer {{jwttoken}}"
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
 									}
 								],
 								"url": {
@@ -4212,8 +4262,8 @@
 									},
 									{
 										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer {{jwttoken}}"
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
 									}
 								],
 								"url": {
@@ -4246,8 +4296,8 @@
 									},
 									{
 										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer {{jwttoken}}"
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
 									}
 								],
 								"body": {
@@ -4289,8 +4339,8 @@
 									},
 									{
 										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer {{jwttoken}}"
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
 									}
 								],
 								"body": {
@@ -4333,8 +4383,8 @@
 									},
 									{
 										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer {{jwttoken}}"
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
 									}
 								],
 								"url": {
@@ -4368,8 +4418,8 @@
 									},
 									{
 										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer {{jwttoken}}"
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
 									}
 								],
 								"url": {
@@ -4491,8 +4541,8 @@
 									},
 									{
 										"key": "Authorization",
-										"type": "text",
-										"value": "Bearer {{jwttoken}}"
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
 									}
 								],
 								"url": {
@@ -4528,8 +4578,8 @@
 							},
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							}
 						],
 						"url": {
@@ -4562,8 +4612,8 @@
 							},
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							}
 						],
 						"url": {
@@ -4597,8 +4647,8 @@
 							},
 							{
 								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer {{jwttoken}}"
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
 							}
 						],
 						"body": {
@@ -4636,8 +4686,8 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"type": "text",
 								"value": "Bearer {{jwttoken}}",
+								"type": "text",
 								"disabled": true
 							}
 						],
