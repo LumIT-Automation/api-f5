@@ -30,7 +30,7 @@ class Permission:
 
     def delete(self) -> None:
         try:
-            Repository.delete(self.id)
+            Repository(permissionId=self.id).delete()
             del self
         except Exception as e:
             raise e
@@ -79,7 +79,7 @@ class Permission:
         #     },
 
         try:
-            return Repository.list()
+            return Repository().list()
         except Exception as e:
             raise e
 
@@ -208,7 +208,7 @@ class Permission:
 
     def __load(self) -> None:
         try:
-            info = Repository.get(self.id)
+            info = Repository(permissionId=self.id).get()
 
             self.identityGroup = IdentityGroup(id=info["id_group"])
             self.role = Role(id=info["id_role"])
@@ -220,10 +220,9 @@ class Permission:
 
     def __modify(self, identityGroup: IdentityGroup, role: Role, partition: Partition) -> None:
         try:
-            Repository.modify(
-                self.id,
+            Repository(permissionId=self.id).modify(
                 identityGroupId=identityGroup.id,
-                roleId=role.id,
+                privilegesListId=role.id,
                 partitionId=partition.id
             )
 
@@ -240,9 +239,9 @@ class Permission:
     @staticmethod
     def __add(identityGroup: IdentityGroup, role: Role, partition: Partition) -> None:
         try:
-            Repository.add(
+            Repository().add(
                 identityGroupId=identityGroup.id,
-                roleId=role.id,
+                privilegesListId=role.id,
                 partitionId=partition.id
             )
         except Exception as e:
