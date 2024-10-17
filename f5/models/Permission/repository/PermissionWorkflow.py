@@ -9,7 +9,4 @@ class PermissionWorkflow(Permission):
         self.permissionTable = "group_workflow_partition"
         self.privilegesList = "workflow"
 
-
-    # IdentityGroupWorkflowPartition
-
-    # Tables: group_workflow_partition, identity_group, workflow, partition
+        # Tables: group_workflow_partition, identity_group, workflow, partition

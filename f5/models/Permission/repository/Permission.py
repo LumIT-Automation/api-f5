@@ -12,8 +12,6 @@ class Permission:
         self.permissionTable = "group_role_partition"
         self.privilegesList = "role"
 
-
-
         # Tables: group_role_partition, identity_group, role, partition
 
 
