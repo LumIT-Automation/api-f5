@@ -116,7 +116,7 @@ class CustomControllerF5GetList(CustomControllerBase):
 
         try:
             user = CustomControllerBase.loggedUser(request)
-            if CheckPermissionFacade.hasUserPermission(groups=user["groups"], action="action", assetId=assetId, partition=partitionName, isWorkflow=bool(workflowId)) or user["authDisabled"]:
+            if CheckPermissionFacade.hasUserPermission(groups=user["groups"], action=action, assetId=assetId, partition=partitionName, isWorkflow=bool(workflowId)) or user["authDisabled"]:
                 if workflowId and checkWorkflowPermission:
                     httpStatus = status.HTTP_204_NO_CONTENT
                 else:

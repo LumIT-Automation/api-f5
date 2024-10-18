@@ -9,9 +9,6 @@ from f5.helpers.Exception import CustomException
 
 
 class Permission:
-
-    # IdentityGroupRolePartition
-
     def __init__(self, permissionId: int, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
