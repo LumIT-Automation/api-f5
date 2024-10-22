@@ -9,7 +9,7 @@ class PermissionWorkflowSerializer(serializers.Serializer):
         id_asset = serializers.IntegerField(required=False)
 
     id = serializers.IntegerField(required=False)
-    identity_group_name = serializers.CharField(max_length=64, required=True)
+    identity_group_name = serializers.CharField(max_length=64, required=False)
     identity_group_identifier = serializers.CharField(max_length=255, required=True)
     workflow = serializers.CharField(max_length=64, required=True)
     partition = PermissionPermissionSerializer(required=True)
