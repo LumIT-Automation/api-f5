@@ -85,8 +85,10 @@ class Permission:
     WHERE role.role IS NOT NULL)
     """
     def list(self, filters: dict = None) -> list:
+        from f5.helpers.Log import Log
         filters = filters or {}
         c = connection.cursor()
+        from f5.helpers.Log import Log
 
         query = (
             f"SELECT {self.permissionTable}.id, "
@@ -104,7 +106,7 @@ class Permission:
         if filter:
             for column in filters.keys():
                 if column in [ "identity_group_identifier", "partition", self.privilegesList, "id_asset" ]:
-                    query += f" AND {column} = '{filters[column]}'"
+                    query += f" AND UPPER({column}) = UPPER('{filters[column]}')"
 
         try:
             c.execute(query)
