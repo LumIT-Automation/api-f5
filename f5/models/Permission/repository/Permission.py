@@ -84,22 +84,30 @@ class Permission:
     LEFT JOIN `partition` ON `partition`.id = group_role_partition.id_partition 
     WHERE role.role IS NOT NULL)
     """
-    def list(self) -> list:
+    def list(self, filters: dict = None) -> list:
+        filters = filters or {}
         c = connection.cursor()
 
+        query = (
+            f"SELECT {self.permissionTable}.id, "
+                "identity_group.name AS identity_group_name, "
+                "identity_group.identity_group_identifier AS identity_group_identifier, "
+                f"{self.privilegesList}.{self.privilegesList}, "                              
+                "`partition`.id_asset AS partition_asset, "
+                "`partition`.`partition` AS partition_name "
+            "FROM identity_group "
+            f"LEFT JOIN {self.permissionTable} ON {self.permissionTable}.id_group = identity_group.id "
+            f"LEFT JOIN {self.privilegesList} ON {self.privilegesList}.id = {self.permissionTable}.id_{self.privilegesList} "
+            f"LEFT JOIN `partition` ON `partition`.id = {self.permissionTable}.id_partition "
+            f"WHERE {self.privilegesList}.{self.privilegesList} IS NOT NULL"
+        )
+        if filter:
+            for column in filters.keys():
+                if column in [ "identity_group_identifier", "partition", self.privilegesList, "id_asset" ]:
+                    query += f" AND {column} = '{filters[column]}'"
+
         try:
-            c.execute(
-                f"SELECT {self.permissionTable}.id, "
-                    "identity_group.name AS identity_group_name, "
-                    "identity_group.identity_group_identifier AS identity_group_identifier, "
-                    f"{self.privilegesList}.{self.privilegesList}, "                              
-                    "`partition`.id_asset AS partition_asset, "
-                    "`partition`.`partition` AS partition_name "
-                "FROM identity_group "
-                f"LEFT JOIN {self.permissionTable} ON {self.permissionTable}.id_group = identity_group.id "
-                f"LEFT JOIN {self.privilegesList} ON {self.privilegesList}.id = {self.permissionTable}.id_{self.privilegesList} "
-                f"LEFT JOIN `partition` ON `partition`.id = {self.permissionTable}.id_partition "
-                f"WHERE {self.privilegesList}.{self.privilegesList} IS NOT NULL")
+            c.execute(query)
             l = DBHelper.asDict(c)
 
             for el in l:

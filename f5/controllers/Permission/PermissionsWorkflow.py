@@ -18,17 +18,27 @@ class PermissionsWorkflowController(CustomController):
     @staticmethod
     def get(request: Request) -> Response:
         etagCondition = {"responseEtag": ""}
-
         user = CustomController.loggedUser(request)
+
+        fk = list()
+        fv = list()
+        filters = dict()
 
         try:
             if Permission.hasUserPermission(groups=user["groups"], action="permission_identityGroups_get") or user["authDisabled"]:
                 Log.actionLog("Workflow Permissions list", user)
 
+                if 'fby' in request.GET and 'fval' in request.GET:
+                    for f in dict(request.GET)["fby"]:
+                        fk.append(f)
+                    for v in dict(request.GET)["fval"]:
+                        fv.append(v)
+                    filters = dict(zip(fk, fv))
+
                 data = {
                     "data": {
                         "items": CustomController.validate(
-                            PermissionWorkflow.workflowPermissionsDataList(),
+                            PermissionWorkflow.workflowPermissionsDataList(filters=filters),
                             PermissionsSerializer,
                             "list"
                         )
