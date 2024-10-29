@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "e5614a88-d51e-4ff3-b6cd-1b7efebc6bdf",
+		"_postman_id": "0983c879-1ef2-460d-98b4-a3db08d6f169",
 		"name": "api-f5",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "2436069"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -664,6 +663,58 @@
 								"f5",
 								"permissions-workflow",
 								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "permissions workflow (filters)",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							},
+							{
+								"key": "If-None-Match",
+								"value": "c485212f298abe5f8b867ca42617292a",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{f5BaseUrl}}/f5/permissions-workflow/?fby=identity_group_identifier&fval=cn=groupstaff,cn=users,dc=lab,dc=local&fby=workflow&fval=flow_test1",
+							"host": [
+								"{{f5BaseUrl}}"
+							],
+							"path": [
+								"f5",
+								"permissions-workflow",
+								""
+							],
+							"query": [
+								{
+									"key": "fby",
+									"value": "identity_group_identifier"
+								},
+								{
+									"key": "fval",
+									"value": "cn=groupstaff,cn=users,dc=lab,dc=local"
+								},
+								{
+									"key": "fby",
+									"value": "workflow"
+								},
+								{
+									"key": "fval",
+									"value": "flow_test1"
+								}
 							]
 						}
 					},
