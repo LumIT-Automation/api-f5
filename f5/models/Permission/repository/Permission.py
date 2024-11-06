@@ -77,15 +77,16 @@ class Permission:
         identity_group.identity_group_identifier AS identity_group_identifier, 
         role.role AS role, 
         `partition`.id_asset AS partition_asset, 
-        `partition`.`partition` AS partition_name 
+        `partition`.`partition` AS partition_name
+        "asset.fqdn AS asset_name "
     FROM identity_group 
     LEFT JOIN group_role_partition ON group_role_partition.id_group = identity_group.id 
     LEFT JOIN role ON role.id = group_role_partition.id_role 
-    LEFT JOIN `partition` ON `partition`.id = group_role_partition.id_partition 
+    LEFT JOIN `partition` ON `partition`.id = group_role_partition.id_partition
+    INNER JOIN asset ON asset.id = `partition`.id_asset
     WHERE role.role IS NOT NULL)
     """
     def list(self, filters: dict = None) -> list:
-        from f5.helpers.Log import Log
         filters = filters or {}
         c = connection.cursor()
         from f5.helpers.Log import Log
@@ -94,15 +95,18 @@ class Permission:
             f"SELECT {self.permissionTable}.id, "
                 "identity_group.name AS identity_group_name, "
                 "identity_group.identity_group_identifier AS identity_group_identifier, "
-                f"{self.privilegesList}.{self.privilegesList}, "                              
+                f"{self.privilegesList}.{self.privilegesList}, "
                 "`partition`.id_asset AS partition_asset, "
-                "`partition`.`partition` AS partition_name "
+                "`partition`.`partition` AS partition_name, "
+                "asset.fqdn AS asset_name "
             "FROM identity_group "
             f"LEFT JOIN {self.permissionTable} ON {self.permissionTable}.id_group = identity_group.id "
             f"LEFT JOIN {self.privilegesList} ON {self.privilegesList}.id = {self.permissionTable}.id_{self.privilegesList} "
             f"LEFT JOIN `partition` ON `partition`.id = {self.permissionTable}.id_partition "
+            "INNER JOIN asset ON asset.id = `partition`.id_asset "
             f"WHERE {self.privilegesList}.{self.privilegesList} IS NOT NULL"
         )
+
         if filter:
             for column in filters.keys():
                 if column in [ "identity_group_identifier", "partition", self.privilegesList, "id_asset" ]:
@@ -115,11 +119,13 @@ class Permission:
             for el in l:
                 el["partition"] = {
                     "id_asset": el["partition_asset"],
-                    "name": el["partition_name"]
+                    "name": el["partition_name"],
+                    "asset_name": el["asset_name"]
                 }
 
                 del(el["partition_asset"])
                 del(el["partition_name"])
+                del(el["asset_name"])
 
             return l
         except Exception as e:

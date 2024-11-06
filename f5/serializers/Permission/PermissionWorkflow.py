@@ -7,6 +7,7 @@ class PermissionWorkflowSerializer(serializers.Serializer):
     class PermissionPermissionSerializer(serializers.Serializer):
         name = serializers.CharField(max_length=64, required=True)
         id_asset = serializers.IntegerField(required=False)
+        asset_name = serializers.CharField(max_length=256, required=False)
 
     id = serializers.IntegerField(required=False)
     identity_group_name = serializers.CharField(max_length=64, required=False)
