@@ -35,15 +35,15 @@ class F5RawTxtController(CustomController):
                     try:
                         f = open(fileName, "r")
                     except FileNotFoundError:
-                        raise CustomException(status=400, payload={"Checkpoint": "Requested file not found."})
+                        raise CustomException(status=400, payload={"F5": "Requested file not found."})
 
                     response = FileResponse(f, as_attachment=True)
                 else:
                     response = Response(None, status=status.HTTP_403_FORBIDDEN)
             else:
-                raise CustomException(status=400, payload={"Checkpoint": "Not permitted file requested."})
+                raise CustomException(status=400, payload={"F5": "Not permitted file requested."})
         except FileNotFoundError:
-            raise CustomException(status=400, payload={"Checkpoint": "Requested file not found."})
+            raise CustomException(status=400, payload={"F5": "Requested file not found."})
 
         except Exception as e:
             data, httpStatus, headers = CustomController.exceptionHandler(e)
