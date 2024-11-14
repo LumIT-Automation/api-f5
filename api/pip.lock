@@ -20,6 +20,6 @@ pytz==2024.2
 redis==5.0.8
 requests==2.31.0
 setuptools==66.1.1
-sqlparse==0.5.1
+sqlparse==0.5.2
 urllib3==2.0.7
 xmltodict==0.13.0

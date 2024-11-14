@@ -84,7 +84,6 @@ class Permission:
 
     @staticmethod
     def authorizationsList(groups: list) -> dict:
-
         # List of authorizations a user has, grouped by authorization type.
 
         #     "assets_get": [
@@ -101,29 +100,21 @@ class Permission:
         #     ],
         #     ...
 
-        superadmin = False
-        for gr in groups:
-            if gr.lower() == "automation.local":
-                superadmin = True
-                break
-
-        if superadmin:
-            # Superadmin's permissions override.
-            authorizations = {
-                "any": [
-                    {
-                        "assetId": 0,
-                        "partition": "any"
-                    }
-                ]
-            }
-        else:
-            try:
-                authorizations = PermissionPrivilegeRepository.authorizationsList(groups)
-            except Exception as e:
-                raise e
-
-        return authorizations
+        # Superadmin's group.
+        try:
+            if "automation.local" in [g.lower() for g in groups]:
+                return {
+                    "any": [
+                        {
+                            "assetId": 0,
+                            "partition": "any"
+                        }
+                    ]
+                }
+            else:
+                return PermissionPrivilegeRepository.authorizationsList(groups)
+        except Exception as e:
+            raise e
 
 
 
