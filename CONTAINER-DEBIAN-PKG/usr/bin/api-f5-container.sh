@@ -5,7 +5,7 @@ function start() {
 }
 
 function stop() {
-    podman stop api-f5
+    podman stop -t 15 api-f5
 }
 
 function restart() {
