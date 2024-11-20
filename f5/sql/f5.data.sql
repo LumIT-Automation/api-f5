@@ -90,7 +90,7 @@ INSERT INTO `privilege` (`id`, `privilege`, `privilege_type`, `description`) VAL
 (55, 'irule_patch', 'object', NULL),
 (56, 'irule_delete', 'object', NULL),
 (57, 'routedomains_get', 'asset', NULL),
-(58, 'configuration_post', 'global', NULL),
+(58, 'configurations_post', 'global', NULL),
 (59, 'datagroups_get', 'object', NULL),
 (60, 'datagroups_post', 'object', NULL),
 (61, 'datagroup_delete', 'object', NULL),
