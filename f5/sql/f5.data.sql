@@ -90,7 +90,7 @@ INSERT INTO `privilege` (`id`, `privilege`, `privilege_type`, `description`) VAL
 (55, 'irule_patch', 'object', NULL),
 (56, 'irule_delete', 'object', NULL),
 (57, 'routedomains_get', 'asset', NULL),
-(58, 'configuration_put', 'global', NULL),
+(58, 'configuration_post', 'global', NULL),
 (59, 'datagroups_get', 'object', NULL),
 (60, 'datagroups_post', 'object', NULL),
 (61, 'datagroup_delete', 'object', NULL),
@@ -108,7 +108,9 @@ INSERT INTO `privilege` (`id`, `privilege`, `privilege_type`, `description`) VAL
 (73, 'node_get', 'object', NULL),
 (74, 'workflows_privileges_get', 'global', NULL),
 (75, 'locks_delete', 'global', NULL),
-(76, 'file_txt_get', 'global', NULL);
+(76, 'file_txt_get', 'global', NULL),
+(77, 'configuration_delete', 'global', NULL),
+(78, 'configuration_patch', 'global', NULL);
 
 
 --
@@ -197,6 +199,8 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (1, 74),
 (1, 75),
 (1, 76),
+(1, 77),
+(1, 78),
 (2, 3),
 (2, 5),
 (2, 6),

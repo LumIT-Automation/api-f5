@@ -44,7 +44,7 @@ class PermissionWorkflow:
     @staticmethod
     def hasUserPermission(groups: list, action: str, assetId: int = 0, partition: str = "") -> bool:
         # Authorizations' list allowed for any (authenticated) user.
-        if action == "authorizations_get":
+        if action == "authorizations_get" or action == "configurations_get" or action == "configuration_get":
             return True
 
         try:
