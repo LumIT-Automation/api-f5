@@ -11,7 +11,7 @@ from .controllers.F5.asm import Policies as ASMPolicies, Policy as ASMPolicy, Po
 from .controllers.Asset import AssetAssetDr, AssetAssetsDr, Asset, Assets
 from .controllers.F5.Usecases import VirtualServersController as WorkflowVirtualServers, VirtualServerController as WorkflowVirtualServer, DeleteNodeController as WorkflowNode, CertificateUpdateController as WorkflowCertificate
 from .controllers.Permission import Authorizations, IdentityGroups, IdentityGroup, Roles, Permission, Permissions, AuthorizationsWorkflow, Workflows, PermissionsWorkflow, PermissionWorkflow
-from .controllers.Configuration import Configuration
+from .controllers.Configuration import Configurations, Configuration
 from .controllers.History import History, ActionHistory
 from .controllers.Helpers import Locks
 
@@ -34,7 +34,8 @@ urlpatterns = [
 
     path('doc/<str:fileName>/', RawTxtController.F5RawTxtController.as_view(), name='txt'),
 
-    path('configuration/<str:configType>/', Configuration.ConfigurationController.as_view(), name='configuration'),
+    path('configurations/', Configurations.ConfigurationsController.as_view(), name='configuration'),
+    path('configuration/<int:configId>/', Configuration.ConfigurationController.as_view(), name='configuration'),
 
     # Asset.
     path('assets/', Assets.F5AssetsController.as_view(), name='f5-assets'),

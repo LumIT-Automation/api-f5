@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `configuration` (
   `id` int(11) NOT NULL,
   `config_type` varchar(255) DEFAULT NULL,
-  `configuration` text NOT NULL DEFAULT '[]'
+  `value` text NOT NULL DEFAULT '[]'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -225,7 +225,8 @@ CREATE TABLE `workflow_privilege` (
 -- Indici per le tabelle `configuration`
 --
 ALTER TABLE `configuration`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `c_type` (`config_type`);
 
 --
 -- Indici per le tabelle `asset`

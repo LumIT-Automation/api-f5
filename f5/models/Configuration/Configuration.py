@@ -1,22 +1,22 @@
-from f5.models.Configuration.repository.Configuration import Configuration as Repository
+from typing import List, Dict
 
-from f5.helpers.Log import Log
+from f5.models.Configuration.repository.Configuration import Configuration as Repository
 
 
 class Configuration:
-    def __init__(self, configType: str, *args, **kwargs):
+    def __init__(self, id: int, configType: str = "", value: str = "", *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.id: int = 0
+        self.id: int = id
         self.config_type: str = configType
-        self.configuration: dict = {}
+        self.value: str = value
 
         self.__load()
 
 
 
     ####################################################################################################################
-    # Public static methods
+    # Public methods
     ####################################################################################################################
 
     def repr(self):
@@ -24,9 +24,42 @@ class Configuration:
 
 
 
-    def rewrite(self, data: dict) -> None:
+    def delete(self) -> None:
         try:
-            Repository.modify(self.id, data.get("configuration", {}))
+            Repository.delete(self.id)
+            del self
+        except Exception as e:
+            raise e
+
+
+
+    def modify(self, data: dict) -> None:
+        try:
+            Repository.modify(id=self.id, config_type=data["config_type"], value=data.get("value", ""))
+        except Exception as e:
+            raise e
+
+
+
+    ####################################################################################################################
+    # Public static methods
+    ####################################################################################################################
+
+    @staticmethod
+    def list(configType: list = None) -> List[Dict]:
+        configType = configType or []
+
+        try:
+            return Repository.list(configType)
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
+    def add(data: dict) -> int:
+        try:
+            return Repository.add(config_type=data["config_type"], value=data["value"])
         except Exception as e:
             raise e
 
@@ -38,10 +71,11 @@ class Configuration:
 
     def __load(self) -> None:
         try:
-            info = Repository.get(self.config_type)
+            info = Repository.get(self.id)
 
             # Set attributes.
             for k, v in info.items():
                 setattr(self, k, v)
+
         except Exception as e:
             raise e

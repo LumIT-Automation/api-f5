@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "0983c879-1ef2-460d-98b4-a3db08d6f169",
+		"_postman_id": "cbc9b009-2267-4f9a-8ae7-ebbac870cc3e",
 		"name": "api-f5",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -399,6 +399,169 @@
 								"1",
 								"assetdr",
 								"3",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Configuration",
+			"item": [
+				{
+					"name": "configurations",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "{{f5BaseUrl}}/f5/configurations/",
+							"host": [
+								"{{f5BaseUrl}}"
+							],
+							"path": [
+								"f5",
+								"configurations",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "configuration",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwttoken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\": {\n        \"config_type\": \"proa\",\n        \"value\": [\n            {\n                \"key\": \"key1\",\n                \"value\": \"value1\"\n            },\n            {\n                \"key\": \"key2\",\n                \"value\": \"value2\"\n            }\n        ]\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{f5BaseUrl}}/f5/configurations/",
+							"host": [
+								"{{f5BaseUrl}}"
+							],
+							"path": [
+								"f5",
+								"configurations",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "configuration",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "{{f5BaseUrl}}/f5/configuration/2/",
+							"host": [
+								"{{f5BaseUrl}}"
+							],
+							"path": [
+								"f5",
+								"configuration",
+								"2",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "configuration",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"url": {
+							"raw": "{{f5BaseUrl}}/f5/configuration/3/",
+							"host": [
+								"{{f5BaseUrl}}"
+							],
+							"path": [
+								"f5",
+								"configuration",
+								"3",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "configuration",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{jwttoken}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"data\": {\n        \"config_type\": \"riproa\",\n        \"value\": [\n            {\n                \"key\": \"kkey1\",\n                \"value\": \"vvalue1\"\n            },\n            {\n                \"key\": \"kkey2\",\n                \"value\": \"vvalue2\"\n            }\n        ]\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{f5BaseUrl}}/f5/configuration/2/",
+							"host": [
+								"{{f5BaseUrl}}"
+							],
+							"path": [
+								"f5",
+								"configuration",
+								"2",
 								""
 							]
 						}
@@ -1082,72 +1245,6 @@
 							"path": [
 								"f5",
 								"workflows",
-								""
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Configuration",
-			"item": [
-				{
-					"name": "configuration",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwttoken}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{f5BaseUrl}}/f5/configuration/global/",
-							"host": [
-								"{{f5BaseUrl}}"
-							],
-							"path": [
-								"f5",
-								"configuration",
-								"global",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "configuration",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{jwttoken}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"data\": {\n        \"configuration\": [\n            {\n                \"key\": \"iruleHide\",\n                \"value\": true\n            }\n        ]\n    }\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{f5BaseUrl}}/f5/configuration/global/",
-							"host": [
-								"{{f5BaseUrl}}"
-							],
-							"path": [
-								"f5",
-								"configuration",
-								"global",
 								""
 							]
 						}
