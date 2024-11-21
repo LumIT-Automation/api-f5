@@ -21,20 +21,29 @@ class Configuration:
     ####################################################################################################################
 
     @staticmethod
-    def get(id: int) -> dict:
+    def get(id: int = 0, config_type: str = "") -> dict:
+        o = dict()
         c = connection.cursor()
+        query = "SELECT id, config_type, value FROM configuration"
+        arg = list()
 
         try:
-            c.execute("SELECT id, config_type, value FROM configuration WHERE id = %s", [
-                id
-            ])
+            if id:
+                query += " WHERE id = %s"
+                arg = [ id ]
+            elif config_type:
+                query += " WHERE config_type = %s"
+                arg = [ config_type ]
 
-            o = DBHelper.asDict(c)[0]
-            if "value" in o:
-                try:
-                    o["value"] = json.loads(o["value"])
-                except JSONDecodeError:
-                    o["value"] = []
+            if arg:
+                c.execute(query, arg)
+
+                o = DBHelper.asDict(c)[0]
+                if "value" in o:
+                    try:
+                        o["value"] = json.loads(o["value"])
+                    except JSONDecodeError:
+                        o["value"] = []
 
             return o
         except IndexError:

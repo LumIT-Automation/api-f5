@@ -4,7 +4,7 @@ from f5.models.Configuration.repository.Configuration import Configuration as Re
 
 
 class Configuration:
-    def __init__(self, id: int, configType: str = "", value: str = "", *args, **kwargs):
+    def __init__(self, id: int = 0, configType: str = "", value: str = "", *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.id: int = id
@@ -70,8 +70,13 @@ class Configuration:
     ####################################################################################################################
 
     def __load(self) -> None:
+        info = dict
+
         try:
-            info = Repository.get(self.id)
+            if self.id:
+                info = Repository.get(id=self.id)
+            elif self.config_type:
+                info = Repository.get(config_type=self.config_type)
 
             # Set attributes.
             for k, v in info.items():
