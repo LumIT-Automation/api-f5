@@ -110,8 +110,8 @@ INSERT INTO `privilege` (`id`, `privilege`, `privilege_type`, `description`) VAL
 (75, 'locks_delete', 'global', NULL),
 (76, 'file_txt_get', 'global', NULL),
 (77, 'configuration_delete', 'global', NULL),
-(78, 'configuration_patch', 'global', NULL);
-
+(78, 'configuration_patch', 'global', NULL),
+(79, 'service_certificate_put', 'object', NULL);
 
 --
 -- Dump dei dati per la tabella `role`
@@ -201,6 +201,7 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (1, 76),
 (1, 77),
 (1, 78),
+(1, 79),
 (2, 3),
 (2, 5),
 (2, 6),
@@ -222,6 +223,7 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (2, 71),
 (2, 72),
 (2, 74),
+(2, 79),
 (3, 3),
 (3, 6),
 (3, 8),
