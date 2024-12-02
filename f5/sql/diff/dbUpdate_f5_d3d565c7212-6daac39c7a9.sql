@@ -1,7 +1,7 @@
 
 /*
 OLD COMMIT: d3d565c72120227810055f0bcb542cfadc9a5046
-NEW COMMIT: db278300350a1bf86724a4d232ff803592978b0a
+NEW COMMIT: 6daac39c7a9fb6e6b68ccf848906be9ef9b106f0
 */
 
 
@@ -11,12 +11,14 @@ SQL SCHEMA SECTION
 
 ## mysqldiff 0.60
 ## 
-## Run on Tue Nov 19 12:09:02 2024
-## Options: debug=0, password=password, user=api, host=10.0.111.22
+## Run on Mon Dec  2 15:51:30 2024
+## Options: host=10.0.111.22, user=api, debug=0, password=password
 ##
 ## --- file: /tmp/f5_old.sql
 ## +++ file: /tmp/f5_new.sql
 
+ALTER TABLE configuration CHANGE configuration value text NOT NULL DEFAULT '[]';
+ALTER TABLE configuration ADD UNIQUE c_type (config_type);
 ALTER TABLE group_role_partition DROP INDEX id; # was INDEX (id)
 ALTER TABLE group_role_partition ADD UNIQUE id (id);
 ALTER TABLE privilege CHANGE COLUMN privilege_type privilege_type enum('object','asset','global','workflow') NOT NULL DEFAULT 'object'; # was enum('object','asset','global') NOT NULL DEFAULT 'object'
@@ -124,7 +126,7 @@ INSERT INTO `privilege` (`id`, `privilege`, `privilege_type`, `description`) VAL
 (55, 'irule_patch', 'object', NULL),
 (56, 'irule_delete', 'object', NULL),
 (57, 'routedomains_get', 'asset', NULL),
-(58, 'configuration_put', 'global', NULL),
+(58, 'configurations_post', 'global', NULL),
 (59, 'datagroups_get', 'object', NULL),
 (60, 'datagroups_post', 'object', NULL),
 (61, 'datagroup_delete', 'object', NULL),
@@ -142,7 +144,10 @@ INSERT INTO `privilege` (`id`, `privilege`, `privilege_type`, `description`) VAL
 (73, 'node_get', 'object', NULL),
 (74, 'workflows_privileges_get', 'global', NULL),
 (75, 'locks_delete', 'global', NULL),
-(76, 'file_txt_get', 'global', NULL);
+(76, 'file_txt_get', 'global', NULL),
+(77, 'configuration_delete', 'global', NULL),
+(78, 'configuration_patch', 'global', NULL),
+(79, 'service_certificate_put', 'object', NULL);
 
 INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (1, 3),
@@ -217,6 +222,9 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (1, 74),
 (1, 75),
 (1, 76),
+(1, 77),
+(1, 78),
+(1, 79),
 (2, 3),
 (2, 5),
 (2, 6),
@@ -238,6 +246,7 @@ INSERT INTO `role_privilege` (`id_role`, `id_privilege`) VALUES
 (2, 71),
 (2, 72),
 (2, 74),
+(2, 79),
 (3, 3),
 (3, 6),
 (3, 8),
