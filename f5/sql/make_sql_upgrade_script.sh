@@ -74,7 +74,15 @@ dbVM_prepare() {
 
 ###############################################
 if ! which mysql-schema-diff > /dev/null; then
-    apt install libmysql-diff-perl
+    echo "mysql client not found, try:"
+    echo "apt install mariadb-client"
+    exit 1
+fi
+
+if ! which mysql-schema-diff > /dev/null; then
+    echo "libmysql-diff-perl package not found, try:"
+    echo "apt install libmysql-diff-perl"
+    exit 1
 fi
 
 if [ "$vmDbSetup" == "y" ]; then
