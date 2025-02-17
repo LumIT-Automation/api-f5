@@ -17,11 +17,23 @@ SQL SCHEMA SECTION
 ## --- file: /tmp/f5_old.sql
 ## +++ file: /tmp/f5_new.sql
 
+set foreign_key_checks = 0;
+
 ALTER TABLE configuration CHANGE configuration value text NOT NULL DEFAULT '[]';
 ALTER TABLE configuration ADD UNIQUE c_type (config_type);
+ALTER TABLE group_role_partition change id id int(255) NOT NULL;
 ALTER TABLE group_role_partition DROP INDEX id; # was INDEX (id)
 ALTER TABLE group_role_partition ADD UNIQUE id (id);
 ALTER TABLE privilege CHANGE COLUMN privilege_type privilege_type enum('object','asset','global','workflow') NOT NULL DEFAULT 'object'; # was enum('object','asset','global') NOT NULL DEFAULT 'object'
+
+CREATE TABLE workflow (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  workflow varchar(64) NOT NULL,
+  description varchar(255) DEFAULT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY workflow (workflow)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 CREATE TABLE group_workflow_partition (
   id int(255) NOT NULL AUTO_INCREMENT,
   id_group int(11) NOT NULL,
@@ -32,16 +44,8 @@ CREATE TABLE group_workflow_partition (
   KEY id_workflow (id_workflow),
   KEY gwp_partition (id_partition),
   CONSTRAINT gwp_group FOREIGN KEY (id_group) REFERENCES identity_group (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT gwp_partition FOREIGN KEY (id_partition) REFERENCES partition (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT gwp_partition FOREIGN KEY (id_partition) REFERENCES `partition` (id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT gwp_workflow FOREIGN KEY (id_workflow) REFERENCES workflow (id) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-CREATE TABLE workflow (
-  id int(11) NOT NULL AUTO_INCREMENT,
-  workflow varchar(64) NOT NULL,
-  description varchar(255) DEFAULT NULL,
-  PRIMARY KEY (id),
-  UNIQUE KEY workflow (workflow)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE workflow_privilege (
@@ -61,7 +65,6 @@ CREATE TABLE workflow_privilege (
 DATA SECTION
 */
 
-set foreign_key_checks = 0;
 
 
 truncate table privilege;
