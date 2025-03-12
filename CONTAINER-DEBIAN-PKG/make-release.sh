@@ -131,6 +131,7 @@ function System_systemFilesSetup()
     # Cleanup.
     rm -f $workingFolderPath/var/log/automation/${shortName}/placeholder
     rm -f $workingFolderPath/home/bck/${shortName}/volumes/placeholder
+    find $workingFolderPath -type l -name Usecases -exec rm -f {} \;
 
     mv $serviceProjectPackage $workingFolderPath/usr/lib/${shortName}
     sed -i "s/PACKAGE/${serviceProjectName}.deb/g" $workingFolderPath/usr/lib/${shortName}/Dockerfile

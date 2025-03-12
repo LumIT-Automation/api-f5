@@ -96,6 +96,8 @@ if [ "$1" == "configure" ]; then
             podman exec api-f5 systemctl restart syslog-ng # on this container.
         fi
     fi
+    dpkg-trigger install-api-f5
 fi
+
 
 exit 0

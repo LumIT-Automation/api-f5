@@ -124,6 +124,9 @@ function System_codeCollect()
         rm -f $workingFolderPath/var/www/api/f5/sql/f5.data-development.sql
     fi
 
+    # Remove unwanted symlinks.
+    find $workingFolderPath -type l -name Usecases -exec rm -f {} \;
+
     # Remove __pycache__ folders and not-required ones.
     rm -fR $workingFolderPath/var/www/api/f5/tests
     rm -fR $(find $workingFolderPath/var/www/api -name __pycache__)
