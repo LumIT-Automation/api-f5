@@ -14,6 +14,7 @@ from .controllers.Permission import Authorizations, IdentityGroups, IdentityGrou
 from .controllers.Configuration import Configurations, Configuration
 from .controllers.History import History, ActionHistory
 from .controllers.Helpers import Locks
+from .F5UsecasesUrls import urlpatterns as useCasesPatters
 
 
 urlpatterns = [
@@ -131,3 +132,6 @@ urlpatterns = [
     path('history/', History.HistoryLogsController.as_view(), name='f5-log-history'),
     path('action-history/', ActionHistory.ActionHistoryLogsController.as_view(), name='f5-log-action-history'),
 ]
+
+urlpatterns.extend(useCasesPatters)
+
