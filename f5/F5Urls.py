@@ -14,7 +14,11 @@ from .controllers.Permission import Authorizations, IdentityGroups, IdentityGrou
 from .controllers.Configuration import Configurations, Configuration
 from .controllers.History import History, ActionHistory
 from .controllers.Helpers import Locks
-from .F5UsecasesUrls import urlpatterns as useCasesPatters
+
+try:
+    from .F5UsecasesUrls import urlpatterns as useCasesPatters
+except ModuleNotFoundError:
+    useCasesPatters = []
 
 
 urlpatterns = [
