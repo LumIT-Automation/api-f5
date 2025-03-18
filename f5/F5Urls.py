@@ -9,7 +9,6 @@ from .controllers.F5.net import RouteDomains
 from .controllers.F5.sys import Certificate, Certificates, Folder, Folders
 from .controllers.F5.asm import Policies as ASMPolicies, Policy as ASMPolicy, PoliciesDifference as ASMPolicyDifference, PolicyMerge as ASMPolicyMerge, PolicyApply as ASMPolicyApply
 from .controllers.Asset import AssetAssetDr, AssetAssetsDr, Asset, Assets
-from .controllers.F5.Usecases import VirtualServersController as WorkflowVirtualServers, VirtualServerController as WorkflowVirtualServer, DeleteNodeController as WorkflowNode, CertificateUpdateController as WorkflowCertificate
 from .controllers.Permission import Authorizations, IdentityGroups, IdentityGroup, Roles, Permission, Permissions, AuthorizationsWorkflow, Workflows, PermissionsWorkflow, PermissionWorkflow
 from .controllers.Configuration import Configurations, Configuration
 from .controllers.History import History, ActionHistory
@@ -117,17 +116,6 @@ urlpatterns = [
     path('<int:assetId>/<str:partitionName>/certificates/', Certificates.F5CertificatesController.as_view(), name='f5-certificates'),
     path('<int:assetId>/<str:partitionName>/key/<str:resourceName>/', Certificate.F5CertificateController.as_view(), name='f5-key'),
     path('<int:assetId>/<str:partitionName>/keys/', Certificates.F5CertificatesController.as_view(), name='f5-keys'),
-
-    # Workflows.
-    # Virtual server.
-    path('<int:assetId>/<str:partitionName>/workflow/virtualserver/<str:virtualServerName>/', WorkflowVirtualServer.F5WorkflowVirtualServerController.as_view(), name='f5-workflow-virtualserver'),
-    path('<int:assetId>/<str:partitionName>/workflow/virtualservers/', WorkflowVirtualServers.F5WorkflowVirtualServersController.as_view(), name='f5-workflow-virtualservers'),
-
-    # Node
-    path('<int:assetId>/<str:partitionName>/workflow/node/<str:nodeName>/', WorkflowNode.F5WorkflowDeleteNodeController.as_view(), name='f5-workflow-node'),
-
-    # Certificate
-    path('<int:assetId>/<str:partitionName>/workflow/profile/<str:profileType>/<str:profileName>/', WorkflowCertificate.F5WorkflowCertificateUpdateController.as_view(), name='f5-workflow-certificate'),
 
     # Locks
     path('locks/', Locks.F5WorkflowLocksController.as_view(), name='f5-workflow-locks'),
