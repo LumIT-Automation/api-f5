@@ -126,6 +126,8 @@ function System_codeCollect()
 
     # Remove unwanted symlinks.
     find $workingFolderPath -type l -name Usecases -exec rm -f {} \;
+    find $workingFolderPath -type l -name F5UsecasesUrls.py -exec rm -f {} \;
+    find $workingFolderPath -type l -name f5.useCases.sql -exec rm -f {} \;
 
     # Remove __pycache__ folders and not-required ones.
     rm -fR $workingFolderPath/var/www/api/f5/tests
