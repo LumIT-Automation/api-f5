@@ -1,3 +1,4 @@
+import os
 from django.urls import path
 
 from .controllers import Root, RawTxtController
@@ -13,11 +14,6 @@ from .controllers.Permission import Authorizations, IdentityGroups, IdentityGrou
 from .controllers.Configuration import Configurations, Configuration
 from .controllers.History import History, ActionHistory
 from .controllers.Helpers import Locks
-
-try:
-    from .F5UsecasesUrls import urlpatterns as useCasesPatters
-except ModuleNotFoundError:
-    useCasesPatters = []
 
 
 urlpatterns = [
@@ -125,5 +121,17 @@ urlpatterns = [
     path('action-history/', ActionHistory.ActionHistoryLogsController.as_view(), name='f5-log-action-history'),
 ]
 
-urlpatterns.extend(useCasesPatters)
+
+for module in os.listdir(os.path.dirname("urlsUsecases")):
+    try:
+        if module == '__init__.py' or module[-3:] != '.py':
+            continue
+        moduleName = module[:-3]
+        patternName = moduleName + "Patterns"
+
+        from urlsUsecases.moduleName import urlpatterns as patternName
+        urlpatterns.extend(patternName)
+    except Exception:
+        pass
+
 
