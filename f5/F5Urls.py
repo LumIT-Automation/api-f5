@@ -1,4 +1,5 @@
 import os
+import importlib
 from django.urls import path
 
 from .controllers import Root, RawTxtController
@@ -121,16 +122,20 @@ urlpatterns = [
     path('action-history/', ActionHistory.ActionHistoryLogsController.as_view(), name='f5-log-action-history'),
 ]
 
+# Add usecases urls.
+try:
+    modules = os.listdir(os.path.dirname("/var/www/api/f5/urlsUsecases/"))
+except Exception:
+    modules = []
 
-for module in os.listdir(os.path.dirname("urlsUsecases")):
+for fileModule in modules:
     try:
-        if module == '__init__.py' or module[-3:] != '.py':
+        if fileModule == '__init__.py' or fileModule[-3:] != '.py':
             continue
-        moduleName = module[:-3]
-        patternName = moduleName + "Patterns"
+        module = importlib.import_module("f5.urlsUsecases." + fileModule[:-3], package=None)
 
-        from urlsUsecases.moduleName import urlpatterns as patternName
-        urlpatterns.extend(patternName)
+        usecaseUrlpatterns = getattr(module, 'urlpatterns')
+        urlpatterns.extend(usecaseUrlpatterns)
     except Exception:
         pass
 

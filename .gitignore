@@ -11,4 +11,5 @@ f5/models/F5/Usecases/*
 f5/serializers/F5/Usecases/*
 f5/sql/Usecases/*
 f5/urlsUsecases/*
+f5/helpers/decorators/Usecases/*
 
