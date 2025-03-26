@@ -234,3 +234,10 @@ LOCK_MAX_VALIDITY = 30 # seconds.
 ENABLE_ASSET_DR = 1
 
 DOC_TXT_DIR = "/var/www/api/doc/"
+
+# Customer/use cases settings.
+try:
+    from api.settings_custom import *
+except ModuleNotFoundError:
+    pass
+
