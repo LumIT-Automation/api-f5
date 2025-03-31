@@ -203,6 +203,22 @@ function System_redhatFilesSetup()
 }
 
 
+
+function System_usecases() {
+    oldDir=`pwd`
+    cd /var/www/usecases
+    for dir in $(find . -maxdepth 1 -type d -name "*-$shortName"); do
+        if [ -d "$dir/$shortName" ]; then
+            echo "Building usecases in $dir..."
+            cd "$dir/$shortName" && bash CONTAINER-RH-PKG/make-rh-release.sh --action rpm
+            cd /var/www/usecases
+        fi
+    done
+    cd $oldDir
+}
+
+
+
 function System_rpmCreate()
 {
     rpmbuild --define "_topdir ${workingFolder}/rpmbuild" -ba ${workingFolder}/rpmbuild/SPECS/${mainSpec}
@@ -213,8 +229,14 @@ function System_rpmCreate()
 # ##################################################################################################################################################
 # Main
 # ##################################################################################################################################################
-
 ACTION=""
+usecases=""
+
+usage()
+{
+  echo "Usage: make-rh-release.sh  [ -a | --action rpm ] [ -A | --all ]"
+  exit 0
+}
 
 # Must be run as root.
 ID=$(id -u)
@@ -223,28 +245,46 @@ if [ $ID -ne 0 ]; then
     exit 1
 fi
 
-# Parse user input.
-while [[ $# -gt 0 ]]; do
-    key="$1"
 
-    case $key in
-        --action)
-            ACTION="$2"
-            shift
-            shift
-            ;;
+PARSED_ARGUMENTS=$(getopt -n make-rh-release.sh -o a:A --long action:,all -- "$@")
+status=$?
+if [ "$status" != "0" ]; then
+  usage
+fi
 
-        *)
-            shift
-            ;;
-    esac
+eval set -- "$PARSED_ARGUMENTS"
+while : ; do
+  case "$1" in
+    -a | --action)
+        ACTION="$2"
+        shift 2
+        ;;
+    
+    -A | --all)
+        usecases="y"
+        shift
+        ;;
+    
+    --) 
+        shift
+        break ;;
+
+    *)
+        echo "Unexpected option: $1."
+        usage ;;
+  esac
 done
 
 if [ -z "$ACTION" ]; then
-    echo "Missing parameters. Use --action rpm."
+    usage
 else
     System "system"
     $system_run
 fi
 
+if [ "$usecases" == "y" ]; then
+    System_usecases
+fi
+
 exit 0
+
