@@ -136,6 +136,20 @@ for fileModule in modules:
 
         usecaseUrlpatterns = getattr(module, 'urlpatterns')
         urlpatterns.extend(usecaseUrlpatterns)
+
+        # Maybe some entries must be replaced, not just added.
+        try:
+            replaceUrlpatterns = getattr(module, 'replaceUrlpatterns')
+            if replaceUrlpatterns:
+                for path in urlpatterns:
+                    for replacePath in replaceUrlpatterns:
+                        if path.pattern.name == replacePath.pattern.name: # replace the wanted controller.
+                            urlpatterns.remove(path)
+                            urlpatterns.append(replacePath)
+
+        except Exception:
+            pass
+
     except Exception:
         pass
 
