@@ -128,6 +128,9 @@ function System_codeCollect()
     find $workingFolderPath/var/www/api/f5/controllers/F5/Usecases -type l -exec rm -f {} \; || true
     find $workingFolderPath/var/www/api/f5/models/F5/Usecases -type l -exec rm -f {} \; || true
     find $workingFolderPath/var/www/api/f5/serializers/F5/Usecases -type l -exec rm -f {} \; || true
+    find $workingFolderPath/var/www/api/f5/controllers/Asset/Usecases -type l -exec rm -f {} \; || true
+    find $workingFolderPath/var/www/api/f5/models/Asset/Usecases -type l -exec rm -f {} \; || true
+    find $workingFolderPath/var/www/api/f5/serializers/Asset/Usecases -type l -exec rm -f {} \; || true
     find $workingFolderPath/var/www/api/f5/helpers/decorators/Usecases -type l -exec rm -f {} \; || true
     find $workingFolderPath/var/www/api/f5/sql/Usecases -type l -exec rm -f {} \; || true
     find $workingFolderPath/var/www/api/f5/urlsUsecases -type l -exec rm -f {} \; || true
