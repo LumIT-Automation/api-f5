@@ -1,13 +1,10 @@
-from typing import List, Dict, Union
-
 from f5.models.Asset.repository.Asset import Asset as Repository
-from f5.models.Asset.repository.AssetAssetDr import AssetAssetDr as AssetDrRepository
 
 from f5.helpers.Misc import Misc
 
 
 class Asset:
-    def __init__(self, assetId: int, includeDr: bool = False, showPassword: bool = True, *args, **kwargs):
+    def __init__(self, assetId: int, showPassword: bool = True, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.id = int(assetId)
@@ -23,9 +20,7 @@ class Asset:
         self.username: str = ""
         self.password: str = ""
 
-        self.assetsDr: List[Dict[str, Union[Asset, bool]]] = [] # composition with a relation parameter.
-
-        self.__load(includeDr=includeDr, showPassword=showPassword)
+        self.__load(showPassword=showPassword)
 
 
 
@@ -34,6 +29,7 @@ class Asset:
     ####################################################################################################################
 
     def repr(self):
+        from f5.helpers.Log import Log
         return Misc.deepRepr(self)
 
 
@@ -59,66 +55,15 @@ class Asset:
 
 
     ####################################################################################################################
-    # Public methods - disaster recovery relation
-    ####################################################################################################################
-
-    def drDataList(self, onlyEnabled: bool) -> list:
-        try:
-            return AssetDrRepository.list(primaryAssetId=int(self.id), showOnlyEnabled=onlyEnabled, showPassword=False)
-        except Exception as e:
-            raise e
-
-
-
-    def drModify(self, drAssetId: int, enabled: bool) -> None:
-        try:
-            AssetDrRepository.modify(primaryAssetId=self.id, drAssetId=int(drAssetId), enabled=enabled)
-        except Exception as e:
-            raise e
-
-
-
-    def drRemove(self, drAssetId: int) -> None:
-        try:
-            AssetDrRepository.delete(primaryAssetId=self.id, drAssetId=int(drAssetId))
-        except Exception as e:
-            raise e
-
-
-
-    def drAdd(self, drAssetId: int, enabled: bool) -> None:
-        try:
-            if self.id != drAssetId:
-                AssetDrRepository.add(primaryAssetId=self.id, drAssetId=int(drAssetId), enabled=enabled) # circular path forbidden.
-            else:
-                from f5.helpers.Exception import CustomException
-                raise CustomException(status=400, payload={"database": "Cannot add asset as disaster recovery of itself"})
-        except Exception as e:
-            raise e
-
-
-
-    ####################################################################################################################
     # Public static methods
     ####################################################################################################################
 
     @staticmethod
-    def dataList(includeDr: bool, showPassword: bool) -> list:
+    def dataList(showPassword: bool) -> list:
         try:
-            l = Repository.list(showPassword=showPassword)
-            if includeDr:
-                for asset in l:
-                    asset["assetsDr"] = list()
-
-                    for dr in AssetDrRepository.list(primaryAssetId=asset["id"], showPassword=showPassword):
-                        asset["assetsDr"].append({
-                            "asset": dr,
-                            "enabled": dr["enabled"]
-                        })
+            return Repository.list(showPassword=showPassword)
         except Exception as e:
             raise e
-
-        return l
 
 
 
@@ -152,7 +97,7 @@ class Asset:
     # Private methods
     ####################################################################################################################
 
-    def __load(self, includeDr: bool, showPassword: bool) -> None:
+    def __load(self, showPassword: bool) -> None:
         try:
             data = Repository.get(self.id, showPassword=showPassword)
             for k, v in data.items():
@@ -162,14 +107,5 @@ class Asset:
                 del self.username
                 del self.password
 
-            if includeDr:
-                # Load related disaster recovery assets.
-                for dr in AssetDrRepository.list(primaryAssetId=self.id, showPassword=showPassword):
-                    self.assetsDr.append({
-                        "asset": Asset(dr["id"], showPassword=showPassword),
-                        "enabled": dr["enabled"]
-                    })
-            else:
-                del self.assetsDr
         except Exception as e:
             raise e

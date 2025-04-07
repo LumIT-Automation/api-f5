@@ -10,7 +10,7 @@ from .controllers.F5.auth import Partitions
 from .controllers.F5.net import RouteDomains
 from .controllers.F5.sys import Certificate, Certificates, Folder, Folders
 from .controllers.F5.asm import Policies as ASMPolicies, Policy as ASMPolicy, PoliciesDifference as ASMPolicyDifference, PolicyMerge as ASMPolicyMerge, PolicyApply as ASMPolicyApply
-from .controllers.Asset import AssetAssetDr, AssetAssetsDr, Asset, Assets
+from .controllers.Asset import Asset, Assets
 from .controllers.Permission import Authorizations, IdentityGroups, IdentityGroup, Roles, Permission, Permissions, AuthorizationsWorkflow, Workflows, PermissionsWorkflow, PermissionWorkflow
 from .controllers.Configuration import Configurations, Configuration
 from .controllers.History import History, ActionHistory
@@ -41,10 +41,6 @@ urlpatterns = [
     # Asset.
     path('assets/', Assets.F5AssetsController.as_view(), name='f5-assets'),
     path('asset/<int:assetId>/', Asset.F5AssetController.as_view(), name='f5-asset'),
-
-    # Asset/disaster recovery related assets.
-    path('asset/<int:assetId>/assetdr/<int:assetDrId>/', AssetAssetDr.F5AssetAssetDrController.as_view(), name='f5-asset-assetdr'),
-    path('asset/<int:assetId>/assetsdr/', AssetAssetsDr.F5AssetAssetsDrController.as_view(), name='f5-assets-assetdr'),
 
     # Partition.
     path('<int:assetId>/partitions/', Partitions.F5PartitionsController.as_view(), name='f5-partitions'),
@@ -129,28 +125,29 @@ except Exception:
     modules = []
 
 for fileModule in modules:
+    from f5.helpers.Log import Log
+
     try:
         if fileModule == '__init__.py' or fileModule[-3:] != '.py':
             continue
         module = importlib.import_module("f5.urlsUsecases." + fileModule[:-3], package=None)
 
-        usecaseUrlpatterns = getattr(module, 'urlpatterns')
-        urlpatterns.extend(usecaseUrlpatterns)
-
-        # Maybe some entries must be replaced, not just added.
+        # Replace.
         try:
             replaceUrlpatterns = getattr(module, 'replaceUrlpatterns')
             if replaceUrlpatterns:
-                for path in urlpatterns:
+                for path in reversed(urlpatterns):
                     for replacePath in replaceUrlpatterns:
-                        if path.pattern.name == replacePath.pattern.name: # replace the wanted controller.
+                        if path.pattern._route == replacePath.pattern._route: # call another controller.
                             urlpatterns.remove(path)
                             urlpatterns.append(replacePath)
 
         except Exception:
             pass
 
+        # Add.
+        usecaseUrlpatterns = getattr(module, 'urlpatterns')
+        urlpatterns.extend(usecaseUrlpatterns)
+
     except Exception:
         pass
-
-

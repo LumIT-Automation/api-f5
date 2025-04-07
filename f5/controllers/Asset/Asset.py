@@ -13,19 +13,15 @@ from f5.helpers.Log import Log
 class F5AssetController(CustomController):
     @staticmethod
     def get(request: Request, assetId: int) -> Response:
-        includeDr = False
         user = CustomController.loggedUser(request)
 
         try:
             if Permission.hasUserPermission(groups=user["groups"], action="asset_get", assetId=assetId) or user["authDisabled"]:
                 Log.actionLog("Asset information", user)
 
-                if "includeDr" in request.GET:
-                    includeDr = True
-
                 data = {
                     "data": CustomController.validate(
-                        Asset(assetId, includeDr=includeDr, showPassword=False).repr(),
+                        Asset(assetId, showPassword=False).repr(),
                         Serializer,
                         "value"
                     ),
