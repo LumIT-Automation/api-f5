@@ -125,8 +125,6 @@ except Exception:
     modules = []
 
 for fileModule in modules:
-    from f5.helpers.Log import Log
-
     try:
         if fileModule == '__init__.py' or fileModule[-3:] != '.py':
             continue
