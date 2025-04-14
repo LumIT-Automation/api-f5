@@ -202,37 +202,28 @@ if [ $ID -ne 0 ]; then
     exit 1
 fi
 
+# Parse user input.
+while [[ $# -gt 0 ]]; do
+    key="$1"
 
-PARSED_ARGUMENTS=$(getopt -n make-release.sh -o a:A --long action:,all -- "$@")
-status=$?
-if [ "$status" != "0" ]; then
-  usage
-fi
-
-eval set -- "$PARSED_ARGUMENTS"
-while : ; do
-  case "$1" in
-    -a | --action)
-        ACTION="$2"
-        shift 2
-        ;;
-    
-    -A | --all)
-        usecases="y"
-        shift
-        ;;
-    
-    --) 
-        shift
-        break ;;
-
-    *)
-        echo "Unexpected option: $1."
-        usage ;;
-  esac
+    case $key in
+        -a | --action)
+            ACTION="$2"
+            shift 2
+            ;;
+        -A | --all)
+            usecases="y"
+            shift
+            ;;
+        *)
+            echo "Unexpected option: $1."
+            usage
+            ;;
+    esac
 done
 
 if [ -z "$ACTION" ]; then
+    echo "Missing parameters."
     usage
 else
     System "system"
@@ -244,3 +235,4 @@ if [ "$usecases" == "y" ]; then
 fi
 
 exit 0
+
