@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "579c650c-adde-459e-a728-92c483df565d",
+		"_postman_id": "b8a0a884-9565-409e-8373-34fe78a2426c",
 		"name": "api-f5",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -1350,15 +1350,16 @@
 									}
 								},
 								"url": {
-									"raw": "{{f5BaseUrl}}/f5/1/Partition1/workflow/virtualservers/?drReplica=1",
+									"raw": "{{f5BaseUrl}}/f5/usecases/crif/1/Partition1/virtualservers/?drReplica=1",
 									"host": [
 										"{{f5BaseUrl}}"
 									],
 									"path": [
 										"f5",
+										"usecases",
+										"crif",
 										"1",
 										"Partition1",
-										"workflow",
 										"virtualservers",
 										""
 									],
@@ -1402,15 +1403,16 @@
 									}
 								},
 								"url": {
-									"raw": "{{f5BaseUrl}}/f5/1/Common/workflow/virtualservers/",
+									"raw": "{{f5BaseUrl}}/f5/usecases/crif/1/Common/virtualservers/",
 									"host": [
 										"{{f5BaseUrl}}"
 									],
 									"path": [
 										"f5",
+										"usecases",
+										"crif",
 										"1",
 										"Common",
-										"workflow",
 										"virtualservers",
 										""
 									]
@@ -1448,15 +1450,16 @@
 									}
 								},
 								"url": {
-									"raw": "{{f5BaseUrl}}/f5/1/Common/workflow/profile/client-ssl/client-ssl_testMik/",
+									"raw": "{{f5BaseUrl}}/f5/usecases/crif/2/Common/profile/client-ssl/client-ssl_testMik/",
 									"host": [
 										"{{f5BaseUrl}}"
 									],
 									"path": [
 										"f5",
-										"1",
+										"usecases",
+										"crif",
+										"2",
 										"Common",
-										"workflow",
 										"profile",
 										"client-ssl",
 										"client-ssl_testMik",
@@ -1496,15 +1499,16 @@
 									}
 								},
 								"url": {
-									"raw": "{{f5BaseUrl}}/f5/1/Common/workflow/profile/server-ssl/server-ssl_testMik/",
+									"raw": "{{f5BaseUrl}}/f5/usecases/crif/1/Common/profile/server-ssl/server-ssl_testMik/",
 									"host": [
 										"{{f5BaseUrl}}"
 									],
 									"path": [
 										"f5",
+										"usecases",
+										"crif",
 										"1",
 										"Common",
-										"workflow",
 										"profile",
 										"server-ssl",
 										"server-ssl_testMik",
@@ -1535,15 +1539,16 @@
 									}
 								],
 								"url": {
-									"raw": "{{f5BaseUrl}}/f5/1/Common/workflow/virtualserver/vs_CONCERTO_TEST/?drReplica=1",
+									"raw": "{{f5BaseUrl}}/f5/usecases/crif/1/Common/virtualserver/vs_CONCERTO_TEST/?drReplica=1",
 									"host": [
 										"{{f5BaseUrl}}"
 									],
 									"path": [
 										"f5",
+										"usecases",
+										"crif",
 										"1",
 										"Common",
-										"workflow",
 										"virtualserver",
 										"vs_CONCERTO_TEST",
 										""
@@ -1579,15 +1584,16 @@
 									}
 								],
 								"url": {
-									"raw": "{{f5BaseUrl}}/f5/1/Partition1/workflow/node/NODOSO/",
+									"raw": "{{f5BaseUrl}}/f5/usecases/crif/1/Partition1/node/NODOSO/",
 									"host": [
 										"{{f5BaseUrl}}"
 									],
 									"path": [
 										"f5",
+										"usecases",
+										"crif",
 										"1",
 										"Partition1",
-										"workflow",
 										"node",
 										"NODOSO",
 										""
