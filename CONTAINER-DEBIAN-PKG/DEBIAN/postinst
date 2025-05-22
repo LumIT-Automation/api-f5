@@ -17,7 +17,7 @@ if [ "$1" == "configure" ]; then
     # api-f5 folder will be bound to /var/lib/containers/storage/volumes/.
     # Until the package is not uninstalled+purged, fs volumes remain untouched -> newly installed package's configuration files are then rewritten with volume's ones (this is why some services are restarted).
     # Side effect is that new package's configuration directives are ignored, so the user must be informed ("Differences from stock config").
-    podman run --name api-f5 -v api-f5:/var/www/api/api -v api-f5-db:/var/lib/mysql -v api-f5-cacerts:/usr/local/share/ca-certificates -dt localhost/api-f5 /lib/systemd/systemd
+    podman run --name api-f5 --hostname api-f5 -v api-f5:/var/www/api/api -v api-f5-db:/var/lib/mysql -v api-f5-cacerts:/usr/local/share/ca-certificates -dt localhost/api-f5 /lib/systemd/systemd
 
     podman exec api-f5 chown -R www-data:www-data /var/www/api/api # within container.
     podman exec api-f5 chown -R mysql:mysql /var/lib/mysql

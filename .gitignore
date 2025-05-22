@@ -6,6 +6,7 @@ f5/sql/f5.data-development.sql
 client.log
 f5/clients/asm-policy-merge/client-input.json
 doc/swagger.yaml
+doc/about.json
 f5/controllers/F5/Usecases/*
 f5/models/F5/Usecases/*
 f5/serializers/F5/Usecases/*
