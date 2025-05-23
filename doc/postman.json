@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "cc9a383e-c883-4473-80c3-7959e81dfe6b",
+		"_postman_id": "363d32e0-1cdb-4e92-8f00-1210882d0609",
 		"name": "api-f5",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -72,14 +72,14 @@
 							}
 						],
 						"url": {
-							"raw": "{{f5BaseUrl}}/f5/doc/swagger.yaml/",
+							"raw": "{{f5BaseUrl}}/f5/doc/about.json/",
 							"host": [
 								"{{f5BaseUrl}}"
 							],
 							"path": [
 								"f5",
 								"doc",
-								"swagger.yaml",
+								"about.json",
 								""
 							]
 						}
