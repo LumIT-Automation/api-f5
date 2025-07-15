@@ -226,7 +226,6 @@ SIMPLE_JWT = {
 }
 
 # Variables.
-
 API_SUPPLICANT_HTTP_PROXY = ""
 API_SUPPLICANT_NETWORK_TIMEOUT = 30 # seconds.
 
@@ -236,8 +235,14 @@ ENABLE_ASSET_DR = 1
 DOC_TXT_DIR = "/var/www/api/doc/"
 
 # Customer/use cases settings.
-try:
-    from api.settings_custom import *
-except ModuleNotFoundError:
-    pass
+import importlib
 
+folder_path = "/var/www/api/api/Usecases"
+files = os.listdir(folder_path)
+
+for file in files:
+    if file.endswith(".py"):
+        module_name = file[:-3]
+        path = f"api.Usecases.{module_name}"
+        customVars = vars(importlib.import_module(path))
+        globals().update(customVars)
