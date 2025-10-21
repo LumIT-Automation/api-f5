@@ -15,6 +15,7 @@ from .controllers.Permission import Authorizations, IdentityGroups, IdentityGrou
 from .controllers.Configuration import Configurations, Configuration
 from .controllers.History import History, ActionHistory
 from .controllers.Helpers import Locks
+from .helpers.Log import Log
 
 
 urlpatterns = [
@@ -128,7 +129,12 @@ for fileModule in modules:
     try:
         if fileModule == '__init__.py' or fileModule[-3:] != '.py':
             continue
-        module = importlib.import_module("f5.urlsUsecases." + fileModule[:-3], package=None)
+
+        try:
+            module = importlib.import_module("f5.urlsUsecases." + fileModule[:-3], package=None)
+        except Exception as e:
+            Log.log("Error when importing module from file " + fileModule + str(e))
+            raise e
 
         # Replace.
         try:
