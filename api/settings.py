@@ -1,4 +1,5 @@
 import os
+import importlib
 from datetime import timedelta
 import logging
 import logging.handlers
@@ -235,14 +236,13 @@ ENABLE_ASSET_DR = 1
 DOC_TXT_DIR = "/var/www/api/doc/"
 
 # Customer/use cases settings.
-import importlib
+usecasesFolder = "/var/www/api/api/Usecases"
+if os.path.isdir(usecasesFolder):
+    files = os.listdir(usecasesFolder)
 
-folder_path = "/var/www/api/api/Usecases"
-files = os.listdir(folder_path)
-
-for file in files:
-    if file.endswith(".py"):
-        module_name = file[:-3]
-        path = f"api.Usecases.{module_name}"
-        customVars = vars(importlib.import_module(path))
-        globals().update(customVars)
+    for file in files:
+        if file.endswith(".py"):
+            module_name = file[:-3]
+            path = f"api.Usecases.{module_name}"
+            customVars = vars(importlib.import_module(path))
+            globals().update(customVars)

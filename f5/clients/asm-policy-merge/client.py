@@ -10,7 +10,7 @@ import sys
 import tempfile
 from getpass import getpass
 from pathlib import Path
-from colorama import just_fix_windows_console
+#from colorama import just_fix_windows_console
 from urllib3.exceptions import InsecureRequestWarning
 from urllib3 import disable_warnings
 
@@ -18,7 +18,7 @@ import django
 from django.conf import settings
 from django.test import Client
 
-just_fix_windows_console() # needed on Windows only.
+#just_fix_windows_console() # needed on Windows only.
 
 
 
