@@ -56,7 +56,7 @@ class F5RawTxtController(CustomController):
     @staticmethod
     def checkRequestedFile(fileName: str) -> bool:
         try:
-            if re.match('^.*\.(txt|yaml|json)$', fileName):
+            if re.match('^.*.(txt|yaml|json)$', fileName):
                 return True
 
             return False
