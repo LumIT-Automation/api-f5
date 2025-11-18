@@ -1,10 +1,9 @@
 from rest_framework import serializers
 
 
-## 1. Serializer per i campi annidati (sflow e interfacesReference)
-
+## 1. Serializer for nested fields (sflow and interfacesReference).
 class F5VlanSflowSerializer(serializers.Serializer):
-    """Mappa la sezione 'sflow'."""
+    # Map the 'sflow' section.
     pollInterval = serializers.IntegerField(required=False)
     pollIntervalGlobal = serializers.CharField(max_length=255, required=False)
     samplingRate = serializers.IntegerField(required=False)
@@ -12,23 +11,21 @@ class F5VlanSflowSerializer(serializers.Serializer):
 
 
 class F5VlanInterfacesReferenceSerializer(serializers.Serializer):
-    """Mappa il campo 'interfacesReference'."""
+    #  interfacesReference field.
     link = serializers.CharField(max_length=255, required=False)
     isSubcollection = serializers.BooleanField(required=False)
 
 
-## 2. Serializer per il Singolo Item VLAN (il tuo oggetto JSON)
-
+## 2. Serializer for a single VLAN element in the 'items' list.
 class F5VlanItemSerializer(serializers.Serializer):
-    """Serializer per un singolo elemento VLAN all'interno della lista 'items'."""
 
-    # Campi principali
+    # main fields.
     name = serializers.CharField(max_length=255, required=True)
     partition = serializers.CharField(max_length=255, required=False)
     fullPath = serializers.CharField(max_length=255, required=False)
     selfLink = serializers.CharField(max_length=255, required=False)
 
-    # Campi intero
+    # Integer fields.
     generation = serializers.IntegerField(required=False)
     failsafeTimeout = serializers.IntegerField(required=False)
     ifIndex = serializers.IntegerField(required=False)
@@ -40,7 +37,7 @@ class F5VlanItemSerializer(serializers.Serializer):
     tag = serializers.IntegerField(required=False)
     assetId = serializers.IntegerField(required=False)
 
-    # Campi stringa (char)
+    # String fields (char).
     kind = serializers.CharField(max_length=255, required=False)
     autoLasthop = serializers.CharField(max_length=255, required=False)
     cmpHash = serializers.CharField(max_length=255, required=False)
@@ -54,16 +51,15 @@ class F5VlanItemSerializer(serializers.Serializer):
     learning = serializers.CharField(max_length=255, required=False)
     sourceChecking = serializers.CharField(max_length=255, required=False)
 
-    # Campi annidati
+    # Nested fields.
     sflow = F5VlanSflowSerializer(required=False)
     interfacesReference = F5VlanInterfacesReferenceSerializer(required=False)
 
 
-## 3. Serializer Radice (quello richiesto dal tuo controller)
-
+## 3. Root Serializer.
 class F5VlansSerializer(serializers.Serializer):
-    """
-    Serializer radice: Mappa la collezione API F5 (risposta della getList)
-    che contiene una lista di VLAN sotto la chiave 'items'.
-    """
+
+    # Root Serializer: map the API F5 collection (called by getList).
+    # It contains a list of VLAN elements at the 'items' dictionary key.
+
     items = F5VlanItemSerializer(many=True, required=True)
