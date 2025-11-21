@@ -1,10 +1,10 @@
-asgiref==3.10.0
+asgiref==3.11.0
 async-timeout==5.0.1
-certifi==2025.10.5
+certifi==2025.11.12
 cffi==2.0.0
 charset-normalizer==3.4.4
 cryptography==41.0.7
-Django==4.2.25
+Django==4.2.26
 django-redis==5.3.0
 djangorestframework==3.14.0
 djangorestframework-recursive==0.1.2
@@ -12,7 +12,7 @@ djangorestframework-simplejwt==5.3.1
 func-timeout==4.3.5
 idna==3.11
 mysqlclient==2.1.1
-pip==25.2
+pip==25.3
 pycparser==2.23
 PyJWT==2.8.0
 pyOpenSSL==24.2.1
