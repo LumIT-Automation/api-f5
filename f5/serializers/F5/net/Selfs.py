@@ -1,22 +1,22 @@
 from rest_framework import serializers
 
 
-## 1. Serializer per i Riferimenti Annidati (References)
+## 1. Serializer for Nested References
 
 class F5SelfReferenceSerializer(serializers.Serializer):
-    """Mappa i campi di riferimento come 'trafficGroupReference' o 'vlanReference'."""
+    """Map reference fields as 'trafficGroupReference' or 'vlanReference'."""
     link = serializers.CharField(max_length=255, required=False)
 
 
-## 2. Serializer per il Singolo Item Self IP
+## 2. Serializer for Single Item Self IP
 
 class F5SelfItemSerializer(serializers.Serializer):
     """
-    Serializer per un singolo oggetto Self IP (quello mostrato nel JSON),
-    che sarà un 'item' nella collezione API.
+    Serializer for a single Self IP object (the one shown in the JSON),
+    which will be an 'item' in the API collection.
     """
 
-    # Campi di sistema e identificazione
+    # System fields and identification
     kind = serializers.CharField(max_length=255, required=False)
     name = serializers.CharField(max_length=255, required=True)
     partition = serializers.CharField(max_length=255, required=False)
@@ -25,28 +25,28 @@ class F5SelfItemSerializer(serializers.Serializer):
     selfLink = serializers.CharField(max_length=255, required=False)
     assetId = serializers.IntegerField(required=False)
 
-    # Campi specifici del Self IP
-    address = serializers.CharField(max_length=255, required=True)  # Es: 10.177.10.6/23
+    # Self IP specific fields
+    address = serializers.CharField(max_length=255, required=True)
     addressSource = serializers.CharField(max_length=255, required=False)
 
-    floating = serializers.CharField(max_length=255, required=False)  # 'enabled' o 'disabled'
-    inheritedTrafficGroup = serializers.CharField(max_length=255, required=False)  # 'true' o 'false'
+    floating = serializers.CharField(max_length=255, required=False)
+    inheritedTrafficGroup = serializers.CharField(max_length=255, required=False)
 
-    trafficGroup = serializers.CharField(max_length=255, required=False)  # /Common/traffic-group-1
-    vlan = serializers.CharField(max_length=255, required=False)  # /Common/DMZ_ADS1_10.177.10.0
+    trafficGroup = serializers.CharField(max_length=255, required=False)
+    vlan = serializers.CharField(max_length=255, required=False)
 
     unit = serializers.IntegerField(required=False)
 
-    # Campi Riferimento annidati
+    # Nested Reference fields
     trafficGroupReference = F5SelfReferenceSerializer(required=False)
     vlanReference = F5SelfReferenceSerializer(required=False)
 
 
-## 3. Serializer Radice per la Collezione (Usato dal Controller)
+## 3. Root Serializer for Collection (Used by Controller)
 
 class F5SelfsSerializer(serializers.Serializer):
     """
-    Serializer principale: Mappa la collezione API F5 (risposta della getList)
-    che contiene una lista di Self IP sotto la chiave 'items'.
+    Main serializer: Map collection API F5 (getList response)
+    which contains a list of Self IPs under the 'items' key.
     """
     items = F5SelfItemSerializer(many=True, required=True)

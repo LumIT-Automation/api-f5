@@ -11,12 +11,14 @@ from f5.serializers.F5.ltm.Datagroup import F5DatagroupSerializer as DatagroupSe
 from f5.controllers.CustomControllerGet import CustomControllerF5GetList
 from f5.controllers.CustomControllerPost import CustomControllerF5Create
 
+from f5.helpers.Log import Log
 
 class F5DatagroupsController(CustomControllerF5GetList, CustomControllerF5Create):
     def __init__(self, *args, **kwargs):
         super().__init__(subject="datagroup", *args, **kwargs)
 
     def get(self, request: Request, assetId: int, partitionName: str, datagroupType: str = "") -> Response:
+        Log.log(request, "-----------------------F5DatagroupsController.get")
         def actionCallback():
             data = {"data": dict()}
             itemData = dict()

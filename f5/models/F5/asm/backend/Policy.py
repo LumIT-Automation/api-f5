@@ -13,6 +13,7 @@ from f5.models.F5.asm.backend.PolicyDiffManager import PolicyDiffManager
 from f5.helpers.ApiSupplicant import ApiSupplicant
 from f5.helpers.Exception import CustomException
 
+#/mgmt/tm/asm/policies?$select=name,virtualServers,manualVirtualServers,enforcementMode
 
 class Policy(PolicyBase):
 
