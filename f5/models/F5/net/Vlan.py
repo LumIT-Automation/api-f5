@@ -19,6 +19,7 @@ class Vlan:
         self.generation: int = 0
         self.connectionLimit: int = 0
         self.selfLink: str = ""
+
         self.strict: str = ""
         self.throughputCapacity: str = ""
         self.vlans: List[str] = []
