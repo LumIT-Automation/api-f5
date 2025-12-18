@@ -1,8 +1,9 @@
 {
 	"info": {
-		"_postman_id": "8b8225fa-933f-4832-b7a3-e6a5c094a2bf",
+		"_postman_id": "a240d6ca-3646-48b5-9ee1-d9a566c9d0a7",
 		"name": "api-f5",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2436069"
 	},
 	"item": [
 		{
@@ -4462,6 +4463,64 @@
 										"f5",
 										"1",
 										"routedomains",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "interfaces",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{f5BaseUrl}}/f5/1/interfaces/",
+									"host": [
+										"{{f5BaseUrl}}"
+									],
+									"path": [
+										"f5",
+										"1",
+										"interfaces",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "selfs",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer {{jwttoken}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{f5BaseUrl}}/f5/1/selfs/",
+									"host": [
+										"{{f5BaseUrl}}"
+									],
+									"path": [
+										"f5",
+										"1",
+										"selfs",
 										""
 									]
 								}
