@@ -10,6 +10,7 @@ from f5.serializers.Asset.Asset import F5AssetSerializer as AssetSerializer
 
 from f5.controllers.CustomController import CustomController
 from f5.helpers.Log import Log
+from f5.helpers.Exception import CustomException
 
 
 class F5AssetsController(CustomController):
@@ -17,12 +18,23 @@ class F5AssetsController(CustomController):
     def get(request: Request) -> Response:
         allowedData = list()
         user = CustomController.loggedUser(request)
+        params = dict()
 
         try:
             if Permission.hasUserPermission(groups=user["groups"], action="assets_get") or user["authDisabled"]:
                 Log.actionLog("Asset list", user)
 
-                itemData = Asset.dataList(showPassword=False)
+                try:
+                    if "datacenter" in request.GET:
+                        params["datacenter"] = request.GET.get("datacenter")
+                    if "environment" in request.GET:
+                        params["environment"] = request.GET.get("environment")
+                    if "position" in request.GET:
+                        params["position"] = request.GET.get("position")
+                except Exception as e:
+                    raise CustomException(status=400, payload={"F5": "Bad url parameter."})
+
+                itemData = Asset.dataList(showPassword=False, filter=params)
                 for p in itemData:
                     # Filter assets' list basing on actual permissions.
                     if Permission.hasUserPermission(groups=user["groups"], action="assets_get", assetId=p["id"]) or user["authDisabled"]:

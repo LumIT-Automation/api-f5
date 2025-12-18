@@ -106,15 +106,34 @@ class Asset:
 
 
     @staticmethod
-    def list(showPassword: bool) -> list:
+    def list(showPassword: bool, filter: dict = None) -> list:
+        filter = filter or {}
+        filterWhere = ""
+        args = list()
         c = connection.cursor()
 
         fields = "id, fqdn, protocol, port, path, tlsverify, baseurl, IFNULL (datacenter, '') AS datacenter, environment, IFNULL (position, '') AS position"
         if showPassword:
             fields += ", IFNULL (username, '') AS username, IFNULL (password, '') AS password"
-
         try:
-            c.execute("SELECT " + fields + " FROM asset")
+            if filter:
+                if "datacenter" in filter:
+                    filterWhere += " datacenter = %s"
+                    args.append(filter["datacenter"])
+                if "environment" in filter:
+                    if filterWhere:
+                        filterWhere += " AND"
+                    filterWhere += " environment = %s"
+                    args.append(filter["environment"])
+                if "position" in filter:
+                    if filterWhere:
+                        filterWhere += " AND"
+                    filterWhere += " position = %s"
+                    args.append(filter["position"])
+
+                filterWhere = " WHERE " + filterWhere
+
+            c.execute("SELECT " + fields + " FROM asset" + filterWhere, args)
 
             l = DBHelper.asDict(c)
             for el in l:

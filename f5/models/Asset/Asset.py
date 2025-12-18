@@ -59,9 +59,11 @@ class Asset:
     ####################################################################################################################
 
     @staticmethod
-    def dataList(showPassword: bool) -> list:
+    def dataList(showPassword: bool = False, filter: dict = None) -> list:
+        filter = filter or {}
+
         try:
-            return Repository.list(showPassword=showPassword)
+            return Repository.list(showPassword=showPassword, filter=filter)
         except Exception as e:
             raise e
 
