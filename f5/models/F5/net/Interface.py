@@ -1,6 +1,6 @@
 from typing import List, Dict
 
-from f5.models.F5.net.backend.Vlan import Vlan as Backend
+from f5.models.F5.net.backend.Interface import Interface as Backend
 
 class Interface:
     def __init__(self, assetId: int, *args, **kwargs):
@@ -60,7 +60,7 @@ class Interface:
     ####################################################################################################################
 
     @staticmethod
-    def dataList(assetId: int) -> dict:
+    def dataList(assetId: int) -> list:
         try:
             l = Backend.list(assetId)
             for el in l:

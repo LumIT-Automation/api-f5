@@ -10,7 +10,7 @@ class Self:
     ####################################################################################################################
 
     @staticmethod
-    def list(assetId: int) -> dict:
+    def list(assetId: int) -> list:
         try:
             f5 = Asset(assetId)
             api = ApiSupplicant(
@@ -19,6 +19,6 @@ class Self:
                 tlsVerify=f5.tlsverify
             )
 
-            return api.get()["payload"]["items"]
+            return api.get().get("payload", {}).get("items", [])
         except Exception as e:
             raise e

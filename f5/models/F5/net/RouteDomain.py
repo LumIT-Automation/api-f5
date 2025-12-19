@@ -31,7 +31,7 @@ class RouteDomain:
     ####################################################################################################################
 
     @staticmethod
-    def dataList(assetId: int) -> dict:
+    def dataList(assetId: int) -> list:
         try:
             l = Backend.list(assetId)
             for el in l:
