@@ -7,7 +7,7 @@ from .controllers.F5.ltm import PoolMemberStats, Datagroup, VirtualServers, Irul
     PoolMember, Profile, Policy, Nodes, Datagroups, Monitor, PoolMembers, VirtualServer, Pools, SnatPools, Node, \
     Profiles, Policies
 from .controllers.F5.auth import Partitions
-from .controllers.F5.net import RouteDomains, Vlans, Selfs, Interfaces
+from .controllers.F5.net import RouteDomains, Vlans, Selfs, Interface, Interfaces
 from .controllers.F5.sys import Certificate, Certificates, Folder, Folders
 from .controllers.F5.asm import Policies as ASMPolicies, Policy as ASMPolicy, PoliciesDifference as ASMPolicyDifference, PolicyMerge as ASMPolicyMerge, PolicyApply as ASMPolicyApply
 from .controllers.Asset import Asset, Assets
@@ -54,6 +54,7 @@ urlpatterns = [
     path('<int:assetId>/routedomains/', RouteDomains.F5RouteDomainsController.as_view(), name='f5-route-domains'),
 
     # Interface.
+    path('<int:assetId>/interface/<str:interfaceName>/', Interface.F5InterfaceController.as_view(), name='f5-interface'),
     path('<int:assetId>/interfaces/', Interfaces.F5InterfacesController.as_view(), name='f5-interfaces'),
 
     # Vlan.

@@ -10,6 +10,22 @@ class Interface:
     ####################################################################################################################
 
     @staticmethod
+    def info(assetId: int, name: str, silent: bool = False) -> dict:
+        try:
+            f5 = Asset(assetId)
+            return ApiSupplicant(
+                endpoint=f5.baseurl + "tm/net/interface/" + name,
+                auth=(f5.username, f5.password),
+                tlsVerify=f5.tlsverify,
+                silent=silent
+            ).get()["payload"]
+
+        except Exception as e:
+            raise e
+
+
+
+    @staticmethod
     def list(assetId: int) -> list:
         try:
             f5 = Asset(assetId)
