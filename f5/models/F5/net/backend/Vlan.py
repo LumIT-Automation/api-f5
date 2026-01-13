@@ -13,13 +13,24 @@ class Vlan:
     def info(assetId: int, name: str, silent: bool = False) -> dict:
         try:
             f5 = Asset(assetId)
-            return ApiSupplicant(
+            vlan = ApiSupplicant(
                 endpoint=f5.baseurl + "tm/net/vlan/" + name,
                 auth=(f5.username, f5.password),
                 tlsVerify=f5.tlsverify,
                 silent=silent
             ).get()["payload"]
 
+            if vlan:
+                interfaces = ApiSupplicant(
+                    endpoint=f5.baseurl + "tm/net/vlan/" + name + "/interfaces/",
+                    auth = (f5.username, f5.password),
+                    tlsVerify = f5.tlsverify,
+                    silent = silent
+                ).get()["payload"]
+                if interfaces:
+                    vlan["interfaces"] = interfaces
+
+            return vlan
         except Exception as e:
             raise e
 
