@@ -8,7 +8,7 @@ SelfsReference: Dict[str, str] = {
 }
 
 class Self:
-    def __init__(self, assetId: int, *args, **kwargs):
+    def __init__(self, assetId: int, name: str, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.assetId: int = int(assetId)
@@ -21,6 +21,21 @@ class Self:
         self.selfLink: str = ""
         self.strict: str = ""
         self.throughputCapacity: str = ""
+
+
+
+    ####################################################################################################################
+    # Public methods
+    ####################################################################################################################
+
+    def info(self) -> dict:
+        try:
+            i = Backend.info(self.assetId, self.name)
+            i["assetId"] = self.assetId
+
+            return i
+        except Exception as e:
+            raise e
 
 
 

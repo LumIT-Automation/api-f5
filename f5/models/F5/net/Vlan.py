@@ -8,11 +8,11 @@ VlansReference: Dict[str, str] = {
 }
 
 class Vlan:
-    def __init__(self, assetId: int, *args, **kwargs):
+    def __init__(self, assetId: int, name: str, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.assetId: int = int(assetId)
-        self.name: str = ""
+        self.name: str = name
         self.id: int = 0
         self.partition: str = ""
         self.fullPath: str = ""
@@ -24,6 +24,21 @@ class Vlan:
         self.throughputCapacity: str = ""
         self.vlans: List[str] = []
         self.vlansReference: List[VlansReference] = []
+
+
+
+    ####################################################################################################################
+    # Public methods
+    ####################################################################################################################
+
+    def info(self) -> dict:
+        try:
+            i = Backend.info(self.assetId, self.name)
+            i["assetId"] = self.assetId
+
+            return i
+        except Exception as e:
+            raise e
 
 
 
